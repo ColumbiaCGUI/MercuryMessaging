@@ -1,4 +1,4 @@
-# MercuryMessaging 
+# MercuryMessaging Toolkit
 
 *MercuryMessaging* is a new way to handle cross-component communication in the Unity
   game engine. It integrates seamlessly with the Unity Editor, and is both
@@ -114,4 +114,3 @@ work in our lab, where we do all of our work in Unity.
 We want to bring the toolkit to other platforms and are looking for
 collaborators in doing so. Please contact
 [Professor Steven Feiner](feiner@cs.columbia.edu) of Columbia University.
-
