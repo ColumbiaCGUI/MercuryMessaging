@@ -36,20 +36,31 @@ namespace MercuryMessaging
 {
 	/// <summary>
 	/// The list of support MmRelayNode function calls.
-	/// MmMethod only reserves values 0-7.
+	/// MmMethod only defines values 0-18.
 	/// In order to invoke new method types, you can use any number,
 	/// without adding it to this list. We suggest you start above 
 	/// 1000 to safely avoid clashes with the core of the framework.
 	/// </summary>
 	public enum MmMethod
 	{
-		NoOp,
+		NoOp = 0,
         Initialize,
 		SetActive,
 		Refresh,
         Switch,
         Complete,
 	    TaskInfo,
-		Message
+        Message,
+        MessageBool,
+        MessageByteArray,
+        MessageFloat,
+        MessageInt,
+        MessageSerializable,
+		MessageString,
+        MessageTransform,
+        MessageTransformList,
+        MessageVector3,
+        MessageVector4,
+        Transform
 	}
 }

@@ -35,7 +35,7 @@
 using System.Collections.Generic;
 using UnityEngine.Networking;
 
-namespace MercuryMessaging.Message
+namespace MercuryMessaging
 {
     /// <summary>
     /// MmMessage with Transform List payload

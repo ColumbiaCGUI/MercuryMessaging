@@ -32,42 +32,48 @@
 // 
 // 
 
-namespace MercuryMessaging.Support.GUI
+using MercuryMessaging.Support.Extensions;
+using UnityEngine;
+
+namespace MercuryMessaging
 {
-    /// <summary>
-    /// GUI Interaction Component - Adapter for IMmGUI objects.
-    /// </summary>
-	public class MmGuiResponder : MmBaseResponder {
+	public class MmTransformResponder : MmBaseResponder {
+
+	    public bool CanSend;
 
         /// <summary>
-        /// Handle to an implementation of IMmGUI
+        /// Based on modification of UNET NetworkTransform code
+        /// See:https://bitbucket.org/Unity-Technologies/networking/src
         /// </summary>
-		IMmGUI GUIHandler;
+	    private float lastClientSendTime;
 
         /// <summary>
-        /// On awake, grabs an IMmGUI instance if present.
+        /// Based on modification of UNET NetworkTransform code
+        /// See:https://bitbucket.org/Unity-Technologies/networking/src
         /// </summary>
-		public override void Awake()
+	    public float NetworkSendInterval = 60f;
+        
+		public override void Update ()
 		{
-			GUIHandler = GetComponent <IMmGUI> ();
+		    if (CanSend && Time.time - lastClientSendTime > (1/NetworkSendInterval))
+		    {
+		        lastClientSendTime = Time.time;
+
+		        GetRelayNode()
+		            .MmInvoke(MmMethod.Transform,
+		                new MmTransform(gameObject.transform, true),
+		                new MmMetadataBlock(MmLevelFilter.Self,
+		                    MmActiveFilter.All, MmSelectedFilter.All)
+		            );
+		    }
+
+            base.Update();
 		}
 
-        /// <summary>
-        /// Handle MmMethod: SetActive
-        /// </summary>
-        /// <param name="active">Value of active state.</param>
-		public override void SetActive (bool active)
+		protected override void ReceivedMessage(MmMessageTransform msgTransform)
 		{
-			GUIHandler.HandleSetActive (active);
-		}
-
-        /// <summary>
-        /// Handle MmMethod: Message
-        /// </summary>
-        /// <param name="message">String message extracted from MmMessageString.</param>
-        protected override void ReceivedMessage(MmMessageString message)
-        {
-			GUIHandler.HandleMessage (message.value);
+			this.gameObject.transform.SetPosition (msgTransform.MmTransform.Translation, true);
+			this.gameObject.transform.SetRotation (msgTransform.MmTransform.Rotation, true);
 		}
 	}
 }

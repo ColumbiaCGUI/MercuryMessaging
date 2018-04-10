@@ -38,7 +38,7 @@ using System.Linq;
 using MercuryMessaging.Task;
 using UnityEngine.Networking;
 
-namespace MercuryMessaging.Message
+namespace MercuryMessaging
 {
     /// <summary>
     /// MmMessage that sends a serialized object as payload

@@ -34,7 +34,7 @@
 
 using UnityEngine.Networking;
 
-namespace MercuryMessaging.Message
+namespace MercuryMessaging
 {
     /// <summary>
     /// Base class for messages passed through MmInvoke

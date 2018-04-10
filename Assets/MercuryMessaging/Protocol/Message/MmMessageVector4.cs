@@ -35,7 +35,7 @@
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace MercuryMessaging.Message
+namespace MercuryMessaging
 {
     /// <summary>
     /// MmMessage with Vector4 payload

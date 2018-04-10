@@ -32,7 +32,6 @@
 // 
 // 
 
-using MercuryMessaging.Message;
 using UnityEngine;
 
 namespace MercuryMessaging

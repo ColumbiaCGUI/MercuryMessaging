@@ -34,7 +34,6 @@
 
 using System;
 using System.Collections.Generic;
-using MercuryMessaging.Message;
 using MercuryMessaging.Task;
 using UnityEngine;
 
@@ -91,16 +90,47 @@ namespace MercuryMessaging
                     var messageSerializable = (MmMessageSerializable)message;
                     ApplyTaskInfo(messageSerializable.value);
                     break;
-				case MmMethod.Message:
-					var messageMessage = (MmMessageString)message;
-					ReceivedMessage(messageMessage.value);
+                case MmMethod.Message:
+                    ReceivedMessage(message);
+                    break;
+                case MmMethod.MessageBool:
+                    ReceivedMessage((MmMessageString)message);
+                    break;
+                case MmMethod.MessageByteArray:
+                    ReceivedMessage((MmMessageByteArray)message);
+                    break;
+                case MmMethod.MessageFloat:
+                    ReceivedMessage((MmMessageFloat)message);
+                    break;
+                case MmMethod.MessageInt:
+                    ReceivedMessage((MmMessageInt)message);
+                    break;
+                case MmMethod.MessageSerializable:
+                    ReceivedMessage((MmMessageSerializable)message);
+                    break;
+                case MmMethod.MessageString:
+                    ReceivedMessage((MmMessageString)message);
 					break;
+                case MmMethod.MessageTransform:
+                    ReceivedMessage((MmMessageTransform)message);
+                    break;
+                case MmMethod.MessageTransformList:
+                    ReceivedMessage((MmMessageTransformList)message);
+                    break;
+                case MmMethod.MessageVector3:
+                    ReceivedMessage((MmMessageVector3)message);
+                    break;
+                case MmMethod.MessageVector4:
+                    ReceivedMessage((MmMessageVector4)message);
+                    break;
                 default:
                     Debug.Log(message.MmMethod.ToString());
                     throw new ArgumentOutOfRangeException();
             }
         }
 
+
+        #region Base Message Handlers
         /// <summary>
         /// Handle MmMethod: SetActive
         /// </summary>
@@ -157,13 +187,104 @@ namespace MercuryMessaging
 	    {
 	    }
 
+	    /// <summary>
+	    /// Handle MmMethod: Base MmMessage.
+	    /// Override this to handle base Mercury Messages.
+	    /// </summary>
+	    /// <param name="message"><see cref="MmMessage"/></param>
+	    protected virtual void ReceivedMessage(MmMessage message)
+	    {
+	    }
+
+	    /// <summary>
+	    /// Handle MmMethod: MessageBool.
+	    /// Override this to handle Mercury's bool messages.
+	    /// </summary>
+	    /// <param name="message"><see cref="MmMessageBool"/></param>
+	    protected virtual void ReceivedMessage(MmMessageBool message)
+	    {
+	    }
+
         /// <summary>
-        /// Handle MmMethod: Message
+        /// Handle MmMethod: MessageByteArray.
+        /// Override this to handle Mercury's byte array messages.
         /// </summary>
-        /// <param name="message">String message extracted from MmMessageString.</param>
-		protected virtual void ReceivedMessage(string message)
+        /// <param name="message"><see cref="MmMessageByteArray"/></param>
+        protected virtual void ReceivedMessage(MmMessageByteArray message)
+	    {
+	    }
+
+        /// <summary>
+        /// Handle MmMethod: MessageFloat.
+        /// Override this to handle Mercury's float messages.
+        /// </summary>
+        /// <param name="message"><see cref="MmMessageFloat"/></param>
+        protected virtual void ReceivedMessage(MmMessageFloat message)
+	    {
+	    }
+
+	    /// <summary>
+	    /// Handle MmMethod: MessageInt.
+	    /// Override this to handle Mercury's int messages.
+	    /// </summary>
+	    /// <param name="message"><see cref="MmMessageInt"/></param>
+	    protected virtual void ReceivedMessage(MmMessageInt message)
+	    {
+	    }
+
+	    /// <summary>
+	    /// Handle MmMethod: MessageSerializable.
+	    /// Override this to handle Mercury's serializable messages.
+	    /// </summary>
+	    /// <param name="message"><see cref="MmMessageSerializable"/></param>
+	    protected virtual void ReceivedMessage(MmMessageSerializable message)
+	    {
+	    }
+
+        /// <summary>
+        /// Handle MmMethod: MessageString
+        /// Override this to handle Mercury's string messages.
+        /// </summary>
+        /// <param name="message"><see cref="MmMessageString"/></param>
+		protected virtual void ReceivedMessage(MmMessageString message)
 		{
 		}
+
+	    /// <summary>
+	    /// Handle MmMethod: MessageTransform
+	    /// Override this to handle Mercury's transform messages.
+	    /// </summary>
+	    /// <param name="message"><see cref="MmMessageTransform"/></param>
+	    protected virtual void ReceivedMessage(MmMessageTransform message)
+	    {
+	    }
+
+	    /// <summary>
+	    /// Handle MmMethod: MessageTransformList
+	    /// Override this to handle Mercury's transform list messages.
+	    /// </summary>
+	    /// <param name="message"><see cref="MmMessageTransformList"/></param>
+	    protected virtual void ReceivedMessage(MmMessageTransformList message)
+	    {
+	    }
+
+        /// <summary>
+        /// Handle MmMethod: MessageVector3
+        /// Override this to handle Mercury's Vector3 messages.
+        /// </summary>
+        /// <param name="message"><see cref="MmMessageVector3"/></param>
+        protected virtual void ReceivedMessage(MmMessageVector3 message)
+	    {
+	    }
+
+	    /// <summary>
+	    /// Handle MmMethod: MessageVector4
+	    /// Override this to handle Mercury's Vector4 messages.
+	    /// </summary>
+	    /// <param name="message"><see cref="MmMessageVector4"/></param>
+	    protected virtual void ReceivedMessage(MmMessageVector4 message)
+	    {
+	    }
 
         /// <summary>
         /// Implementation of IMmResponder's GetRelayNode.
@@ -175,5 +296,7 @@ namespace MercuryMessaging
 		{
 			return GetComponent<MmRelayNode>();
 		}
+
+        #endregion
     }
 }

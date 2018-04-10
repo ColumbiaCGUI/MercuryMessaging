@@ -32,8 +32,6 @@
 // 
 // 
 
-using MercuryMessaging.Message;
-
 namespace MercuryMessaging
 {
     /// <summary>
