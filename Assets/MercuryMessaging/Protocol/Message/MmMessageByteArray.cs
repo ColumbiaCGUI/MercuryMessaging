@@ -116,9 +116,9 @@ namespace MercuryMessaging.Message
         /// <param name="writer">UNET based serializer</param>
         public override void Serialize(NetworkWriter writer)
 		{
-			base.Serialize (writer);
-			writer.Write (length);
-			writer.Write (byteArr,length);
+            base.Serialize (writer);
+            writer.Write (byteArr.Length);
+			writer.Write (byteArr, byteArr.Length);
 		}
     }
 }

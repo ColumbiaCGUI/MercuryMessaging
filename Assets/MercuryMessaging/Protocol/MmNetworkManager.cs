@@ -124,9 +124,23 @@ namespace MercuryMessaging
         /// </summary>
         /// <param name="responder"></param>
 		public void RegisterMmNetworkResponder(MmNetworkResponder responder)
-		{
-			MmRelayNodes.Add (responder.netId.Value, responder.MmRelayNode);
+        {
+            MmRelayNode nodeToAdd;
+            bool presentInDictionary = MmRelayNodes.TryGetValue(responder.netId.Value, out nodeToAdd);
+            if(!presentInDictionary)
+			    MmRelayNodes.Add (responder.netId.Value, responder.MmRelayNode);
 		}
+
+        /// <summary>
+        /// Removes a particular relay node from the dictionary of supported nodes.
+        /// </summary>
+        public void RemoveMmNetworkResponder(MmNetworkResponder responder)
+        {
+            MmRelayNode nodeToRemove;
+            bool presentInDictionary = MmRelayNodes.TryGetValue(responder.netId.Value, out nodeToRemove);
+            if (!presentInDictionary)
+                MmRelayNodes.Remove(responder.netId.Value);
+        }
 
         /// <summary>
         /// Process a message and send it to the associated object.
@@ -171,7 +185,7 @@ namespace MercuryMessaging
 		            case MmMessageType.MmByteArray:
 		                MmMessageByteArray msgByteArray = netMsg.ReadMessage<MmMessageByteArray>();
 		                MmRelayNodes[msgByteArray.NetId].MmInvoke(mmMessageType, msgByteArray);
-		                break;
+                        break;
 		            case MmMessageType.MmTransform:
 		                MmMessageTransform msgTransform = netMsg.ReadMessage<MmMessageTransform>();
 		                MmRelayNodes[msgTransform.NetId].MmInvoke(mmMessageType, msgTransform);
@@ -188,9 +202,9 @@ namespace MercuryMessaging
 		                throw new ArgumentOutOfRangeException();
 		        }
 		    }
-		    catch
-		    {
-                MmLogger.LogError("Message NetID not found in MmRelayNodes Dictionary.");
+		    catch (Exception e)
+            {
+                MmLogger.LogError(e.Message);
             }
 		}
 	}

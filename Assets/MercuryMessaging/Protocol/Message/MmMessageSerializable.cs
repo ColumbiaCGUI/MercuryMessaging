@@ -34,6 +34,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using MercuryMessaging.Task;
 using UnityEngine.Networking;
 
@@ -41,6 +42,11 @@ namespace MercuryMessaging.Message
 {
     /// <summary>
     /// MmMessage that sends a serialized object as payload
+    /// You need to assign your implementation of the IMSerializable interface
+    /// to the Serializable types somewhere in your program. Additionally, you
+    /// need to invoke the AssignType function manually if you do not create the 
+    /// message using the constructor with an IMSerializable as a parameter 
+    /// or the copy constructor.
     /// </summary>
     public class MmMessageSerializable : MmMessage
     {
@@ -64,7 +70,8 @@ namespace MercuryMessaging.Message
         /// Creates a basic MmMessageSerializable
         /// </summary>
         public MmMessageSerializable()
-        {}
+        {
+        }
 
         /// <summary>
         /// Creates a basic MmMessageSerializable, with a control block
@@ -87,6 +94,7 @@ namespace MercuryMessaging.Message
             : base(mmMethod, metadataBlock)
         {
             value = iVal;
+            AssignType();
         }
 
         /// <summary>
@@ -94,7 +102,8 @@ namespace MercuryMessaging.Message
         /// </summary>
         /// <param name="message">Item to duplicate</param>
         public MmMessageSerializable(MmMessageSerializable message) : base(message)
-        {}
+        {
+        }
 
         /// <summary>
         /// Message copy method
@@ -105,6 +114,7 @@ namespace MercuryMessaging.Message
             MmMessageSerializable newMessage = new MmMessageSerializable (this);
 
             newMessage.value = value.Copy();
+            AssignType();
 
             return newMessage;
         }
@@ -132,6 +142,17 @@ namespace MercuryMessaging.Message
             base.Serialize (writer);
             writer.Write(SerializableType);
             value.Serialize (writer);
+        }
+
+        /// <summary>
+        /// Attempt to determine type of the value, then lookup in the types dictionary
+        ///   then assign to numerical value for transfer
+        /// Sample code from: https://stackoverflow.com/questions/2444033/get-dictionary-key-by-value
+        /// </summary>
+        public void AssignType()
+        {
+            Type myType = value.GetType();
+            SerializableType = SerializableTypes.FirstOrDefault(x => x.Value == myType).Key;
         }
 
     }

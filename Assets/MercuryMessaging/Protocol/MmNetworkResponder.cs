@@ -178,7 +178,7 @@ namespace MercuryMessaging
 
             //Need to call the right method based on whether this object 
             //  is a client or a server.
-            if (isServer)
+            if (NetworkServer.active)
                 MmSendMessageToClient((short)msgType, message);
             else if (allowClientToSend)
                 MmSendMessageToServer((short)msgType, message);
@@ -194,7 +194,7 @@ namespace MercuryMessaging
         /// </summary>
         public virtual void Awake()
 		{
-            MmLogger.LogFramework(gameObject.name + ": Network Responder Awake");
+		    MmLogger.LogFramework(gameObject.name + ": Network Responder Awake");
 
             MmRelayNode = GetComponent<MmRelayNode>();
 
@@ -211,7 +211,7 @@ namespace MercuryMessaging
         {
             MmLogger.LogFramework(gameObject.name + ": Network Responder Started");
 
-			MmNetworkManager.Instance.RegisterMmNetworkResponder (this);
+			RegisterToMmNetworkManager();
 			
             if (MmStart != null)
                 MmStart();
@@ -288,6 +288,16 @@ namespace MercuryMessaging
             foreach (var connection in NetworkServer.connections)
                 if (connection != null)
                     NetworkServer.SendToClient(connection.connectionId, msgType, msg);
+        }
+
+	    public virtual void RegisterToMmNetworkManager()
+	    {
+	        MmNetworkManager.Instance.RegisterMmNetworkResponder(this);
+        }
+
+	    public virtual void RemoveSelfFromMmNetworkManager()
+	    {
+	        MmNetworkManager.Instance.RemoveMmNetworkResponder(this);
         }
     }
 }
