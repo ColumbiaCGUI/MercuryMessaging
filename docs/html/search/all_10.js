@@ -21,6 +21,6 @@ var searchData=
   ['root',['root',['../class_mercury_messaging_1_1_mm_message.html#ae714e44a3e14deafb1f232a4865342a2',1,'MercuryMessaging::MmMessage']]],
   ['rootrelayswitchnode',['RootRelaySwitchNode',['../class_mercury_messaging_1_1_mm_test_manager.html#a4f1993f2dc20d33392a00e037d6ac1b3',1,'MercuryMessaging::MmTestManager']]],
   ['rotation',['Rotation',['../struct_mercury_messaging_1_1_mm_transform.html#a472d07a6b329d4a8c663a836013db221',1,'MercuryMessaging::MmTransform']]],
-  ['rotationfromto',['rotationFromTo',['../class_mercury_messaging_1_1_task_1_1_mm_transformation_task_responder.html#a3bef4915827ea17e7c9065816f0ef401',1,'MercuryMessaging.Task.MmTransformationTaskResponder.rotationFromTo()'],['../class_mercury_messaging_1_1_task_1_1_mm_transformation_task_info.html#a5d7897658a5279514f1e6837516d3693',1,'MercuryMessaging.Task.MmTransformationTaskInfo.RotationFromTo()']]],
+  ['rotationfromto',['RotationFromTo',['../class_mercury_messaging_1_1_task_1_1_mm_transformation_task_info.html#a5d7897658a5279514f1e6837516d3693',1,'MercuryMessaging.Task.MmTransformationTaskInfo.RotationFromTo()'],['../class_mercury_messaging_1_1_task_1_1_mm_transformation_task_responder.html#a3bef4915827ea17e7c9065816f0ef401',1,'MercuryMessaging.Task.MmTransformationTaskResponder.rotationFromTo()']]],
   ['routingtable',['RoutingTable',['../class_mercury_messaging_1_1_mm_relay_node.html#a7733064c849f8f0beb39a870089f39e7',1,'MercuryMessaging::MmRelayNode']]]
 ];

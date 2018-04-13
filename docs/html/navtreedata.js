@@ -23,7 +23,8 @@ for the JavaScript code in this file
 */
 var NAVTREE =
 [
-  [ "Mercury Documentation", "index.html", [
+  [ "Mercury Messaging", "index.html", [
+    [ "MercuryMessaging", "index.html", null ],
     [ "MercuryMessaging Toolkit", "md__c_1__users_ce223__documents__projects__mercury_messaging__assets__mercury_messaging__readme.html", null ],
     [ "Packages", "namespaces.html", [
       [ "Packages", "namespaces.html", "namespaces_dup" ],
@@ -54,7 +55,7 @@ var NAVTREEINDEX =
 "annotated.html",
 "class_mercury_messaging_1_1_mm_relay_node.html#a3e800e46891b390e797b5c01335c2762",
 "class_mercury_messaging_1_1_support_1_1_g_u_i_1_1_mm_gui_handler.html#aeee24995300cbb49461c69e093bcae40",
-"functions_h.html"
+"functions_func_w.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

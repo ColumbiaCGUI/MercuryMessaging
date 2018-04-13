@@ -5,6 +5,7 @@ var searchData=
   ['extensions',['Extensions',['../namespace_mercury_messaging_1_1_support_1_1_extensions.html',1,'MercuryMessaging::Support']]],
   ['finitestatemachine',['FiniteStateMachine',['../namespace_mercury_messaging_1_1_support_1_1_finite_state_machine.html',1,'MercuryMessaging::Support']]],
   ['gui',['GUI',['../namespace_mercury_messaging_1_1_support_1_1_g_u_i.html',1,'MercuryMessaging::Support']]],
+  ['mercurymessaging',['MercuryMessaging',['../index.html',1,'']]],
   ['input',['Input',['../namespace_mercury_messaging_1_1_support_1_1_input.html',1,'MercuryMessaging::Support']]],
   ['interpolators',['Interpolators',['../namespace_mercury_messaging_1_1_support_1_1_interpolators.html',1,'MercuryMessaging::Support']]],
   ['materialchanger',['MaterialChanger',['../class_mercury_messaging_1_1_support_1_1_interpolators_1_1_material_changer.html',1,'MercuryMessaging::Support::Interpolators']]],

@@ -13,6 +13,8 @@ var class_mercury_messaging_1_1_task_1_1_mm_look_at_task_info =
     [ "delimiter", "class_mercury_messaging_1_1_task_1_1_mm_look_at_task_info.html#aa5ce8c05b7820262aaf13bda67c524a5", null ],
     [ "LookAt", "class_mercury_messaging_1_1_task_1_1_mm_look_at_task_info.html#a67103b6c35c1feaf416153500e9cfaa4", null ],
     [ "Orientation", "class_mercury_messaging_1_1_task_1_1_mm_look_at_task_info.html#af50ac2cd4a71a3ad46ca79d12469597a", null ],
+    [ "Position", "class_mercury_messaging_1_1_task_1_1_mm_look_at_task_info.html#a3cc088ba8179749accc87655c8c5f084", null ],
     [ "TargetObjOrientation", "class_mercury_messaging_1_1_task_1_1_mm_look_at_task_info.html#a4951320b53046923e743486f5afa910a", null ],
+    [ "Threshold", "class_mercury_messaging_1_1_task_1_1_mm_look_at_task_info.html#a55bf4a28a692046d2a927e3d7dbb82e2", null ],
     [ "up", "class_mercury_messaging_1_1_task_1_1_mm_look_at_task_info.html#a76e299e861d37a795f1aeb888f4302e5", null ]
 ];
