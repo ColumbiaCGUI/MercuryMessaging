@@ -181,10 +181,14 @@ public class InvocationComparison : MmBaseResponder, ICustomMessageTarget {
 		int counter = 0;
 		while (counter < Repetitions)
 		{
-			stopWatch.Start ();
-			myNode.MmInvoke (MmMethod.Initialize, mmBlock);
+		    if (!simpleLock)
+		    {
+		        simpleLock = true;
+		        stopWatch.Start();
+		        myNode.MmInvoke(MmMethod.Initialize, mmBlock);
 
-			counter++;
+		        counter++;
+		    }
 		}
 	}
 
@@ -264,7 +268,7 @@ public class InvocationComparison : MmBaseResponder, ICustomMessageTarget {
 	/// Overrides the base MmInvoke
 	/// Here we just stop the stopwatch. But we could throw in a switch (to represent normal usage) too.
 	/// </summary>
-	public override void MmInvoke (MmMessageType msgType, MercuryMessaging.Message.MmMessage message)
+	public override void MmInvoke (MmMessageType msgType, MmMessage message)
 	{
 		//base.MmInvoke (msgType, message);
 
