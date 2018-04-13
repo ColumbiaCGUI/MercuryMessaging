@@ -59,7 +59,7 @@ Done!
 
 To get the MercuryMessaging Toolkit, please visit any of the following sources:
 
-[MercuryMessaging Official Website](https:www.cs.columbia.edu/cgui/MercuryMessaging)
+[MercuryMessaging Official Website](https://columbiacgui.github.io/MercuryMessaging/)
 
 Download the *MercuryMessaging.unitypackage* file from the website.
 In Unity, in the menu bar, select **Assets->Import Package->Custom package**.
@@ -75,7 +75,7 @@ You'll be able to import the package immediately after downloading.
 Once it is finished downloading, double click the file and select import when
 the **Import** dialogue window appears.
 
-[GitHub](https://github.com/ColumbiaCGUI)
+[GitHub](https://github.com/ColumbiaCGUI/MercuryMessaging)
 
 If you downloaded the source from GitHub, please drag and drop the
         root folder of MercuryMessaging, *MercuryMessaging* into the Assets folder of your
@@ -86,20 +86,20 @@ If you downloaded the source from GitHub, please drag and drop the
 Now that you have the toolkit installed, you'll probably want to check out a
 tutorial.
 
-Please see our tutorials page at the site: [MercuryMessaging Tutorials](https://www.cs.columbia.edu/cgui/MercuryMessaging/Tutorials).
+Please see our tutorials page at the site: [MercuryMessaging Tutorials](https://github.com/ColumbiaCGUI/MercuryMessaging/wiki/Tutorials).
 
 ## Documentation
 
 Complete Documentation for the toolkit can be found on the toolkit's
-[documentation page](https://www.cs.columbia.edu/cgui/MercuryMessaging/Documentation).
+[documentation page](https://columbiacgui.github.io/MercuryMessaging/).
 
 ## FAQ
 ### Q. Does the toolkit work in Unity version 5.4.x, 4.x, 3.x, and earlier?
 
-A. Don't know. The toolkit requires some features that were added in Unity 5. As such,
-we provide no support for the toolkit in earlier versions of Unity.
+A. The Framework was developed using Unity 5.6, and has been tested in all versions of Unity 2017 and Unity 2018.
 
-That said, it may work in other versions of Unity 5, but we're not sure.
+As to earlier versions, possibly. The toolkit requires some features that were added in Unity 5. As such,
+we provide no support for the toolkit in earlier versions of Unity. That said, it may work in other versions of Unity 5, but we're not sure.
 
 ### Q. What is Unity?
 
@@ -108,8 +108,8 @@ A. Unity is a game engine. Please see here:
 
 ### Q. Can I use the toolkit with Unreal, CryEngine, etc.
 
-A. As much as we like those engines, we built the toolkit to support us in our
-work in our lab, where we do all of our work in Unity.
+A. As much as we like those engines, we originally built the toolkit to support us in our
+work in our lab, where we use Unity.
 
 We want to bring the toolkit to other platforms and are looking for
 collaborators in doing so. Please contact
