@@ -697,6 +697,21 @@ namespace MercuryMessaging
             MmInvoke(MmMessageType.MmSerializable, msg);
         }
 
+		/// <summary>
+		/// Invoke an MmMethod with any message type.
+		/// </summary>
+		/// <param name="mmMethod">MmMethod Identifier - <see cref="MmMethod"/></param>
+		/// <param name="param">MmMethod parameter: Any Message type.</param>
+		/// <param name="msgType">Type of MmMessage parameter.</param>
+		/// <param name="metadataBlock">Object defining the routing of 
+		/// Mmessages through MercuryMessaging Hierarchies. <see cref="MmMetadataBlock"/></param>
+		public virtual void MmInvoke(MmMethod mmMethod, MmMessage param, MmMessageType msgType, MmMetadataBlock metadataBlock = null)
+		{
+			param.MmMethod = mmMethod;
+			param.MetadataBlock = metadataBlock;
+			MmInvoke(msgType, param);
+		}
+
         #endregion
 
         #endregion
