@@ -52,6 +52,9 @@ namespace MercuryMessaging.Tutorials.Tutorial1
             _myRelayNode.MmInvoke(MmMethod.Initialize, 
                 new MmMetadataBlock(MmLevelFilterHelper.SelfAndChildren, 
                     MmActiveFilter.All));
+
+			_myRelayNode.MmInvoke ((MmMethod)20, new MmMetadataBlock(MmLevelFilterHelper.SelfAndChildren, 
+				MmActiveFilter.All));
         }
 	
         // Update is called once per frame
