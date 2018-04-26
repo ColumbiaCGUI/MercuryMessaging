@@ -95,3 +95,9 @@ A. Unity is a game engine. Please see here:
 A. As much as we like those engines, we originally built the toolkit to support us in our
 work in our lab, where we use Unity.
 
+# Acknowledgments
+
+Funded in part by National Science Foundation Grant IIS-1514429. 
+Any opinions, findings and conclusions or recommendations expressed in this material are those of the authors and do not necessarily reflect the views of the National Science Foundation.
+
+
