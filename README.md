@@ -1,6 +1,6 @@
 # MercuryMessaging 
 
-![Basic scene layout](https://github.com/ColumbiaCGUI/MercuryMessaging/wiki/Images/Tutorial1/Tutorial1.png)
+![Basic scene layout](https://github.com/ColumbiaCGUI/MercuryMessaging/wiki/Images/General/MercuryCollage.png)
 
 *MercuryMessaging* is a new way to handle cross-component communication in the Unity
   game engine. It integrates seamlessly with the Unity Editor, and is both
