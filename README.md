@@ -57,33 +57,15 @@ Done!
 
 ## Downloading MercuryMessaging
 
-To get the MercuryMessaging Toolkit, please visit any of the following sources:
-
-[MercuryMessaging Official Website](https://columbiacgui.github.io/MercuryMessaging/)
-
-Download the *MercuryMessaging.unitypackage* file from the website.
-In Unity, in the menu bar, select **Assets->Import Package->Custom package**.
-Then navigate to where you stored the package file: *MercuryMessaging.unitypackage*.
-Alternatively, simply drag and drop the *MercuryMessaging.unitypackage*
-  file into the Assets folder in Unity's project view.
-Double click the file and select import when the **Import**
-  dialogue window appears.
-
-[Unity Asset Store](https://www.assetstore.unity3d.com/en/#!/)
-
-You'll be able to import the package immediately after downloading.
-Once it is finished downloading, double click the file and select import when
-the **Import** dialogue window appears.
-
 [GitHub](https://github.com/ColumbiaCGUI/MercuryMessaging)
-
+You can check-out or download the code from GitHub directly. 
 If you downloaded the source from GitHub, please drag and drop the
         root folder of MercuryMessaging, *MercuryMessaging* into the Assets folder of your
         project.
 
 ## Getting Started
 
-Now that you have the toolkit installed, you'll probably want to check out a
+Once you have the toolkit installed, you'll probably want to check out a
 tutorial.
 
 Please see our tutorials page at the site: [MercuryMessaging Tutorials](https://github.com/ColumbiaCGUI/MercuryMessaging/wiki/Tutorials).
@@ -110,8 +92,4 @@ A. Unity is a game engine. Please see here:
 
 A. As much as we like those engines, we originally built the toolkit to support us in our
 work in our lab, where we use Unity.
-
-We want to bring the toolkit to other platforms and are looking for
-collaborators in doing so. Please contact
-[Professor Steven Feiner](feiner@cs.columbia.edu) of Columbia University.
 
