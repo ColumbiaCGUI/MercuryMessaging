@@ -2,46 +2,45 @@
 
 ![Basic scene layout](https://github.com/ColumbiaCGUI/MercuryMessaging/wiki/Images/General/MercuryCollage.png)
 
-*MercuryMessaging* is a new way to handle cross-component communication in the Unity
+The *Mercury* messaging toolkit is a new way to handle cross-component communication in the Unity
   game engine. It integrates seamlessly with the Unity Editor, and is both
-  robust and very expandable.
+ robust and expandable.
 
-The toolkit contains the *MercuryMessaging* Framework, which is a messaging
-  and organizational framework built around the *MercuryMessaging Protocol*. 
+The toolkit contains the *Mercury* messaging framework, which is a messaging
+  and organizational framework built around the *Mercury Protocol*. 
 
 Unity organizes its rendered scene objects
 (known in Unity as
   [GameObjects](https://docs.unity3d.com/ScriptReference/GameObject.html))
 using a standard scene graph (known in Unity as the
   [Scene Hierarchy](https://docs.unity3d.com/Manual/Hierarchy.html)).
-While Unity's implementation is very powerful,
-it is fairly difficult to achieve non-spatial communication between
+While Unity is very powerful,
+it is fairly difficult to achieve nonspatial communication between
 scriptable components of GameObjects (in Unity, known as
   [MonoBehaviours](https://docs.unity3d.com/ScriptReference/MonoBehaviour.html))
 .
 
 Consider a visualization in a basketball game where you connect the ball to *each* 
-player on a court with individual lines, and then
-  another from the ball in the hoop. There will be a control script on each
-  line in the effect.
+player on a court with individual lines. There will be a control script on each
+  line in the visualization.
 
 Normally, to disable a GameObject in Unity, you invoke the
   [SetActive](https://docs.unity3d.com/ScriptReference/GameObject.SetActive.html)
   method.
-This will disable the GameObject and it's children in the scene hierarchy.
-However, in our example, to disable the entire effect, you would need to
-  go and disable the endpoint spheres and the line objects.
+This will disable the GameObject and its children in the scene hierarchy.
+However, in our example, to disable the entire visualization, you would need to
+  disable the endpoint spheres and the line objects.
 In a script, you would need to get a handle to the GameObjects, and invoke
   SetActive on each of them individually.  
 
 
-In this simple example, the toolkit makes it easy to achieve this.
+In this simple example, the Mercury messaging toolkit makes it easy to achieve this.
 
 You drop an *MmRelayNode* (MercuryMessaging Relay Node) and an *MmResponder* (MercuryMessaging
-  Responder) onto each of the related GameObjects in the effect.
+  Responder) onto each of the related GameObjects in the visualization.
 
 Each *MmRelayNode* has a *MmRoutingTable*.
-In the Line's root *MmRelayNode*, you'll drag and drop the related components:
+In the line's root *MmRelayNode*, you'll drag and drop the related components:
   the endpoint-spheres and line.
 
 In your line control script, you invoke the following method:
@@ -53,14 +52,20 @@ GetComponent<MmRelayNode>().MmInvoke(MmMethod.SetActive, true,
 ```
 
 This will trigger a special SetActive message on each of the objects involved
-  in the effect.
+  in the visualization.
 
 Done!
 
+## CHI 2018
+
+*Mercury* was presented at CHI 2018. The paper is available online at the ACM Digital Library.
+
+Carmine Elvezio, Mengu Sukan, and Steven Feiner. 2018. Mercury: A Messaging Framework for Modular UI Components. In Proceedings of the 2018 CHI Conference on Human Factors in Computing Systems (CHI '18). ACM, New York, NY, USA, Paper 588, 12 pages. DOI:https://doi.org/10.1145/3173574.3174162
+
 ## Downloading MercuryMessaging
 
-[GitHub](https://github.com/ColumbiaCGUI/MercuryMessaging)
-You can check-out or download the code from GitHub directly. 
+GitHub
+You can check-out or download the code from [GitHub](https://github.com/ColumbiaCGUI/MercuryMessaging) directly. 
 If you downloaded the source from GitHub, please drag and drop the
         root folder of MercuryMessaging, *MercuryMessaging* into the Assets folder of your
         project.
