@@ -4,7 +4,7 @@
 
 The *Mercury* messaging toolkit is a new way to handle cross-component communication in the Unity
   game engine. It integrates seamlessly with the Unity Editor, and is both
- robust and expandable.
+ robust and expandable. It has been tested in Unity 2017 up until 2017.4f1, Unity 2018 up until 2018.1b, and 5.6.
 
 The toolkit contains the *Mercury* messaging framework, which is a messaging
   and organizational framework built around the *Mercury Protocol*. 
@@ -85,9 +85,9 @@ Complete Documentation for the toolkit can be found on the toolkit's
 ## FAQ
 ### Q. Does the toolkit work in Unity version 5.4.x, 4.x, 3.x, and earlier?
 
-A. The Framework was developed using Unity 5.6, and has been tested in all versions of Unity 2017 and Unity 2018.
+A. The framework has been tested in Unity 2017 up until 2017.4f1 and Unity 2018 up until 2018.1b.
 
-As to earlier versions, possibly. The toolkit requires some features that were added in Unity 5. As such,
+The Framework was developed using Unity 5.6. The toolkit requires some features that were added in Unity 5. As such,
 we provide no support for the toolkit in earlier versions of Unity. That said, it may work in other versions of Unity 5, but we're not sure.
 
 ### Q. What is Unity?
