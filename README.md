@@ -85,7 +85,7 @@ Complete Documentation for the toolkit can be found on the toolkit's
 ## FAQ
 ### Q. Does the toolkit work in Unity version 5.4.x, 4.x, 3.x, and earlier?
 
-A. The framework has been tested in Unity 2017 up until 2017.4f1 and Unity 2018 up until 2018.1b.
+A. The framework has been tested in Unity 2017 up until 2017.4f1 and Unity 2018 up until 2018.1.6f1.
 
 The Framework was developed using Unity 5.6. The toolkit requires some features that were added in Unity 5. As such,
 we provide no support for the toolkit in earlier versions of Unity. That said, it may work in other versions of Unity 5, but we're not sure.
