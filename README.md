@@ -36,7 +36,7 @@ In a script, you would need to get a handle to the GameObjects, and invoke
 
 In this simple example, the Mercury messaging toolkit makes it easy to achieve this.
 
-You drop an *MmRelayNode* (MercuryMessaging Relay Node) and an *MmResponder* (MercuryMessaging
+You first drop an *MmRelayNode* (MercuryMessaging Relay Node) and an *MmResponder* (MercuryMessaging
   Responder) onto each of the related GameObjects in the visualization.
 
 Each *MmRelayNode* has a *MmRoutingTable*.
