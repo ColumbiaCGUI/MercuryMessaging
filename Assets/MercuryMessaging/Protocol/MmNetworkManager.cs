@@ -115,7 +115,9 @@ namespace MercuryMessaging
 
 		    if (MmStart != null)
 				MmStart();
-		}
+
+		    //NetworkManager.singleton.globalConfig.MaxPacketSize = 2500;
+        }
 
         /// <summary>
         /// Register all MmResponders that can receive messages.
@@ -196,7 +198,11 @@ namespace MercuryMessaging
 		                MmMessageSerializable msgSerializable = netMsg.ReadMessage<MmMessageSerializable>();
 		                MmRelayNodes[msgSerializable.NetId].MmInvoke(mmMessageType, msgSerializable);
 		                break;
-		            default:
+                    case MmMessageType.MmGameObject:
+                        MmMessageGameObject msgGameObject = netMsg.ReadMessage<MmMessageGameObject>();
+                        MmRelayNodes[msgGameObject.NetId].MmInvoke(mmMessageType, msgGameObject);
+                        break;
+                default:
 		                throw new ArgumentOutOfRangeException();
 		        }
 		    }

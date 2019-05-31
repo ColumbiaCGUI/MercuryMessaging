@@ -46,6 +46,11 @@ namespace MercuryMessaging
 		public MmTransform MmTransform;
 
         /// <summary>
+        /// Represents whether to use local or global transformation.
+        /// </summary>
+        public bool LocalTransform;
+
+        /// <summary>
         /// Creates a basic MmMessageTransform
         /// </summary>
 		public MmMessageTransform()
@@ -67,12 +72,29 @@ namespace MercuryMessaging
         /// <param name="transform">MmTransform payload</param>
         /// <param name="mmMethod">Identifier of target MmMethod</param>
         /// <param name="metadataBlock">Object defining the routing of messages</param>
+        public MmMessageTransform(MmTransform transform,
+            MmMethod mmMethod = default(MmMethod),
+            MmMetadataBlock metadataBlock = null)
+            : base(mmMethod, metadataBlock)
+        {
+            MmTransform = transform;
+        }
+
+        /// <summary>
+        /// Create an MmMessage, with control block, MmMethod, and an MmTransform
+        /// </summary>
+        /// <param name="transform">MmTransform payload</param>
+        /// <param name="globalTransform">Should message recipient apply to global or local transform?</param>
+        /// <param name="mmMethod">Identifier of target MmMethod</param>
+        /// <param name="metadataBlock">Object defining the routing of messages</param>
 		public MmMessageTransform(MmTransform transform,
-			MmMethod mmMethod = default(MmMethod),
+            bool localTransform,
+            MmMethod mmMethod = default(MmMethod),
 			MmMetadataBlock metadataBlock = null)
 			: base(mmMethod, metadataBlock)
 		{
 			MmTransform = transform;
+            LocalTransform = localTransform;
 		}
 
         /// <summary>
@@ -90,6 +112,7 @@ namespace MercuryMessaging
         {
 			MmMessageTransform newMessage = new MmMessageTransform (this);
             newMessage.MmTransform = MmTransform;
+            newMessage.LocalTransform = LocalTransform;
 
             return newMessage;
         }
@@ -102,7 +125,8 @@ namespace MercuryMessaging
 		{
 			base.Deserialize (reader);
 			MmTransform.Deserialize (reader);
-		}
+            LocalTransform = reader.ReadBoolean();
+        }
 
         /// <summary>
         /// Serialize the MmMessage
@@ -112,6 +136,7 @@ namespace MercuryMessaging
 		{
 			base.Serialize (writer);
 			MmTransform.Serialize (writer);
-		}
+            writer.Write(LocalTransform);
+        }
 	}
 }

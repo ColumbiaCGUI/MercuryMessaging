@@ -51,7 +51,27 @@ namespace MercuryMessaging
         /// See:https://bitbucket.org/Unity-Technologies/networking/src
         /// </summary>
 	    public float NetworkSendInterval = 60f;
-        
+
+        /// <summary>
+        /// Indicate whether to transmit and set local or global transformation values.
+        /// </summary>
+        public bool useGlobalTransformation;
+
+
+        public override void MmInvoke (MmMessageType msgType, MmMessage message)
+		{
+			switch (message.MmMethod)
+			{
+			case MmMethod.Transform:
+				MmMessageTransform newMsg = message as MmMessageTransform;
+				HandleTransform (newMsg);
+				break;
+			default:
+				base.MmInvoke(msgType, message);
+				break;
+			}
+		}
+
 		public override void Update ()
 		{
 		    if (CanSend && Time.time - lastClientSendTime > (1/NetworkSendInterval))
@@ -60,8 +80,11 @@ namespace MercuryMessaging
 
 		        GetRelayNode()
 		            .MmInvoke(MmMethod.Transform,
-		                new MmTransform(gameObject.transform, true),
-		                new MmMetadataBlock(MmLevelFilter.Self,
+		                new MmMessageTransform(
+                            new MmTransform(gameObject.transform, useGlobalTransformation),
+                            !useGlobalTransformation),
+                        MmMessageType.MmTransform,
+                        new MmMetadataBlock(MmLevelFilter.Self,
 		                    MmActiveFilter.All, MmSelectedFilter.All)
 		            );
 		    }
@@ -69,10 +92,11 @@ namespace MercuryMessaging
             base.Update();
 		}
 
-		protected override void ReceivedMessage(MmMessageTransform msgTransform)
+		public void HandleTransform(MmMessageTransform msgTransform)
 		{
-			this.gameObject.transform.SetPosition (msgTransform.MmTransform.Translation, true);
-			this.gameObject.transform.SetRotation (msgTransform.MmTransform.Rotation, true);
+            //Debug.Log(gameObject.name + " HandleTransform");
+			this.gameObject.transform.SetPosition (msgTransform.MmTransform.Translation, !msgTransform.LocalTransform);
+			this.gameObject.transform.SetRotation (msgTransform.MmTransform.Rotation, !msgTransform.LocalTransform);
 		}
 	}
 }
