@@ -100,6 +100,10 @@ A. Unity is a game engine. Please see here:
 A. As much as we like those engines, we originally built the toolkit to support us in our
 work in our lab, where we use Unity.
 
+### Q. UNET Deprecation
+
+A. MercuryMessaging uses a few components of UNET in the framework. Unity is deprecating and removing UNET from Unity post 2019.4 (LTS) and 2018.4.(LTS). We are already transitioning the code away from UNET, but while we are, if you try to use MercuryMessaging in Unity 2019.1.4 and beyond, you may encounter compilation issues. To resolve these, all you need to do is ensure that you have the Multiplayer HLAPI enabled in packages (Unity->Window->Package Manager->Multiplayer HLAPI (Install)).
+
 # Acknowledgments
 
 Funded in part by National Science Foundation Grant IIS-1514429. 
