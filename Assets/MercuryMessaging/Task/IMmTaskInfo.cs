@@ -46,7 +46,7 @@ namespace MercuryMessaging.Task
         string TaskName { get; set; }
         bool DoNotRecordData { get; set; }
 
-        void Parse(string str);
+        int Parse(string str);
         string Headers();
         string ToString();
     }

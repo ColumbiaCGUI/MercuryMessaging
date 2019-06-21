@@ -84,8 +84,9 @@ namespace MercuryMessaging.Task
         /// <summary>
         /// Generate member values by parsing string.
         /// </summary>
-        /// <param name="str"></param>
-        public virtual void Parse(string str)
+        /// <param name="str">String to parse</param>
+        /// <returns>Word length parsed</returns>
+        public virtual int Parse(string str)
         {
             var words = str.Split(',');
             
@@ -95,6 +96,8 @@ namespace MercuryMessaging.Task
             TaskId = int.Parse(words[3]);
             DoNotRecordData = bool.Parse(words[4]);
             TaskName = words[5];
+
+            return 6;
         }
 
         /// <summary>

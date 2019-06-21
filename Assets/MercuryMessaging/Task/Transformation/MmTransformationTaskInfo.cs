@@ -39,8 +39,25 @@ namespace MercuryMessaging.Task
     /// <summary>
     /// A task info that supports tasks requiring 
     /// 3D transformations meet particular requirements.
+    /// If you want a lighter-weight version of the TransformationTask 
+    /// (without all the header information), set InlcudeTaskInfoData
+    /// to true. Please note, this will not stop the creation of the
+    /// header fields. It will only make it 
     /// </summary>
-    public class MmTransformationTaskInfo : MmTaskInfo {
+    public class MmTransformationTaskInfo : MmTaskInfo
+    {
+        /// <summary>
+        /// If set to false, will skip parsing and serialization of root metadata.
+        /// Data will be replaced by <see cref="Step"/>
+        /// </summary>
+        public bool InlcudeTaskInfoData = true;
+
+        /// <summary>
+        /// Optional. Indicates what step this transformation represents.
+        /// Useful for chaining transformation tasks together as subtasks.
+        /// </summary>
+        public int Step;
+
         #region Rotation
         /// <summary>
         /// Angle requirement.
@@ -95,6 +112,9 @@ namespace MercuryMessaging.Task
             RotationFromTo = orig.RotationFromTo;
             Position = orig.Position;
             Scale = orig.Scale;
+
+            InlcudeTaskInfoData = orig.InlcudeTaskInfoData;
+            Step = orig.Step;
         }
 
         /// <summary>
@@ -126,7 +146,7 @@ namespace MercuryMessaging.Task
 								 "{9:0.0000000}," +
 								 "{10:0.0000000}",
 
-				base.ToString(),
+				InlcudeTaskInfoData ? base.ToString() : Step.ToString(),
 				Axis.x,Axis.y, Axis.z, Angle,
 				Position.x, Position.y, Position.z,
 				Scale.x, Scale.y, Scale.z);
@@ -136,24 +156,26 @@ namespace MercuryMessaging.Task
         /// Parts a string to set members of MmTransformationTaskInfo.
         /// </summary>
         /// <param name="str">String to be parsed.</param>
-        public override void Parse(string str)
+        public override int Parse(string str)
 		{
-			base.Parse (str);
-			var words = str.Split(',');
+			int wordsParsed = InlcudeTaskInfoData ? base.Parse (str) : 0;
+			string[] words = str.Split(',');
 
-			Axis.x = float.Parse(words[6]);
-			Axis.y = float.Parse(words[7]);
-			Axis.z = float.Parse(words[8]);
-			Angle  = float.Parse(words[9]);
+			Axis.x = float.Parse(words[wordsParsed]);
+			Axis.y = float.Parse(words[wordsParsed + 1]);
+			Axis.z = float.Parse(words[wordsParsed + 2]);
+			Angle  = float.Parse(words[wordsParsed + 3]);
 
-			Position.x = float.Parse(words[10]);
-			Position.y = float.Parse(words[11]);
-			Position.z = float.Parse(words[12]);
+			Position.x = float.Parse(words[wordsParsed + 4]);
+			Position.y = float.Parse(words[wordsParsed + 5]);
+			Position.z = float.Parse(words[wordsParsed + 6]);
 
-			Scale.x = float.Parse(words[13]);
-			Scale.y = float.Parse(words[14]);
-			Scale.z = float.Parse(words[15]);
-		}
+			Scale.x = float.Parse(words[wordsParsed + 7]);
+			Scale.y = float.Parse(words[wordsParsed + 8]);
+			Scale.z = float.Parse(words[wordsParsed + 9]);
+
+            return wordsParsed + 10;
+        }
 
         /// <summary>
         /// Generates headers for file/stream storing MmTransformationTaskInfos
@@ -163,7 +185,7 @@ namespace MercuryMessaging.Task
         /// Scale.X, Scale.Y, Scale.Z</returns>
 		public override string Headers()
 		{
-			return base.Headers() + ",Rotation.Axis.X,Rotation.Axis.Y,Rotation.Axis.Z,Rotation.Angle" +
+			return InlcudeTaskInfoData ? base.Headers() : "Step" + ",Rotation.Axis.X,Rotation.Axis.Y,Rotation.Axis.Z,Rotation.Angle" +
 				",Position.X,Position.Y,Position.Z" + 
 				",Scale.X,Scale.Y,Scale.Z";
 		}
@@ -183,7 +205,14 @@ namespace MercuryMessaging.Task
         /// <param name="reader">UNET deserializer.</param>
         public override void Deserialize(NetworkReader reader)
         {
-            base.Deserialize(reader);
+            if (InlcudeTaskInfoData)
+            {
+                base.Deserialize(reader);
+            }
+            else
+            {
+                Step = reader.ReadInt32();
+            }
             Angle = reader.ReadSingle();
             Axis = reader.ReadVector3();
             RotationFromTo = reader.ReadQuaternion();
@@ -198,7 +227,14 @@ namespace MercuryMessaging.Task
         /// <param name="writer">UNET serializer.</param>
         public override void Serialize(NetworkWriter writer)
         {
-            base.Serialize(writer);
+            if (InlcudeTaskInfoData)
+            {
+                base.Serialize(writer);
+            }
+            else
+            {
+                writer.Write(Step);
+            }
             writer.Write(Angle);
             writer.Write(Axis);
             writer.Write(RotationFromTo);

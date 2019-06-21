@@ -100,7 +100,7 @@ namespace MercuryMessaging.Task
                 TargetObjOrientation.ToCSV(delimiter));
         }
 
-        public override void Parse(string str)
+        public override int Parse(string str)
         {
             base.Parse(str);
 
@@ -111,6 +111,8 @@ namespace MercuryMessaging.Task
             TargetObjOrientation = TransformExtensions.CSV2Quaternion(words[18], '|');
 
             CalculateOrientation();
+
+            return 19;
         }
 
         public override string Headers()
