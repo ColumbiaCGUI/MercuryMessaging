@@ -31,9 +31,11 @@
 // =============================================================
 // 
 // 
-
 using UnityEngine;
-using UnityEngine.Networking;
+using System.Linq;
+#if PHOTON_UNITY_NETWORKING
+    using Photon.Pun;
+#endif
 
 namespace MercuryMessaging
 {
@@ -99,20 +101,58 @@ namespace MercuryMessaging
         /// Deserialize the message
         /// </summary>
         /// <param name="reader">UNET based deserializer object</param>
-        public override void Deserialize(NetworkReader reader)
-		{
-			base.Deserialize (reader);
-            Value = reader.ReadGameObject();
+        public override int Deserialize(object[] data)
+        {
+            int index = base.Deserialize(data);
+            #if PHOTON_UNITY_NETWORKING
+                bool networkedGameObject = (bool) data[index++];
+                if (networkedGameObject)
+                {
+                    int photonViewId = (int) data[index++];
+                    PhotonView photonView = PhotonView.Find(photonViewId);
+                    Value = null;
+                    if (photonView != null)
+                    {
+                        Value = photonView.gameObject;
+                    }
+                }
+                else 
+                {
+                    int instanceID = (int) data[index++];
+                    Value = GameObject.Find(instanceID.ToString());
+                }
+            #else
+            Value = GameObject.Find(instanceID.ToString());
+            #endif
+            return index;
         }
 
         /// <summary>
         /// Serialize the MmMessage
         /// </summary>
         /// <param name="writer">UNET based serializer</param>
-        public override void Serialize(NetworkWriter writer)
-		{
-			base.Serialize (writer);
-            writer.Write(Value);
+        public override object[] Serialize()
+        {
+            object[] baseSerialized = base.Serialize();
+            object[] thisSerialized; 
+
+            #if PHOTON_UNITY_NETWORKING
+                if (Value.GetComponent<PhotonView>() != null)
+                {
+                    PhotonView photonView = Value.GetComponent<PhotonView>();
+                    thisSerialized = new object[] { true, photonView.ViewID };
+                }
+                else 
+                {
+                    thisSerialized = new object[] { false, Value.GetInstanceID() };
+                }
+            #else
+                thisSerialized = new object[] { Value.GetInstanceID() };
+            #endif
+
+            
+            object[] combinedSerialized = baseSerialized.Concat(thisSerialized).ToArray();
+            return combinedSerialized;
         }
 	}
 }

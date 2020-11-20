@@ -32,7 +32,6 @@
 //  
 //  
 using System;
-using UnityEngine.Networking;
 
 namespace MercuryMessaging.Task
 {
@@ -101,22 +100,22 @@ namespace MercuryMessaging.Task
         /// Deserialize the task threshold from serialized form.
         /// </summary>
         /// <param name="reader">UNET deserializer.</param>
-        public void Deserialize(NetworkReader reader)
+        public int Deserialize(object[] data, int index)
         {
-            AngleThreshold = reader.ReadSingle();
-            DistanceThreshold = reader.ReadSingle();
-            ScaleThreshold = reader.ReadSingle();
+            AngleThreshold = (float) data[index++];
+            DistanceThreshold = (float) data[index++];
+            ScaleThreshold = (float) data[index++];
+            return index;
         }
 
         /// <summary>
         /// Serialize the task threshold into serialized form.
         /// </summary>
         /// <param name="writer">UNET serializer.</param>
-        public void Serialize(NetworkWriter writer)
+        public object[] Serialize()
         {
-            writer.Write(AngleThreshold);
-            writer.Write(DistanceThreshold);
-            writer.Write(ScaleThreshold);
+            object[] thisSerialized = new object[] { AngleThreshold, DistanceThreshold, ScaleThreshold };
+            return thisSerialized;
         }
     }
 }

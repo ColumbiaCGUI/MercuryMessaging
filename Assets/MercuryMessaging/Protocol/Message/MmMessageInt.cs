@@ -30,8 +30,8 @@
 // Carmine Elvezio, Mengu Sukan, Steven Feiner
 // =============================================================
 //  
-//  
-using UnityEngine.Networking;
+// 
+using System.Linq;
 
 namespace MercuryMessaging
 {
@@ -97,20 +97,23 @@ namespace MercuryMessaging
         /// Deserialize the message
         /// </summary>
         /// <param name="reader">UNET based deserializer object</param>
-        public override void Deserialize(NetworkReader reader)
-		{
-			base.Deserialize (reader);
-			value = reader.ReadInt32();
-		}
+        public override int Deserialize(object[] data)
+        {
+            int index = base.Deserialize(data);
+            value = (int) data[index++];
+            return index;
+        }
 
         /// <summary>
         /// Serialize the MmMessage
         /// </summary>
         /// <param name="writer">UNET based serializer</param>
-        public override void Serialize(NetworkWriter writer)
-		{
-			base.Serialize (writer);
-			writer.Write (value);
-		}
+        public override object[] Serialize()
+        {
+            object[] baseSerialized = base.Serialize();
+            object[] thisSerialized = new object[] { value };
+            object[] combinedSerialized = baseSerialized.Concat(thisSerialized).ToArray();
+            return combinedSerialized;
+        }
     }
 }

@@ -33,7 +33,6 @@
 //  
 using MercuryMessaging.Support.Extensions;
 using UnityEngine;
-using UnityEngine.Networking;
 
 namespace MercuryMessaging
 {
@@ -98,22 +97,27 @@ namespace MercuryMessaging
         /// Deserialize the MmTransform
         /// </summary>
         /// <param name="reader">UNET based deserializer object</param>
-        public void Deserialize(NetworkReader reader)
+        public int Deserialize(object[] data, int index)
 		{
-			Translation = reader.ReadVector3();
-			Rotation = reader.ReadQuaternion();
-			Scale = reader.ReadVector3();
+            Translation = (Vector3) data[index++];
+            Rotation = new Quaternion(
+                (float) data[index++],
+                (float) data[index++],
+                (float) data[index++],
+                (float) data[index++]
+            );
+            Scale = (Vector3) data[index++];
+            return index;
 		}
 
         /// <summary>
         /// Serialize the MmTransform
         /// </summary>
         /// <param name="writer">UNET based serializer</param>
-        public void Serialize(NetworkWriter writer)
+        public object[] Serialize()
 		{
-			writer.Write (Translation);
-			writer.Write (Rotation);
-			writer.Write (Scale);
+			object[] thisSerialized = new object[] { Translation, Rotation.x, Rotation.y, Rotation.z, Rotation.w, Scale };
+            return thisSerialized;
 		}
 	}
 }

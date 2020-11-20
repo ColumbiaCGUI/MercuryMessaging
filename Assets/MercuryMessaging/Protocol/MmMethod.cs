@@ -60,6 +60,7 @@ namespace MercuryMessaging
         MessageTransformList,
         MessageVector3,
         MessageVector4,
-        Transform
+        Transform,
+		GameObject
 	}
 }

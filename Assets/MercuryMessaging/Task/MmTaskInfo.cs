@@ -31,8 +31,6 @@
 // =============================================================
 //  
 //  
-using UnityEngine.Networking;
-
 namespace MercuryMessaging.Task
 {
     /// <summary>
@@ -132,28 +130,25 @@ namespace MercuryMessaging.Task
         /// Deserialize the task info from serialized form.
         /// </summary>
         /// <param name="reader">UNET deserializer.</param>
-        public virtual void Deserialize(NetworkReader reader)
+        public virtual int Deserialize(object[] data, int index)
         {
-            RecordId = reader.ReadInt32();
-            UserId = reader.ReadInt32();
-            UserSequence = reader.ReadInt32();
-            TaskId = reader.ReadInt32();
-            DoNotRecordData = reader.ReadBoolean();
-            TaskName = reader.ReadString();
+            RecordId = (int) data[index++];
+            UserId = (int) data[index++];
+            UserSequence = (int) data[index++];
+            TaskId = (int) data[index++];
+            DoNotRecordData = (bool) data[index++];
+            TaskName = (string) data[index++];
+            return index;
         }
 
         /// <summary>
         /// Serialize the task info into serialized form.
         /// </summary>
         /// <param name="writer">UNET serializer.</param>
-        public virtual void Serialize(NetworkWriter writer)
+        public virtual object[] Serialize()
         {
-            writer.Write(RecordId);
-            writer.Write(UserId);
-            writer.Write(UserSequence);
-            writer.Write(TaskId);
-            writer.Write(DoNotRecordData);
-            writer.Write(TaskName);
+            object[] thisSerialized = new object[]  { RecordId, UserId, UserSequence, TaskId, DoNotRecordData, TaskName };
+            return thisSerialized;
         }
 
         /// <summary>

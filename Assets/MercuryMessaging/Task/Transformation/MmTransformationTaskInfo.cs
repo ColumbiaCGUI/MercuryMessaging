@@ -32,7 +32,7 @@
 //  
 //  
 using UnityEngine;
-using UnityEngine.Networking;
+using System.Linq;
 
 namespace MercuryMessaging.Task
 {
@@ -203,43 +203,47 @@ namespace MercuryMessaging.Task
         /// Deserialize the task info from serialized form.
         /// </summary>
         /// <param name="reader">UNET deserializer.</param>
-        public override void Deserialize(NetworkReader reader)
+        public override int Deserialize(object[] data, int index)
         {
             if (InlcudeTaskInfoData)
             {
-                base.Deserialize(reader);
+                index = base.Deserialize(data, index);
             }
             else
             {
-                Step = reader.ReadInt32();
+                Step = (int) data[index++];
             }
-            Angle = reader.ReadSingle();
-            Axis = reader.ReadVector3();
-            RotationFromTo = reader.ReadQuaternion();
-			Position = reader.ReadVector3();
-			Scale = reader.ReadVector3();
-
+            Angle = (float) data[index++];
+            Axis = (Vector3) data[index++];
+            RotationFromTo = new Quaternion(
+                (float) data[index++],
+                (float) data[index++],
+                (float) data[index++],
+                (float) data[index++]
+            );
+			Position = (Vector3) data[index++];
+			Scale = (Vector3) data[index++];
+            return index;
         }
 
         /// <summary>
         /// Serialize the task info into serialized form.
         /// </summary>
         /// <param name="writer">UNET serializer.</param>
-        public override void Serialize(NetworkWriter writer)
+        public override object[] Serialize()
         {
+            object[] baseSerialized;
             if (InlcudeTaskInfoData)
             {
-                base.Serialize(writer);
+                baseSerialized = base.Serialize();
             }
             else
             {
-                writer.Write(Step);
+                baseSerialized = new object[] { Step };
             }
-            writer.Write(Angle);
-            writer.Write(Axis);
-            writer.Write(RotationFromTo);
-            writer.Write(Position);
-            writer.Write(Scale);
+            object[] thisSerialized = new object[] { Angle, Axis, RotationFromTo.x, RotationFromTo.y, RotationFromTo.z, RotationFromTo.w, Position, Scale };
+            object[] combinedSerialized = baseSerialized.Concat(thisSerialized).ToArray();
+            return combinedSerialized;
         }
     }
 }
