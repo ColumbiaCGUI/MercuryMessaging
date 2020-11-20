@@ -34,7 +34,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 #if PHOTON_UNITY_NETWORKING
-    using Photon.Pun;
+using Photon.Pun;
 #endif
 
 namespace MercuryMessaging.Support.Extensions
@@ -108,19 +108,19 @@ namespace MercuryMessaging.Support.Extensions
         }
 
         /// <summary>
-        /// Given a GameObject, remove NetworkTransform and NetworkIdentity.
+        /// Given a GameObject, remove its Network componenets.
         /// </summary>
         /// <param name="go">Observed GameObject.</param>
         public static void RemoveNetworkComponents(this GameObject go)
         {
             #if PHOTON_UNITY_NETWORKING
-                var netTrans = go.GetComponent<PhotonTransformView>();
+            var netTrans = go.GetComponent<PhotonTransformView>();
 
-                if (netTrans != null) Object.Destroy(netTrans);
+            if (netTrans != null) Object.Destroy(netTrans);
 
-                var netId = go.GetComponent<PhotonView>();
+            var netId = go.GetComponent<PhotonView>();
 
-                if (netId != null) Object.Destroy(netId);
+            if (netId != null) Object.Destroy(netId);
             #endif
         }
     }

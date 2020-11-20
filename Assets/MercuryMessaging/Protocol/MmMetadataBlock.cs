@@ -30,11 +30,7 @@
 // Carmine Elvezio, Mengu Sukan, Steven Feiner
 // =============================================================
 //  
-//  
-using System.Collections.Generic;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-
+//
 namespace MercuryMessaging
 {
     /// <summary>
@@ -127,41 +123,27 @@ namespace MercuryMessaging
         /// <summary>
         /// Deserialize the MmMetadataBlock
         /// </summary>
-        /// <param name="reader">UNET based deserializer object</param>
-        public virtual void Deserialize(byte[] data)
+        /// <param name="data">Object array representation of a MmMetadataBlock</param>
+        /// <returns>The index of the next element to be read from data</returns>
+        public virtual int Deserialize(object[] data)
         {
-            List<object> variables = new List<object>();
-			BinaryFormatter formatter = new BinaryFormatter();
-            using (MemoryStream memoryStream = new MemoryStream())
-            {
-                memoryStream.Write(data, 0, data.Length);
-                memoryStream.Seek(0, SeekOrigin.Begin);
-                variables = formatter.Deserialize(memoryStream) as List<object>;
-                LevelFilter = (MercuryMessaging.MmLevelFilter)((short)variables[0]);
-                ActiveFilter = (MercuryMessaging.MmActiveFilter)((short)variables[1]);
-                SelectedFilter = (MercuryMessaging.MmSelectedFilter)((short)variables[2]);
-                NetworkFilter = (MercuryMessaging.MmNetworkFilter)((short)variables[3]);
-                Tag = (MercuryMessaging.MmTag)((short)variables[4]);
-            }
+            int index = 0;
+            LevelFilter = (MercuryMessaging.MmLevelFilter) ((short) data[index++]);
+            ActiveFilter = (MercuryMessaging.MmActiveFilter) ((short) data[index++]);
+            SelectedFilter = (MercuryMessaging.MmSelectedFilter) ((short) data[index++]);
+            NetworkFilter = (MercuryMessaging.MmNetworkFilter) ((short) data[index++]);
+            Tag = (MercuryMessaging.MmTag) ((short) data[index++]);
+            return index;
         }
 
         /// <summary>
         /// Serialize the MmMetadataBlock
         /// </summary>
-        /// <param name="writer">UNET based serializer</param>
-        public virtual void Serialize(byte[] data)
+        /// <returns>Object array representation of a MmMetadataBlock</returns>
+        public virtual object[] Serialize()
         {
-            List<object> variables = new List<object> { (short) LevelFilter, (short) ActiveFilter, (short) SelectedFilter, (short) NetworkFilter, (short) Tag }; 
-            BinaryFormatter formatter = new BinaryFormatter();
-            using (MemoryStream memoryStream = new MemoryStream())
-            {
-                formatter.Serialize(memoryStream, variables);
-                byte[] variables_bytes = memoryStream.ToArray();
-                byte[] temp = new byte[data.Length + variables_bytes.Length];
-                data.CopyTo(temp, 0);
-                variables_bytes.CopyTo(temp, data.Length);
-                data = temp;
-            }
+            object[] thisSerialized = new object[] { (short) LevelFilter, (short) ActiveFilter, (short) SelectedFilter, (short) NetworkFilter, (short) Tag };
+            return thisSerialized;
         }
     }
 

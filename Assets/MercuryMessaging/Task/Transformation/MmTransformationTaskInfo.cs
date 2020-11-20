@@ -200,9 +200,11 @@ namespace MercuryMessaging.Task
         }
 
         /// <summary>
-        /// Deserialize the task info from serialized form.
+        /// Deserialize the MmTransformationTaskInfo
         /// </summary>
-        /// <param name="reader">UNET deserializer.</param>
+        /// <param name="data">Object array representation of a MmTransformationTaskInfo</param>
+        /// <param name="index">The index of the next element to be read from data</param>
+        /// <returns>The index of the next element to be read from data</returns>
         public override int Deserialize(object[] data, int index)
         {
             if (InlcudeTaskInfoData)
@@ -227,9 +229,9 @@ namespace MercuryMessaging.Task
         }
 
         /// <summary>
-        /// Serialize the task info into serialized form.
+        /// Serialize the MmTransformationTaskInfo
         /// </summary>
-        /// <param name="writer">UNET serializer.</param>
+        /// <returns>Object array representation of a MmTransformationTaskInfo</returns>
         public override object[] Serialize()
         {
             object[] baseSerialized;

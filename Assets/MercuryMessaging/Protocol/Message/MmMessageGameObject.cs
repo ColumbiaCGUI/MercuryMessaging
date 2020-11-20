@@ -34,7 +34,7 @@
 using UnityEngine;
 using System.Linq;
 #if PHOTON_UNITY_NETWORKING
-    using Photon.Pun;
+using Photon.Pun;
 #endif
 
 namespace MercuryMessaging
@@ -98,56 +98,58 @@ namespace MercuryMessaging
         }
 
         /// <summary>
-        /// Deserialize the message
+        /// Deserialize the MmMessageGameObject
         /// </summary>
-        /// <param name="reader">UNET based deserializer object</param>
+        /// <param name="data">Object array representation of a MmMessageGameObject</param>
+        /// <returns>The index of the next element to be read from data</returns>
         public override int Deserialize(object[] data)
         {
             int index = base.Deserialize(data);
             #if PHOTON_UNITY_NETWORKING
-                bool networkedGameObject = (bool) data[index++];
-                if (networkedGameObject)
+            bool networkedGameObject = (bool) data[index++];
+            if (networkedGameObject)
+            {
+                int photonViewId = (int) data[index++];
+                PhotonView photonView = PhotonView.Find(photonViewId);
+                Value = null;
+                if (photonView != null)
                 {
-                    int photonViewId = (int) data[index++];
-                    PhotonView photonView = PhotonView.Find(photonViewId);
-                    Value = null;
-                    if (photonView != null)
-                    {
-                        Value = photonView.gameObject;
-                    }
+                    Value = photonView.gameObject;
                 }
-                else 
-                {
-                    int instanceID = (int) data[index++];
-                    Value = GameObject.Find(instanceID.ToString());
-                }
+            }
+            else 
+            {
+                int instanceID = (int) data[index++];
+                Value = GameObject.Find(instanceID.ToString());
+            }
             #else
+            int instanceID = (int) data[index++];
             Value = GameObject.Find(instanceID.ToString());
             #endif
             return index;
         }
 
         /// <summary>
-        /// Serialize the MmMessage
+        /// Serialize the MmMessageGameObject
         /// </summary>
-        /// <param name="writer">UNET based serializer</param>
+        /// <returns>Object array representation of a MmMessageGameObject</returns>
         public override object[] Serialize()
         {
             object[] baseSerialized = base.Serialize();
             object[] thisSerialized; 
 
             #if PHOTON_UNITY_NETWORKING
-                if (Value.GetComponent<PhotonView>() != null)
-                {
-                    PhotonView photonView = Value.GetComponent<PhotonView>();
-                    thisSerialized = new object[] { true, photonView.ViewID };
-                }
-                else 
-                {
-                    thisSerialized = new object[] { false, Value.GetInstanceID() };
-                }
+            if (Value.GetComponent<PhotonView>() != null)
+            {
+                PhotonView photonView = Value.GetComponent<PhotonView>();
+                thisSerialized = new object[] { true, photonView.ViewID };
+            }
+            else 
+            {
+                thisSerialized = new object[] { false, Value.GetInstanceID() };
+            }
             #else
-                thisSerialized = new object[] { Value.GetInstanceID() };
+            thisSerialized = new object[] { Value.GetInstanceID() };
             #endif
 
             
