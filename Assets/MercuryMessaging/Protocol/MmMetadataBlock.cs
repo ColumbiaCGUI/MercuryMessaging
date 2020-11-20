@@ -31,7 +31,9 @@
 // =============================================================
 //  
 //  
-using UnityEngine.Networking;
+using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace MercuryMessaging
 {
@@ -126,26 +128,40 @@ namespace MercuryMessaging
         /// Deserialize the MmMetadataBlock
         /// </summary>
         /// <param name="reader">UNET based deserializer object</param>
-        public virtual void Deserialize(NetworkReader reader)
+        public virtual void Deserialize(byte[] data)
         {
-            LevelFilter = (MmLevelFilter) reader.ReadInt16();
-            ActiveFilter = (MmActiveFilter) reader.ReadInt16();
-            SelectedFilter = (MmSelectedFilter) reader.ReadInt16();
-            NetworkFilter = (MmNetworkFilter) reader.ReadInt16();
-            Tag = (MmTag)reader.ReadInt16();
+            List<object> variables = new List<object>();
+			BinaryFormatter formatter = new BinaryFormatter();
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                memoryStream.Write(data, 0, data.Length);
+                memoryStream.Seek(0, SeekOrigin.Begin);
+                variables = formatter.Deserialize(memoryStream) as List<object>;
+                LevelFilter = (MercuryMessaging.MmLevelFilter)((short)variables[0]);
+                ActiveFilter = (MercuryMessaging.MmActiveFilter)((short)variables[1]);
+                SelectedFilter = (MercuryMessaging.MmSelectedFilter)((short)variables[2]);
+                NetworkFilter = (MercuryMessaging.MmNetworkFilter)((short)variables[3]);
+                Tag = (MercuryMessaging.MmTag)((short)variables[4]);
+            }
         }
 
         /// <summary>
         /// Serialize the MmMetadataBlock
         /// </summary>
         /// <param name="writer">UNET based serializer</param>
-        public virtual void Serialize(NetworkWriter writer)
+        public virtual void Serialize(byte[] data)
         {
-            writer.Write((short) LevelFilter);
-            writer.Write((short) ActiveFilter);
-            writer.Write((short) SelectedFilter);
-            writer.Write((short) NetworkFilter);
-            writer.Write((short) Tag);
+            List<object> variables = new List<object> { (short) LevelFilter, (short) ActiveFilter, (short) SelectedFilter, (short) NetworkFilter, (short) Tag }; 
+            BinaryFormatter formatter = new BinaryFormatter();
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                formatter.Serialize(memoryStream, variables);
+                byte[] variables_bytes = memoryStream.ToArray();
+                byte[] temp = new byte[data.Length + variables_bytes.Length];
+                data.CopyTo(temp, 0);
+                variables_bytes.CopyTo(temp, data.Length);
+                data = temp;
+            }
         }
     }
 

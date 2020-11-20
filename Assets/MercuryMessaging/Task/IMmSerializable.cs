@@ -30,9 +30,7 @@
 // Carmine Elvezio, Mengu Sukan, Steven Feiner
 // =============================================================
 //  
-//  
-using UnityEngine.Networking;
-
+//
 namespace MercuryMessaging.Task
 {
     /// <summary>
@@ -43,7 +41,7 @@ namespace MercuryMessaging.Task
     {
         IMmSerializable Copy();
 
-        void Deserialize(NetworkReader reader);
-        void Serialize(NetworkWriter writer);
+        int Deserialize(object[] data, int index);
+        object[] Serialize();
     }
 }

@@ -32,7 +32,7 @@
 //  
 //  
 using System.Collections.Generic;
-using UnityEngine.Networking;
+using System.Linq;
 
 namespace MercuryMessaging
 {
@@ -103,33 +103,34 @@ namespace MercuryMessaging
         /// Deserialize the message
         /// </summary>
         /// <param name="reader">UNET based deserializer object</param>
-        public override void Deserialize(NetworkReader reader)
-		{
-			base.Deserialize (reader);
-			transforms.Clear ();
-
-			int transformsCount = reader.ReadInt32();
-			for(int i = 0; i < transformsCount; i++)
-			{
-				MmTransform tempTrans = new MmTransform ();
-				tempTrans.Deserialize (reader);
-				transforms.Add(tempTrans);
-			}
-		}
+        public override int Deserialize(object[] data)
+        {
+            int index = base.Deserialize(data);
+            int numTransforms = (int) data[index++];
+            transforms = new List<MmTransform>();
+            for (int i = 0; i < numTransforms; i++)
+            {
+                MmTransform transform = new MmTransform();
+                index = transform.Deserialize(data, index);
+                transforms.Add(transform);
+            }
+            return index;
+        }
 
         /// <summary>
         /// Serialize the MmMessage
         /// </summary>
         /// <param name="writer">UNET based serializer</param>
-        public override void Serialize(NetworkWriter writer)
-		{
-			base.Serialize (writer);
-			writer.Write (transforms.Count);
-
-			for(int i = 0; i < transforms.Count; i++)
-			{
-				transforms [i].Serialize (writer);
-			}
-		}
+        public override object[] Serialize()
+        {
+            object[] baseSerialized = base.Serialize();
+            object[] thisSerialized = new object[] { transforms.Count };
+            foreach (MmTransform transform in transforms)
+            {
+                thisSerialized = thisSerialized.Concat(transform.Serialize()).ToArray();
+            }
+            object[] combinedSerialized = baseSerialized.Concat(thisSerialized).ToArray();
+            return combinedSerialized;
+        }
 	}
 }

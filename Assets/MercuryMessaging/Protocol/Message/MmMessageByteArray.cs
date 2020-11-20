@@ -31,7 +31,7 @@
 // =============================================================
 //  
 //  
-using UnityEngine.Networking;
+using System.Linq;
 
 namespace MercuryMessaging
 {
@@ -93,6 +93,7 @@ namespace MercuryMessaging
         {
 			MmMessageByteArray newMessage = new MmMessageByteArray (this);
             newMessage.length = length;
+            newMessage.byteArr = new byte[byteArr.Length];
             byteArr.CopyTo(newMessage.byteArr, 0);
 
             return newMessage;
@@ -102,22 +103,32 @@ namespace MercuryMessaging
         /// Deserialize the message
         /// </summary>
         /// <param name="reader">UNET based deserializer object</param>
-        public override void Deserialize(NetworkReader reader)
+        public override int Deserialize(object[] data)
 		{
-			base.Deserialize (reader);
-			length = reader.ReadInt32 ();
-			byteArr = reader.ReadBytes(length);
+			int index = base.Deserialize(data);
+            length = (int) data[index++];
+            byteArr = new byte[length];
+            for (int i = 0; i < length; i++)
+            {
+                byteArr[i] = (byte) data[index++];
+            }
+            return index;
 		}
 
         /// <summary>
         /// Serialize the MmMessage
         /// </summary>
         /// <param name="writer">UNET based serializer</param>
-        public override void Serialize(NetworkWriter writer)
+        public override object[] Serialize()
 		{
-            base.Serialize (writer);
-            writer.Write (byteArr.Length);
-			writer.Write (byteArr, byteArr.Length);
+            object[] baseSerialized = base.Serialize();
+            object[] thisSerialized = new object[] {byteArr.Length};
+            foreach (byte b in byteArr)
+            {
+                thisSerialized = thisSerialized.Concat(new object[] { b }).ToArray();
+            }
+            object[] combinedSerialized = baseSerialized.Concat(thisSerialized).ToArray();
+            return combinedSerialized;
 		}
     }
 }

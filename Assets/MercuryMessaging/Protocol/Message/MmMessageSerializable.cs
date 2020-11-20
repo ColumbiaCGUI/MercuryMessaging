@@ -35,7 +35,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using MercuryMessaging.Task;
-using UnityEngine.Networking;
+using UnityEngine;
 
 namespace MercuryMessaging
 {
@@ -122,25 +122,28 @@ namespace MercuryMessaging
         /// Deserialize the message
         /// </summary>
         /// <param name="reader">UNET based deserializer object</param>
-        public override void Deserialize(NetworkReader reader)
+        public override int Deserialize(object[] data)
         {
-            base.Deserialize (reader);
-            SerializableType = reader.ReadInt32();
-
-            value = (IMmSerializable)Activator.CreateInstance(SerializableTypes[SerializableType]);
-
-            value.Deserialize(reader);
+            int index = base.Deserialize(data);
+            Type type = Type.GetType((string) data[index++]);
+            value = (IMmSerializable) Activator.CreateInstance(type);
+            Debug.Log(index);
+            Debug.Log(data.Length);
+            index = value.Deserialize(data, index);
+            return index;
         }
 
         /// <summary>
         /// Serialize the MmMessage
         /// </summary>
         /// <param name="writer">UNET based serializer</param>
-        public override void Serialize(NetworkWriter writer)
+        public override object[] Serialize()
         {
-            base.Serialize (writer);
-            writer.Write(SerializableType);
-            value.Serialize (writer);
+            object[] baseSerialized = base.Serialize();
+            object[] thisSerialized = new object[] { value.GetType().ToString() };
+            thisSerialized = thisSerialized.Concat(value.Serialize()).ToArray();
+            object[] combinedSerialized = baseSerialized.Concat(thisSerialized).ToArray();
+            return combinedSerialized;
         }
 
         /// <summary>

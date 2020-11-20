@@ -93,7 +93,7 @@ namespace MercuryMessaging
                     ReceivedMessage(message);
                     break;
                 case MmMethod.MessageBool:
-                    ReceivedMessage((MmMessageString)message);
+                    ReceivedMessage((MmMessageBool)message);
                     break;
                 case MmMethod.MessageByteArray:
                     ReceivedMessage((MmMessageByteArray)message);
@@ -121,6 +121,9 @@ namespace MercuryMessaging
                     break;
                 case MmMethod.MessageVector4:
                     ReceivedMessage((MmMessageVector4)message);
+                    break;
+                case MmMethod.GameObject:
+                    ReceivedMessage((MmMessageGameObject)message);
                     break;
                 default:
                     Debug.Log(message.MmMethod.ToString());

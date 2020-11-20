@@ -30,16 +30,14 @@
 // Carmine Elvezio, Mengu Sukan, Steven Feiner
 // =============================================================
 //  
-//  
-using UnityEngine.Networking;
-
+// 
 namespace MercuryMessaging
 {
     /// <summary>
     /// Base class for messages passed through MmInvoke
     /// Built on Unity's Message Base, allowing usage of serialize/deserialize
     /// </summary>
-    public class MmMessage : MessageBase
+    public class MmMessage //: MessageBase
     {
         /// <summary>
         /// The MmMethod invoked by the calling object.
@@ -152,28 +150,25 @@ namespace MercuryMessaging
         /// Deserialize the MmMessage
         /// </summary>
         /// <param name="reader">UNET based deserializer object</param>
-        public override void Deserialize(NetworkReader reader)
-		{
-			MmMethod = (MmMethod)reader.ReadInt16();
-            MetadataBlock.Deserialize(reader);
-            TimeStamp = reader.ReadString();
-            NetId = reader.ReadUInt32();
+        
+        public virtual int Deserialize(object[] data)
+        {
+            int index = 0;
+            MmMethod = (MercuryMessaging.MmMethod) ((short) data[index++]);
+            // TimeStamp = (string)data[++index];
+            NetId = (uint) ((int) data[index++]);
             IsDeserialized = true;
-
-            //On Deserialize, Network contexts should switch to local
-            //MetadataBlock.NetworkFilter = MmNetworkFilter.Local;
-		}
+            
+            return index;
+        }
 
         /// <summary>
         /// Serialize the MmMessage
         /// </summary>
         /// <param name="writer">UNET based serializer</param>
-		public override void Serialize(NetworkWriter writer)
-		{
-			writer.Write((short)MmMethod);
-            MetadataBlock.Serialize(writer);
-            writer.Write(TimeStamp);
-            writer.Write(NetId);
+        public virtual object[] Serialize()
+        {
+            return new object[] { (short)MmMethod, /*TimeStamp, */(int)NetId };
         }
     }
 }
