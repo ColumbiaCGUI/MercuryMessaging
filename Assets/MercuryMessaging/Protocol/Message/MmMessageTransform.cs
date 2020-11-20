@@ -118,9 +118,10 @@ namespace MercuryMessaging
         }
 
         /// <summary>
-        /// Deserialize the message
+        /// Deserialize the MmMessageTransform
         /// </summary>
-        /// <param name="reader">UNET based deserializer object</param>
+        /// <param name="data">Object array representation of a MmMessageTransform</param>
+        /// <returns>The index of the next element to be read from data</returns>
         public override int Deserialize(object[] data)
         {
             int index = base.Deserialize(data);
@@ -131,9 +132,9 @@ namespace MercuryMessaging
         }
 
         /// <summary>
-        /// Serialize the MmMessage
+        /// Serialize the MmMessageTransform
         /// </summary>
-        /// <param name="writer">UNET based serializer</param>
+        /// <param name="writer">Object array representation of a MmMessageTransform</param>
         public override object[] Serialize()
         {
             object[] baseSerialized = base.Serialize();

@@ -50,16 +50,6 @@ namespace MercuryMessaging
     public class MmMessageSerializable : MmMessage
     {
         /// <summary>
-        /// Dictionary enumerating supported serialized types
-        /// </summary>
-        public static readonly Dictionary<int, Type> SerializableTypes = new Dictionary<int, Type>();
-
-        /// <summary>
-        /// Type of payload
-        /// </summary>
-        public int SerializableType;
-
-        /// <summary>
         /// Serialized item Payload
         /// Item needs to implement IMmSerializable
         /// </summary>
@@ -93,7 +83,6 @@ namespace MercuryMessaging
             : base(mmMethod, metadataBlock)
         {
             value = iVal;
-            AssignType();
         }
 
         /// <summary>
@@ -113,15 +102,14 @@ namespace MercuryMessaging
             MmMessageSerializable newMessage = new MmMessageSerializable (this);
 
             newMessage.value = value.Copy();
-            AssignType();
-
             return newMessage;
         }
 
         /// <summary>
-        /// Deserialize the message
+        /// Deserialize the MmMessageSerializable
         /// </summary>
-        /// <param name="reader">UNET based deserializer object</param>
+        /// <param name="data">Object array representation of a MmMessageSerializable</param>
+        /// <returns>The index of the next element to be read from data</returns>
         public override int Deserialize(object[] data)
         {
             int index = base.Deserialize(data);
@@ -134,9 +122,9 @@ namespace MercuryMessaging
         }
 
         /// <summary>
-        /// Serialize the MmMessage
+        /// Serialize the MmMessageSerializable
         /// </summary>
-        /// <param name="writer">UNET based serializer</param>
+        /// <returns>Object array representation of a MmMessageSerializable</returns>
         public override object[] Serialize()
         {
             object[] baseSerialized = base.Serialize();
@@ -145,17 +133,5 @@ namespace MercuryMessaging
             object[] combinedSerialized = baseSerialized.Concat(thisSerialized).ToArray();
             return combinedSerialized;
         }
-
-        /// <summary>
-        /// Attempt to determine type of the value, then lookup in the types dictionary
-        ///   then assign to numerical value for transfer
-        /// Sample code from: https://stackoverflow.com/questions/2444033/get-dictionary-key-by-value
-        /// </summary>
-        public void AssignType()
-        {
-            Type myType = value.GetType();
-            SerializableType = SerializableTypes.FirstOrDefault(x => x.Value == myType).Key;
-        }
-
     }
 }

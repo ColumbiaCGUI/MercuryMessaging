@@ -33,6 +33,8 @@
 //  
 using UnityEngine;
 using System;
+
+#if PHOTON_UNITY_NETWORKING
 using ExitGames.Client.Photon;
 using Photon.Realtime;
 using Photon.Pun;
@@ -76,8 +78,8 @@ namespace MercuryMessaging
 
         /// <summary>
         /// Set when Network Obj is active & enabled.
-        /// This is important since Objects in UNET scenarios
-        /// UNET may not be awake/active at the same times.
+        /// This is important since Objects in Photon scenarios
+        /// may not be awake/active at the same times.
         /// </summary>
         public override bool IsActiveAndEnabled { get {return PhotonNetwork.IsConnectedAndReady;} }
 
@@ -103,29 +105,27 @@ namespace MercuryMessaging
         /// the correct type requires knowing what was 
         /// used to serialize the object originally.
         /// </param>
-        /// <param name="msg">The message to send.
-        /// This class builds on UNET's MessageBase so it is
-        /// Auto [de]serialized by UNET.</param>
+        /// <param name="msg">The message to send.</param>
         /// <param name="connectionId">Connection ID - use to identify clients.</param>
-        public override void MmInvoke(MmMessageType msgType, MmMessage message, int connectionId = -1) 
+        public override void MmInvoke(MmMessageType msgType, MmMessage msg, int connectionId = -1) 
         { 
-            message.NetId = (uint) photonView.ViewID;
+            msg.NetId = (uint) photonView.ViewID;
 
-            //If the connection ID is defined, only send it there,
-            //  otherwise, it follows the standard execution flow for the chosen 
-            //  network solution.
+            // If the connection ID is defined, only send it there,
+            // otherwise, it follows the standard execution flow for the chosen 
+            // network solution.
             if (connectionId != -1)
             {
-                MmSendMessageToClient(connectionId, (short) msgType, message);
+                MmSendMessageToClient(connectionId, (short) msgType, msg);
                 return;
             }
 
-            //Need to call the right method based on whether this object 
-            //  is a client or a server.
+            // Need to call the right method based on whether this object 
+            // is a client or a server.
             if (IsActiveAndEnabled)
-                MmSendMessageToClient((short) msgType, message);
+                MmSendMessageToClient((short) msgType, msg);
             else if (AllowClientToSend)
-                MmSendMessageToServer((short) msgType, message);
+                MmSendMessageToServer((short) msgType, msg);
         }
 
         /// <summary>
@@ -137,11 +137,7 @@ namespace MercuryMessaging
         /// the correct type requires knowing what was 
         /// used to serialize the object originally.
         /// </param>
-        /// <param name="msg">The message to send.
-        /// This utilises UNET's MessageBase so it is
-        /// Auto [de]serialized by UNET.
-        /// This also allows us to send messages that are not
-        /// part of Mercury XM</param>
+        /// <param name="msg">The message to send.</param>
         public override void MmSendMessageToServer(short msgType, MmMessage msg)
         {
             byte eventCode = (byte)(msgType - 1000); 
@@ -151,7 +147,7 @@ namespace MercuryMessaging
         }
 
         /// <summary>
-        /// Send a message to a specific client over chosen UNET.
+        /// Send a message to a specific client over chosen Photon.
         /// </summary>
         /// <param name="channelId">Client connection ID</param>
         /// <param name="msgType">Type of message. This specifies
@@ -160,11 +156,7 @@ namespace MercuryMessaging
         /// the correct type requires knowing what was 
         /// used to serialize the object originally.
         /// </param>
-        /// <param name="msg">The message to send.
-        /// This utilises UNET's MessageBase so it is
-        /// Auto [de]serialized by UNET.
-        /// This also allows us to send messages that are not
-        /// part of Mercury XM</param>
+        /// <param name="msg">The message to send.</param>
         public override void MmSendMessageToClient(int channelId, short msgType, MmMessage msg)
         {
             byte eventCode = (byte)(msgType - 1000); 
@@ -175,7 +167,7 @@ namespace MercuryMessaging
         }
 
         /// <summary>
-        /// Send a message to all clients using UNET
+        /// Send a message to all clients using Photon
         /// </summary>
         /// <param name="msgType">Type of message. This specifies
         /// the type of the payload. This is important in 
@@ -183,11 +175,7 @@ namespace MercuryMessaging
         /// the correct type requires knowing what was 
         /// used to serialize the object originally.
         /// </param>
-        /// <param name="msg">The message to send.
-        /// This utilises UNET's MessageBase so it is
-        /// Auto [de]serialized by UNET.
-        /// This also allows us to send messages that are not
-        /// part of Mercury XM</param>
+        /// <param name="msg">The message to send.</param>
         public override void MmSendMessageToClient(short msgType, MmMessage msg)
         {
             byte eventCode = (byte)(msgType - 1000); 
@@ -199,7 +187,7 @@ namespace MercuryMessaging
         /// <summary>
         /// Process a message and send it to the associated object.
         /// </summary>
-        /// <param name="netMsg">UNET network message</param>
+        /// <param name="photonEvent">Photon RaiseEvent message data</param>
         public virtual void ReceivedMessage(EventData photonEvent)
 		{
             short eventCode = (short)photonEvent.Code;
@@ -281,3 +269,24 @@ namespace MercuryMessaging
 		} 
     }
 }
+#else
+namespace MercuryMessaging
+{
+    public class MmNetworkResponderPhoton : MmNetworkResponder
+    {
+        public override bool IsActiveAndEnabled { get { return false; } }
+
+        public override bool OnServer { get { return false; } }
+
+        public override bool OnClient { get { return false; } }
+
+        public abstract void MmInvoke(MmMessageType msgType, MmMessage message, int connectionId = -1) {}
+
+        public abstract void MmSendMessageToServer(short msgType, MmMessage msg) {}
+
+        public abstract void MmSendMessageToClient(int channelId, short msgType, MmMessage msg) {}
+
+        public abstract void MmSendMessageToClient(short msgType, MmMessage msg) {}
+    }
+}
+#endif

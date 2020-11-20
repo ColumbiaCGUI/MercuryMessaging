@@ -94,20 +94,21 @@ namespace MercuryMessaging
         }
 
         /// <summary>
-        /// Deserialize the message
+        /// Deserialize the MmMessageBool
         /// </summary>
-        /// <param name="reader">UNET based deserializer object</param>
+        /// <param name="data">Object array representation of a MmMessageBool</param>
+        /// <returns>The index of the next element to be read from data</returns>
         public override int Deserialize(object[] data)
 		{
 			int index = base.Deserialize(data);
             value = (bool) data[index++];
-            return 0;
+            return index;
 		}
 
         /// <summary>
-        /// Serialize the MmMessage
+        /// Serialize the MmMessageBool
         /// </summary>
-        /// <param name="writer">UNET based serializer</param>
+        /// <returns>Object array representation of a MmMessageBool</returns>
 		public override object[] Serialize()
 		{
 			object[] baseSerialized = base.Serialize(); 

@@ -96,7 +96,9 @@ namespace MercuryMessaging
         /// <summary>
         /// Deserialize the MmTransform
         /// </summary>
-        /// <param name="reader">UNET based deserializer object</param>
+        /// <param name="data">Object array representation of a MmTransform</param>
+        /// <param name="index">The index of the next element to be read from data</param>
+        /// <returns>The index of the next element to be read from data</returns>
         public int Deserialize(object[] data, int index)
 		{
             Translation = (Vector3) data[index++];
@@ -113,7 +115,7 @@ namespace MercuryMessaging
         /// <summary>
         /// Serialize the MmTransform
         /// </summary>
-        /// <param name="writer">UNET based serializer</param>
+        /// <returns>Object array representation of a MmTransform</returns>
         public object[] Serialize()
 		{
 			object[] thisSerialized = new object[] { Translation, Rotation.x, Rotation.y, Rotation.z, Rotation.w, Scale };

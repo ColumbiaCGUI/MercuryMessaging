@@ -127,9 +127,11 @@ namespace MercuryMessaging.Task
         }
 
         /// <summary>
-        /// Deserialize the task info from serialized form.
+        /// Deserialize the MmTaskInfo
         /// </summary>
-        /// <param name="reader">UNET deserializer.</param>
+        /// <param name="data">Object array representation of a MmTaskInfo</param>
+        /// <param name="index">The index of the next element to be read from data</param>
+        /// <returns>The index of the next element to be read from data</returns>
         public virtual int Deserialize(object[] data, int index)
         {
             RecordId = (int) data[index++];
@@ -142,9 +144,9 @@ namespace MercuryMessaging.Task
         }
 
         /// <summary>
-        /// Serialize the task info into serialized form.
+        /// Serialize the MmTaskInfo
         /// </summary>
-        /// <param name="writer">UNET serializer.</param>
+        /// <returns>Object array representation of a MmTaskInfo</returns>
         public virtual object[] Serialize()
         {
             object[] thisSerialized = new object[]  { RecordId, UserId, UserSequence, TaskId, DoNotRecordData, TaskName };

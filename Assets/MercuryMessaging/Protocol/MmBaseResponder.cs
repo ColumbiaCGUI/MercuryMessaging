@@ -55,78 +55,76 @@ namespace MercuryMessaging
         /// the correct type requires knowing what was 
         /// used to serialize the object originally. <see cref="MmMessageType"/>
         /// </param>
-        /// <param name="message">The message to send.
-        /// This class builds on UNET's MessageBase so it is
-        /// Auto [de]serialized by UNET. <see cref="MmMessage"/></param>
-        public override void MmInvoke(MmMessageType msgType, MmMessage message)
+        /// <param name="msg">The message to send.<see cref="MmMessage"/></param>
+        public override void MmInvoke(MmMessageType msgType, MmMessage msg)
         {
-            var type = message.MmMethod;
+            var type = msg.MmMethod;
 
             switch (type)
             {
                 case MmMethod.NoOp:
                     break;
                 case MmMethod.SetActive:
-                    var messageBool = (MmMessageBool) message;
+                    var messageBool = (MmMessageBool) msg;
                     SetActive(messageBool.value);
                     break;
                 case MmMethod.Refresh:
-                    var messageTransform = (MmMessageTransformList) message;
+                    var messageTransform = (MmMessageTransformList) msg;
                     Refresh(messageTransform.transforms);
                     break;
                 case MmMethod.Initialize:
                     Initialize();
                     break;
                 case MmMethod.Switch:
-                    var messageString = (MmMessageString) message;
+                    var messageString = (MmMessageString) msg;
                     Switch(messageString.value);
                     break;
                 case MmMethod.Complete:
-                    var messageCompleteBool = (MmMessageBool)message;
+                    var messageCompleteBool = (MmMessageBool) msg;
                     Complete(messageCompleteBool.value);
                     break;
                 case MmMethod.TaskInfo:
-                    var messageSerializable = (MmMessageSerializable)message;
+                    var messageSerializable = (MmMessageSerializable) msg;
                     ApplyTaskInfo(messageSerializable.value);
                     break;
                 case MmMethod.Message:
-                    ReceivedMessage(message);
+                    ReceivedMessage(msg);
                     break;
                 case MmMethod.MessageBool:
-                    ReceivedMessage((MmMessageBool)message);
+                    ReceivedMessage((MmMessageBool) msg);
                     break;
                 case MmMethod.MessageByteArray:
-                    ReceivedMessage((MmMessageByteArray)message);
+                    ReceivedMessage((MmMessageByteArray) msg);
                     break;
                 case MmMethod.MessageFloat:
-                    ReceivedMessage((MmMessageFloat)message);
+                    ReceivedMessage((MmMessageFloat) msg);
                     break;
                 case MmMethod.MessageInt:
-                    ReceivedMessage((MmMessageInt)message);
+                    ReceivedMessage((MmMessageInt) msg);
                     break;
                 case MmMethod.MessageSerializable:
-                    ReceivedMessage((MmMessageSerializable)message);
+                    ReceivedMessage((MmMessageSerializable) msg);
                     break;
                 case MmMethod.MessageString:
-                    ReceivedMessage((MmMessageString)message);
+                    ReceivedMessage((MmMessageString) msg);
 					break;
                 case MmMethod.MessageTransform:
-                    ReceivedMessage((MmMessageTransform)message);
+                    ReceivedMessage((MmMessageTransform) msg);
                     break;
                 case MmMethod.MessageTransformList:
-                    ReceivedMessage((MmMessageTransformList)message);
+                    ReceivedMessage((MmMessageTransformList) msg);
                     break;
                 case MmMethod.MessageVector3:
-                    ReceivedMessage((MmMessageVector3)message);
+                    ReceivedMessage((MmMessageVector3) msg);
                     break;
                 case MmMethod.MessageVector4:
-                    ReceivedMessage((MmMessageVector4)message);
+                    ReceivedMessage((MmMessageVector4) msg);
                     break;
                 case MmMethod.GameObject:
-                    ReceivedMessage((MmMessageGameObject)message);
+                    ReceivedMessage((MmMessageGameObject) msg);
                     break;
                 default:
-                    Debug.Log(message.MmMethod.ToString());
+                    Debug.Log(msg.MmMethod.ToString());
                     throw new ArgumentOutOfRangeException();
             }
         }

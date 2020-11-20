@@ -35,9 +35,8 @@ namespace MercuryMessaging
 {
     /// <summary>
     /// Base class for messages passed through MmInvoke
-    /// Built on Unity's Message Base, allowing usage of serialize/deserialize
     /// </summary>
-    public class MmMessage //: MessageBase
+    public class MmMessage
     {
         /// <summary>
         /// The MmMethod invoked by the calling object.
@@ -149,8 +148,8 @@ namespace MercuryMessaging
         /// <summary>
         /// Deserialize the MmMessage
         /// </summary>
-        /// <param name="reader">UNET based deserializer object</param>
-        
+        /// <param name="data">Object array representation of a MmMessage</param>
+        /// <returns>The index of the next element to be read from data</returns>
         public virtual int Deserialize(object[] data)
         {
             int index = 0;
@@ -165,7 +164,7 @@ namespace MercuryMessaging
         /// <summary>
         /// Serialize the MmMessage
         /// </summary>
-        /// <param name="writer">UNET based serializer</param>
+        /// <returns>Object array representation of a MmMessage</returns>
         public virtual object[] Serialize()
         {
             return new object[] { (short)MmMethod, /*TimeStamp, */(int)NetId };
