@@ -280,13 +280,13 @@ namespace MercuryMessaging
 
         public override bool OnClient { get { return false; } }
 
-        public abstract void MmInvoke(MmMessageType msgType, MmMessage message, int connectionId = -1) {}
+        public override void MmInvoke(MmMessageType msgType, MmMessage message, int connectionId = -1) {}
 
-        public abstract void MmSendMessageToServer(short msgType, MmMessage msg) {}
+        public override void MmSendMessageToServer(short msgType, MmMessage msg) {}
 
-        public abstract void MmSendMessageToClient(int channelId, short msgType, MmMessage msg) {}
+        public override void MmSendMessageToClient(int channelId, short msgType, MmMessage msg) {}
 
-        public abstract void MmSendMessageToClient(short msgType, MmMessage msg) {}
+        public override void MmSendMessageToClient(short msgType, MmMessage msg) {}
     }
 }
 #endif
