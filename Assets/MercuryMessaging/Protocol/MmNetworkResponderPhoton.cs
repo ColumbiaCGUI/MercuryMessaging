@@ -34,7 +34,7 @@
 using UnityEngine;
 using System;
 
-#if PHOTON_UNITY_NETWORKING
+#if PHOTON_AVAILABLE
 using ExitGames.Client.Photon;
 using Photon.Realtime;
 using Photon.Pun;
