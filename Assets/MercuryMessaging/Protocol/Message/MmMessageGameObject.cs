@@ -33,7 +33,7 @@
 // 
 using UnityEngine;
 using System.Linq;
-#if PHOTON_UNITY_NETWORKING
+#if PHOTON_AVAILABLE
 using Photon.Pun;
 #endif
 
@@ -105,7 +105,7 @@ namespace MercuryMessaging
         public override int Deserialize(object[] data)
         {
             int index = base.Deserialize(data);
-            #if PHOTON_UNITY_NETWORKING
+            #if PHOTON_AVAILABLE
             bool networkedGameObject = (bool) data[index++];
             if (networkedGameObject)
             {
@@ -138,7 +138,7 @@ namespace MercuryMessaging
             object[] baseSerialized = base.Serialize();
             object[] thisSerialized; 
 
-            #if PHOTON_UNITY_NETWORKING
+            #if PHOTON_AVAILABLE
             if (Value.GetComponent<PhotonView>() != null)
             {
                 PhotonView photonView = Value.GetComponent<PhotonView>();
