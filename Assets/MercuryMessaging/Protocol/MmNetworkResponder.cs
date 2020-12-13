@@ -194,7 +194,6 @@ namespace MercuryMessaging
 
         #endregion
 
-
         /// <summary>
         /// Method serializes message and sends it to server.
         /// </summary>
@@ -208,7 +207,7 @@ namespace MercuryMessaging
         public abstract void MmSendMessageToServer(short msgType, MmMessage msg);
 
         /// <summary>
-        /// Send a message to a specific client over chosen UNET.
+        /// Send a message to a specific client.
         /// </summary>
         /// <param name="channelId">Client connection ID</param>
         /// <param name="msgType">Type of message. This specifies
@@ -221,7 +220,7 @@ namespace MercuryMessaging
         public abstract void MmSendMessageToClient(int channelId, short msgType, MmMessage msg);
 
         /// <summary>
-        /// Send a message to all clients using UNET
+        /// Send a message to all clients.
         /// </summary>
         /// <param name="msgType">Type of message. This specifies
         /// the type of the payload. This is important in 

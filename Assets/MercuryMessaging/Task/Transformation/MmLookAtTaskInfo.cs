@@ -121,6 +121,12 @@ namespace MercuryMessaging.Task
                 base.Headers(), "Position", "LookAt", "TargetObjOrientation");
         }
 
+        /// <summary>
+        /// Deserialize the MmLookAtTaskInfo
+        /// </summary>
+        /// <param name="data">Object array representation of a MmLookAtTaskInfo</param>
+        /// <param name="index">The index of the next element to be read from data</param>
+        /// <returns>The index of the next element to be read from data</returns>
         public override int Deserialize(object[] data, int index)
         {
             index = base.Deserialize(data, index);
@@ -136,6 +142,10 @@ namespace MercuryMessaging.Task
             return index;
         }
 
+        /// <summary>
+        /// Serialize the MmLookAtTaskInfo
+        /// </summary>
+        /// <returns>Object array representation of a MmLookAtTaskInfo</returns>
         public override object[] Serialize()
         {
             object[] baseSerialized = base.Serialize();

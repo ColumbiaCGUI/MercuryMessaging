@@ -118,7 +118,14 @@ namespace MercuryMessaging
         /// <returns>Object array representation of a MmTransform</returns>
         public object[] Serialize()
 		{
-			object[] thisSerialized = new object[] { Translation, Rotation.x, Rotation.y, Rotation.z, Rotation.w, Scale };
+			object[] thisSerialized = new object[] { 
+                Translation, 
+                Rotation.x, 
+                Rotation.y, 
+                Rotation.z, 
+                Rotation.w, 
+                Scale 
+            };
             return thisSerialized;
 		}
 	}

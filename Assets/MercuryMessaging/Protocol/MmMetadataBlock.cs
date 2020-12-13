@@ -142,7 +142,13 @@ namespace MercuryMessaging
         /// <returns>Object array representation of a MmMetadataBlock</returns>
         public virtual object[] Serialize()
         {
-            object[] thisSerialized = new object[] { (short) LevelFilter, (short) ActiveFilter, (short) SelectedFilter, (short) NetworkFilter, (short) Tag };
+            object[] thisSerialized = new object[] { 
+                (short) LevelFilter, 
+                (short) ActiveFilter, 
+                (short) SelectedFilter, 
+                (short) NetworkFilter, 
+                (short) Tag 
+            };
             return thisSerialized;
         }
     }

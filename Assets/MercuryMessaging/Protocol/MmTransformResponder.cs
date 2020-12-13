@@ -62,7 +62,7 @@ namespace MercuryMessaging
 		{
 			switch (message.MmMethod)
 			{
-			case MmMethod.Transform:
+			case MmMethod.MessageTransform:
 				MmMessageTransform newMsg = message as MmMessageTransform;
 				HandleTransform (newMsg);
 				break;
@@ -79,7 +79,7 @@ namespace MercuryMessaging
 		        lastClientSendTime = Time.time;
 
 		        GetRelayNode()
-		            .MmInvoke(MmMethod.Transform,
+		            .MmInvoke(MmMethod.MessageTransform,
 		                new MmMessageTransform(
                             new MmTransform(gameObject.transform, useGlobalTransformation),
                             !useGlobalTransformation),

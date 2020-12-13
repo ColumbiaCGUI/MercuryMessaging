@@ -128,6 +128,7 @@ namespace MercuryMessaging
                 MmSendMessageToServer((short) msgType, msg);
         }
 
+        #region Implementation of MmNetworkResponder
         /// <summary>
         /// Method serializes message and sends it to server.
         /// </summary>
@@ -183,7 +184,8 @@ namespace MercuryMessaging
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
             PhotonNetwork.RaiseEvent(eventCode, data, raiseEventOptions, SendOptions.SendReliable);
         }
-
+        #endregion
+        
         /// <summary>
         /// Process a message and send it to the associated object.
         /// </summary>

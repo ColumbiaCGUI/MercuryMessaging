@@ -120,7 +120,7 @@ namespace MercuryMessaging
                 case MmMethod.MessageVector4:
                     ReceivedMessage((MmMessageVector4) msg);
                     break;
-                case MmMethod.GameObject:
+                case MmMethod.MessageGameObject:
                     ReceivedMessage((MmMessageGameObject) msg);
                     break;
                 default:
