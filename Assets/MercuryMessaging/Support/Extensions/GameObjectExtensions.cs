@@ -108,7 +108,7 @@ namespace MercuryMessaging.Support.Extensions
         }
 
         /// <summary>
-        /// Given a GameObject, remove its Network componenets.
+        /// Given a GameObject, remove its Photon Network componenets.
         /// </summary>
         /// <param name="go">Observed GameObject.</param>
         public static void RemoveNetworkComponents(this GameObject go)
