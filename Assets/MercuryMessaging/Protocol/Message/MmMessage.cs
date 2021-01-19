@@ -44,6 +44,12 @@ namespace MercuryMessaging
         public MmMethod MmMethod;
 
         /// <summary>
+        /// The type of the MmMessage - useful for networking 
+        /// and serialization/deserialization of messages
+        /// </summary>
+        public MmMessageType MmMessageType;
+
+        /// <summary>
         /// Control parameters designating how a message should traverse an MercuryMessaging Hierarchy. 
         /// </summary>
         public MmMetadataBlock MetadataBlock;
@@ -74,28 +80,43 @@ namespace MercuryMessaging
         public MmMessage()
         {
             MetadataBlock = new MmMetadataBlock();
+            MmMessageType = MmMessageType.MmVoid;
         }
 
         /// <summary>
         /// Creates a basic MmMessage with the passed control block.
         /// </summary>
         /// <param name="metadataBlock">Object defining the routing of messages.</param>
-		public MmMessage(MmMetadataBlock metadataBlock)
+        /// <param name="msgType">Type of Mercury Message.</param>
+		public MmMessage(MmMetadataBlock metadataBlock, 
+            MmMessageType msgType = default(MmMessageType))
 		{
 			MetadataBlock = new MmMetadataBlock(metadataBlock);
-		}
+            MmMessageType = msgType;
+        }
+
+        /// <summary>
+        /// Creates a basic MmMessage with the passed MmMessageType.
+        /// </summary>
+        /// <param name="msgType">Type of Mercury Message.</param>
+        public MmMessage(MmMessageType msgType) : 
+            this(new MmMetadataBlock(), msgType)
+        {}
 
         /// <summary>
         /// Create an MmMessage, with defined control block and MmMethod
         /// </summary>
         /// <param name="mmMethod">Identifier of target MmMethod</param>
+        /// <param name="msgType">Type of Mercury Message.</param>
         /// <param name="metadataBlock">Object defining the routing of messages through MercuryMessaging Hierarchys.</param>
 		public MmMessage(MmMethod mmMethod,
-			MmMetadataBlock metadataBlock = null)
+            MmMessageType msgType = default(MmMessageType),
+            MmMetadataBlock metadataBlock = null)
 		{
 			MmMethod = mmMethod;
+            MmMessageType = msgType;
 
-			if(metadataBlock != null)
+            if (metadataBlock != null)
 				MetadataBlock = new MmMetadataBlock(metadataBlock);
 			else
 				MetadataBlock = new MmMetadataBlock();
@@ -109,13 +130,17 @@ namespace MercuryMessaging
         /// <param name="activeFilter">Determines whether message sent to active and/or inactive objects</param>
         /// <param name="selectedFilter">Determines whether message sent to objects "selected" as defined by MmRelayNode implementation</param>
         /// <param name="networkFilter">Determines whether message will remain local or can be sent over the network</param>
+        /// <param name="msgType">Type of Mercury Message.</param>
         public MmMessage(MmMethod mmMethod, 
 			MmLevelFilter levelFilter,
 			MmActiveFilter activeFilter,
             MmSelectedFilter selectedFilter,
-            MmNetworkFilter networkFilter)
+            MmNetworkFilter networkFilter,
+            MmMessageType msgType = default(MmMessageType)
+            )
         {
             MmMethod = mmMethod;
+            MmMessageType = msgType;
 
             MetadataBlock = new MmMetadataBlock();
             MetadataBlock.LevelFilter = levelFilter;
@@ -128,7 +153,10 @@ namespace MercuryMessaging
         /// Duplicate an MmMessage
         /// </summary>
         /// <param name="message">Item to duplicate</param>
-        public MmMessage(MmMessage message) : this(message.MmMethod, message.MetadataBlock)
+        public MmMessage(MmMessage message) : 
+            this(message.MmMethod, 
+                message.MmMessageType, 
+                message.MetadataBlock)
         {
             NetId = message.NetId;
             IsDeserialized = message.IsDeserialized;
@@ -154,7 +182,7 @@ namespace MercuryMessaging
         {
             int index = 0;
             MmMethod = (MercuryMessaging.MmMethod) ((short) data[index++]);
-            // TimeStamp = (string)data[++index];
+            MmMessageType = (MercuryMessaging.MmMessageType) (short)data[++index];
             NetId = (uint) ((int) data[index++]);
             IsDeserialized = true;
             
@@ -167,7 +195,10 @@ namespace MercuryMessaging
         /// <returns>Object array representation of a MmMessage</returns>
         public virtual object[] Serialize()
         {
-            return new object[] { (short)MmMethod, /*TimeStamp, */(int)NetId };
+            return new object[] { 
+                (short)MmMethod, 
+                (short)MmMessageType,
+                (int)NetId };
         }
     }
 }
