@@ -56,7 +56,7 @@ namespace MercuryMessaging
         /// </summary>
         /// <param name="metadataBlock">Object defining the routing of messages</param>
 		public MmMessageBool(MmMetadataBlock metadataBlock = null)
-			: base (metadataBlock)
+			: base (metadataBlock, MmMessageType.MmBool)
 		{}
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace MercuryMessaging
 		public MmMessageBool(bool iVal, 
 			MmMethod mmMethod = default(MmMethod), 
             MmMetadataBlock metadataBlock = null)
-			: base (mmMethod, metadataBlock)
+			: base (mmMethod, MmMessageType.MmBool, metadataBlock)
 		{
 			value = iVal;
 		}
