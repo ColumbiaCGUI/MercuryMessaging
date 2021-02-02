@@ -61,7 +61,7 @@ namespace MercuryMessaging
         /// </summary>
         /// <param name="metadataBlock">Object defining the routing of messages</param>
 		public MmMessageByteArray(MmMetadataBlock metadataBlock = null)
-			: base (metadataBlock)
+			: base (metadataBlock, MmMessageType.MmByteArray)
         {}
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace MercuryMessaging
 		public MmMessageByteArray(byte[] iVal, 
 			MmMethod mmMethod = default(MmMethod), 
             MmMetadataBlock metadataBlock = null)
-            : base(mmMethod, metadataBlock)
+            : base(mmMethod, MmMessageType.MmByteArray, metadataBlock)
         {
 			byteArr = iVal;
 		}

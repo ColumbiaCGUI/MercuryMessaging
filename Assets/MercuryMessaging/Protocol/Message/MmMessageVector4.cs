@@ -58,7 +58,7 @@ namespace MercuryMessaging
         /// </summary>
         /// <param name="metadataBlock">Object defining the routing of messages</param>
 		public MmMessageVector4(MmMetadataBlock metadataBlock = null)
-			: base (metadataBlock)
+			: base (metadataBlock, MmMessageType.MmVector4)
 		{
         }
 
@@ -71,7 +71,7 @@ namespace MercuryMessaging
         public MmMessageVector4(Vector4 iVal, 
 			MmMethod mmMethod = default(MmMethod),
             MmMetadataBlock metadataBlock = null)
-            : base(mmMethod, metadataBlock)
+            : base(mmMethod, MmMessageType.MmVector4, metadataBlock)
         {
 			value = iVal;
 		}

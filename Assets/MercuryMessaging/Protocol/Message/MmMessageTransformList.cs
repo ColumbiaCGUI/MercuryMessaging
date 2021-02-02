@@ -60,7 +60,7 @@ namespace MercuryMessaging
         /// </summary>
         /// <param name="metadataBlock">Object defining the routing of messages</param>
 		public MmMessageTransformList(MmMetadataBlock metadataBlock = null)
-			: base (metadataBlock)
+			: base (metadataBlock, MmMessageType.MmTransformList)
 		{
 			transforms = new List<MmTransform>();
 		}
@@ -75,7 +75,7 @@ namespace MercuryMessaging
 		public MmMessageTransformList(List<MmTransform> iTransforms, 
 			MmMethod mmMethod = default(MmMethod),
 			MmMetadataBlock metadataBlock = null)
-			: base(mmMethod, metadataBlock)
+			: base(mmMethod, MmMessageType.MmTransformList, metadataBlock)
 		{
 			transforms = iTransforms;
 		}

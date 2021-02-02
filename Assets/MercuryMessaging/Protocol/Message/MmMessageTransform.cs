@@ -61,7 +61,7 @@ namespace MercuryMessaging
         /// </summary>
         /// <param name="metadataBlock">Object defining the routing of messages</param>
 		public MmMessageTransform(MmMetadataBlock metadataBlock = null)
-			: base (metadataBlock)
+			: base (metadataBlock, MmMessageType.MmTransform)
 		{
 			MmTransform = new MmTransform();
 		}
@@ -75,7 +75,7 @@ namespace MercuryMessaging
         public MmMessageTransform(MmTransform transform,
             MmMethod mmMethod = default(MmMethod),
             MmMetadataBlock metadataBlock = null)
-            : base(mmMethod, metadataBlock)
+            : base(mmMethod, MmMessageType.MmTransform, metadataBlock)
         {
             MmTransform = transform;
         }
@@ -91,7 +91,7 @@ namespace MercuryMessaging
             bool localTransform,
             MmMethod mmMethod = default(MmMethod),
 			MmMetadataBlock metadataBlock = null)
-			: base(mmMethod, metadataBlock)
+			: base(mmMethod, MmMessageType.MmTransform, metadataBlock)
 		{
 			MmTransform = transform;
             LocalTransform = localTransform;
