@@ -56,7 +56,7 @@ namespace MercuryMessaging
         /// used to serialize the object originally. <see cref="MmMessageType"/>
         /// </param>
         /// <param name="msg">The message to send.<see cref="MmMessage"/></param>
-        public override void MmInvoke(MmMessageType msgType, MmMessage msg)
+        public override void MmInvoke(MmMessage msg)
         {
             var type = msg.MmMethod;
 

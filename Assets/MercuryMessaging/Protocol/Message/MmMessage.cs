@@ -182,7 +182,7 @@ namespace MercuryMessaging
         {
             int index = 0;
             MmMethod = (MercuryMessaging.MmMethod) ((short) data[index++]);
-            MmMessageType = (MercuryMessaging.MmMessageType) (short)data[++index];
+            MmMessageType = (MercuryMessaging.MmMessageType) (short)data[index++];
             NetId = (uint) ((int) data[index++]);
             IsDeserialized = true;
             

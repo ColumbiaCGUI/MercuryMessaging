@@ -58,7 +58,7 @@ namespace MercuryMessaging
         public bool useGlobalTransformation;
 
 
-        public override void MmInvoke (MmMessageType msgType, MmMessage message)
+        public override void MmInvoke (MmMessage message)
 		{
 			switch (message.MmMethod)
 			{
@@ -67,7 +67,7 @@ namespace MercuryMessaging
 				HandleTransform (newMsg);
 				break;
 			default:
-				base.MmInvoke(msgType, message);
+				base.MmInvoke(message);
 				break;
 			}
 		}

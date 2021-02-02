@@ -53,7 +53,7 @@ namespace MercuryMessaging
         /// used to serialize the object originally.
         /// </param>
         /// <param name="msg">The message to send.</param>
-        void MmInvoke(MmMessageType msgType, MmMessage message);
+        void MmInvoke(MmMessage message);
 
         /// <summary>
         /// Invoke an MmMethod with no parameter. 

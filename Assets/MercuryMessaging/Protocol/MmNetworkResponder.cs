@@ -159,7 +159,7 @@ namespace MercuryMessaging
         /// </param>
         /// <param name="msg">The message to send.</param>
         /// <param name="connectionId">Connection ID - use to identify clients.</param>
-        public abstract void MmInvoke(MmMessageType msgType, MmMessage msg, int connectionId = -1);
+        public abstract void MmInvoke(MmMessage msg, int connectionId = -1);
 
         #endregion
 
@@ -204,7 +204,7 @@ namespace MercuryMessaging
         /// used to serialize the object originally.
         /// </param>
         /// <param name="msg">The message to send.</param>
-        public abstract void MmSendMessageToServer(short msgType, MmMessage msg);
+        public abstract void MmSendMessageToServer(MmMessage msg);
 
         /// <summary>
         /// Send a message to a specific client.
@@ -217,7 +217,7 @@ namespace MercuryMessaging
         /// used to serialize the object originally.
         /// </param>
         /// <param name="msg">The message to send.</param>
-        public abstract void MmSendMessageToClient(int channelId, short msgType, MmMessage msg);
+        public abstract void MmSendMessageToClient(int channelId, MmMessage msg);
 
         /// <summary>
         /// Send a message to all clients.
@@ -229,6 +229,6 @@ namespace MercuryMessaging
         /// used to serialize the object originally.
         /// </param>
         /// <param name="msg">The message to send.</param>
-        public abstract void MmSendMessageToClient(short msgType, MmMessage msg);
+        public abstract void MmSendMessageToClient(MmMessage msg);
     }
 }
