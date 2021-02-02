@@ -67,7 +67,7 @@ namespace MercuryMessaging
         /// </summary>
         /// <param name="metadataBlock">Object defining the routing of messages</param>
         public MmMessageSerializable(MmMetadataBlock metadataBlock = null)
-            : base (metadataBlock)
+            : base (metadataBlock, MmMessageType.MmSerializable)
         {
         }
 
@@ -80,7 +80,7 @@ namespace MercuryMessaging
         public MmMessageSerializable(IMmSerializable iVal,
             MmMethod mmMethod = default(MmMethod),
             MmMetadataBlock metadataBlock = null)
-            : base(mmMethod, metadataBlock)
+            : base(mmMethod, MmMessageType.MmSerializable, metadataBlock)
         {
             value = iVal;
         }

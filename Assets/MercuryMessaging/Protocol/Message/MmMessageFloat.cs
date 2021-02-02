@@ -56,7 +56,7 @@ namespace MercuryMessaging
         /// </summary>
         /// <param name="metadataBlock">Object defining the routing of messages</param>
 		public MmMessageFloat(MmMetadataBlock metadataBlock = null)
-			: base (metadataBlock)
+			: base (metadataBlock, MmMessageType.MmFloat)
 		{
 		}
 
@@ -69,7 +69,7 @@ namespace MercuryMessaging
 		public MmMessageFloat(float iVal, 
 			MmMethod mmMethod = default(MmMethod), 
             MmMetadataBlock metadataBlock = null)
-            : base(mmMethod, metadataBlock)
+            : base(mmMethod, MmMessageType.MmFloat, metadataBlock)
         {
 			value = iVal;
 		}

@@ -56,7 +56,7 @@ namespace MercuryMessaging
         /// </summary>
         /// <param name="metadataBlock">Object defining the routing of messages</param>
 		public MmMessageInt(MmMetadataBlock metadataBlock = null)
-			: base (metadataBlock)
+			: base (metadataBlock, MmMessageType.MmInt)
 		{
 		}
 
@@ -69,7 +69,7 @@ namespace MercuryMessaging
         public MmMessageInt(int iVal, 
 			MmMethod mmMethod = default(MmMethod), 
             MmMetadataBlock metadataBlock = null)
-            : base(mmMethod, metadataBlock)
+            : base(mmMethod, MmMessageType.MmInt, metadataBlock)
         {
 			value = iVal;
 		}

@@ -60,7 +60,7 @@ namespace MercuryMessaging
         /// </summary>
         /// <param name="metadataBlock">Object defining the routing of messages</param>
 		public MmMessageGameObject(MmMetadataBlock metadataBlock = null)
-			: base (metadataBlock)
+			: base (metadataBlock, MmMessageType.MmGameObject)
 		{
 		}
 
@@ -73,7 +73,7 @@ namespace MercuryMessaging
         public MmMessageGameObject(GameObject gameObject,
             MmMethod mmMethod = default(MmMethod),
             MmMetadataBlock metadataBlock = null)
-            : base(mmMethod, metadataBlock)
+            : base(mmMethod, MmMessageType.MmGameObject, metadataBlock)
         {
             Value = gameObject;
         }
