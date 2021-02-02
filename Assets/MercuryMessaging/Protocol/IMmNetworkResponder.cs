@@ -110,6 +110,6 @@ namespace MercuryMessaging
         /// </param>
         /// <param name="msg">The message to send.</param>
         /// <param name="connectionId">Connection ID - use to identify clients.</param>
-        void MmInvoke(MmMessageType msgType, MmMessage message, int connectionId = -1);
+        void MmInvoke(MmMessage message, int connectionId = -1);
     }
 }

@@ -106,7 +106,7 @@ namespace MercuryMessaging
         /// used to serialize the object originally.
         /// </param>
         /// <param name="message">The message to send.</param>
-        void MmInvoke(MmMessageType msgType, MmMessage message);
+        void MmInvoke(MmMessage message);
 
         /// <summary>
         /// Get a handle to a IMmResponder's MmRelayNode,

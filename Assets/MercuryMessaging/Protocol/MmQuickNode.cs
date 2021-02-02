@@ -52,11 +52,11 @@ namespace MercuryMessaging
         /// <param name="message">The message to send.
         /// This class builds on UNET's MessageBase so it is
         /// Auto [de]serialized by UNET.</param>
-        public override void MmInvoke (MmMessageType msgType, MmMessage message)
+        public override void MmInvoke (MmMessage message)
         {
             if(AllowStandardMmInvoke)
             {
-                base.MmInvoke (msgType, message);
+                base.MmInvoke (message);
             }
             else
             {
@@ -71,7 +71,7 @@ namespace MercuryMessaging
                     !message.IsDeserialized)
                 {
                     MmNetworkFilter originalNetworkFilter = NetworkFilterAdjust(ref message);
-                    MmNetworkResponder.MmInvoke (msgType, message);
+                    MmNetworkResponder.MmInvoke (message);
                     message.MetadataBlock.NetworkFilter = originalNetworkFilter;
                 }
 
@@ -87,7 +87,7 @@ namespace MercuryMessaging
                     //bool isLocalResponder = responder.MmGameObject == this.gameObject;
                     MmLevelFilter responderLevel = routingTableItem.Level;
 
-                    responder.MmInvoke (msgType, message);
+                    responder.MmInvoke (message);
 
                 }
             }

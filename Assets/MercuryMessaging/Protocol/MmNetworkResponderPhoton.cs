@@ -107,7 +107,7 @@ namespace MercuryMessaging
         /// </param>
         /// <param name="msg">The message to send.</param>
         /// <param name="connectionId">Connection ID - use to identify clients.</param>
-        public override void MmInvoke(MmMessageType msgType, MmMessage msg, int connectionId = -1) 
+        public override void MmInvoke(MmMessage msg, int connectionId = -1) 
         { 
             msg.NetId = (uint) photonView.ViewID;
 
@@ -116,16 +116,16 @@ namespace MercuryMessaging
             // network solution.
             if (connectionId != -1)
             {
-                MmSendMessageToClient(connectionId, (short) msgType, msg);
+                MmSendMessageToClient(connectionId, msg);
                 return;
             }
 
             // Need to call the right method based on whether this object 
             // is a client or a server.
             if (IsActiveAndEnabled)
-                MmSendMessageToClient((short) msgType, msg);
+                MmSendMessageToClient(msg);
             else if (AllowClientToSend)
-                MmSendMessageToServer((short) msgType, msg);
+                MmSendMessageToServer(msg);
         }
 
         #region Implementation of MmNetworkResponder
@@ -139,9 +139,9 @@ namespace MercuryMessaging
         /// used to serialize the object originally.
         /// </param>
         /// <param name="msg">The message to send.</param>
-        public override void MmSendMessageToServer(short msgType, MmMessage msg)
+        public override void MmSendMessageToServer(MmMessage msg)
         {
-            byte eventCode = (byte)(msgType - 1000); 
+            byte eventCode = (byte)(1); 
             object[] data = msg.Serialize();
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.MasterClient };
             PhotonNetwork.RaiseEvent(eventCode, data, raiseEventOptions, SendOptions.SendReliable);
@@ -158,9 +158,9 @@ namespace MercuryMessaging
         /// used to serialize the object originally.
         /// </param>
         /// <param name="msg">The message to send.</param>
-        public override void MmSendMessageToClient(int channelId, short msgType, MmMessage msg)
+        public override void MmSendMessageToClient(int channelId, MmMessage msg)
         {
-            byte eventCode = (byte)(msgType - 1000); 
+            byte eventCode = (byte)(1); 
             object[] data = msg.Serialize();
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
             SendOptions sendOptions = new SendOptions { Reliability = true, Channel = (byte) channelId };
@@ -177,9 +177,9 @@ namespace MercuryMessaging
         /// used to serialize the object originally.
         /// </param>
         /// <param name="msg">The message to send.</param>
-        public override void MmSendMessageToClient(short msgType, MmMessage msg)
+        public override void MmSendMessageToClient(MmMessage msg)
         {
-            byte eventCode = (byte)(msgType - 1000); 
+            byte eventCode = (byte)(1); 
             object[] data = msg.Serialize();
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
             PhotonNetwork.RaiseEvent(eventCode, data, raiseEventOptions, SendOptions.SendReliable);
@@ -193,74 +193,78 @@ namespace MercuryMessaging
         public virtual void ReceivedMessage(EventData photonEvent)
 		{
             short eventCode = (short)photonEvent.Code;
-            eventCode += 1000;
+            if (eventCode != 1)
+            {
+                return;
+            }
 			MmMessageType mmMessageType = (MmMessageType)(eventCode);
             object[] data = (object[])photonEvent.CustomData;
+            MmMessage msg = new MmMessage();
+            msg.Deserialize(data);
 		    try
 		    {
-		        switch (mmMessageType)
+		        switch (msg.MmMessageType)
 		        {
 		            case MmMessageType.MmVoid:
-		                MmMessage msg = new MmMessage();
-                        msg.Deserialize(data);
-		                MmRelayNode.MmInvoke(mmMessageType, msg);
+		                MmRelayNode.MmInvoke(msg);
 		                break;
 		            case MmMessageType.MmInt:
 		                MmMessageInt msgInt = new MmMessageInt();
                         msgInt.Deserialize(data);
-		                MmRelayNode.MmInvoke(mmMessageType, msgInt);
+		                MmRelayNode.MmInvoke(msgInt);
 		                break;
 		            case MmMessageType.MmBool:
 		                MmMessageBool msgBool = new MmMessageBool();
                         msgBool.Deserialize(data);
-		                MmRelayNode.MmInvoke(mmMessageType, msgBool);
+		                MmRelayNode.MmInvoke(msgBool);
 		                break;
 		            case MmMessageType.MmFloat:
 		                MmMessageFloat msgFloat = new MmMessageFloat();
                         msgFloat.Deserialize(data);
-		                MmRelayNode.MmInvoke(mmMessageType, msgFloat);
+		                MmRelayNode.MmInvoke(msgFloat);
 		                break;
 		            case MmMessageType.MmVector3:
 		                MmMessageVector3 msgVector3 = new MmMessageVector3();
                         msgVector3.Deserialize(data);
-		                MmRelayNode.MmInvoke(mmMessageType, msgVector3);
+		                MmRelayNode.MmInvoke(msgVector3);
 		                break;
 		            case MmMessageType.MmVector4:
 		                MmMessageVector4 msgVector4 = new MmMessageVector4();
                         msgVector4.Deserialize(data);
-		                MmRelayNode.MmInvoke(mmMessageType, msgVector4);
+		                MmRelayNode.MmInvoke(msgVector4);
 		                break;
 		            case MmMessageType.MmString:
 		                MmMessageString msgString = new MmMessageString();
                         msgString.Deserialize(data);
-		                MmRelayNode.MmInvoke(mmMessageType, msgString);
+		                MmRelayNode.MmInvoke(msgString);
 		                break;
 		            case MmMessageType.MmByteArray:
 		                MmMessageByteArray msgByteArray = new MmMessageByteArray();
                         msgByteArray.Deserialize(data);
-		                MmRelayNode.MmInvoke(mmMessageType, msgByteArray);
+		                MmRelayNode.MmInvoke(msgByteArray);
                         break;
 		            case MmMessageType.MmTransform:
 		                MmMessageTransform msgTransform = new MmMessageTransform();
                         msgTransform.Deserialize(data);
-		                MmRelayNode.MmInvoke(mmMessageType, msgTransform);
+		                MmRelayNode.MmInvoke(msgTransform);
 		                break;
 		            case MmMessageType.MmTransformList:
 		                MmMessageTransformList msgTransformList = new MmMessageTransformList();
                         msgTransformList.Deserialize(data);
-		                MmRelayNode.MmInvoke(mmMessageType, msgTransformList);
+		                MmRelayNode.MmInvoke(msgTransformList);
 		                break;
                     case MmMessageType.MmSerializable:
 		                MmMessageSerializable msgSerializable = new MmMessageSerializable();
                         msgSerializable.Deserialize(data);
-		                MmRelayNode.MmInvoke(mmMessageType, msgSerializable);
+		                MmRelayNode.MmInvoke(msgSerializable);
 		                break;
                     case MmMessageType.MmGameObject:
                         MmMessageGameObject msgGameObject = new MmMessageGameObject();
                         msgGameObject.Deserialize(data);
-                        MmRelayNode.MmInvoke(mmMessageType, msgGameObject);
+                        MmRelayNode.MmInvoke(msgGameObject);
                         break;
                 default:
+                        Debug.Log(eventCode);
 		                throw new ArgumentOutOfRangeException();
 		        }
 		    }
@@ -282,7 +286,7 @@ namespace MercuryMessaging
 
         public override bool OnClient { get { return false; } }
 
-        public override void MmInvoke(MmMessageType msgType, MmMessage message, int connectionId = -1) {}
+        public override void MmInvoke(MmMessage message, int connectionId = -1) {}
 
         public override void MmSendMessageToServer(short msgType, MmMessage msg) {}
 

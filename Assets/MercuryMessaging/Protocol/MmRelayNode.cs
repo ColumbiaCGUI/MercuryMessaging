@@ -400,8 +400,9 @@ namespace MercuryMessaging
         /// <param name="message">The message to send.
         /// This class builds on UNET's MessageBase so it is
         /// Auto [de]serialized by UNET.</param>
-        public override void MmInvoke(MmMessageType msgType, MmMessage message)
+        public override void MmInvoke(MmMessage message)
         {
+            MmMessageType msgType = message.MmMessageType;
             //If the MmRelayNode has not been initialized, initialize it here,
             //  and refresh the parents - to ensure proper routing can occur.
             InitializeNode();
@@ -446,7 +447,7 @@ namespace MercuryMessaging
                 //  it will not be treated as networ
                 networkFilter = NetworkFilterAdjust(ref message);
 
-                MmNetworkResponder.MmInvoke (msgType, message);
+                MmNetworkResponder.MmInvoke (message);
 			}
 
             
@@ -494,7 +495,7 @@ namespace MercuryMessaging
 
                 if (ResponderCheck (levelFilter, activeFilter, selectedFilter, networkFilter,
                     routingTableItem, responderSpecificMessage)) {
-					responder.MmInvoke (msgType, responderSpecificMessage);
+					responder.MmInvoke (responderSpecificMessage);
 				}
 			}
 
@@ -514,7 +515,7 @@ namespace MercuryMessaging
                 if (ResponderCheck(levelFilter, activeFilter, selectedFilter, networkFilter,
                     routingTableItem, message))
                 {
-                    routingTableItem.Responder.MmInvoke(msgType, message);
+                    routingTableItem.Responder.MmInvoke(message);
                 }
             }
 
@@ -543,7 +544,7 @@ namespace MercuryMessaging
 			MmMetadataBlock metadataBlock = null)
         {
 			MmMessage msg = new MmMessage (mmMethod, MmMessageType.MmVoid, metadataBlock);
-            MmInvoke(MmMessageType.MmVoid, msg);
+            MmInvoke(msg);
         }
 
         /// Invoke a general MmMethod with parameter: MmMessage. 
@@ -560,7 +561,7 @@ namespace MercuryMessaging
             MmMessage msg = param.Copy();
             msg.MmMethod = mmMethod;
             msg.MetadataBlock = metadataBlock;
-            MmInvoke(msgType, msg);
+            MmInvoke(msg);
         }
 
         /// <summary>
@@ -575,7 +576,7 @@ namespace MercuryMessaging
             MmMetadataBlock metadataBlock = null)
         {
 			MmMessage msg = new MmMessageBool (param, mmMethod, metadataBlock);
-            MmInvoke(MmMessageType.MmBool, msg);
+            MmInvoke(msg);
         }
 
         /// <summary>
@@ -590,7 +591,7 @@ namespace MercuryMessaging
             MmMetadataBlock metadataBlock = null)
         {
 			MmMessage msg = new MmMessageInt(param, mmMethod, metadataBlock);
-            MmInvoke(MmMessageType.MmInt, msg);
+            MmInvoke(msg);
         }
 
         /// <summary>
@@ -605,7 +606,7 @@ namespace MercuryMessaging
             MmMetadataBlock metadataBlock = null)
         {
 			MmMessage msg = new MmMessageFloat(param, mmMethod, metadataBlock);
-            MmInvoke(MmMessageType.MmFloat, msg);
+            MmInvoke(msg);
         }
 
         /// <summary>
@@ -620,7 +621,7 @@ namespace MercuryMessaging
             MmMetadataBlock metadataBlock = null)
         {
 			MmMessage msg = new MmMessageVector3(param, mmMethod, metadataBlock);
-            MmInvoke(MmMessageType.MmVector3, msg);
+            MmInvoke(msg);
 		}
 
         /// <summary>
@@ -635,7 +636,7 @@ namespace MercuryMessaging
             MmMetadataBlock metadataBlock = null)
         {
 			MmMessage msg = new MmMessageVector4(param, mmMethod, metadataBlock);
-            MmInvoke(MmMessageType.MmVector4, msg);
+            MmInvoke(msg);
 		}
 
         /// <summary>
@@ -650,7 +651,7 @@ namespace MercuryMessaging
             MmMetadataBlock metadataBlock = null)
         {
 			MmMessage msg = new MmMessageString(param, mmMethod, metadataBlock);
-            MmInvoke(MmMessageType.MmString, msg);
+            MmInvoke(msg);
 		}
 
         /// <summary>
@@ -665,7 +666,7 @@ namespace MercuryMessaging
             MmMetadataBlock metadataBlock = null)
         {
 			MmMessage msg = new MmMessageByteArray(param, mmMethod, metadataBlock);
-            MmInvoke(MmMessageType.MmByteArray, msg);
+            MmInvoke(msg);
 		}
 
         /// <summary>
@@ -680,7 +681,7 @@ namespace MercuryMessaging
 			MmMetadataBlock metadataBlock = null)
 		{
 			MmMessage msg = new MmMessageTransform(param, mmMethod, metadataBlock);
-			MmInvoke(MmMessageType.MmTransform, msg);
+			MmInvoke(msg);
 		}
 
         /// <summary>
@@ -695,7 +696,7 @@ namespace MercuryMessaging
 			MmMetadataBlock metadataBlock = null)
 		{
 			MmMessage msg = new MmMessageTransformList(param, mmMethod, metadataBlock);
-			MmInvoke(MmMessageType.MmTransformList, msg);
+			MmInvoke(msg);
 		}
 
         /// <summary>
@@ -710,7 +711,7 @@ namespace MercuryMessaging
             MmMetadataBlock metadataBlock = null)
         {
             MmMessage msg = new MmMessageSerializable(param, mmMethod, metadataBlock);
-            MmInvoke(MmMessageType.MmSerializable, msg);
+            MmInvoke(msg);
         }
 
         /// Invoke an MmMethod with parameter: GameObject. 
@@ -724,7 +725,7 @@ namespace MercuryMessaging
             MmMetadataBlock metadataBlock = null)
         {
             MmMessage msg = new MmMessageGameObject(param, mmMethod, metadataBlock);
-            MmInvoke(MmMessageType.MmGameObject, msg);
+            MmInvoke(msg);
         }
 
         #endregion
