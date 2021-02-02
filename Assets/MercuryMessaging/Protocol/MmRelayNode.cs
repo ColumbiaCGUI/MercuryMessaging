@@ -542,7 +542,7 @@ namespace MercuryMessaging
         public virtual void MmInvoke(MmMethod mmMethod,
 			MmMetadataBlock metadataBlock = null)
         {
-			MmMessage msg = new MmMessage (mmMethod, metadataBlock);
+			MmMessage msg = new MmMessage (mmMethod, MmMessageType.MmVoid, metadataBlock);
             MmInvoke(MmMessageType.MmVoid, msg);
         }
 
