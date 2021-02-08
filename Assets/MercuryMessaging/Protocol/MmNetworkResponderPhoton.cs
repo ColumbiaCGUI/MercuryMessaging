@@ -288,11 +288,11 @@ namespace MercuryMessaging
 
         public override void MmInvoke(MmMessage message, int connectionId = -1) {}
 
-        public override void MmSendMessageToServer(short msgType, MmMessage msg) {}
+        public override void MmSendMessageToServer(MmMessage msg) {}
 
-        public override void MmSendMessageToClient(int channelId, short msgType, MmMessage msg) {}
+        public override void MmSendMessageToClient(int channelId, MmMessage msg) {}
 
-        public override void MmSendMessageToClient(short msgType, MmMessage msg) {}
+        public override void MmSendMessageToClient(MmMessage msg) {}
     }
 }
 #endif
