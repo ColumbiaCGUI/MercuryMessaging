@@ -27,7 +27,7 @@
 //  
 // =============================================================
 // Authors: 
-// Carmine Elvezio, Mengu Sukan, Steven Feiner
+// Carmine Elvezio, Samuel Silverman, Steven Feiner
 // =============================================================
 //  
 //  
