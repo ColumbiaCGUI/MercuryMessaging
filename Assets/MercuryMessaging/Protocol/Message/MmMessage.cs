@@ -30,7 +30,9 @@
 // Carmine Elvezio, Mengu Sukan, Samuel Silverman, Steven Feiner
 // =============================================================
 //  
-// 
+//
+using System.Linq;
+
 namespace MercuryMessaging
 {
     /// <summary>
@@ -184,6 +186,7 @@ namespace MercuryMessaging
             MmMethod = (MercuryMessaging.MmMethod) ((short) data[index++]);
             MmMessageType = (MercuryMessaging.MmMessageType) (short)data[index++];
             NetId = (uint) ((int) data[index++]);
+            index = MetadataBlock.Deserialize(data, index);
             IsDeserialized = true;
             
             return index;
@@ -195,10 +198,12 @@ namespace MercuryMessaging
         /// <returns>Object array representation of a MmMessage</returns>
         public virtual object[] Serialize()
         {
-            return new object[] { 
+            object[] thisSerialized = new object[] { 
                 (short)MmMethod, 
                 (short)MmMessageType,
-                (int)NetId };
+                (int)NetId};
+            thisSerialized = thisSerialized.Concat(MetadataBlock.Serialize()).ToArray();
+            return thisSerialized;
         }
     }
 }
