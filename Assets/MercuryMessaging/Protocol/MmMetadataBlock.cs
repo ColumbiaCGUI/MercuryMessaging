@@ -124,10 +124,10 @@ namespace MercuryMessaging
         /// Deserialize the MmMetadataBlock
         /// </summary>
         /// <param name="data">Object array representation of a MmMetadataBlock</param>
+        /// <param name="index">The index of the next element to be read from data</param> 
         /// <returns>The index of the next element to be read from data</returns>
-        public virtual int Deserialize(object[] data)
+        public virtual int Deserialize(object[] data, int index)
         {
-            int index = 0;
             LevelFilter = (MercuryMessaging.MmLevelFilter) ((short) data[index++]);
             ActiveFilter = (MercuryMessaging.MmActiveFilter) ((short) data[index++]);
             SelectedFilter = (MercuryMessaging.MmSelectedFilter) ((short) data[index++]);
