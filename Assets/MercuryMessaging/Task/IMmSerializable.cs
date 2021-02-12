@@ -41,7 +41,18 @@ namespace MercuryMessaging.Task
     {
         IMmSerializable Copy();
 
+        /// <summary>
+        /// Deserialize the IMmSerializable
+        /// </summary>
+        /// <param name="data">Object array representation of a IMmSerializable</param>
+        /// <param name="index">The index of the next element to be read from data</param> 
+        /// <returns>The index of the next element to be read from data</returns>
         int Deserialize(object[] data, int index);
+        
+        /// <summary>
+        /// Serialize the IMmSerializable
+        /// </summary>
+        /// <returns>Object array representation of a IMmSerializable</returns>
         object[] Serialize();
     }
 }
