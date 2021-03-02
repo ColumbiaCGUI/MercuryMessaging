@@ -81,8 +81,8 @@ namespace MercuryMessaging
 
         /// <summary>
         /// Set when Network Obj is active & enabled.
-        /// This is important since Objects in UNET scenarios
-        /// UNET may not be awake/active at the same times.
+        /// This is important since Objects in Photon scenarios
+        /// may not be awake/active at the same times.
         /// </summary>
         bool IsActiveAndEnabled { get; }
 
@@ -108,10 +108,8 @@ namespace MercuryMessaging
         /// the correct type requires knowing what was 
         /// used to serialize the object originally.
         /// </param>
-        /// <param name="msg">The message to send.
-        /// This class builds on UNET's MessageBase so it is
-        /// Auto [de]serialized by UNET.</param>
+        /// <param name="msg">The message to send.</param>
         /// <param name="connectionId">Connection ID - use to identify clients.</param>
-        void MmInvoke(MmMessageType msgType, MmMessage message, int connectionId = -1);
+        void MmInvoke(MmMessage message, int connectionId = -1);
     }
 }

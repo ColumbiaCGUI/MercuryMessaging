@@ -27,12 +27,10 @@
 //  
 // =============================================================
 // Authors: 
-// Carmine Elvezio, Mengu Sukan, Steven Feiner
+// Carmine Elvezio, Mengu Sukan, Samuel Silverman, Steven Feiner
 // =============================================================
 //  
-//  
-using UnityEngine.Networking;
-
+//
 namespace MercuryMessaging.Task
 {
     /// <summary>
@@ -43,7 +41,18 @@ namespace MercuryMessaging.Task
     {
         IMmSerializable Copy();
 
-        void Deserialize(NetworkReader reader);
-        void Serialize(NetworkWriter writer);
+        /// <summary>
+        /// Deserialize the IMmSerializable
+        /// </summary>
+        /// <param name="data">Object array representation of a IMmSerializable</param>
+        /// <param name="index">The index of the next element to be read from data</param> 
+        /// <returns>The index of the next element to be read from data</returns>
+        int Deserialize(object[] data, int index);
+        
+        /// <summary>
+        /// Serialize the IMmSerializable
+        /// </summary>
+        /// <returns>Object array representation of a IMmSerializable</returns>
+        object[] Serialize();
     }
 }

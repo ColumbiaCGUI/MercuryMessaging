@@ -301,7 +301,7 @@ public class InvocationComparison : MmBaseResponder, ICustomMessageTarget {
 	/// Overrides the base MmInvoke
 	/// Here we just stop the stopwatch. But we could throw in a switch (to represent normal usage) too.
 	/// </summary>
-	public override void MmInvoke (MmMessageType msgType, MmMessage message)
+	public override void MmInvoke (MmMessage message)
 	{
 		//base.MmInvoke (msgType, message);
 

@@ -27,13 +27,15 @@
 //  
 // =============================================================
 // Authors: 
-// Carmine Elvezio, Mengu Sukan, Steven Feiner
+// Carmine Elvezio, Mengu Sukan, Samuel Silverman, Steven Feiner
 // =============================================================
 //  
 //  
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Networking;
+#if PHOTON_AVAILABLE
+using Photon.Pun;
+#endif
 
 namespace MercuryMessaging.Support.Extensions
 {
@@ -106,18 +108,20 @@ namespace MercuryMessaging.Support.Extensions
         }
 
         /// <summary>
-        /// Given a GameObject, remove NetworkTransform and NetworkIdentity.
+        /// Given a GameObject, remove its Photon Network componenets.
         /// </summary>
         /// <param name="go">Observed GameObject.</param>
         public static void RemoveNetworkComponents(this GameObject go)
         {
-            var netTrans = go.GetComponent<NetworkTransform>();
+            #if PHOTON_AVAILABLE
+            var netTrans = go.GetComponent<PhotonTransformView>();
 
             if (netTrans != null) Object.Destroy(netTrans);
 
-            var netId = go.GetComponent<NetworkIdentity>();
+            var netId = go.GetComponent<PhotonView>();
 
             if (netId != null) Object.Destroy(netId);
+            #endif
         }
     }
 }

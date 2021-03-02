@@ -27,11 +27,11 @@
 //  
 // =============================================================
 // Authors: 
-// Carmine Elvezio, Mengu Sukan, Steven Feiner
+// Carmine Elvezio, Mengu Sukan, Samuel Silverman, Steven Feiner
 // =============================================================
 //  
-//  
-using UnityEngine.Networking;
+//
+using System.Linq;
 
 namespace MercuryMessaging
 {
@@ -61,7 +61,7 @@ namespace MercuryMessaging
         /// </summary>
         /// <param name="metadataBlock">Object defining the routing of messages</param>
 		public MmMessageTransform(MmMetadataBlock metadataBlock = null)
-			: base (metadataBlock)
+			: base (metadataBlock, MmMessageType.MmTransform)
 		{
 			MmTransform = new MmTransform();
 		}
@@ -75,7 +75,7 @@ namespace MercuryMessaging
         public MmMessageTransform(MmTransform transform,
             MmMethod mmMethod = default(MmMethod),
             MmMetadataBlock metadataBlock = null)
-            : base(mmMethod, metadataBlock)
+            : base(mmMethod, MmMessageType.MmTransform, metadataBlock)
         {
             MmTransform = transform;
         }
@@ -91,7 +91,7 @@ namespace MercuryMessaging
             bool localTransform,
             MmMethod mmMethod = default(MmMethod),
 			MmMetadataBlock metadataBlock = null)
-			: base(mmMethod, metadataBlock)
+			: base(mmMethod, MmMessageType.MmTransform, metadataBlock)
 		{
 			MmTransform = transform;
             LocalTransform = localTransform;
@@ -118,25 +118,30 @@ namespace MercuryMessaging
         }
 
         /// <summary>
-        /// Deserialize the message
+        /// Deserialize the MmMessageTransform
         /// </summary>
-        /// <param name="reader">UNET based deserializer object</param>
-        public override void Deserialize(NetworkReader reader)
-		{
-			base.Deserialize (reader);
-			MmTransform.Deserialize (reader);
-            LocalTransform = reader.ReadBoolean();
+        /// <param name="data">Object array representation of a MmMessageTransform</param>
+        /// <returns>The index of the next element to be read from data</returns>
+        public override int Deserialize(object[] data)
+        {
+            int index = base.Deserialize(data);
+            MmTransform = new MmTransform();
+            index = MmTransform.Deserialize(data, index);
+            LocalTransform = (bool) data[index++];
+            return index;
         }
 
         /// <summary>
-        /// Serialize the MmMessage
+        /// Serialize the MmMessageTransform
         /// </summary>
-        /// <param name="writer">UNET based serializer</param>
-        public override void Serialize(NetworkWriter writer)
-		{
-			base.Serialize (writer);
-			MmTransform.Serialize (writer);
-            writer.Write(LocalTransform);
+        /// <param name="writer">Object array representation of a MmMessageTransform</param>
+        public override object[] Serialize()
+        {
+            object[] baseSerialized = base.Serialize();
+            object[] thisSerialized = MmTransform.Serialize(); 
+            thisSerialized = thisSerialized.Concat(new object[] { LocalTransform }).ToArray();
+            object[] combinedSerialized = baseSerialized.Concat(thisSerialized).ToArray();
+            return combinedSerialized;
         }
 	}
 }

@@ -27,12 +27,10 @@
 //  
 // =============================================================
 // Authors: 
-// Carmine Elvezio, Mengu Sukan, Steven Feiner
+// Carmine Elvezio, Mengu Sukan, Samuel Silverman, Steven Feiner
 // =============================================================
 //  
-//  
-using UnityEngine.Networking;
-
+//
 namespace MercuryMessaging
 {
     /// <summary>
@@ -125,27 +123,33 @@ namespace MercuryMessaging
         /// <summary>
         /// Deserialize the MmMetadataBlock
         /// </summary>
-        /// <param name="reader">UNET based deserializer object</param>
-        public virtual void Deserialize(NetworkReader reader)
+        /// <param name="data">Object array representation of a MmMetadataBlock</param>
+        /// <param name="index">The index of the next element to be read from data</param> 
+        /// <returns>The index of the next element to be read from data</returns>
+        public virtual int Deserialize(object[] data, int index)
         {
-            LevelFilter = (MmLevelFilter) reader.ReadInt16();
-            ActiveFilter = (MmActiveFilter) reader.ReadInt16();
-            SelectedFilter = (MmSelectedFilter) reader.ReadInt16();
-            NetworkFilter = (MmNetworkFilter) reader.ReadInt16();
-            Tag = (MmTag)reader.ReadInt16();
+            LevelFilter = (MercuryMessaging.MmLevelFilter) ((short) data[index++]);
+            ActiveFilter = (MercuryMessaging.MmActiveFilter) ((short) data[index++]);
+            SelectedFilter = (MercuryMessaging.MmSelectedFilter) ((short) data[index++]);
+            NetworkFilter = (MercuryMessaging.MmNetworkFilter) ((short) data[index++]);
+            Tag = (MercuryMessaging.MmTag) ((short) data[index++]);
+            return index;
         }
 
         /// <summary>
         /// Serialize the MmMetadataBlock
         /// </summary>
-        /// <param name="writer">UNET based serializer</param>
-        public virtual void Serialize(NetworkWriter writer)
+        /// <returns>Object array representation of a MmMetadataBlock</returns>
+        public virtual object[] Serialize()
         {
-            writer.Write((short) LevelFilter);
-            writer.Write((short) ActiveFilter);
-            writer.Write((short) SelectedFilter);
-            writer.Write((short) NetworkFilter);
-            writer.Write((short) Tag);
+            object[] thisSerialized = new object[] { 
+                (short) LevelFilter, 
+                (short) ActiveFilter, 
+                (short) SelectedFilter, 
+                (short) NetworkFilter, 
+                (short) Tag 
+            };
+            return thisSerialized;
         }
     }
 

@@ -27,11 +27,11 @@
 //  
 // =============================================================
 // Authors: 
-// Carmine Elvezio, Mengu Sukan, Steven Feiner
+// Carmine Elvezio, Mengu Sukan, Samuel Silverman, Steven Feiner
 // =============================================================
 //  
 //  
-using UnityEngine.Networking;
+using System.Linq;
 
 namespace MercuryMessaging
 {
@@ -56,7 +56,7 @@ namespace MercuryMessaging
         /// </summary>
         /// <param name="metadataBlock">Object defining the routing of messages</param>
 		public MmMessageBool(MmMetadataBlock metadataBlock = null)
-			: base (metadataBlock)
+			: base (metadataBlock, MmMessageType.MmBool)
 		{}
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace MercuryMessaging
 		public MmMessageBool(bool iVal, 
 			MmMethod mmMethod = default(MmMethod), 
             MmMetadataBlock metadataBlock = null)
-			: base (mmMethod, metadataBlock)
+			: base (mmMethod, MmMessageType.MmBool, metadataBlock)
 		{
 			value = iVal;
 		}
@@ -94,23 +94,27 @@ namespace MercuryMessaging
         }
 
         /// <summary>
-        /// Deserialize the message
+        /// Deserialize the MmMessageBool
         /// </summary>
-        /// <param name="reader">UNET based deserializer object</param>
-        public override void Deserialize(NetworkReader reader)
+        /// <param name="data">Object array representation of a MmMessageBool</param>
+        /// <returns>The index of the next element to be read from data</returns>
+        public override int Deserialize(object[] data)
 		{
-			base.Deserialize (reader);
-			value = reader.ReadBoolean();
+			int index = base.Deserialize(data);
+            value = (bool) data[index++];
+            return index;
 		}
 
         /// <summary>
-        /// Serialize the MmMessage
+        /// Serialize the MmMessageBool
         /// </summary>
-        /// <param name="writer">UNET based serializer</param>
-		public override void Serialize(NetworkWriter writer)
+        /// <returns>Object array representation of a MmMessageBool</returns>
+		public override object[] Serialize()
 		{
-			base.Serialize (writer);
-			writer.Write (value);
+			object[] baseSerialized = base.Serialize(); 
+            object[] thisSerialized = new object[] { value };
+            object[] combinedSerialized = baseSerialized.Concat(thisSerialized).ToArray();
+            return combinedSerialized;
 		}
     }
 }

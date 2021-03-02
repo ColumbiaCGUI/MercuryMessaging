@@ -105,10 +105,8 @@ namespace MercuryMessaging
         /// the correct type requires knowing what was 
         /// used to serialize the object originally.
         /// </param>
-        /// <param name="message">The message to send.
-        /// This class builds on UNET's MessageBase so it is
-        /// Auto [de]serialized by UNET.</param>
-        void MmInvoke(MmMessageType msgType, MmMessage message);
+        /// <param name="message">The message to send.</param>
+        void MmInvoke(MmMessage message);
 
         /// <summary>
         /// Get a handle to a IMmResponder's MmRelayNode,

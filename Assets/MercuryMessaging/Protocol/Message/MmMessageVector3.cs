@@ -27,12 +27,12 @@
 //  
 // =============================================================
 // Authors: 
-// Carmine Elvezio, Mengu Sukan, Steven Feiner
+// Carmine Elvezio, Mengu Sukan, Samuel Silverman, Steven Feiner
 // =============================================================
 //  
 //  
 using UnityEngine;
-using UnityEngine.Networking;
+using System.Linq;
 
 namespace MercuryMessaging
 {
@@ -57,7 +57,7 @@ namespace MercuryMessaging
         /// </summary>
         /// <param name="metadataBlock">Object defining the routing of messages</param>
         public MmMessageVector3(MmMetadataBlock metadataBlock = null)
-			: base (metadataBlock)
+			: base (metadataBlock, MmMessageType.MmVector3)
 		{
 		}
 
@@ -70,7 +70,7 @@ namespace MercuryMessaging
 		public MmMessageVector3(Vector3 iVal, 
 			MmMethod mmMethod = default(MmMethod), 
             MmMetadataBlock metadataBlock = null)
-            : base(mmMethod, metadataBlock)
+            : base(mmMethod, MmMessageType.MmVector3, metadataBlock)
         {
 			value = iVal;
 		}
@@ -95,23 +95,27 @@ namespace MercuryMessaging
         }
 
         /// <summary>
-        /// Deserialize the message
+        /// Deserialize the MmMessageVector3
         /// </summary>
-        /// <param name="reader">UNET based deserializer object</param>
-        public override void Deserialize(NetworkReader reader)
-		{
-			base.Deserialize (reader);
-			value = reader.ReadVector3();
-		}
+        /// <param name="data">Object array representation of a MmMessageVector3</param>
+        /// <returns>The index of the next element to be read from data</returns>
+        public override int Deserialize(object[] data)
+        {
+            int index = base.Deserialize(data);
+            value = (Vector3) data[index++];
+            return index;
+        }
 
         /// <summary>
-        /// Serialize the MmMessage
+        /// Serialize the MmMessageVector3
         /// </summary>
-        /// <param name="writer">UNET based serializer</param>
-        public override void Serialize(NetworkWriter writer)
-		{
-			base.Serialize (writer);
-			writer.Write (value);
-		}
+        /// <returns>Object array representation of a MmMessageVector3</returns>
+        public override object[] Serialize()
+        {
+            object[] baseSerialized = base.Serialize();
+            object[] thisSerialized = new object[] { value };
+            object[] combinedSerialized = baseSerialized.Concat(thisSerialized).ToArray();
+            return combinedSerialized;
+        }
     }
 }

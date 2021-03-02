@@ -27,11 +27,11 @@
 //  
 // =============================================================
 // Authors: 
-// Carmine Elvezio, Mengu Sukan, Steven Feiner
+// Carmine Elvezio, Mengu Sukan, Samuel Silverman, Steven Feiner
 // =============================================================
 //  
 //  
-using UnityEngine.Networking;
+using System.Linq;
 
 namespace MercuryMessaging
 {
@@ -56,7 +56,7 @@ namespace MercuryMessaging
         /// </summary>
         /// <param name="metadataBlock">Object defining the routing of messages</param>
         public MmMessageString(MmMetadataBlock metadataBlock = null)
-			: base (metadataBlock)
+			: base (metadataBlock, MmMessageType.MmString)
 		{
 		}
 
@@ -69,7 +69,7 @@ namespace MercuryMessaging
 		public MmMessageString(string initVal, 
 			MmMethod mmMethod = default(MmMethod), 
             MmMetadataBlock metadataBlock = null)
-            : base(mmMethod, metadataBlock)
+            : base(mmMethod, MmMessageType.MmString, metadataBlock)
         {
 			value = initVal;
 		}
@@ -94,23 +94,27 @@ namespace MercuryMessaging
         }
 
         /// <summary>
-        /// Deserialize the message
+        /// Deserialize the MmMessageString
         /// </summary>
-        /// <param name="reader">UNET based deserializer object</param>
-        public override void Deserialize(NetworkReader reader)
-		{
-			base.Deserialize (reader);
-			value = reader.ReadString();
-		}
+        /// <param name="data">Object array representation of a MmMessageString</param>
+        /// <returns>The index of the next element to be read from data</returns>
+        public override int Deserialize(object[] data)
+        {
+            int index = base.Deserialize(data);
+            value = (string) data[index++];
+            return index;
+        }
 
         /// <summary>
-        /// Serialize the MmMessage
+        /// Serialize the MmMessageString
         /// </summary>
-        /// <param name="writer">UNET based serializer</param>
-        public override void Serialize(NetworkWriter writer)
-		{
-			base.Serialize (writer);
-			writer.Write (value);
-		}
+        /// <returns>Object array representation of a MmMessageString</returns>
+        public override object[] Serialize()
+        {
+            object[] baseSerialized = base.Serialize();
+            object[] thisSerialized = new object[] { value };
+            object[] combinedSerialized = baseSerialized.Concat(thisSerialized).ToArray();
+            return combinedSerialized;
+        }
     }
 }

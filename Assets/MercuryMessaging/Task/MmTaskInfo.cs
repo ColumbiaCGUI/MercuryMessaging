@@ -27,12 +27,10 @@
 //  
 // =============================================================
 // Authors: 
-// Carmine Elvezio, Mengu Sukan, Steven Feiner
+// Carmine Elvezio, Mengu Sukan, Samuel Silverman, Steven Feiner
 // =============================================================
 //  
 //  
-using UnityEngine.Networking;
-
 namespace MercuryMessaging.Task
 {
     /// <summary>
@@ -129,31 +127,30 @@ namespace MercuryMessaging.Task
         }
 
         /// <summary>
-        /// Deserialize the task info from serialized form.
+        /// Deserialize the MmTaskInfo
         /// </summary>
-        /// <param name="reader">UNET deserializer.</param>
-        public virtual void Deserialize(NetworkReader reader)
+        /// <param name="data">Object array representation of a MmTaskInfo</param>
+        /// <param name="index">The index of the next element to be read from data</param>
+        /// <returns>The index of the next element to be read from data</returns>
+        public virtual int Deserialize(object[] data, int index)
         {
-            RecordId = reader.ReadInt32();
-            UserId = reader.ReadInt32();
-            UserSequence = reader.ReadInt32();
-            TaskId = reader.ReadInt32();
-            DoNotRecordData = reader.ReadBoolean();
-            TaskName = reader.ReadString();
+            RecordId = (int) data[index++];
+            UserId = (int) data[index++];
+            UserSequence = (int) data[index++];
+            TaskId = (int) data[index++];
+            DoNotRecordData = (bool) data[index++];
+            TaskName = (string) data[index++];
+            return index;
         }
 
         /// <summary>
-        /// Serialize the task info into serialized form.
+        /// Serialize the MmTaskInfo
         /// </summary>
-        /// <param name="writer">UNET serializer.</param>
-        public virtual void Serialize(NetworkWriter writer)
+        /// <returns>Object array representation of a MmTaskInfo</returns>
+        public virtual object[] Serialize()
         {
-            writer.Write(RecordId);
-            writer.Write(UserId);
-            writer.Write(UserSequence);
-            writer.Write(TaskId);
-            writer.Write(DoNotRecordData);
-            writer.Write(TaskName);
+            object[] thisSerialized = new object[]  { RecordId, UserId, UserSequence, TaskId, DoNotRecordData, TaskName };
+            return thisSerialized;
         }
 
         /// <summary>

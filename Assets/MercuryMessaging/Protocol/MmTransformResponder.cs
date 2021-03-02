@@ -58,16 +58,16 @@ namespace MercuryMessaging
         public bool useGlobalTransformation;
 
 
-        public override void MmInvoke (MmMessageType msgType, MmMessage message)
+        public override void MmInvoke (MmMessage message)
 		{
 			switch (message.MmMethod)
 			{
-			case MmMethod.Transform:
+			case MmMethod.MessageTransform:
 				MmMessageTransform newMsg = message as MmMessageTransform;
 				HandleTransform (newMsg);
 				break;
 			default:
-				base.MmInvoke(msgType, message);
+				base.MmInvoke(message);
 				break;
 			}
 		}
@@ -79,7 +79,7 @@ namespace MercuryMessaging
 		        lastClientSendTime = Time.time;
 
 		        GetRelayNode()
-		            .MmInvoke(MmMethod.Transform,
+		            .MmInvoke(MmMethod.MessageTransform,
 		                new MmMessageTransform(
                             new MmTransform(gameObject.transform, useGlobalTransformation),
                             !useGlobalTransformation),

@@ -27,7 +27,7 @@
 //  
 // =============================================================
 // Authors: 
-// Carmine Elvezio, Mengu Sukan, Steven Feiner
+// Carmine Elvezio, Mengu Sukan, Samuel Silverman, Steven Feiner
 // =============================================================
 //  
 //  
@@ -60,6 +60,6 @@ namespace MercuryMessaging
         MessageTransformList,
         MessageVector3,
         MessageVector4,
-        Transform
+		MessageGameObject
 	}
 }

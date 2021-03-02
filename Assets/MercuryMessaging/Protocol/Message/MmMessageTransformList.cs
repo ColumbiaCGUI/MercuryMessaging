@@ -27,12 +27,12 @@
 //  
 // =============================================================
 // Authors: 
-// Carmine Elvezio, Mengu Sukan, Steven Feiner
+// Carmine Elvezio, Mengu Sukan, Samuel Silverman, Steven Feiner
 // =============================================================
 //  
 //  
 using System.Collections.Generic;
-using UnityEngine.Networking;
+using System.Linq;
 
 namespace MercuryMessaging
 {
@@ -60,7 +60,7 @@ namespace MercuryMessaging
         /// </summary>
         /// <param name="metadataBlock">Object defining the routing of messages</param>
 		public MmMessageTransformList(MmMetadataBlock metadataBlock = null)
-			: base (metadataBlock)
+			: base (metadataBlock, MmMessageType.MmTransformList)
 		{
 			transforms = new List<MmTransform>();
 		}
@@ -75,7 +75,7 @@ namespace MercuryMessaging
 		public MmMessageTransformList(List<MmTransform> iTransforms, 
 			MmMethod mmMethod = default(MmMethod),
 			MmMetadataBlock metadataBlock = null)
-			: base(mmMethod, metadataBlock)
+			: base(mmMethod, MmMessageType.MmTransformList, metadataBlock)
 		{
 			transforms = iTransforms;
 		}
@@ -100,36 +100,38 @@ namespace MercuryMessaging
         }
 
         /// <summary>
-        /// Deserialize the message
+        /// Deserialize the MmMessageTransformList
         /// </summary>
-        /// <param name="reader">UNET based deserializer object</param>
-        public override void Deserialize(NetworkReader reader)
-		{
-			base.Deserialize (reader);
-			transforms.Clear ();
-
-			int transformsCount = reader.ReadInt32();
-			for(int i = 0; i < transformsCount; i++)
-			{
-				MmTransform tempTrans = new MmTransform ();
-				tempTrans.Deserialize (reader);
-				transforms.Add(tempTrans);
-			}
-		}
+        /// <param name="data">Object array representation of a MmMessageTransformList</param>
+        /// <returns>The index of the next element to be read from data</returns>
+        public override int Deserialize(object[] data)
+        {
+            int index = base.Deserialize(data);
+            int numTransforms = (int) data[index++];
+            transforms = new List<MmTransform>();
+            for (int i = 0; i < numTransforms; i++)
+            {
+                MmTransform transform = new MmTransform();
+                index = transform.Deserialize(data, index);
+                transforms.Add(transform);
+            }
+            return index;
+        }
 
         /// <summary>
-        /// Serialize the MmMessage
+        /// Serialize the MmMessageTransformList
         /// </summary>
-        /// <param name="writer">UNET based serializer</param>
-        public override void Serialize(NetworkWriter writer)
-		{
-			base.Serialize (writer);
-			writer.Write (transforms.Count);
-
-			for(int i = 0; i < transforms.Count; i++)
-			{
-				transforms [i].Serialize (writer);
-			}
-		}
+        /// <returns>Object array representation of a MmMessageTransformList</returns>
+        public override object[] Serialize()
+        {
+            object[] baseSerialized = base.Serialize();
+            object[] thisSerialized = new object[] { transforms.Count };
+            foreach (MmTransform transform in transforms)
+            {
+                thisSerialized = thisSerialized.Concat(transform.Serialize()).ToArray();
+            }
+            object[] combinedSerialized = baseSerialized.Concat(thisSerialized).ToArray();
+            return combinedSerialized;
+        }
 	}
 }

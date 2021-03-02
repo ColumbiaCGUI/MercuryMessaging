@@ -27,13 +27,12 @@
 //  
 // =============================================================
 // Authors: 
-// Carmine Elvezio, Mengu Sukan, Steven Feiner
+// Carmine Elvezio, Mengu Sukan, Samuel Silverman, Steven Feiner
 // =============================================================
 //  
 //  
 using MercuryMessaging.Support.Extensions;
 using UnityEngine;
-using UnityEngine.Networking;
 
 namespace MercuryMessaging
 {
@@ -97,23 +96,37 @@ namespace MercuryMessaging
         /// <summary>
         /// Deserialize the MmTransform
         /// </summary>
-        /// <param name="reader">UNET based deserializer object</param>
-        public void Deserialize(NetworkReader reader)
+        /// <param name="data">Object array representation of a MmTransform</param>
+        /// <param name="index">The index of the next element to be read from data</param>
+        /// <returns>The index of the next element to be read from data</returns>
+        public int Deserialize(object[] data, int index)
 		{
-			Translation = reader.ReadVector3();
-			Rotation = reader.ReadQuaternion();
-			Scale = reader.ReadVector3();
+            Translation = (Vector3) data[index++];
+            Rotation = new Quaternion(
+                (float) data[index++],
+                (float) data[index++],
+                (float) data[index++],
+                (float) data[index++]
+            );
+            Scale = (Vector3) data[index++];
+            return index;
 		}
 
         /// <summary>
         /// Serialize the MmTransform
         /// </summary>
-        /// <param name="writer">UNET based serializer</param>
-        public void Serialize(NetworkWriter writer)
+        /// <returns>Object array representation of a MmTransform</returns>
+        public object[] Serialize()
 		{
-			writer.Write (Translation);
-			writer.Write (Rotation);
-			writer.Write (Scale);
+			object[] thisSerialized = new object[] { 
+                Translation, 
+                Rotation.x, 
+                Rotation.y, 
+                Rotation.z, 
+                Rotation.w, 
+                Scale 
+            };
+            return thisSerialized;
 		}
 	}
 }
