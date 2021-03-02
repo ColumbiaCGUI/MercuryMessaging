@@ -53,7 +53,7 @@ namespace MercuryMessaging
         /// Log Framework-level messages.
         /// </summary>
         public static LogFunc LogFramework = delegate { };
-        //public static LogFunc LogFramework = Debug.Log;
+        // public static LogFunc LogFramework = Debug.Log;
 
         /// <summary>
         /// Log MmResponder-level messages.

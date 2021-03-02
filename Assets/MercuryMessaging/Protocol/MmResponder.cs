@@ -189,7 +189,7 @@ namespace MercuryMessaging
         /// <param name="message">The message to send.
         /// This class builds on UNET's MessageBase so it is
         /// Auto [de]serialized by UNET.</param>
-        public virtual void MmInvoke(MmMessageType msgType, MmMessage message)
+        public virtual void MmInvoke(MmMessage message)
 		{
 		}
 

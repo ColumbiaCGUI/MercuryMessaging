@@ -27,20 +27,20 @@
 //  
 // =============================================================
 // Authors: 
-// Carmine Elvezio, Mengu Sukan, Steven Feiner
+// Carmine Elvezio, Mengu Sukan, Samuel Silverman, Steven Feiner
 // =============================================================
 //  
 //  
 using MercuryMessaging.Support.Extensions;
 using UnityEngine;
-using UnityEngine.Networking;
+using System.Linq;
 
 namespace MercuryMessaging.Task
 {
     public class MmLookAtTaskInfo : MmTransformationTaskInfo
     {
         //Viewing position
-        public Vector3 Position;
+        public new Vector3 Position;
 
         //Billboard position
         public Vector3 LookAt;
@@ -56,7 +56,7 @@ namespace MercuryMessaging.Task
 
         protected char delimiter = '|';
         
-        public MmTransformTaskThreshold Threshold; // This should be enough, has angle and distance
+        public new MmTransformTaskThreshold Threshold; // This should be enough, has angle and distance
 
         #region Constructors & Copiers
 
@@ -121,22 +121,37 @@ namespace MercuryMessaging.Task
                 base.Headers(), "Position", "LookAt", "TargetObjOrientation");
         }
 
-        public override void Deserialize(NetworkReader reader)
+        /// <summary>
+        /// Deserialize the MmLookAtTaskInfo
+        /// </summary>
+        /// <param name="data">Object array representation of a MmLookAtTaskInfo</param>
+        /// <param name="index">The index of the next element to be read from data</param>
+        /// <returns>The index of the next element to be read from data</returns>
+        public override int Deserialize(object[] data, int index)
         {
-            base.Deserialize(reader);
-            Position = reader.ReadVector3();
-            LookAt = reader.ReadVector3();
-            TargetObjOrientation = reader.ReadQuaternion();
-
+            index = base.Deserialize(data, index);
+            Position = (Vector3) data[index++];
+            LookAt = (Vector3) data[index++];
+            TargetObjOrientation = new Quaternion(
+                (float) data[index++],
+                (float) data[index++],
+                (float) data[index++],
+                (float) data[index++]
+            );
             CalculateOrientation();
+            return index;
         }
 
-        public override void Serialize(NetworkWriter writer)
+        /// <summary>
+        /// Serialize the MmLookAtTaskInfo
+        /// </summary>
+        /// <returns>Object array representation of a MmLookAtTaskInfo</returns>
+        public override object[] Serialize()
         {
-            base.Serialize(writer);
-            writer.Write(Position);
-            writer.Write(LookAt);
-            writer.Write(TargetObjOrientation);
+            object[] baseSerialized = base.Serialize();
+            object[] thisSerialized = new object[] { Position, LookAt, TargetObjOrientation.x, TargetObjOrientation.y, TargetObjOrientation.z, TargetObjOrientation.w };
+            object[] combinedSerialized = baseSerialized.Concat(thisSerialized).ToArray();
+            return combinedSerialized;
         }
 
         #endregion

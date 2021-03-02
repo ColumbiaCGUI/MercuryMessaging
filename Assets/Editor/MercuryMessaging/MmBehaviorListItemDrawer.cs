@@ -27,7 +27,7 @@
 // 
 // =============================================================
 // Authors: 
-// Carmine Elvezio, Mengu Sukan, Steven Feiner
+// Carmine Elvezio, Mengu Sukan, Samuel Silverman, Steven Feiner
 // =============================================================
 // 
 // 
@@ -188,7 +188,7 @@ namespace MercuryMessaging
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
 		{
 			EditorGUI.BeginProperty(position, label, property);
-			property.intValue = (int) (MmTag) EditorGUI.EnumMaskField(position, label, (MmTag)property.intValue);
+			property.intValue = (int) (MmTag) EditorGUI.EnumFlagsField(position, label, (MmTag)property.intValue);
 			EditorGUI.EndProperty();
 		}
 	}
@@ -203,7 +203,7 @@ namespace MercuryMessaging
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             EditorGUI.BeginProperty(position, label, property);
-            property.intValue = (int) (MmLevelFilter) EditorGUI.EnumMaskField(position, label, (MmLevelFilter)property.intValue);
+            property.intValue = (int) (MmLevelFilter) EditorGUI.EnumFlagsField(position, label, (MmLevelFilter)property.intValue);
             EditorGUI.EndProperty();
         }
     }

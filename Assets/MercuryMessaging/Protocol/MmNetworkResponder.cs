@@ -27,15 +27,15 @@
 //  
 // =============================================================
 // Authors: 
-// Carmine Elvezio, Mengu Sukan, Steven Feiner
+// Carmine Elvezio, Mengu Sukan, Samuel Silverman, Steven Feiner
 // =============================================================
 //  
 //  
-using UnityEngine.Networking;
+using UnityEngine;
 
 namespace MercuryMessaging
 {
-	public class MmNetworkResponder : NetworkBehaviour, IMmNetworkResponder
+	public abstract class MmNetworkResponder : MonoBehaviour, IMmNetworkResponder
 	{
         /// <summary>
         /// Get a handle to an MmRelayNode that shares the same GameObject.
@@ -130,20 +130,20 @@ namespace MercuryMessaging
 
         /// <summary>
         /// Set when Network Obj is active & enabled.
-        /// This is important since Objects in UNET scenarios
-        /// UNET may not be awake/active at the same times.
+        /// This is important since Objects in network scenarios
+        /// may not be awake/active at the same times.
         /// </summary>
-        public bool IsActiveAndEnabled { get { return isActiveAndEnabled; } }
+        public abstract bool IsActiveAndEnabled { get; }
 
 	    /// <summary>
 	    /// Indicates whether the network responder is executing on a server 
 	    /// </summary>
-	    public bool OnServer { get { return isServer; } }
+	    public abstract bool OnServer { get; }
 
 	    /// <summary>
 	    /// Indicates whether the network responder is executing on a client 
 	    /// </summary>
-	    public bool OnClient { get { return isClient; } }
+	    public abstract bool OnClient { get; }
 
         /// <summary>
         /// This is the network equivalent of IMmResponder's MmInvoke.
@@ -157,30 +157,9 @@ namespace MercuryMessaging
         /// the correct type requires knowing what was 
         /// used to serialize the object originally.
         /// </param>
-        /// <param name="msg">The message to send.
-        /// This class builds on UNET's MessageBase so it is
-        /// Auto [de]serialized by UNET.</param>
+        /// <param name="msg">The message to send.</param>
         /// <param name="connectionId">Connection ID - use to identify clients.</param>
-        public virtual void MmInvoke(MmMessageType msgType, MmMessage message, int connectionId = -1)
-        {
-            message.NetId = netId.Value;
-
-            //If the connection ID is defined, only send it there,
-            //  otherwise, it follows the standard execution flow for the chosen 
-            //  network solution.
-            if (connectionId != -1)
-            {
-                MmSendMessageToClient(connectionId, (short) msgType, message);
-                return;
-            }
-
-            //Need to call the right method based on whether this object 
-            //  is a client or a server.
-            if (NetworkServer.active)
-                MmSendMessageToClient((short)msgType, message);
-            else if (allowClientToSend)
-                MmSendMessageToServer((short)msgType, message);
-        }
+        public abstract void MmInvoke(MmMessage msg, int connectionId = -1);
 
         #endregion
 
@@ -208,8 +187,6 @@ namespace MercuryMessaging
         public virtual void Start()
         {
             MmLogger.LogFramework(gameObject.name + ": Network Responder Started");
-
-			RegisterToMmNetworkManager();
 			
             if (MmStart != null)
                 MmStart();
@@ -226,29 +203,11 @@ namespace MercuryMessaging
         /// the correct type requires knowing what was 
         /// used to serialize the object originally.
         /// </param>
-        /// <param name="msg">The message to send.
-        /// This utilises UNET's MessageBase so it is
-        /// Auto [de]serialized by UNET.
-        /// This also allows us to send messages that are not
-        /// part of Mercury XM</param>
-        public virtual void MmSendMessageToServer(short msgType, MessageBase msg)
-        {
-            if (MmNetworkManager.Instance.NetworkClient == null)
-            {
-                MmLogger.LogFramework("No client present on host");
-                return;
-            }
-
-            NetworkWriter writer = new NetworkWriter();
-            writer.StartMessage(msgType);
-            msg.Serialize(writer);
-            writer.FinishMessage();
-
-            MmNetworkManager.Instance.NetworkClient.SendWriter(writer, Channels.DefaultReliable);
-        }
+        /// <param name="msg">The message to send.</param>
+        public abstract void MmSendMessageToServer(MmMessage msg);
 
         /// <summary>
-        /// Send a message to a specific client over chosen UNET.
+        /// Send a message to a specific client.
         /// </summary>
         /// <param name="channelId">Client connection ID</param>
         /// <param name="msgType">Type of message. This specifies
@@ -257,18 +216,11 @@ namespace MercuryMessaging
         /// the correct type requires knowing what was 
         /// used to serialize the object originally.
         /// </param>
-        /// <param name="msg">The message to send.
-        /// This utilises UNET's MessageBase so it is
-        /// Auto [de]serialized by UNET.
-        /// This also allows us to send messages that are not
-        /// part of Mercury XM</param>
-        public virtual void MmSendMessageToClient(int channelId, short msgType, MmMessage msg)
-        {
-            NetworkServer.SendToClient(channelId, msgType, msg);
-        }
+        /// <param name="msg">The message to send.</param>
+        public abstract void MmSendMessageToClient(int channelId, MmMessage msg);
 
         /// <summary>
-        /// Send a message to all clients using UNET
+        /// Send a message to all clients.
         /// </summary>
         /// <param name="msgType">Type of message. This specifies
         /// the type of the payload. This is important in 
@@ -276,26 +228,7 @@ namespace MercuryMessaging
         /// the correct type requires knowing what was 
         /// used to serialize the object originally.
         /// </param>
-        /// <param name="msg">The message to send.
-        /// This utilises UNET's MessageBase so it is
-        /// Auto [de]serialized by UNET.
-        /// This also allows us to send messages that are not
-        /// part of Mercury XM</param>
-        public virtual void MmSendMessageToClient(short msgType, MmMessage msg)
-        {
-            foreach (var connection in NetworkServer.connections)
-                if (connection != null)
-                    NetworkServer.SendToClient(connection.connectionId, msgType, msg);
-        }
-
-	    public virtual void RegisterToMmNetworkManager()
-	    {
-	        MmNetworkManager.Instance.RegisterMmNetworkResponder(this);
-        }
-
-	    public virtual void RemoveSelfFromMmNetworkManager()
-	    {
-	        MmNetworkManager.Instance.RemoveMmNetworkResponder(this);
-        }
+        /// <param name="msg">The message to send.</param>
+        public abstract void MmSendMessageToClient(MmMessage msg);
     }
 }
