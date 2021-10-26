@@ -1,29 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Networking;
 using MercuryMessaging;
 
 public class T4_ColorMessage : MmMessage
 {
     public Color value;
+    // Start is called before the first frame update
+
     public T4_ColorMessage(Color iVal,
-        MmMessageType mmMessageType = default(MmMessageType),
-                MmMetadataBlock metadataBlock = null)
-            : base(metadataBlock, mmMessageType)
+        MmMethod mmMethod,
+        MmMessageType mmMType,
+        MmMetadataBlock metadataBlock)
+        : base(metadataBlock, mmMType)
     {
         value = iVal;
+        MmMethod = mmMethod;
+        MmMessageType = mmMType;
+        MetadataBlock = metadataBlock;
     }
 
-    public override MmMessage Copy()
-    {
-        T4_ColorMessage newMessage = new T4_ColorMessage(this.value);
-        newMessage.value = value;
-
-        return newMessage;
-    }
-
-    // Start is called before the first frame update
     void Start()
     {
         
