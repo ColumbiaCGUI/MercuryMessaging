@@ -10,14 +10,16 @@ public class T4_CylinderResponder : MmBaseResponder
     {
         GetComponent<MeshRenderer>().material.color = col;
     }
+
     public override void MmInvoke(MmMessage message)
     {
+
         var type = message.MmMethod;
 
         switch (type)
         {
             case ((MmMethod)T4_myMethods.UpdateColor):
-                Color col = ((T4_ColorMessage)message).value;
+                Color col = ((T4_ColorMessage) message).value;
                 ChangeColor(col);
                 break;
             default:
@@ -25,14 +27,15 @@ public class T4_CylinderResponder : MmBaseResponder
                 break;
         }
     }
+
     void Start()
     {
-
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        
     }
 }
