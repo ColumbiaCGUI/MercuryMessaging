@@ -19,6 +19,7 @@ public class T4_CylinderResponder : MmBaseResponder
         switch (type)
         {
             case ((MmMethod)T4_myMethods.UpdateColor):
+                Debug.Log("CASTING MESSAGE");
                 Color col = ((T4_ColorMessage) message).value;
                 ChangeColor(col);
                 break;
