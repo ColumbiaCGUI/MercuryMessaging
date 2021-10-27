@@ -20,6 +20,13 @@ public class T4_ColorMessage : MmMessage
         MetadataBlock = metadataBlock;
     }
 
+    public override MmMessage Copy()
+    {
+        T4_ColorMessage newMessage = new T4_ColorMessage(this.value, this.MmMethod, this.MmMessageType, this.MetadataBlock);
+
+        return newMessage;
+    }
+
     void Start()
     {
         
