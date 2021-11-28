@@ -728,6 +728,21 @@ namespace MercuryMessaging
             MmInvoke(msg);
         }
 
+        /// <summary>
+        /// Invoke an MmMethod with parameter: Quaternion.  
+        /// </summary>
+        /// <param name="mmMethod">MmMethod Identifier - <see cref="MmMethod"/></param>
+        /// <param name="param">MmMethod parameter: Quaternion.</param>
+        /// <param name="metadataBlock">Object defining the routing of 
+        /// Mmessages through MercuryMessaging Hierarchies. <see cref="MmMetadataBlock"/></param>
+        public virtual void MmInvoke(MmMethod mmMethod,
+            Quaternion param,
+            MmMetadataBlock metadataBlock = null)
+        {
+            MmMessage msg = new MmMessageQuaternion(param, mmMethod, metadataBlock);
+            MmInvoke(msg);
+        }
+
         #endregion
 
         #endregion
