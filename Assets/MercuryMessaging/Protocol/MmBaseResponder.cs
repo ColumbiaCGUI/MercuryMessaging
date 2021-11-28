@@ -123,6 +123,9 @@ namespace MercuryMessaging
                 case MmMethod.MessageGameObject:
                     ReceivedMessage((MmMessageGameObject) msg);
                     break;
+                case MmMethod.MessageQuaternion:
+                    ReceivedMessage((MmMessageQuaternion)msg);
+                    break;
                 default:
                     Debug.Log(msg.MmMethod.ToString());
                     throw new ArgumentOutOfRangeException();
@@ -285,6 +288,15 @@ namespace MercuryMessaging
 	    protected virtual void ReceivedMessage(MmMessageVector4 message)
 	    {
 	    }
+
+        /// <summary>
+	    /// Handle MmMethod: MessageQuaternion
+	    /// Override this to handle Mercury's Quaternion messages.
+	    /// </summary>
+	    /// <param name="message"><see cref="MmMessageQuaternion"/></param>
+	    protected virtual void ReceivedMessage(MmMessageQuaternion message)
+        {
+        }
 
         /// <summary>
         /// Implementation of IMmResponder's GetRelayNode.
