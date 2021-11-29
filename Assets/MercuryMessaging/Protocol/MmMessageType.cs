@@ -52,6 +52,7 @@ namespace MercuryMessaging
         MmTransform,
         MmTransformList,
         MmSerializable,
-        MmGameObject
+        MmGameObject,
+        MmQuaternion
     }
 }
