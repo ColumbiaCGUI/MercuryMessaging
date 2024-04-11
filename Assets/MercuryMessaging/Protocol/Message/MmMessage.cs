@@ -175,6 +175,9 @@ namespace MercuryMessaging
             return new MmMessage(this);
         }
 
+
+        // message serialization/deserialization
+
         /// <summary>
         /// Deserialize the MmMessage
         /// </summary>
