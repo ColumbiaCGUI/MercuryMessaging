@@ -13,7 +13,7 @@ namespace MercuryMessaging
     public class MmNetworkResponderPhotonFusion : MmNetworkResponderFusion
     {
         private NetworkObject _networkObject;
-        private NetworkRunner _networkRunner;
+        public NetworkRunner _networkRunner;
 
         public override void Awake()
         {
@@ -24,7 +24,7 @@ namespace MercuryMessaging
         {
             base.Start();
             _networkObject = GetComponent<NetworkObject>();
-            _networkRunner = GetComponent<NetworkRunner>();
+            // _networkRunner = GetComponent<NetworkRunner>();
         }
 
         private void OnEnable()

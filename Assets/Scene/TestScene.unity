@@ -204,9 +204,6 @@ GameObject:
   - component: {fileID: 304280071}
   - component: {fileID: 304280070}
   - component: {fileID: 304280069}
-  - component: {fileID: 304280072}
-  - component: {fileID: 304280073}
-  - component: {fileID: 304280074}
   m_Layer: 0
   m_Name: Prototype Runner
   m_TagString: Untagged
@@ -310,66 +307,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2047930297}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &304280072
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 304280068}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2eab7cc3f6f5b47ea9014cdcb6fd92ba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _mmTag: -1
-  tagCheckEnabled: 1
-  FlipNetworkFlagOnSend: 0
-  AllowNetworkPropagationLocally: 0
-  ReparentClonedRespondersToSelf: 1
-  Initialized: 0
-  AutoGrabAttachedResponders: 1
-  RoutingTable:
-    _list:
-    - Name: Sphere1 (1)
-      Responder: {fileID: 1305959160}
-      Clone: 0
-      Tags: 0
-      Level: 2
-    - Name: Sphere2 (1)
-      Responder: {fileID: 1481478348}
-      Clone: 0
-      Tags: 0
-      Level: 2
---- !u!114 &304280073
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 304280068}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e2ca80ed43e768545910fe7a4e016006, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &304280074
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 304280068}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SortKey: 184110256
-  ObjectInterest: 1
-  Flags: 262145
-  NestedObjects: []
-  NetworkedBehaviours: []
 --- !u!1 &794330737
 GameObject:
   m_ObjectHideFlags: 0
@@ -1181,6 +1118,115 @@ MonoBehaviour:
   sceneViewId: 1
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!1 &1644487833
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1644487834}
+  - component: {fileID: 1644487839}
+  - component: {fileID: 1644487837}
+  - component: {fileID: 1644487836}
+  - component: {fileID: 1644487835}
+  m_Layer: 0
+  m_Name: SceneController (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1644487834
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1644487833}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2047930297}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1644487835
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1644487833}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 323bff89ba6c9284aabbf2d9dc76bc91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _networkRunner: {fileID: 304280070}
+--- !u!114 &1644487836
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1644487833}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 3609095678
+  ObjectInterest: 1
+  Flags: 262145
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 1644487835}
+--- !u!114 &1644487837
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1644487833}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e086134080cb44331a1df151664fa578, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1644487839
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1644487833}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2eab7cc3f6f5b47ea9014cdcb6fd92ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mmTag: -1
+  tagCheckEnabled: 1
+  FlipNetworkFlagOnSend: 0
+  AllowNetworkPropagationLocally: 0
+  ReparentClonedRespondersToSelf: 1
+  Initialized: 0
+  AutoGrabAttachedResponders: 1
+  RoutingTable:
+    _list:
+    - Name: Sphere1 (1)
+      Responder: {fileID: 1305959160}
+      Clone: 0
+      Tags: 0
+      Level: 2
+    - Name: Sphere2 (1)
+      Responder: {fileID: 1481478348}
+      Clone: 0
+      Tags: 0
+      Level: 2
 --- !u!1 &1654950687
 GameObject:
   m_ObjectHideFlags: 0
@@ -1347,6 +1393,7 @@ Transform:
   - {fileID: 1305959158}
   - {fileID: 210062676}
   - {fileID: 304280071}
+  - {fileID: 1644487834}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2146029311
