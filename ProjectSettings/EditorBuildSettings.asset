@@ -8,4 +8,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scene/TestScene.unity
     guid: fa7819a0bceab23499a84271177e65a0
+  - enabled: 1
+    path: Assets/Scene/FusionTest.unity
+    guid: 9f1d58787fdc5f848ac2025ed877582b
   m_configObjects: {}

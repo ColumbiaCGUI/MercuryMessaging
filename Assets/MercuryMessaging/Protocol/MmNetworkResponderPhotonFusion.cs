@@ -15,6 +15,7 @@ namespace MercuryMessaging
         private NetworkObject _networkObject;
         public NetworkRunner _networkRunner;
 
+
         public override void Awake()
         {
             base.Awake();
@@ -24,7 +25,6 @@ namespace MercuryMessaging
         {
             base.Start();
             _networkObject = GetComponent<NetworkObject>();
-            // _networkRunner = GetComponent<NetworkRunner>();
         }
 
         private void OnEnable()
@@ -37,7 +37,7 @@ namespace MercuryMessaging
 
         }
 
-        public override bool IsActiveAndEnabled{ get { return _networkRunner != null && _networkRunner.IsRunning; } }
+        public override bool IsActiveAndEnabled{ get { return _networkRunner !=null && _networkRunner.IsRunning; } }
 
         public override bool OnServer{ get { return _networkRunner!=null && _networkRunner.IsServer; } }
 
@@ -45,23 +45,29 @@ namespace MercuryMessaging
 
         public override void MmInvoke(MmMessage msg, int connectionId = -1) 
         { 
-            // msg.NetId = (uint) photonView.ViewID;
+            NetworkId netID = _networkObject.Id;
+
+            uint idUint = netID.Raw;
+            msg.NetId = idUint;
+
+            // msg.NetId =  _networkObject.NetworkObjectId;
 
             // // If the connection ID is defined, only send it there,
             // // otherwise, it follows the standard execution flow for the chosen 
             // // network solution.
-            // if (connectionId != -1)
-            // {
-            //     MmSendMessageToClient(connectionId, msg);
-            //     return;
-            // }
+            if (connectionId != -1)
+            {
+                MmSendMessageToClient(connectionId, msg);
+                return;
+            }
 
             // // Need to call the right method based on whether this object 
             // // is a client or a server.
-            // if (IsActiveAndEnabled)
-            //     MmSendMessageToClient(msg);
-            // else if (AllowClientToSend)
-            //     MmSendMessageToServer(msg);
+            if (IsActiveAndEnabled)
+                MmSendMessageToClient(msg);
+            else if (AllowClientToSend)
+                MmSendMessageToServer(msg);
+
         }
 
         #region Implementation of MmNetworkResponder
@@ -75,12 +81,15 @@ namespace MercuryMessaging
         /// used to serialize the object originally.
         /// </param>
         /// <param name="msg">The message to send.</param>
+        /// 
+
         public override void MmSendMessageToServer(MmMessage msg)
         {
-            // byte eventCode = (byte)(1); 
+            
             // object[] data = msg.Serialize();
-            // RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.MasterClient };
-            // PhotonNetwork.RaiseEvent(eventCode, data, raiseEventOptions, SendOptions.SendReliable);
+
+            Debug.Log("Sending message to server");
+            
         }
 
         /// <summary>
@@ -96,6 +105,8 @@ namespace MercuryMessaging
         /// <param name="msg">The message to send.</param>
         public override void MmSendMessageToClient(int channelId, MmMessage msg)
         {
+            Debug.Log("Sending message to client");
+
             // byte eventCode = (byte)(1); 
             // object[] data = msg.Serialize();
             // RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
@@ -126,7 +137,8 @@ namespace MercuryMessaging
         /// Process a message and send it to the associated object.
         /// </summary>
         /// <param name="photonEvent">Photon RaiseEvent message data</param>
-        public virtual void ReceivedMessage(EventData photonEvent)
+        
+        public virtual void ReceivedMessage()
 		{
         //     short eventCode = (short)photonEvent.Code;
         //     if (eventCode != 1)
@@ -135,79 +147,79 @@ namespace MercuryMessaging
         //     }
 		// 	MmMessageType mmMessageType = (MmMessageType)(eventCode);
         //     object[] data = (object[])photonEvent.CustomData;
-        //     MmMessage msg = new MmMessage();
-        //     msg.Deserialize(data);
-		//     try
-		//     {
-		//         switch (msg.MmMessageType)
-		//         {
-		//             case MmMessageType.MmVoid:
-		//                 MmRelayNode.MmInvoke(msg);
-		//                 break;
-		//             case MmMessageType.MmInt:
-		//                 MmMessageInt msgInt = new MmMessageInt();
-        //                 msgInt.Deserialize(data);
-		//                 MmRelayNode.MmInvoke(msgInt);
-		//                 break;
-		//             case MmMessageType.MmBool:
-		//                 MmMessageBool msgBool = new MmMessageBool();
-        //                 msgBool.Deserialize(data);
-		//                 MmRelayNode.MmInvoke(msgBool);
-		//                 break;
-		//             case MmMessageType.MmFloat:
-		//                 MmMessageFloat msgFloat = new MmMessageFloat();
-        //                 msgFloat.Deserialize(data);
-		//                 MmRelayNode.MmInvoke(msgFloat);
-		//                 break;
-		//             case MmMessageType.MmVector3:
-		//                 MmMessageVector3 msgVector3 = new MmMessageVector3();
-        //                 msgVector3.Deserialize(data);
-		//                 MmRelayNode.MmInvoke(msgVector3);
-		//                 break;
-		//             case MmMessageType.MmVector4:
-		//                 MmMessageVector4 msgVector4 = new MmMessageVector4();
-        //                 msgVector4.Deserialize(data);
-		//                 MmRelayNode.MmInvoke(msgVector4);
-		//                 break;
-		//             case MmMessageType.MmString:
-		//                 MmMessageString msgString = new MmMessageString();
-        //                 msgString.Deserialize(data);
-		//                 MmRelayNode.MmInvoke(msgString);
-		//                 break;
-		//             case MmMessageType.MmByteArray:
-		//                 MmMessageByteArray msgByteArray = new MmMessageByteArray();
-        //                 msgByteArray.Deserialize(data);
-		//                 MmRelayNode.MmInvoke(msgByteArray);
-        //                 break;
-		//             case MmMessageType.MmTransform:
-		//                 MmMessageTransform msgTransform = new MmMessageTransform();
-        //                 msgTransform.Deserialize(data);
-		//                 MmRelayNode.MmInvoke(msgTransform);
-		//                 break;
-		//             case MmMessageType.MmTransformList:
-		//                 MmMessageTransformList msgTransformList = new MmMessageTransformList();
-        //                 msgTransformList.Deserialize(data);
-		//                 MmRelayNode.MmInvoke(msgTransformList);
-		//                 break;
-        //             case MmMessageType.MmSerializable:
-		//                 MmMessageSerializable msgSerializable = new MmMessageSerializable();
-        //                 msgSerializable.Deserialize(data);
-		//                 MmRelayNode.MmInvoke(msgSerializable);
-		//                 break;
-        //             case MmMessageType.MmGameObject:
-        //                 MmMessageGameObject msgGameObject = new MmMessageGameObject();
-        //                 msgGameObject.Deserialize(data);
-        //                 MmRelayNode.MmInvoke(msgGameObject);
-        //                 break;
-        //         default:
-        //                 Debug.Log(eventCode);
-		//                 throw new ArgumentOutOfRangeException();
-		//         }
-		//     }
-		//     catch (Exception e)
-        //     {
-        //         MmLogger.LogError(e.Message);
-        //     }
+            // MmMessage msg = new MmMessage();
+            // msg.Deserialize(data);
+		    // try
+		    // {
+		    //     switch (msg.MmMessageType)
+		    //     {
+		    //         case MmMessageType.MmVoid:
+		    //             MmRelayNode.MmInvoke(msg);
+		    //             break;
+		    //         case MmMessageType.MmInt:
+		    //             MmMessageInt msgInt = new MmMessageInt();
+            //             msgInt.Deserialize(data);
+		    //             MmRelayNode.MmInvoke(msgInt);
+		    //             break;
+		    //         case MmMessageType.MmBool:
+		    //             MmMessageBool msgBool = new MmMessageBool();
+            //             msgBool.Deserialize(data);
+		    //             MmRelayNode.MmInvoke(msgBool);
+		    //             break;
+		    //         case MmMessageType.MmFloat:
+		    //             MmMessageFloat msgFloat = new MmMessageFloat();
+            //             msgFloat.Deserialize(data);
+		    //             MmRelayNode.MmInvoke(msgFloat);
+		    //             break;
+		    //         case MmMessageType.MmVector3:
+		    //             MmMessageVector3 msgVector3 = new MmMessageVector3();
+            //             msgVector3.Deserialize(data);
+		    //             MmRelayNode.MmInvoke(msgVector3);
+		    //             break;
+		    //         case MmMessageType.MmVector4:
+		    //             MmMessageVector4 msgVector4 = new MmMessageVector4();
+            //             msgVector4.Deserialize(data);
+		    //             MmRelayNode.MmInvoke(msgVector4);
+		    //             break;
+		    //         case MmMessageType.MmString:
+		    //             MmMessageString msgString = new MmMessageString();
+            //             msgString.Deserialize(data);
+		    //             MmRelayNode.MmInvoke(msgString);
+		    //             break;
+		    //         case MmMessageType.MmByteArray:
+		    //             MmMessageByteArray msgByteArray = new MmMessageByteArray();
+            //             msgByteArray.Deserialize(data);
+		    //             MmRelayNode.MmInvoke(msgByteArray);
+            //             break;
+		    //         case MmMessageType.MmTransform:
+		    //             MmMessageTransform msgTransform = new MmMessageTransform();
+            //             msgTransform.Deserialize(data);
+		    //             MmRelayNode.MmInvoke(msgTransform);
+		    //             break;
+		    //         case MmMessageType.MmTransformList:
+		    //             MmMessageTransformList msgTransformList = new MmMessageTransformList();
+            //             msgTransformList.Deserialize(data);
+		    //             MmRelayNode.MmInvoke(msgTransformList);
+		    //             break;
+            //         case MmMessageType.MmSerializable:
+		    //             MmMessageSerializable msgSerializable = new MmMessageSerializable();
+            //             msgSerializable.Deserialize(data);
+		    //             MmRelayNode.MmInvoke(msgSerializable);
+		    //             break;
+            //         case MmMessageType.MmGameObject:
+            //             MmMessageGameObject msgGameObject = new MmMessageGameObject();
+            //             msgGameObject.Deserialize(data);
+            //             MmRelayNode.MmInvoke(msgGameObject);
+            //             break;
+            //     default:
+            //             Debug.Log(eventCode);
+		    //             throw new ArgumentOutOfRangeException();
+		    //     }
+		    // }
+		    // catch (Exception e)
+            // {
+            //     MmLogger.LogError(e.Message);
+            // }
 		} 
 
 

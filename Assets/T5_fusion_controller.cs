@@ -4,7 +4,7 @@ using MercuryMessaging;
 using Fusion;
 // using Photon.Realtime;
 
-public class T5_fusion_controller : SimulationBehaviour
+public class T5_fusion_controller : NetworkBehaviour
 {
 
     MmRelayNode _myRelayNode;
