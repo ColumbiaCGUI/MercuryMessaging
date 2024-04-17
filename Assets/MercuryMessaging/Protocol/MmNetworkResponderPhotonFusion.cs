@@ -2,6 +2,8 @@ using UnityEngine;
 using System;
 // using System.Text;
 // using System.Text.Json;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 
 #if PHOTON_AVAILABLE
@@ -9,8 +11,18 @@ using ExitGames.Client.Photon;
 using Photon.Realtime;
 using Fusion;
 
+
+[Serializable]
+public class DataCollection
+{   
+    [SerializeField]
+    public object[] data;
+}
+
 namespace MercuryMessaging
 {
+    
+
     [RequireComponent(typeof(NetworkObject))]
     public class MmNetworkResponderPhotonFusion : MmNetworkResponderFusion
     {
@@ -62,24 +74,32 @@ namespace MercuryMessaging
             Debug.Log("object type: " + msgb.value);
 
             object[] data = msg.Serialize();
-            foreach (var item in data) {
-                Debug.Log(item);
+
+            foreach (var item in data) 
+            {
+                Debug.Log("data log out: "+item);
             }
+
+            DataCollection dc = new();
+            dc.data = data;
+            Debug.Log("DataCollection: " + dc.data);
+
+            // foreach (var item in data) {
+            //     Debug.Log("data log out: "+item);
+            // }
 
             // for some reason ToJson doesn't return the right values
             // looks like the object array data is not being serialized correctly
             // you probably need to add serializable / serializablefield tag to everything
             
-            string json = JsonUtility.ToJson(data);
-            Debug.Log("Json send: " + json);
+            // string json = JsonUtility.ToJson(dc);
+            string jsonText = Newtonsoft.Json.JsonConvert.SerializeObject(dc);
+            Debug.Log("Json send: " + jsonText);
 
             // // serialize the message before sending it
-            byte[] dataSent = System.Text.Encoding.UTF8.GetBytes(json);
+            byte[] dataSent = System.Text.Encoding.UTF8.GetBytes(jsonText);
 
-            // Debug.Log("Data byte: " + data);
-            
-
-            // msg.NetId =  _networkObject.NetworkObjectId;
+            Debug.Log("Data byte: " + dataSent);
 
             // // If the connection ID is defined, only send it there,
             // // otherwise, it follows the standard execution flow for the chosen 
@@ -125,11 +145,25 @@ namespace MercuryMessaging
         {
             // deserialize the message after receiving it
             string json = System.Text.Encoding.UTF8.GetString(dataSent);
-            Debug.Log("Json received by server: " + json);
-            // MmMessage msg = JsonUtility.FromJson<MmMessage>(json);
-            // Debug.Log(msg);
-            // object[] data = msg.Serialize();
-            object[] data = JsonUtility.FromJson<object[]>(json);
+            
+            DataCollection dc = Newtonsoft.Json.JsonConvert.DeserializeObject<DataCollection>(json);
+            object[] data = dc.data;
+
+            // convert datasend back to object array
+            // object[] data = new object[dataSent.Length];
+
+            // for (int i = 0; i < dataSent.Length; i++)
+            // {
+            //     byte[] bytes = dataSent[i];
+            //     BinaryFormatter bf = new BinaryFormatter();
+            //     using (MemoryStream ms = new MemoryStream(bytes))
+            //     {
+            //         data[i] = bf.Deserialize(ms);
+            //     }
+            // }
+
+
+
             MmMessage msg = new MmMessage();
             msg.Deserialize(data);
 
@@ -250,26 +284,46 @@ namespace MercuryMessaging
         public override void RPC_MmSendMessageToClient(byte[] dataSent)
         {
 
-            // byte eventCode = (byte)(1); 
-            // object[] data = msg.Serialize();
-            // RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
-            // PhotonNetwork.RaiseEvent(eventCode, data, raiseEventOptions, SendOptions.SendReliable);
+            string json = System.Text.Encoding.UTF8.GetString(dataSent);
+            
+            DataCollection dc = Newtonsoft.Json.JsonConvert.DeserializeObject<DataCollection>(json);
+            object[] data = dc.data;
 
+            foreach (var item in data) 
+            {
+                Debug.Log("data log out: "+item);
+            }
 
             // deserialize the message after receiving it
-            string json = System.Text.Encoding.UTF8.GetString(dataSent);
-            Debug.Log("Json received by server: " + json);
-            // MmMessage msg = JsonUtility.FromJson<MmMessage>(json);
-            // Debug.Log(msg);
-            // object[] data = msg.Serialize();
-            object[] data = JsonUtility.FromJson<object[]>(json);
-            MmMessage msg = new MmMessage();
-            msg.Deserialize(data);
+            // string json = System.Text.Encoding.UTF8.GetString(dataSent);
+            // Debug.Log("Json received by server: " + json);
+            // // MmMessage msg = JsonUtility.FromJson<MmMessage>(json);
+            // // Debug.Log(msg);
+            // // object[] data = msg.Serialize();
+            // object[] data = JsonUtility.FromJson<object[]>(json);
+            // MmMessage msg = new MmMessage();
+            // msg.Deserialize(data);
             // Debug.Log("message type: " + msg.MmMessageType);
             // foreach (var item in data)
             // {
             //     Debug.Log("serialized item in data: " + item);
             // }
+
+            // object[] data = new object[dataSent.Length];
+
+            // for (int i = 0; i < dataSent.Length; i++)
+            // {
+            //     byte[] bytes = dataSent[i];
+            //     BinaryFormatter bf = new BinaryFormatter();
+            //     using (MemoryStream ms = new MemoryStream(bytes))
+            //     {
+            //         data[i] = bf.Deserialize(ms);
+            //     }
+            // }
+
+            MmMessage msg = new MmMessage();
+            msg.Deserialize(data);
+
             try
 		    {
 		        switch (msg.MmMessageType)

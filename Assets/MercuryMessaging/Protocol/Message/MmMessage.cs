@@ -33,13 +33,13 @@
 //
 using System.Linq;
 using UnityEngine;
-using System;
+// using System;
 namespace MercuryMessaging
 {
     /// <summary>
     /// Base class for messages passed through MmInvoke
     /// </summary>
-    [Serializable]
+    // [Serializable]
     public class MmMessage
     {
         /// <summary>
@@ -188,13 +188,15 @@ namespace MercuryMessaging
         public virtual int Deserialize(object[] data)
         {
             int index = 0;
-            Debug.Log("MmMessage Deserialize index: " + index);
-            foreach (var item in data)
-            {
-                Debug.Log(item);
-            }
+            // Debug.Log("MmMessage Deserialize index: " + index);
+            // foreach (var item in data)
+            // {
+            //     Debug.Log(item);
+            // }
+
+            // no idea why the Specified cast is not valid error is thrown
             MmMethod = (MercuryMessaging.MmMethod) ((short) data[index++]);
-            Debug.Log("MmMethod: " + MmMethod);
+            // Debug.Log("MmMethod: " + MmMethod);
             MmMessageType = (MercuryMessaging.MmMessageType) (short)data[index++];
             Debug.Log("MmMessageType: " + MmMessageType);
             NetId = (uint) ((int) data[index++]);
