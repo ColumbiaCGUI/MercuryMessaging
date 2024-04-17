@@ -50,19 +50,31 @@ namespace MercuryMessaging
 
         public override void MmInvoke(MmMessage msg, int connectionId = -1) 
         { 
-
+            Debug.Log("msg from relay node: " + msg);
             _networkRunner = _networkObject.Runner;
 
             NetworkId netID = _networkObject.Id;
 
             uint idUint = netID.Raw;
             msg.NetId = idUint;
+        
+            MmMessageBool msgb = (MmMessageBool) msg;
+            Debug.Log("object type: " + msgb.value);
 
-            string json = JsonUtility.ToJson(msg);
+            object[] data = msg.Serialize();
+            foreach (var item in data) {
+                Debug.Log(item);
+            }
+
+            // for some reason ToJson doesn't return the right values
+            // looks like the object array data is not being serialized correctly
+            // you probably need to add serializable / serializablefield tag to everything
+            
+            string json = JsonUtility.ToJson(data);
             Debug.Log("Json send: " + json);
 
             // // serialize the message before sending it
-            byte[] data = System.Text.Encoding.UTF8.GetBytes(json);
+            byte[] dataSent = System.Text.Encoding.UTF8.GetBytes(json);
 
             // Debug.Log("Data byte: " + data);
             
@@ -86,12 +98,12 @@ namespace MercuryMessaging
             {
                 Debug.Log("Sending message to client");
                 
-                RPC_MmSendMessageToClient(data);
+                RPC_MmSendMessageToClient(dataSent);
             }
             else if (AllowClientToSend)
             {
                 Debug.Log("Sending message to server");
-                RPC_MmSendMessageToServer(data);
+                RPC_MmSendMessageToServer(dataSent);
             }
 
         }
@@ -114,9 +126,12 @@ namespace MercuryMessaging
             // deserialize the message after receiving it
             string json = System.Text.Encoding.UTF8.GetString(dataSent);
             Debug.Log("Json received by server: " + json);
-            MmMessage msg = JsonUtility.FromJson<MmMessage>(json);
-
-            object[] data = msg.Serialize();
+            // MmMessage msg = JsonUtility.FromJson<MmMessage>(json);
+            // Debug.Log(msg);
+            // object[] data = msg.Serialize();
+            object[] data = JsonUtility.FromJson<object[]>(json);
+            MmMessage msg = new MmMessage();
+            msg.Deserialize(data);
 
             try
 		    {
@@ -243,13 +258,18 @@ namespace MercuryMessaging
 
             // deserialize the message after receiving it
             string json = System.Text.Encoding.UTF8.GetString(dataSent);
-            Debug.Log("Json received by client: " + json);
-            MmMessage msg = JsonUtility.FromJson<MmMessage>(json);
-            Debug.Log("Message type: " + msg.MmMessageType);
-
-            object[] data = msg.Serialize();
+            Debug.Log("Json received by server: " + json);
+            // MmMessage msg = JsonUtility.FromJson<MmMessage>(json);
+            // Debug.Log(msg);
+            // object[] data = msg.Serialize();
+            object[] data = JsonUtility.FromJson<object[]>(json);
+            MmMessage msg = new MmMessage();
+            msg.Deserialize(data);
             // Debug.Log("message type: " + msg.MmMessageType);
-
+            // foreach (var item in data)
+            // {
+            //     Debug.Log("serialized item in data: " + item);
+            // }
             try
 		    {
 		        switch (msg.MmMessageType)
@@ -264,7 +284,9 @@ namespace MercuryMessaging
 		                break;
 		            case MmMessageType.MmBool:
 		                MmMessageBool msgBool = new MmMessageBool();
+                        Debug.Log("right before deserialize");
                         msgBool.Deserialize(data);
+                        Debug.Log("right after deserialize");
 		                MmRelayNode.MmInvoke(msgBool);
 		                break;
 		            case MmMessageType.MmFloat:

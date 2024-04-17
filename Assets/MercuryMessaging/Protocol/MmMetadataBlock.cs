@@ -31,6 +31,8 @@
 // =============================================================
 //  
 //
+using System;
+using UnityEngine;
 namespace MercuryMessaging
 {
     /// <summary>
@@ -39,6 +41,7 @@ namespace MercuryMessaging
     /// of an MmMessage invoked on an MmRelayNode through its
     /// MercuryMessaging hierarchy.
     /// </summary>
+    [Serializable]
     public class MmMetadataBlock
     {
         /// <summary>
@@ -149,6 +152,10 @@ namespace MercuryMessaging
                 (short) NetworkFilter, 
                 (short) Tag 
             };
+            foreach (var item in thisSerialized)
+            {
+                Debug.Log("thisSerializedMB: " + item);
+            }
             return thisSerialized;
         }
     }

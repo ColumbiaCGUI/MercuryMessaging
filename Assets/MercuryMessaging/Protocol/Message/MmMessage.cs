@@ -32,12 +32,14 @@
 //  
 //
 using System.Linq;
-
+using UnityEngine;
+using System;
 namespace MercuryMessaging
 {
     /// <summary>
     /// Base class for messages passed through MmInvoke
     /// </summary>
+    [Serializable]
     public class MmMessage
     {
         /// <summary>
@@ -186,10 +188,19 @@ namespace MercuryMessaging
         public virtual int Deserialize(object[] data)
         {
             int index = 0;
+            Debug.Log("MmMessage Deserialize index: " + index);
+            foreach (var item in data)
+            {
+                Debug.Log(item);
+            }
             MmMethod = (MercuryMessaging.MmMethod) ((short) data[index++]);
+            Debug.Log("MmMethod: " + MmMethod);
             MmMessageType = (MercuryMessaging.MmMessageType) (short)data[index++];
+            Debug.Log("MmMessageType: " + MmMessageType);
             NetId = (uint) ((int) data[index++]);
+            Debug.Log("NetId: " + NetId);
             index = MetadataBlock.Deserialize(data, index);
+            Debug.Log("MetadataBlock: " + MetadataBlock.ToString());
             IsDeserialized = true;
             
             return index;
@@ -205,7 +216,21 @@ namespace MercuryMessaging
                 (short)MmMethod, 
                 (short)MmMessageType,
                 (int)NetId};
+            Debug.Log("MetadataBlock: " + MetadataBlock.ToString());
+            Debug.Log("MetadatBlockSerialize: " + MetadataBlock.Serialize());
+            // Metadatablock serialize is not getting concat properly?
+            foreach (var item in thisSerialized)
+            {
+                Debug.Log("BEFORE CONCAT thisSerialized: " + item);
+            }
+            // is this concat working? looks like some values are lost?
+
+            // metadatablock.serialize is returning 4 values instead of 5 values
             thisSerialized = thisSerialized.Concat(MetadataBlock.Serialize()).ToArray();
+            foreach (var item in thisSerialized)
+            {
+                Debug.Log("AFTER CONCAT thisSerialized: " + item);
+            }
             return thisSerialized;
         }
     }

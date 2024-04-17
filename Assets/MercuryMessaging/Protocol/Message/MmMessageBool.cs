@@ -32,12 +32,15 @@
 //  
 //  
 using System.Linq;
+using UnityEngine;
+using System;
 
 namespace MercuryMessaging
 {
     /// <summary>
     /// MmMessage with bool payload
     /// </summary>
+    [Serializable]
     public class MmMessageBool : MmMessage
     {
         /// <summary>
@@ -101,6 +104,11 @@ namespace MercuryMessaging
         public override int Deserialize(object[] data)
 		{
 			int index = base.Deserialize(data);
+            Debug.Log("MmMessageBool Deserialize index: " + index);
+            foreach (var item in data)
+            {
+                Debug.Log(item);
+            }
             value = (bool) data[index++];
             return index;
 		}
@@ -112,8 +120,16 @@ namespace MercuryMessaging
 		public override object[] Serialize()
 		{
 			object[] baseSerialized = base.Serialize(); 
+            foreach (var item in baseSerialized)
+            {
+                Debug.Log("baseSerialized: " + item);
+            }
             object[] thisSerialized = new object[] { value };
             object[] combinedSerialized = baseSerialized.Concat(thisSerialized).ToArray();
+            foreach (var item in combinedSerialized)
+            {
+                Debug.Log("combinedserialized: " + item);
+            }
             return combinedSerialized;
 		}
     }
