@@ -19,7 +19,12 @@ public class T5_fusion_controller : NetworkBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (HasStateAuthority == false)
+        {
+            return;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space) )
         {
             Debug.Log("Space key was pressed.");
             active = !active;

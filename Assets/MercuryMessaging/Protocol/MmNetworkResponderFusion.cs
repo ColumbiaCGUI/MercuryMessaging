@@ -205,7 +205,9 @@ namespace MercuryMessaging
         /// used to serialize the object originally.
         /// </param>
         /// <param name="msg">The message to send.</param>
-        public abstract void MmSendMessageToServer(MmMessage msg);
+        
+        // [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+        public abstract void RPC_MmSendMessageToServer(byte[] data);
 
         /// <summary>
         /// Send a message to a specific client.
@@ -230,6 +232,6 @@ namespace MercuryMessaging
         /// used to serialize the object originally.
         /// </param>
         /// <param name="msg">The message to send.</param>
-        public abstract void MmSendMessageToClient(MmMessage msg);
+        public abstract void RPC_MmSendMessageToClient(byte[] data);
     }
 }

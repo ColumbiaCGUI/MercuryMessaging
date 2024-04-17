@@ -1199,7 +1199,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1644487834}
   - component: {fileID: 1644487839}
-  - component: {fileID: 1644487837}
   - component: {fileID: 1644487836}
   - component: {fileID: 1644487835}
   - component: {fileID: 1644487840}
@@ -1237,7 +1236,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 323bff89ba6c9284aabbf2d9dc76bc91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _networkRunner: {fileID: 304280070}
 --- !u!114 &1644487836
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1257,18 +1255,6 @@ MonoBehaviour:
   NetworkedBehaviours:
   - {fileID: 1644487835}
   - {fileID: 1644487840}
---- !u!114 &1644487837
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1644487833}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e086134080cb44331a1df151664fa578, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1644487839
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,5 +1,7 @@
 using UnityEngine;
 using System;
+// using System.Text;
+// using System.Text.Json;
 
 
 #if PHOTON_AVAILABLE
@@ -13,8 +15,9 @@ namespace MercuryMessaging
     public class MmNetworkResponderPhotonFusion : MmNetworkResponderFusion
     {
         private NetworkObject _networkObject;
-        public NetworkRunner _networkRunner;
+        private NetworkRunner _networkRunner;
 
+        [Networked] public string dataTrans {get; set;}
 
         public override void Awake()
         {
@@ -25,6 +28,8 @@ namespace MercuryMessaging
         {
             base.Start();
             _networkObject = GetComponent<NetworkObject>();
+            // _networkRunner = GetComponent<NetworkRunner>();
+            _networkRunner = _networkObject.Runner;
         }
 
         private void OnEnable()
@@ -45,10 +50,22 @@ namespace MercuryMessaging
 
         public override void MmInvoke(MmMessage msg, int connectionId = -1) 
         { 
+
+            _networkRunner = _networkObject.Runner;
+
             NetworkId netID = _networkObject.Id;
 
             uint idUint = netID.Raw;
             msg.NetId = idUint;
+
+            string json = JsonUtility.ToJson(msg);
+            Debug.Log("Json send: " + json);
+
+            // // serialize the message before sending it
+            byte[] data = System.Text.Encoding.UTF8.GetBytes(json);
+
+            // Debug.Log("Data byte: " + data);
+            
 
             // msg.NetId =  _networkObject.NetworkObjectId;
 
@@ -61,12 +78,21 @@ namespace MercuryMessaging
                 return;
             }
 
+            // Debug.Log("Runner status: " + _networkRunner.IsRunning);
+
             // // Need to call the right method based on whether this object 
             // // is a client or a server.
             if (IsActiveAndEnabled)
-                MmSendMessageToClient(msg);
+            {
+                Debug.Log("Sending message to client");
+                
+                RPC_MmSendMessageToClient(data);
+            }
             else if (AllowClientToSend)
-                MmSendMessageToServer(msg);
+            {
+                Debug.Log("Sending message to server");
+                RPC_MmSendMessageToServer(data);
+            }
 
         }
 
@@ -82,13 +108,93 @@ namespace MercuryMessaging
         /// </param>
         /// <param name="msg">The message to send.</param>
         /// 
-
-        public override void MmSendMessageToServer(MmMessage msg)
+        [Rpc(sources:RpcSources.InputAuthority, targets:RpcTargets.StateAuthority)]
+        public override void RPC_MmSendMessageToServer(byte[] dataSent)
         {
-            
+            // deserialize the message after receiving it
+            string json = System.Text.Encoding.UTF8.GetString(dataSent);
+            Debug.Log("Json received by server: " + json);
+            MmMessage msg = JsonUtility.FromJson<MmMessage>(json);
+
+            object[] data = msg.Serialize();
+
+            try
+		    {
+		        switch (msg.MmMessageType)
+		        {
+		            case MmMessageType.MmVoid:
+		                MmRelayNode.MmInvoke(msg);
+		                break;
+		            case MmMessageType.MmInt:
+		                MmMessageInt msgInt = new MmMessageInt();
+                        msgInt.Deserialize(data);
+		                MmRelayNode.MmInvoke(msgInt);
+		                break;
+		            case MmMessageType.MmBool:
+		                MmMessageBool msgBool = new MmMessageBool();
+                        msgBool.Deserialize(data);
+		                MmRelayNode.MmInvoke(msgBool);
+		                break;
+		            case MmMessageType.MmFloat:
+		                MmMessageFloat msgFloat = new MmMessageFloat();
+                        msgFloat.Deserialize(data);
+		                MmRelayNode.MmInvoke(msgFloat);
+		                break;
+		            case MmMessageType.MmVector3:
+		                MmMessageVector3 msgVector3 = new MmMessageVector3();
+                        msgVector3.Deserialize(data);
+		                MmRelayNode.MmInvoke(msgVector3);
+		                break;
+		            case MmMessageType.MmVector4:
+		                MmMessageVector4 msgVector4 = new MmMessageVector4();
+                        msgVector4.Deserialize(data);
+		                MmRelayNode.MmInvoke(msgVector4);
+		                break;
+		            case MmMessageType.MmString:
+		                MmMessageString msgString = new MmMessageString();
+                        msgString.Deserialize(data);
+		                MmRelayNode.MmInvoke(msgString);
+		                break;
+		            case MmMessageType.MmByteArray:
+		                MmMessageByteArray msgByteArray = new MmMessageByteArray();
+                        msgByteArray.Deserialize(data);
+		                MmRelayNode.MmInvoke(msgByteArray);
+                        break;
+		            case MmMessageType.MmTransform:
+		                MmMessageTransform msgTransform = new MmMessageTransform();
+                        msgTransform.Deserialize(data);
+		                MmRelayNode.MmInvoke(msgTransform);
+		                break;
+		            case MmMessageType.MmTransformList:
+		                MmMessageTransformList msgTransformList = new MmMessageTransformList();
+                        msgTransformList.Deserialize(data);
+		                MmRelayNode.MmInvoke(msgTransformList);
+		                break;
+                    case MmMessageType.MmSerializable:
+		                MmMessageSerializable msgSerializable = new MmMessageSerializable();
+                        msgSerializable.Deserialize(data);
+		                MmRelayNode.MmInvoke(msgSerializable);
+		                break;
+                    case MmMessageType.MmGameObject:
+                        MmMessageGameObject msgGameObject = new MmMessageGameObject();
+                        msgGameObject.Deserialize(data);
+                        MmRelayNode.MmInvoke(msgGameObject);
+                        break;
+                default:
+                        // Debug.Log(eventCode);
+		                throw new ArgumentOutOfRangeException();
+		        }
+		    }
+		    catch (Exception e)
+            {
+                MmLogger.LogError(e.Message);
+            }
+
+
+
             // object[] data = msg.Serialize();
 
-            Debug.Log("Sending message to server");
+            // Debug.Log("Sending message to server");
             
         }
 
@@ -124,12 +230,99 @@ namespace MercuryMessaging
         /// used to serialize the object originally.
         /// </param>
         /// <param name="msg">The message to send.</param>
-        public override void MmSendMessageToClient(MmMessage msg)
+        
+        [Rpc(sources:RpcSources.All, targets:RpcTargets.StateAuthority)]
+        public override void RPC_MmSendMessageToClient(byte[] dataSent)
         {
+
             // byte eventCode = (byte)(1); 
             // object[] data = msg.Serialize();
             // RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
             // PhotonNetwork.RaiseEvent(eventCode, data, raiseEventOptions, SendOptions.SendReliable);
+
+
+            // deserialize the message after receiving it
+            string json = System.Text.Encoding.UTF8.GetString(dataSent);
+            Debug.Log("Json received by client: " + json);
+            MmMessage msg = JsonUtility.FromJson<MmMessage>(json);
+            Debug.Log("Message type: " + msg.MmMessageType);
+
+            object[] data = msg.Serialize();
+            // Debug.Log("message type: " + msg.MmMessageType);
+
+            try
+		    {
+		        switch (msg.MmMessageType)
+		        {
+		            case MmMessageType.MmVoid:
+		                MmRelayNode.MmInvoke(msg);
+		                break;
+		            case MmMessageType.MmInt:
+		                MmMessageInt msgInt = new MmMessageInt();
+                        msgInt.Deserialize(data);
+		                MmRelayNode.MmInvoke(msgInt);
+		                break;
+		            case MmMessageType.MmBool:
+		                MmMessageBool msgBool = new MmMessageBool();
+                        msgBool.Deserialize(data);
+		                MmRelayNode.MmInvoke(msgBool);
+		                break;
+		            case MmMessageType.MmFloat:
+		                MmMessageFloat msgFloat = new MmMessageFloat();
+                        msgFloat.Deserialize(data);
+		                MmRelayNode.MmInvoke(msgFloat);
+		                break;
+		            case MmMessageType.MmVector3:
+		                MmMessageVector3 msgVector3 = new MmMessageVector3();
+                        msgVector3.Deserialize(data);
+		                MmRelayNode.MmInvoke(msgVector3);
+		                break;
+		            case MmMessageType.MmVector4:
+		                MmMessageVector4 msgVector4 = new MmMessageVector4();
+                        msgVector4.Deserialize(data);
+		                MmRelayNode.MmInvoke(msgVector4);
+		                break;
+		            case MmMessageType.MmString:
+		                MmMessageString msgString = new MmMessageString();
+                        msgString.Deserialize(data);
+		                MmRelayNode.MmInvoke(msgString);
+		                break;
+		            case MmMessageType.MmByteArray:
+		                MmMessageByteArray msgByteArray = new MmMessageByteArray();
+                        msgByteArray.Deserialize(data);
+		                MmRelayNode.MmInvoke(msgByteArray);
+                        break;
+		            case MmMessageType.MmTransform:
+		                MmMessageTransform msgTransform = new MmMessageTransform();
+                        msgTransform.Deserialize(data);
+		                MmRelayNode.MmInvoke(msgTransform);
+		                break;
+		            case MmMessageType.MmTransformList:
+		                MmMessageTransformList msgTransformList = new MmMessageTransformList();
+                        msgTransformList.Deserialize(data);
+		                MmRelayNode.MmInvoke(msgTransformList);
+		                break;
+                    case MmMessageType.MmSerializable:
+		                MmMessageSerializable msgSerializable = new MmMessageSerializable();
+                        msgSerializable.Deserialize(data);
+		                MmRelayNode.MmInvoke(msgSerializable);
+		                break;
+                    case MmMessageType.MmGameObject:
+                        MmMessageGameObject msgGameObject = new MmMessageGameObject();
+                        msgGameObject.Deserialize(data);
+                        MmRelayNode.MmInvoke(msgGameObject);
+                        break;
+                default:
+                        // Debug.Log(eventCode);
+		                throw new ArgumentOutOfRangeException();
+		        }
+		    }
+		    catch (Exception e)
+            {
+                MmLogger.LogError(e.Message);
+            }
+
+
         }
         #endregion
         
