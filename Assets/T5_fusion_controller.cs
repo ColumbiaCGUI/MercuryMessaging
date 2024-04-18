@@ -10,6 +10,8 @@ public class T5_fusion_controller : NetworkBehaviour
     MmRelayNode _myRelayNode;
     bool active = true;
 
+    private NetworkRunner networkRunner;
+
 
     public void Start()
     {
@@ -19,12 +21,12 @@ public class T5_fusion_controller : NetworkBehaviour
 
     void Update()
     {
-        if (HasStateAuthority == false)
+        if(GetComponent<NetworkObject>().Runner!=null)
         {
-            return;
+            networkRunner = GetComponent<NetworkObject>().Runner;
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) )
+        if (Input.GetKeyDown(KeyCode.Space) && networkRunner.IsRunning)
         {
             Debug.Log("Space key was pressed.");
             active = !active;

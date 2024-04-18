@@ -32,7 +32,7 @@
 //  
 //
 using System;
-using UnityEngine;
+// using UnityEngine;
 namespace MercuryMessaging
 {
     /// <summary>
@@ -41,7 +41,7 @@ namespace MercuryMessaging
     /// of an MmMessage invoked on an MmRelayNode through its
     /// MercuryMessaging hierarchy.
     /// </summary>
-    [Serializable]
+    // [Serializable]
     public class MmMetadataBlock
     {
         /// <summary>
@@ -131,11 +131,11 @@ namespace MercuryMessaging
         /// <returns>The index of the next element to be read from data</returns>
         public virtual int Deserialize(object[] data, int index)
         {
-            LevelFilter = (MercuryMessaging.MmLevelFilter) ((short) data[index++]);
-            ActiveFilter = (MercuryMessaging.MmActiveFilter) ((short) data[index++]);
-            SelectedFilter = (MercuryMessaging.MmSelectedFilter) ((short) data[index++]);
-            NetworkFilter = (MercuryMessaging.MmNetworkFilter) ((short) data[index++]);
-            Tag = (MercuryMessaging.MmTag) ((short) data[index++]);
+            LevelFilter = (MercuryMessaging.MmLevelFilter) (Convert.ToInt16(data[index++]));
+            ActiveFilter = (MercuryMessaging.MmActiveFilter) (Convert.ToInt16(data[index++]));
+            SelectedFilter = (MercuryMessaging.MmSelectedFilter) (Convert.ToInt16(data[index++]));
+            NetworkFilter = (MercuryMessaging.MmNetworkFilter) (Convert.ToInt16(data[index++]));
+            Tag = (MercuryMessaging.MmTag) (Convert.ToInt16(data[index++]));
             return index;
         }
 
@@ -152,10 +152,10 @@ namespace MercuryMessaging
                 (short) NetworkFilter, 
                 (short) Tag 
             };
-            foreach (var item in thisSerialized)
-            {
-                Debug.Log("thisSerializedMB: " + item);
-            }
+            // foreach (var item in thisSerialized)
+            // {
+            //     Debug.Log("thisSerializedMB: " + item);
+            // }
             return thisSerialized;
         }
     }

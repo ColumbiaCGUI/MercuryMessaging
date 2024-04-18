@@ -32,7 +32,9 @@
 //  
 //
 using System.Linq;
-using UnityEngine;
+// using UnityEngine;
+using System;
+
 // using System;
 namespace MercuryMessaging
 {
@@ -195,14 +197,20 @@ namespace MercuryMessaging
             // }
 
             // no idea why the Specified cast is not valid error is thrown
-            MmMethod = (MercuryMessaging.MmMethod) ((short) data[index++]);
+            // short temp = Convert.ToInt16(data[index++]);
+
+            // Debug.Log("data type: " +((short) data[index]));
+            // MmMethod = (MercuryMessaging.MmMethod) ((short) data[index++]);
+            MmMethod = (MercuryMessaging.MmMethod) (Convert.ToInt16(data[index++]));
             // Debug.Log("MmMethod: " + MmMethod);
-            MmMessageType = (MercuryMessaging.MmMessageType) (short)data[index++];
-            Debug.Log("MmMessageType: " + MmMessageType);
-            NetId = (uint) ((int) data[index++]);
-            Debug.Log("NetId: " + NetId);
+            // MmMessageType = (MercuryMessaging.MmMessageType) (short)data[index++];
+            MmMessageType = (MercuryMessaging.MmMessageType) (Convert.ToInt16(data[index++]));
+            // Debug.Log("MmMessageType: " + MmMessageType);
+            NetId = (uint) (Convert.ToInt32(data[index++]));
+            // NetId = (uint) ((int)data[index++]);
+            // Debug.Log("NetId: " + NetId);
             index = MetadataBlock.Deserialize(data, index);
-            Debug.Log("MetadataBlock: " + MetadataBlock.ToString());
+            // Debug.Log("MetadataBlock: " + MetadataBlock.ToString());
             IsDeserialized = true;
             
             return index;
@@ -218,21 +226,21 @@ namespace MercuryMessaging
                 (short)MmMethod, 
                 (short)MmMessageType,
                 (int)NetId};
-            Debug.Log("MetadataBlock: " + MetadataBlock.ToString());
-            Debug.Log("MetadatBlockSerialize: " + MetadataBlock.Serialize());
+            // Debug.Log("MetadataBlock: " + MetadataBlock.ToString());
+            // Debug.Log("MetadatBlockSerialize: " + MetadataBlock.Serialize());
             // Metadatablock serialize is not getting concat properly?
-            foreach (var item in thisSerialized)
-            {
-                Debug.Log("BEFORE CONCAT thisSerialized: " + item);
-            }
+            // foreach (var item in thisSerialized)
+            // {
+            //     Debug.Log("BEFORE CONCAT thisSerialized: " + item);
+            // }
             // is this concat working? looks like some values are lost?
 
             // metadatablock.serialize is returning 4 values instead of 5 values
             thisSerialized = thisSerialized.Concat(MetadataBlock.Serialize()).ToArray();
-            foreach (var item in thisSerialized)
-            {
-                Debug.Log("AFTER CONCAT thisSerialized: " + item);
-            }
+            // foreach (var item in thisSerialized)
+            // {
+            //     Debug.Log("AFTER CONCAT thisSerialized: " + item);
+            // }
             return thisSerialized;
         }
     }
