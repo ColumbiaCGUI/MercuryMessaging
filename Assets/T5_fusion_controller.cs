@@ -10,22 +10,20 @@ public class T5_fusion_controller : NetworkBehaviour
     MmRelayNode _myRelayNode;
     bool active = true;
 
-    private NetworkRunner networkRunner;
-
+    public NetworkRunner networkRunner;
+    public NetworkObject networkObject;
 
     public void Start()
     {
         _myRelayNode = GetComponent<MmRelayNode>();
+        networkObject = GetComponent<NetworkObject>();
+        // networkObject.RequestStateAuthority();
         // PhotonNetwork.ConnectUsingSettings();
     }
 
     void Update()
     {
-        if(GetComponent<NetworkObject>().Runner!=null)
-        {
-            networkRunner = GetComponent<NetworkObject>().Runner;
-        }
-        else
+        if(networkRunner==null)
         {
             return;
         }
@@ -46,6 +44,12 @@ public class T5_fusion_controller : NetworkBehaviour
                 new MmMetadataBlock(MmLevelFilter.Parent, MmActiveFilter.All, MmSelectedFilter.All, MmNetworkFilter.Network)
             );
         }
+    }
+
+    public void OnConnectedToServer()
+    {
+        // Debug.Log("Connected to server.");
+        networkRunner =networkObject.Runner;
     }
 
     
