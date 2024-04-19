@@ -27,8 +27,12 @@ public class T5_fusion_controller : NetworkBehaviour
         {
             return;
         }
+        if(networkRunner.IsRunning== false)
+        {
+            return;
+        }
 
-        if (Input.GetKeyDown(KeyCode.Space) && networkRunner.IsRunning)
+        if (Input.GetKeyDown(KeyCode.Space) )
         {
             Debug.Log("Space key was pressed.");
             active = !active;
@@ -44,6 +48,16 @@ public class T5_fusion_controller : NetworkBehaviour
                 new MmMetadataBlock(MmLevelFilter.Parent, MmActiveFilter.All, MmSelectedFilter.All, MmNetworkFilter.Network)
             );
         }
+        // else if (Input.GetKeyDown(KeyCode.Alpha1))
+        // {
+        //     _myRelayNode.MmInvoke(
+        //         new T4_ColorMessage(new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f), 1f),
+        //         (MmMethod)T4_myMethods.UpdateColor,
+        //         (MmMessageType)T4_myMsgTypes.Color,
+        //         new MmMetadataBlock(MmLevelFilter.Child, MmActiveFilter.All, MmSelectedFilter.All, MmNetworkFilter.Network))
+        //     );
+                
+        // }
     }
 
     public void OnConnectedToServer()

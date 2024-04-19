@@ -65,7 +65,7 @@ namespace MercuryMessaging
 
             msg.NetId = (uint) _networkObject.Id.Raw;
         
-            MmMessageBool msgb = (MmMessageBool) msg;
+            // MmMessageBool msgb = (MmMessageBool) msg;
 
             object[] data = msg.Serialize();
 
