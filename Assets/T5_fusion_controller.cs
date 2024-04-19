@@ -25,6 +25,10 @@ public class T5_fusion_controller : NetworkBehaviour
         {
             networkRunner = GetComponent<NetworkObject>().Runner;
         }
+        else
+        {
+            return;
+        }
 
         if (Input.GetKeyDown(KeyCode.Space) && networkRunner.IsRunning)
         {
@@ -34,6 +38,12 @@ public class T5_fusion_controller : NetworkBehaviour
                 MmMethod.SetActive,
                 active,
                 new MmMetadataBlock(MmLevelFilter.Child, MmActiveFilter.All, MmSelectedFilter.All, MmNetworkFilter.Network)
+            );
+
+            _myRelayNode.MmInvoke(
+                MmMethod.SetActive,
+                !active,
+                new MmMetadataBlock(MmLevelFilter.Parent, MmActiveFilter.All, MmSelectedFilter.All, MmNetworkFilter.Network)
             );
         }
     }

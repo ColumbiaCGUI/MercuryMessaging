@@ -1006,6 +1006,11 @@ MonoBehaviour:
       Clone: 0
       Tags: 0
       Level: 1
+    - Name: SceneController (1)
+      Responder: {fileID: 1644487839}
+      Clone: 0
+      Tags: 0
+      Level: 2
 --- !u!23 &1481478349
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1126,7 +1131,7 @@ MonoBehaviour:
   FlipNetworkFlagOnSend: 0
   AllowNetworkPropagationLocally: 0
   ReparentClonedRespondersToSelf: 1
-  Initialized: 0
+  Initialized: 1
   AutoGrabAttachedResponders: 1
   RoutingTable:
     _list:
@@ -1236,7 +1241,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 323bff89ba6c9284aabbf2d9dc76bc91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _dataTrans: 
 --- !u!114 &1644487836
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1251,7 +1255,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SortKey: 3609095678
   ObjectInterest: 1
-  Flags: 262145
+  Flags: 524289
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 1644487835}
@@ -1273,17 +1277,12 @@ MonoBehaviour:
   FlipNetworkFlagOnSend: 0
   AllowNetworkPropagationLocally: 0
   ReparentClonedRespondersToSelf: 1
-  Initialized: 0
+  Initialized: 1
   AutoGrabAttachedResponders: 1
   RoutingTable:
     _list:
     - Name: Sphere1 (1)
       Responder: {fileID: 1305959160}
-      Clone: 0
-      Tags: 0
-      Level: 2
-    - Name: Sphere2 (1)
-      Responder: {fileID: 1481478348}
       Clone: 0
       Tags: 0
       Level: 2
