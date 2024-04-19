@@ -13,10 +13,16 @@ public class T5_fusion_controller : NetworkBehaviour
     private NetworkRunner networkRunner;
     private NetworkObject networkObject;
 
+    private CharacterController _controller;  
+
+    public float PlayerSpeed = 2f;
+
+
     public void Start()
     {
         _myRelayNode = GetComponent<MmRelayNode>();
         networkObject = GetComponent<NetworkObject>();
+        _controller = GetComponent<CharacterController>();
         // networkObject.RequestStateAuthority();
         // PhotonNetwork.ConnectUsingSettings();
     }
@@ -64,6 +70,12 @@ public class T5_fusion_controller : NetworkBehaviour
     {
         // Debug.Log("Connected to server.");
         networkRunner =networkObject.Runner;
+    }
+
+    public override void FixedUpdateNetwork()
+    {
+        Vector3 move = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")) * Runner.DeltaTime * PlayerSpeed;
+        _controller.Move(move);
     }
 
     
