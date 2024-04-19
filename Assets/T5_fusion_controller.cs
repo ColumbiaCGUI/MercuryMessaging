@@ -10,8 +10,8 @@ public class T5_fusion_controller : NetworkBehaviour
     MmRelayNode _myRelayNode;
     bool active = true;
 
-    public NetworkRunner networkRunner;
-    public NetworkObject networkObject;
+    private NetworkRunner networkRunner;
+    private NetworkObject networkObject;
 
     public void Start()
     {
