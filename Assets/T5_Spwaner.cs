@@ -11,7 +11,7 @@ public class T5_PlayerSpawner : SimulationBehaviour, IPlayerJoined
     {
         if (player == Runner.LocalPlayer)
         {
-            Runner.Spawn(PlayerPrefab, new Vector3(0, 1, 0), Quaternion.identity);
+            Runner.Spawn(PlayerPrefab, new Vector3(0, 0, 0), Quaternion.identity);
         }
     }
 }

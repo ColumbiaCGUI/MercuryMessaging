@@ -1,5 +1,7 @@
 using UnityEngine;
 using MercuryMessaging;
+using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.InputSystem;
 
 using Fusion;
 // using Photon.Realtime;
@@ -13,6 +15,13 @@ public class T5_fusion_controller : NetworkBehaviour
     private NetworkRunner networkRunner;
     private NetworkObject networkObject;
 
+
+    [SerializeField]
+    // set the XRI default input action to be the player input
+    public InputActionAsset playerInput;
+
+    private InputAction turnOffAction;
+
     // private CharacterController _controller;  
 
     // public float PlayerSpeed = 2f;
@@ -22,6 +31,8 @@ public class T5_fusion_controller : NetworkBehaviour
     {
         _myRelayNode = GetComponent<MmRelayNode>();
         networkObject = GetComponent<NetworkObject>();
+        turnOffAction=playerInput.FindActionMap("XRI RightHand Interaction").FindAction("RightPrimary");
+        turnOffAction.Enable();
         // _controller = GetComponent<CharacterController>();
         // networkObject.RequestStateAuthority();
         // PhotonNetwork.ConnectUsingSettings();
@@ -38,7 +49,7 @@ public class T5_fusion_controller : NetworkBehaviour
             return;
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) )
+        if (turnOffAction.triggered)
         {
             Debug.Log("Space key was pressed.");
             active = !active;

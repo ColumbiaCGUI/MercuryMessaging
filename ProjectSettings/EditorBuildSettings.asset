@@ -11,4 +11,6 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scene/FusionTest.unity
     guid: 9f1d58787fdc5f848ac2025ed877582b
-  m_configObjects: {}
+  m_configObjects:
+    Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 76b2f9fa65ed2074287566322f149f10, type: 2}
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: e1e3404524f10fd4687a856dc229b8c8, type: 2}
