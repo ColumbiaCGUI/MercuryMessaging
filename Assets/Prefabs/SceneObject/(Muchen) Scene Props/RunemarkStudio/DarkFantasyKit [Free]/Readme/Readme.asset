@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a098baab29416494fb3546741e8419b1, type: 3}
+  m_Name: Readme
+  m_EditorClassIdentifier: 
+  icon: {fileID: 2800000, guid: a01ad4878b189db499d606392bb721c9, type: 3}
+  title: Dark Fantasy Kit [Free]
+  sections:
+  - heading: Welcome
+    text: 'Thank you for downloading the free version of the Dark Fantasy Kit!
+
+      Please
+      rate this asset on the asset store! This will help us to continue to work on
+      this and on other assets!'
+    linkText: Visit Asset Store!
+    url: https://assetstore.unity.com/packages/3d/environments/fantasy/dark-fantasy-kit-123894
+  - heading: Share your work and WIN!
+    text: "Do you like this package? Share your work on social media! We are giving
+      away voucher codes for Dark Fantasy Kit! \r\n\n   1. Create something cool
+      with this package.\r\n   2. Take a Screenshot\r\n   3. Share it on any social
+      media: facebook, twitter or instagram\r\n   4. Use #madewithdarkfantasykit
+      hashtag!\r\n   5. Mention us in the post! @RunemarkStudio\r\n\nWe are selecting
+      the winners in random times!\nShare your works occasionally and increase your
+      chance to win!\r\n"
+    linkText: Learn More!
+    url: https://forum.unity.com/threads/released-dark-fantasy-kit.545207/#post-3596384
+  loadedLayout: 0
