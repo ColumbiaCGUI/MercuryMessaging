@@ -17,6 +17,8 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     [SerializeField]
     private GameObject _runnerPrefab;
 
+    public GameObject canvas;
+
     public NetworkRunner Runner { get; private set; }
 
     private void Awake()
@@ -94,6 +96,8 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
         };
         await Runner.StartGame(args);
+
+        canvas.SetActive(false);
 
     }
 
