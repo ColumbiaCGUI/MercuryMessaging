@@ -12,8 +12,8 @@ public class T5_fusion_controller : NetworkBehaviour
     MmRelayNode _myRelayNode;
     bool active = true;
 
-    private NetworkRunner networkRunner;
-    private NetworkObject networkObject;
+    public NetworkRunner networkRunner;
+    public NetworkObject networkObject;
 
 
     [SerializeField]
@@ -42,10 +42,12 @@ public class T5_fusion_controller : NetworkBehaviour
     {
         if(networkRunner==null)
         {
+            Debug.Log("NetworkRunner is null");
             return;
         }
         if(networkRunner.IsRunning== false)
         {
+            Debug.Log("NetworkRunner is not running");
             return;
         }
 

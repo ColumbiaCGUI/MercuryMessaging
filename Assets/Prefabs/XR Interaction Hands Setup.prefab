@@ -1477,7 +1477,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2402091302973945962}
-  - component: {fileID: 2887205606553167798}
   - component: {fileID: 3212495241322233541}
   m_Layer: 0
   m_Name: XR Interaction Hands Setup
@@ -1505,24 +1504,6 @@ Transform:
   - {fileID: 5210882441050589287}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2887205606553167798
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1369807540111893444}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SortKey: 499035095
-  ObjectInterest: 1
-  Flags: 262145
-  NestedObjects: []
-  NetworkedBehaviours:
-  - {fileID: 3212495241322233541}
 --- !u!114 &3212495241322233541
 MonoBehaviour:
   m_ObjectHideFlags: 0
