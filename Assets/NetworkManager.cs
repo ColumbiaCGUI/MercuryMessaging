@@ -10,8 +10,6 @@ using UnityEngine.SceneManagement;
 public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 {
     //creating a singleton
-    public T5_fusion_controller fusionController;
-
     public static NetworkManager Instance { get; private set; }
 
     [SerializeField]
@@ -39,12 +37,6 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         // fixing the server to a perticular region
         Fusion.Photon.Realtime.PhotonAppSettings.Global.AppSettings.FixedRegion = "asia";
 
-        
-    }
-
-    private void Update()
-    {
-        fusionController.networkRunner = Runner;
     }
 
     public async void CreateSession(string roomCode)
@@ -65,6 +57,8 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         // await LoadScene();
         //ConnectSession
         await Connect(roomCode);
+        
+        canvas.SetActive(false);
     }
 
     public void CreateRunner()
@@ -97,7 +91,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         };
         await Runner.StartGame(args);
 
-        canvas.SetActive(false);
+        // canvas.SetActive(false);
 
     }
 

@@ -68,7 +68,7 @@ public class ButtonHandler : MmBaseResponder
             new CandleMessage(true,
                 (MmMethod)CandleMessageMethod.UpdateLit,
                 (MmMessageType)CandleMessageType.Lit,
-                new MmMetadataBlock(MmLevelFilter.Child)));
+                new MmMetadataBlock(MmLevelFilter.Child, MmActiveFilter.All, MmSelectedFilter.All, MmNetworkFilter.Network)));
     }
 
     private void OnDeviceChange(InputDevice device, InputDeviceChange change)

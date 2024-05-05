@@ -12,8 +12,10 @@ public class T5_fusion_controller : NetworkBehaviour
     MmRelayNode _myRelayNode;
     bool active = true;
 
-    public NetworkRunner networkRunner;
-    public NetworkObject networkObject;
+    bool candleActive = true;
+
+    private NetworkRunner networkRunner;
+    private NetworkObject networkObject;
 
 
     [SerializeField]
@@ -40,20 +42,22 @@ public class T5_fusion_controller : NetworkBehaviour
 
     void Update()
     {
+
+        networkRunner = networkObject.Runner;
         if(networkRunner==null)
         {
-            Debug.Log("NetworkRunner is null");
+            // Debug.Log("NetworkRunner is null");
             return;
         }
         if(networkRunner.IsRunning== false)
         {
-            Debug.Log("NetworkRunner is not running");
+            // Debug.Log("NetworkRunner is not running");
             return;
         }
 
         if (turnOffAction.triggered)
         {
-            Debug.Log("Space key was pressed.");
+            // Debug.Log("Space key was pressed.");
             active = !active;
             _myRelayNode.MmInvoke(
                 MmMethod.SetActive,
@@ -67,29 +71,7 @@ public class T5_fusion_controller : NetworkBehaviour
                 new MmMetadataBlock(MmLevelFilter.Parent, MmActiveFilter.All, MmSelectedFilter.All, MmNetworkFilter.Network)
             );
         }
-        // else if (Input.GetKeyDown(KeyCode.Alpha1))
-        // {
-        //     _myRelayNode.MmInvoke(
-        //         new T4_ColorMessage(new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f), 1f),
-        //         (MmMethod)T4_myMethods.UpdateColor,
-        //         (MmMessageType)T4_myMsgTypes.Color,
-        //         new MmMetadataBlock(MmLevelFilter.Child, MmActiveFilter.All, MmSelectedFilter.All, MmNetworkFilter.Network))
-        //     );
-                
-        // }
     }
-
-    public void OnConnectedToServer()
-    {
-        // Debug.Log("Connected to server.");
-        networkRunner =networkObject.Runner;
-    }
-
-    // public override void FixedUpdateNetwork()
-    // {
-    //     Vector3 move = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")) * Runner.DeltaTime * PlayerSpeed;
-    //     _controller.Move(move);
-    // }
 
     
 
