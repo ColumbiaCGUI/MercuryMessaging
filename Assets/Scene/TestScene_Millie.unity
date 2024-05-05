@@ -380,6 +380,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerPrefab: {fileID: 1243799198762847433, guid: 0c8ad6b5a311ebf429f8e0ffd24a02e8, type: 3}
+--- !u!1 &459612870 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4411066062533108096, guid: 775d6233a4c4749fb8000e399aa4c098, type: 3}
+  m_PrefabInstance: {fileID: 1907505285}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &570417412
 GameObject:
   m_ObjectHideFlags: 0
@@ -2052,6 +2057,10 @@ PrefabInstance:
     - target: {fileID: 4411066062533108096, guid: 775d6233a4c4749fb8000e399aa4c098, type: 3}
       propertyPath: m_Name
       value: fire_particle
+      objectReference: {fileID: 0}
+    - target: {fileID: 4411066062533108096, guid: 775d6233a4c4749fb8000e399aa4c098, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7771422917407779273, guid: 775d6233a4c4749fb8000e399aa4c098, type: 3}
       propertyPath: m_LocalScale.x
@@ -5803,6 +5812,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2402091303274756733}
   - component: {fileID: 2402091303274756734}
+  - component: {fileID: 2402091303274756735}
+  - component: {fileID: 2402091303274756736}
   m_Layer: 0
   m_Name: XR Interaction Hands Setup
   m_TagString: Untagged
@@ -6803,6 +6814,8 @@ GameObject:
   - component: {fileID: 1692844759688734011}
   - component: {fileID: 1692844759690121629}
   - component: {fileID: 1692844759693940663}
+  - component: {fileID: 1692844759693940665}
+  - component: {fileID: 1692844759693940664}
   m_Layer: 0
   m_Name: candle.task2
   m_TagString: Untagged
@@ -6900,6 +6913,47 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 6a0a701acff80a7459be73abcec8129a, type: 3}
+--- !u!114 &1692844759693940664
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1692844759687885419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afc42920ca338a3499b73fe14b9c1654, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mmTag: -1
+  tagCheckEnabled: 1
+  fireParticle: {fileID: 459612870}
+--- !u!114 &1692844759693940665
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1692844759687885419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2eab7cc3f6f5b47ea9014cdcb6fd92ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mmTag: -1
+  tagCheckEnabled: 1
+  FlipNetworkFlagOnSend: 0
+  AllowNetworkPropagationLocally: 0
+  ReparentClonedRespondersToSelf: 1
+  Initialized: 0
+  AutoGrabAttachedResponders: 1
+  RoutingTable:
+    _list:
+    - Name: candle
+      Responder: {fileID: 1692844759693940664}
+      Clone: 0
+      Tags: 0
+      Level: 1
 --- !u!1 &1693477510526532789
 GameObject:
   m_ObjectHideFlags: 0
@@ -23132,6 +23186,52 @@ MonoBehaviour:
   headTransform: {fileID: 3158000427109047987}
   leftHandTransform: {fileID: 7359252236518304085}
   rightHandTransform: {fileID: 8583510618287910510}
+--- !u!114 &2402091303274756735
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1369807540420567507}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1c13f0d4427aa749ae196498b782434, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mmTag: -1
+  tagCheckEnabled: 1
+  candleAction: {fileID: -4928836406555347514, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+--- !u!114 &2402091303274756736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1369807540420567507}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2eab7cc3f6f5b47ea9014cdcb6fd92ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mmTag: -1
+  tagCheckEnabled: 1
+  FlipNetworkFlagOnSend: 0
+  AllowNetworkPropagationLocally: 0
+  ReparentClonedRespondersToSelf: 1
+  Initialized: 0
+  AutoGrabAttachedResponders: 1
+  RoutingTable:
+    _list:
+    - Name: XR Interaction Hands Setup
+      Responder: {fileID: 2402091303274756735}
+      Clone: 0
+      Tags: 0
+      Level: 1
+    - Name: candle.task2
+      Responder: {fileID: 1692844759693940665}
+      Clone: 0
+      Tags: 0
+      Level: 2
 --- !u!1 &2404300093291596263
 GameObject:
   m_ObjectHideFlags: 0
