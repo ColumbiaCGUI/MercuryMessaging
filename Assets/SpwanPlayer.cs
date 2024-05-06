@@ -12,7 +12,7 @@ public class SpwanPlayer : MonoBehaviour, INetworkRunnerCallbacks
 
     // Dictionary of spawned user prefabs, to destroy them on disconnection
     private Dictionary<PlayerRef, NetworkObject> _spawnedUsers = new Dictionary<PlayerRef, NetworkObject>();
-
+    
     void Start()
     {
         NetworkManager.Instance.Runner.AddCallbacks(this);
@@ -26,6 +26,16 @@ public class SpwanPlayer : MonoBehaviour, INetworkRunnerCallbacks
             //Vector3 spawnPosition = new Vector3(UnityEngine.Random.Range(1, 5), 0.5f, UnityEngine.Random.Range(1, 5));
 
             NetworkObject networkPlayerObject = runner.Spawn(playerPrefab, Vector3.zero, Quaternion.identity, player);
+            
+            if(player.PlayerId ==1)
+            {
+                networkPlayerObject.gameObject.GetComponent<SetOutline>().SetOutlineColor(Color.blue);
+            }
+            else
+            {
+                networkPlayerObject.gameObject.GetComponent<SetOutline>().SetOutlineColor(Color.green);
+            }
+            
             // Keep track of the player avatars so we can remove it when they disconnect
             _spawnedUsers.Add(player, networkPlayerObject);
         }

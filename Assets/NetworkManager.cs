@@ -17,8 +17,9 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public GameObject canvas;
 
-    public NetworkRunner Runner { get; private set; }
+    public GameObject handCanvas;
 
+    public NetworkRunner Runner { get; private set; }
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -63,7 +64,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public void CreateRunner()
     {
-        Runner = Instantiate(_runnerPrefab, transform).GetComponent<NetworkRunner>();
+        Runner =Instantiate(_runnerPrefab, transform).GetComponent<NetworkRunner>();
         Runner.AddCallbacks(this);
 
         
@@ -103,7 +104,14 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         Debug.Log("<<<<<<< PlayerID >>>>>>>>" + player.PlayerId);
         Debug.Log("<<<<<<< IsRealPlayer >>>>>>>>" + player.IsRealPlayer);
 
-        
+        if(player.PlayerId ==1)
+        {
+            handCanvas.SetActive(true);
+        }
+        else
+        {
+            handCanvas.SetActive(false);
+        }
     }
 
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)

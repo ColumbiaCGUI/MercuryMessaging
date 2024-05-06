@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3219403415012988289}
   - component: {fileID: 3156873635378275342}
   - component: {fileID: 5417193042707901225}
+  - component: {fileID: 1401671086573085125}
   m_Layer: 0
   m_Name: PlayerPrefab
   m_TagString: Untagged
@@ -89,6 +90,19 @@ MonoBehaviour:
   headTransform: {fileID: 7543209247027572036}
   leftHandTransform: {fileID: 419695113485655692}
   rightHandTransform: {fileID: 5552329542903381453}
+--- !u!114 &1401671086573085125
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1243799198762847433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d1f5e08974411a428977d4bf4e57706, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  head: {fileID: 5876977733403168258}
 --- !u!1 &3133883669338432517
 GameObject:
   m_ObjectHideFlags: 0
