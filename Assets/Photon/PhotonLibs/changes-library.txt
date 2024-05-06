@@ -4,9 +4,6 @@ www.photonengine.com  -  Join our Discord Server: https://dashboard.photonengine
 
 
 
-Version 4.1.8.1 (12. March 2024 - rev7444)
-    Fixed: SocketTcp which was reading the wrong TCP Header byte as "reliable" indicator. This meant, the TrafficStatsIncoming were wrong.
-
 Version 4.1.8.0 (31. January 2024 - rev7364)
     No notable changes. The Realtime API has some breaking changes. Check that changelog.
 
