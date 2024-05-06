@@ -5,18 +5,28 @@ using UnityEngine;
 public class DoorInteraction : MonoBehaviour
 {
     private Animator mAnimator;
+    private bool isOpen = false;
     // Start is called before the first frame update
     void Start()
     {
         mAnimator = GetComponent<Animator>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void PlayAnimation()
     {
-        if (mAnimator != null){
-            if(Input.GetKeyDown(KeyCode.O)){
+        if(mAnimator !=null)
+        {
+            if(isOpen)
+            {
+                mAnimator.SetBool("open", false);
+
+                isOpen = false;
+            }
+            else
+            {
                 mAnimator.SetBool("open", true);
+
+                isOpen = true;
             }
         }
     }
