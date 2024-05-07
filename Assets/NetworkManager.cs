@@ -124,7 +124,9 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         Debug.Log("<<<<<<< PlayerID >>>>>>>>" + player.PlayerId);
         Debug.Log("<<<<<<< IsRealPlayer >>>>>>>>" + player.IsRealPlayer);
 
-        if(runner.LocalPlayer.RawEncoded==1)
+        Debug.Log("<<<<<<< RawEncoded >>>>>>>>" + runner.LocalPlayer.RawEncoded);
+
+        if(runner.LocalPlayer.RawEncoded==2)
         {
             handCanvas.SetActive(true);
             Vector3 position = SetUpPosition.transform.position;
