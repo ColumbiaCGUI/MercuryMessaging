@@ -292,7 +292,7 @@ MonoBehaviour:
   tasks:
   - {fileID: 1700962347}
   - {fileID: 1418083527}
-  potShadow: {fileID: 0}
+  potShadow: {fileID: 369013274}
   TaskNumber: 1
 --- !u!1 &185905240
 GameObject:
@@ -5741,7 +5741,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &369013275
 Transform:
   m_ObjectHideFlags: 0
@@ -12171,7 +12171,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 70
+    m_Bits: 198
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 8400000, guid: c59ff0501df699a468ab214390474cf3, type: 2}
   m_TargetDisplay: 0
@@ -23401,7 +23401,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1133668217
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23523,7 +23523,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1157851606
 RectTransform:
   m_ObjectHideFlags: 0
@@ -26019,7 +26019,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1596694722}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
@@ -26521,7 +26521,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6392495803785549480, guid: 882d04309686623498f946a5b090bdc3, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 13.904
+      value: 12.4
       objectReference: {fileID: 0}
     - target: {fileID: 6392495803785549480, guid: 882d04309686623498f946a5b090bdc3, type: 3}
       propertyPath: m_LocalPosition.y
@@ -27400,7 +27400,7 @@ GameObject:
   - component: {fileID: 2146029313}
   - component: {fileID: 2146029312}
   - component: {fileID: 2146029316}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30346,7 +30346,7 @@ MonoBehaviour:
   m_ConeCastAngle: 6
   m_RaycastMask:
     serializedVersion: 2
-    m_Bits: 2147483745
+    m_Bits: 2147483873
   m_RaycastTriggerInteraction: 1
   m_RaycastSnapVolumeInteraction: 1
   m_HitClosestOnly: 0
@@ -48079,7 +48079,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &2312541350381962152
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -71492,7 +71492,7 @@ MonoBehaviour:
   m_ConeCastAngle: 6
   m_RaycastMask:
     serializedVersion: 2
-    m_Bits: 2147483745
+    m_Bits: 2147483873
   m_RaycastTriggerInteraction: 1
   m_RaycastSnapVolumeInteraction: 1
   m_HitClosestOnly: 0
