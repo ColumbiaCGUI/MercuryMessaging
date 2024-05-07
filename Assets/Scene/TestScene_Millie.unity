@@ -12167,7 +12167,7 @@ Camera:
   far clip plane: 1000
   field of view: 29.3
   orthographic: 1
-  orthographic size: 16.31
+  orthographic size: 10
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -12192,7 +12192,7 @@ Transform:
   m_GameObject: {fileID: 713234036}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -1.2, y: 200, z: -1}
+  m_LocalPosition: {x: -10, y: 200, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -17702,6 +17702,98 @@ MonoBehaviour:
       Clone: 0
       Tags: 2
       Level: 1
+--- !u!1 &876935340
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 876935343}
+  - component: {fileID: 876935342}
+  - component: {fileID: 876935341}
+  m_Layer: 0
+  m_Name: MinimapCamera (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!81 &876935341
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 876935340}
+  m_Enabled: 0
+--- !u!20 &876935342
+Camera:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 876935340}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_projectionMatrixMode: 1
+  m_GateFitMode: 2
+  m_FOVAxisMode: 0
+  m_Iso: 200
+  m_ShutterSpeed: 0.005
+  m_Aperture: 16
+  m_FocusDistance: 10
+  m_FocalLength: 50
+  m_BladeCount: 5
+  m_Curvature: {x: 2, y: 11}
+  m_BarrelClipping: 0.25
+  m_Anamorphism: 0
+  m_SensorSize: {x: 36, y: 24}
+  m_LensShift: {x: 0, y: 0}
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 29.3
+  orthographic: 1
+  orthographic size: 10
+  m_Depth: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 198
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 8400000, guid: b45ab5b5ad1db3a4d9d5cd8fcd5fdeec, type: 2}
+  m_TargetDisplay: 0
+  m_TargetEye: 3
+  m_HDR: 1
+  m_AllowMSAA: 1
+  m_AllowDynamicResolution: 0
+  m_ForceIntoRT: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
+--- !u!4 &876935343
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 876935340}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 8, y: 200, z: -1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1 &883115329
 GameObject:
   m_ObjectHideFlags: 0
@@ -18141,6 +18233,9 @@ MonoBehaviour:
   canvas: {fileID: 2305584058539307576}
   handCanvas: {fileID: 570417412}
   SetUpPosition: {fileID: 1369807540420567507}
+  miniMap: {fileID: 679352394}
+  renderTextureLeft: {fileID: 8400000, guid: c59ff0501df699a468ab214390474cf3, type: 2}
+  renderTextureRight: {fileID: 8400000, guid: b45ab5b5ad1db3a4d9d5cd8fcd5fdeec, type: 2}
 --- !u!114 &957343772
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -72225,6 +72320,7 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 713234039}
+  - {fileID: 876935343}
   - {fileID: 2402091303274756733}
   - {fileID: 812246313}
   - {fileID: 2146029315}

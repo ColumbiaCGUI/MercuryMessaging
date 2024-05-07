@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 {
@@ -20,6 +21,12 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     public GameObject handCanvas;
 
     public GameObject SetUpPosition;
+
+    public GameObject miniMap;
+
+    public RenderTexture renderTextureLeft;
+
+    public RenderTexture renderTextureRight;
 
     public NetworkRunner Runner { get; private set; }
 
@@ -128,6 +135,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
         if(runner.LocalPlayer.RawEncoded==2)
         {
+            miniMap.GetComponent<RawImage>().texture = renderTextureRight; 
             handCanvas.SetActive(true);
             Vector3 position = SetUpPosition.transform.position;
             position.x -= 5f;
@@ -135,6 +143,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         }
         else
         {
+            miniMap.GetComponent<RawImage>().texture = renderTextureLeft;
             handCanvas.SetActive(false);
         }
     }
