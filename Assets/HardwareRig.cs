@@ -17,7 +17,7 @@ public class HardwareRig : MonoBehaviour, INetworkRunnerCallbacks
 
     void Start()
     {
-        NetworkManager.Instance.Runner.AddCallbacks(this);
+        // NetworkManager.Instance.Runner.AddCallbacks(this);
     }
 
 

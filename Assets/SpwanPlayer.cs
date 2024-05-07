@@ -32,7 +32,7 @@ public class SpwanPlayer : MonoBehaviour, INetworkRunnerCallbacks
             NetworkObject networkPlayerObject = runner.Spawn(playerPrefab, Vector3.zero, Quaternion.identity, player);
             
             // networkPlayerObject.gameObject.GetComponent<SetOutline>().SetOutlineColor(Color.green);
-            networkPlayerObject.gameObject.layer = LayerMask.NameToLayer("UI");
+            networkPlayerObject.gameObject.GetComponent<SetOutline>().SetCullingMusk();
             // gameObject.layer = LayerMask.NameToLayer("MyLayer");
             
             // Keep track of the player avatars so we can remove it when they disconnect
