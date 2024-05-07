@@ -112,6 +112,7 @@ public class TaskBehavior2 : MonoBehaviour
             {
                 rightHand.EndManualInteraction();
             }
+            pot.GetComponent<XRGrabInteractable>().enabled = false;
 
             pot.transform.position = potShadow.transform.position;
             pot.transform.rotation = potShadow.transform.rotation;
@@ -125,7 +126,7 @@ public class TaskBehavior2 : MonoBehaviour
             {
                 this.transform.parent.gameObject.GetComponent<TaskManager>().wristMenu.SetActive(false);
             }
-            
+
             this.transform.parent.gameObject.GetComponent<TaskManager>().TaskNumber++;
         }
         else
