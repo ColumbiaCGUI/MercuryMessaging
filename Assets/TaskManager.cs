@@ -10,6 +10,8 @@ using MercuryMessaging;
 public class TaskManager : NetworkBehaviour
 {
     public List<GameObject> tasks;
+
+    public GameObject potShadow;
     MmRelayNode _relayNode;
     private NetworkRunner _runner;
     private NetworkObject _object;
@@ -51,6 +53,12 @@ public class TaskManager : NetworkBehaviour
                 false,
                 new MmMetadataBlock(((MmTag)(2)),MmLevelFilter.Child, MmActiveFilter.All, MmSelectedFilter.All, MmNetworkFilter.Network)
             );
+
+            _relayNode.MmInvoke(
+                MmMethod.SetActive,
+                false,
+                new MmMetadataBlock(((MmTag)(4)),MmLevelFilter.Child, MmActiveFilter.All, MmSelectedFilter.All, MmNetworkFilter.Network)
+            );
         }
         else if(TaskNumber ==2)
         {
@@ -64,6 +72,12 @@ public class TaskManager : NetworkBehaviour
                 MmMethod.SetActive,
                 true,
                 new MmMetadataBlock(((MmTag)(2)),MmLevelFilter.Child, MmActiveFilter.All, MmSelectedFilter.All, MmNetworkFilter.Network)
+            );
+
+            _relayNode.MmInvoke(
+                MmMethod.SetActive,
+                true,
+                new MmMetadataBlock(((MmTag)(4)),MmLevelFilter.Child, MmActiveFilter.All, MmSelectedFilter.All, MmNetworkFilter.Network)
             );
         }
     }
