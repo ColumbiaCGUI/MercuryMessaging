@@ -40,6 +40,16 @@ public class TaskBehavior1 : MonoBehaviour
         }
         if(allCandlesLit)
         {
+            if(this.transform.parent.gameObject.GetComponent<TaskManager>().wristMenu.activeSelf == false)
+            {
+                // Debug.Log("Task1 completed"
+                this.transform.parent.gameObject.GetComponent<TaskManager>().wristMenu.SetActive(true);
+            }
+            else
+            {
+                this.transform.parent.gameObject.GetComponent<TaskManager>().wristMenu.SetActive(false);
+            }
+
             this.transform.parent.gameObject.GetComponent<TaskManager>().TaskNumber++;
         }
     }

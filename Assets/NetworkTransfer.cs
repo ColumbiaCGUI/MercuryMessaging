@@ -4,7 +4,7 @@ using UnityEngine;
 
 using Fusion;
 
-public class NetworkTransfer : MonoBehaviour
+public class NetworkTransfer : NetworkBehaviour
 {
     private NetworkObject networkObject;
     // Start is called before the first frame update
@@ -17,7 +17,10 @@ public class NetworkTransfer : MonoBehaviour
     {
         if(networkObject != null && networkObject.Runner !=null)
         {
-            networkObject.RequestStateAuthority();
+            if(networkObject.HasStateAuthority==false)
+            {
+                networkObject.RequestStateAuthority();
+            }
         }
     }
 
@@ -25,7 +28,11 @@ public class NetworkTransfer : MonoBehaviour
     {
         if(networkObject != null && networkObject.Runner !=null)
         {
-            networkObject.ReleaseStateAuthority();
+            if(networkObject.HasStateAuthority==true)
+            {
+                networkObject.ReleaseStateAuthority();
+            }
+            // networkObject.ReleaseStateAuthority();
         }
     }
 }

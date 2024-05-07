@@ -19,6 +19,8 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public GameObject handCanvas;
 
+    public GameObject SetUpPosition;
+
     public NetworkRunner Runner { get; private set; }
 
     private bool GameStarted = false;
@@ -125,6 +127,9 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         if(player.PlayerId ==1)
         {
             handCanvas.SetActive(true);
+            Vector3 position = SetUpPosition.transform.position;
+            position.x -= 5f;
+            SetUpPosition.transform.position= position;
         }
         else
         {
