@@ -9,6 +9,7 @@ using MercuryMessaging;
 
 public class TaskManager : NetworkBehaviour
 {
+    public GameObject wristMenu;
     public List<GameObject> tasks;
 
     public GameObject potShadow;
@@ -77,6 +78,26 @@ public class TaskManager : NetworkBehaviour
             _relayNode.MmInvoke(
                 MmMethod.SetActive,
                 true,
+                new MmMetadataBlock(((MmTag)(4)),MmLevelFilter.Child, MmActiveFilter.All, MmSelectedFilter.All, MmNetworkFilter.Network)
+            );
+        }
+        else
+        {
+            _relayNode.MmInvoke(
+                MmMethod.SetActive,
+                false,
+                new MmMetadataBlock(((MmTag)(1)),MmLevelFilter.Child, MmActiveFilter.All, MmSelectedFilter.All, MmNetworkFilter.Network)
+            );
+
+            _relayNode.MmInvoke(
+                MmMethod.SetActive,
+                false,
+                new MmMetadataBlock(((MmTag)(2)),MmLevelFilter.Child, MmActiveFilter.All, MmSelectedFilter.All, MmNetworkFilter.Network)
+            );
+
+            _relayNode.MmInvoke(
+                MmMethod.SetActive,
+                false,
                 new MmMetadataBlock(((MmTag)(4)),MmLevelFilter.Child, MmActiveFilter.All, MmSelectedFilter.All, MmNetworkFilter.Network)
             );
         }
