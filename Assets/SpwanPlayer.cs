@@ -24,17 +24,16 @@ public class SpwanPlayer : MonoBehaviour, INetworkRunnerCallbacks
         if (player == runner.LocalPlayer && playerPrefab != null)
         {
             //Vector3 spawnPosition = new Vector3(UnityEngine.Random.Range(1, 5), 0.5f, UnityEngine.Random.Range(1, 5));
+            // if(player.PlayerId == 1)
+            // {
+            //     playerPrefab.
+            // }
 
             NetworkObject networkPlayerObject = runner.Spawn(playerPrefab, Vector3.zero, Quaternion.identity, player);
             
-            if(player.PlayerId ==1)
-            {
-                networkPlayerObject.gameObject.GetComponent<SetOutline>().SetOutlineColor(Color.blue);
-            }
-            else
-            {
-                networkPlayerObject.gameObject.GetComponent<SetOutline>().SetOutlineColor(Color.green);
-            }
+            // networkPlayerObject.gameObject.GetComponent<SetOutline>().SetOutlineColor(Color.green);
+            networkPlayerObject.gameObject.layer = LayerMask.NameToLayer("UI");
+            // gameObject.layer = LayerMask.NameToLayer("MyLayer");
             
             // Keep track of the player avatars so we can remove it when they disconnect
             _spawnedUsers.Add(player, networkPlayerObject);
