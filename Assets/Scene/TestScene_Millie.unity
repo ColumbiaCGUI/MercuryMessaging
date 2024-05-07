@@ -202,6 +202,7 @@ Transform:
   m_Children:
   - {fileID: 1700962348}
   - {fileID: 1418083528}
+  - {fileID: 1133668220}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &170928835
@@ -263,6 +264,16 @@ MonoBehaviour:
       Responder: {fileID: 369013281}
       Clone: 0
       Tags: 4
+      Level: 2
+    - Name: Task4
+      Responder: {fileID: 1133668217}
+      Clone: 0
+      Tags: 8
+      Level: 2
+    - Name: GapDoor
+      Responder: {fileID: 1881678849}
+      Clone: 0
+      Tags: 16
       Level: 2
 --- !u!114 &170928837
 MonoBehaviour:
@@ -23490,13 +23501,14 @@ GameObject:
   - component: {fileID: 1133668217}
   - component: {fileID: 1133668221}
   - component: {fileID: 1133668222}
+  - component: {fileID: 1133668223}
   m_Layer: 0
-  m_Name: GoNoGo
+  m_Name: Task4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1133668217
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23547,7 +23559,7 @@ Transform:
   m_Children:
   - {fileID: 442824459}
   - {fileID: 1732226690}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 170928834}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1133668221
 MonoBehaviour:
@@ -23556,7 +23568,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1133668216}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2eab7cc3f6f5b47ea9014cdcb6fd92ba, type: 3}
   m_Name: 
@@ -23574,6 +23586,11 @@ MonoBehaviour:
       Responder: {fileID: 1133668217}
       Clone: 0
       Tags: 0
+      Level: 1
+    - Name: Task4
+      Responder: {fileID: 1133668223}
+      Clone: 0
+      Tags: 8
       Level: 1
 --- !u!114 &1133668222
 MonoBehaviour:
@@ -23600,6 +23617,20 @@ MonoBehaviour:
   advanceTrial: 0
   isButtonPressed: 0
   scores: 0
+--- !u!114 &1133668223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1133668216}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adab6894faa1a4fb5a8584a8d7b867f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mmTag: -1
+  tagCheckEnabled: 1
 --- !u!1 &1157851605
 GameObject:
   m_ObjectHideFlags: 0
@@ -25144,7 +25175,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6888587072004152404, guid: 882d04309686623498f946a5b090bdc3, type: 3}
       propertyPath: m_Name
-      value: AnimatedDoor (2)
+      value: GapDoor
       objectReference: {fileID: 0}
     - target: {fileID: 6888587072004152404, guid: 882d04309686623498f946a5b090bdc3, type: 3}
       propertyPath: m_Layer
@@ -25165,7 +25196,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6888587072004152404, guid: 882d04309686623498f946a5b090bdc3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1881678849}
+    - targetCorrespondingSourceObject: {fileID: 6888587072004152404, guid: 882d04309686623498f946a5b090bdc3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1881678850}
   m_SourcePrefab: {fileID: 100100000, guid: 882d04309686623498f946a5b090bdc3, type: 3}
 --- !u!4 &1477014964 stripped
 Transform:
@@ -26897,6 +26934,51 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 878d7e0f03b4d6f409b7329916c086fd, type: 3}
+--- !u!1 &1881678845 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6888587072004152404, guid: 882d04309686623498f946a5b090bdc3, type: 3}
+  m_PrefabInstance: {fileID: 1477014963}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1881678849
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1881678845}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2eab7cc3f6f5b47ea9014cdcb6fd92ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mmTag: -1
+  tagCheckEnabled: 1
+  FlipNetworkFlagOnSend: 0
+  AllowNetworkPropagationLocally: 0
+  ReparentClonedRespondersToSelf: 1
+  Initialized: 1
+  AutoGrabAttachedResponders: 1
+  RoutingTable:
+    _list:
+    - Name: AnimatedDoor (2)
+      Responder: {fileID: 1881678850}
+      Clone: 0
+      Tags: 16
+      Level: 1
+--- !u!114 &1881678850
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1881678845}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adab6894faa1a4fb5a8584a8d7b867f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mmTag: -1
+  tagCheckEnabled: 1
 --- !u!1 &1911239944
 GameObject:
   m_ObjectHideFlags: 0
@@ -72331,4 +72413,3 @@ SceneRoots:
   - {fileID: 185905242}
   - {fileID: 402941023}
   - {fileID: 170928834}
-  - {fileID: 1133668220}

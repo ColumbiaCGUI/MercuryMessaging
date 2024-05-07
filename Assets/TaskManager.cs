@@ -60,6 +60,12 @@ public class TaskManager : NetworkBehaviour
                 false,
                 new MmMetadataBlock(((MmTag)(4)),MmLevelFilter.Child, MmActiveFilter.All, MmSelectedFilter.All, MmNetworkFilter.Network)
             );
+
+            _relayNode.MmInvoke(
+                MmMethod.SetActive,
+                false,
+                new MmMetadataBlock(((MmTag)(8)),MmLevelFilter.Child, MmActiveFilter.All, MmSelectedFilter.All, MmNetworkFilter.Network)
+            );
         }
         else if(TaskNumber ==2)
         {
@@ -80,7 +86,39 @@ public class TaskManager : NetworkBehaviour
                 true,
                 new MmMetadataBlock(((MmTag)(4)),MmLevelFilter.Child, MmActiveFilter.All, MmSelectedFilter.All, MmNetworkFilter.Network)
             );
+
+            _relayNode.MmInvoke(
+                MmMethod.SetActive,
+                false,
+                new MmMetadataBlock(((MmTag)(8)),MmLevelFilter.Child, MmActiveFilter.All, MmSelectedFilter.All, MmNetworkFilter.Network)
+            );
         }
+        // else if(TaskNumber==3)
+        // {
+        //     _relayNode.MmInvoke(
+        //         MmMethod.SetActive,
+        //         false,
+        //         new MmMetadataBlock(((MmTag)(1)),MmLevelFilter.Child, MmActiveFilter.All, MmSelectedFilter.All, MmNetworkFilter.Network)
+        //     );
+
+        //     _relayNode.MmInvoke(
+        //         MmMethod.SetActive,
+        //         false,
+        //         new MmMetadataBlock(((MmTag)(2)),MmLevelFilter.Child, MmActiveFilter.All, MmSelectedFilter.All, MmNetworkFilter.Network)
+        //     );
+
+        //     _relayNode.MmInvoke(
+        //         MmMethod.SetActive,
+        //         false,
+        //         new MmMetadataBlock(((MmTag)(4)),MmLevelFilter.Child, MmActiveFilter.All, MmSelectedFilter.All, MmNetworkFilter.Network)
+        //     );
+
+        //     _relayNode.MmInvoke(
+        //         MmMethod.SetActive,
+        //         true,
+        //         new MmMetadataBlock(((MmTag)(8)),MmLevelFilter.Child, MmActiveFilter.All, MmSelectedFilter.All, MmNetworkFilter.Network)
+        //     );
+        // }
         else
         {
             _relayNode.MmInvoke(
@@ -100,6 +138,22 @@ public class TaskManager : NetworkBehaviour
                 false,
                 new MmMetadataBlock(((MmTag)(4)),MmLevelFilter.Child, MmActiveFilter.All, MmSelectedFilter.All, MmNetworkFilter.Network)
             );
+
+            _relayNode.MmInvoke(
+                MmMethod.SetActive,
+                false,
+                new MmMetadataBlock(((MmTag)(8)),MmLevelFilter.Child, MmActiveFilter.All, MmSelectedFilter.All, MmNetworkFilter.Network)
+            );
+
+            _relayNode.MmInvoke(
+                MmMethod.SetActive,
+                false,
+                new MmMetadataBlock(((MmTag)(16)),MmLevelFilter.Child, MmActiveFilter.All, MmSelectedFilter.All, MmNetworkFilter.Network)
+            );
+
+
+
+
         }
     }
 }

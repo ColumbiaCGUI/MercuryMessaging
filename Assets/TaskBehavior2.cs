@@ -117,15 +117,16 @@ public class TaskBehavior2 : MonoBehaviour
             pot.transform.position = potShadow.transform.position;
             pot.transform.rotation = potShadow.transform.rotation;
             audioSource.Play(0);
-            if(this.transform.parent.gameObject.GetComponent<TaskManager>().wristMenu.activeSelf == false)
-            {
-                // Debug.Log("Task1 completed"
-                this.transform.parent.gameObject.GetComponent<TaskManager>().wristMenu.SetActive(true);
-            }
-            else
-            {
-                this.transform.parent.gameObject.GetComponent<TaskManager>().wristMenu.SetActive(false);
-            }
+            // if(this.transform.parent.gameObject.GetComponent<TaskManager>().wristMenu.activeSelf == false)
+            // {
+            //     // Debug.Log("Task1 completed"
+            //     this.transform.parent.gameObject.GetComponent<TaskManager>().wristMenu.SetActive(true);
+            // }
+            // else
+            // {
+            //     this.transform.parent.gameObject.GetComponent<TaskManager>().wristMenu.SetActive(false);
+            // }
+            this.transform.parent.gameObject.GetComponent<TaskManager>().wristMenu.SetActive(false);
 
             this.transform.parent.gameObject.GetComponent<TaskManager>().TaskNumber++;
         }
