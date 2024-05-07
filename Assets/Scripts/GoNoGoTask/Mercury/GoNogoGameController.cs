@@ -2,7 +2,7 @@
 using UnityEngine;
 using MercuryMessaging;
 
-public class GoNogoGameController : MonoBehaviour
+public class GoNogoGameController : MmBaseResponder
 {
     public float gameDuration = 60.0f;
     private float timer;
