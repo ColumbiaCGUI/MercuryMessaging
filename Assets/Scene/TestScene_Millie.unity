@@ -167,6 +167,126 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 460226, guid: 57abdd11cedcad8478c764228178c11f, type: 3}
   m_PrefabInstance: {fileID: 1945929779}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &170928833
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 170928834}
+  - component: {fileID: 170928836}
+  - component: {fileID: 170928835}
+  - component: {fileID: 170928837}
+  - component: {fileID: 170928838}
+  m_Layer: 0
+  m_Name: TaskManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &170928834
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 170928833}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1700962348}
+  - {fileID: 1418083528}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &170928835
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 170928833}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 2643396398
+  ObjectInterest: 1
+  Flags: 524289
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 170928837}
+  - {fileID: 170928838}
+--- !u!114 &170928836
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 170928833}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2eab7cc3f6f5b47ea9014cdcb6fd92ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mmTag: -1
+  tagCheckEnabled: 1
+  FlipNetworkFlagOnSend: 0
+  AllowNetworkPropagationLocally: 0
+  ReparentClonedRespondersToSelf: 1
+  Initialized: 0
+  AutoGrabAttachedResponders: 1
+  RoutingTable:
+    _list:
+    - Name: TaskManager
+      Responder: {fileID: 170928836}
+      Clone: 0
+      Tags: 0
+      Level: 1
+    - Name: Task1
+      Responder: {fileID: 1700962350}
+      Clone: 0
+      Tags: 1
+      Level: 2
+    - Name: Task2
+      Responder: {fileID: 1418083530}
+      Clone: 0
+      Tags: 2
+      Level: 2
+--- !u!114 &170928837
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 170928833}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 323bff89ba6c9284aabbf2d9dc76bc91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &170928838
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 170928833}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56c714d2ed4acac4b83425a5fcd6abbc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tasks:
+  - {fileID: 1700962347}
+  - {fileID: 1418083527}
+  TaskNumber: 1
 --- !u!1 &220724498
 GameObject:
   m_ObjectHideFlags: 0
@@ -180,7 +300,7 @@ GameObject:
   - component: {fileID: 220724501}
   - component: {fileID: 220724500}
   m_Layer: 0
-  m_Name: candle.task2 (3)
+  m_Name: Unllight3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -287,8 +407,8 @@ GameObject:
   - component: {fileID: 273020427}
   - component: {fileID: 273020431}
   - component: {fileID: 273020430}
-  - component: {fileID: 273020429}
-  - component: {fileID: 273020428}
+  - component: {fileID: 273020433}
+  - component: {fileID: 273020432}
   m_Layer: 0
   m_Name: fire_particle
   m_TagString: Untagged
@@ -311,46 +431,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1340679203}
   m_LocalEulerAnglesHint: {x: -90, y: 90, z: 0}
---- !u!114 &273020428
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 273020426}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: adab6894faa1a4fb5a8584a8d7b867f5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _mmTag: -1
-  tagCheckEnabled: 1
---- !u!114 &273020429
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 273020426}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2eab7cc3f6f5b47ea9014cdcb6fd92ba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _mmTag: -1
-  tagCheckEnabled: 1
-  FlipNetworkFlagOnSend: 0
-  AllowNetworkPropagationLocally: 0
-  ReparentClonedRespondersToSelf: 1
-  Initialized: 1
-  AutoGrabAttachedResponders: 1
-  RoutingTable:
-    _list:
-    - Name: fire_particle
-      Responder: {fileID: 273020428}
-      Clone: 0
-      Tags: 0
-      Level: 1
 --- !u!199 &273020430
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -5157,6 +5237,46 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
+--- !u!114 &273020432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 273020426}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adab6894faa1a4fb5a8584a8d7b867f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mmTag: -1
+  tagCheckEnabled: 1
+--- !u!114 &273020433
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 273020426}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2eab7cc3f6f5b47ea9014cdcb6fd92ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mmTag: -1
+  tagCheckEnabled: 1
+  FlipNetworkFlagOnSend: 0
+  AllowNetworkPropagationLocally: 0
+  ReparentClonedRespondersToSelf: 1
+  Initialized: 1
+  AutoGrabAttachedResponders: 1
+  RoutingTable:
+    _list:
+    - Name: fire_particle
+      Responder: {fileID: 273020432}
+      Clone: 0
+      Tags: 8
+      Level: 1
 --- !u!1001 &291406251
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5270,15 +5390,13 @@ GameObject:
   - component: {fileID: 380931476}
   - component: {fileID: 380931480}
   - component: {fileID: 380931479}
-  - component: {fileID: 380931478}
-  - component: {fileID: 380931477}
   m_Layer: 0
   m_Name: fire_particle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &380931476
 Transform:
   m_ObjectHideFlags: 0
@@ -5294,46 +5412,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 608775483}
   m_LocalEulerAnglesHint: {x: -90, y: 90, z: 0}
---- !u!114 &380931477
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 380931475}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: adab6894faa1a4fb5a8584a8d7b867f5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _mmTag: -1
-  tagCheckEnabled: 1
---- !u!114 &380931478
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 380931475}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2eab7cc3f6f5b47ea9014cdcb6fd92ba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _mmTag: -1
-  tagCheckEnabled: 1
-  FlipNetworkFlagOnSend: 0
-  AllowNetworkPropagationLocally: 0
-  ReparentClonedRespondersToSelf: 1
-  Initialized: 1
-  AutoGrabAttachedResponders: 1
-  RoutingTable:
-    _list:
-    - Name: fire_particle
-      Responder: {fileID: 380931477}
-      Clone: 0
-      Tags: 0
-      Level: 1
 --- !u!199 &380931479
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -10484,8 +10562,16 @@ GameObject:
   - component: {fileID: 608775486}
   - component: {fileID: 608775485}
   - component: {fileID: 608775484}
+  - component: {fileID: 608775490}
+  - component: {fileID: 608775489}
+  - component: {fileID: 608775488}
+  - component: {fileID: 608775487}
+  - component: {fileID: 608775493}
+  - component: {fileID: 608775492}
+  - component: {fileID: 608775491}
+  - component: {fileID: 608775494}
   m_Layer: 0
-  m_Name: candle.task2 (1)
+  m_Name: CandleLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10526,7 +10612,7 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 6a0a701acff80a7459be73abcec8129a, type: 3}
 --- !u!23 &608775485
@@ -10581,6 +10667,320 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 608775482}
   m_Mesh: {fileID: 4300000, guid: 6a0a701acff80a7459be73abcec8129a, type: 3}
+--- !u!114 &608775487
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 608775482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 2749511830
+  ObjectInterest: 1
+  Flags: 524289
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 608775493}
+  - {fileID: 608775491}
+  - {fileID: 608775494}
+--- !u!114 &608775488
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 608775482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2eab7cc3f6f5b47ea9014cdcb6fd92ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mmTag: -1
+  tagCheckEnabled: 1
+  FlipNetworkFlagOnSend: 0
+  AllowNetworkPropagationLocally: 0
+  ReparentClonedRespondersToSelf: 1
+  Initialized: 0
+  AutoGrabAttachedResponders: 1
+  RoutingTable:
+    _list:
+    - Name: candle.task2 (1)
+      Responder: {fileID: 608775488}
+      Clone: 0
+      Tags: 0
+      Level: 1
+    - Name: fire_particle
+      Responder: {fileID: 8093664398888821455}
+      Clone: 0
+      Tags: 1
+      Level: 2
+    - Name: fire_particle
+      Responder: {fileID: 846049057}
+      Clone: 0
+      Tags: 2
+      Level: 2
+    - Name: fire_particle
+      Responder: {fileID: 1118569267}
+      Clone: 0
+      Tags: 4
+      Level: 2
+    - Name: fire_particle
+      Responder: {fileID: 273020433}
+      Clone: 0
+      Tags: 8
+      Level: 2
+--- !u!114 &608775489
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 608775482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ad34abafad169848a38072baa96cdb2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_InteractionManager: {fileID: 0}
+  m_Colliders: []
+  m_InteractionLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_InteractionLayers:
+    m_Bits: 1
+  m_DistanceCalculationMode: 1
+  m_SelectMode: 0
+  m_FocusMode: 1
+  m_CustomReticle: {fileID: 0}
+  m_AllowGazeInteraction: 0
+  m_AllowGazeSelect: 0
+  m_OverrideGazeTimeToSelect: 0
+  m_GazeTimeToSelect: 0.5
+  m_OverrideTimeToAutoDeselectGaze: 0
+  m_TimeToAutoDeselectGaze: 3
+  m_AllowGazeAssistance: 0
+  m_FirstHoverEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_LastHoverExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_HoverEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_HoverExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FirstSelectEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_LastSelectExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_SelectEntered:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 608775492}
+        m_TargetAssemblyTypeName: NetworkTransfer, Assembly-CSharp
+        m_MethodName: TransferAuthority
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  m_SelectExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FirstFocusEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_LastFocusExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FocusEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FocusExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Activated:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Deactivated:
+    m_PersistentCalls:
+      m_Calls: []
+  m_StartingHoverFilters: []
+  m_StartingSelectFilters: []
+  m_StartingInteractionStrengthFilters: []
+  m_OnFirstHoverEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnLastHoverExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnHoverEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnHoverExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnSelectEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnSelectExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnSelectCanceled:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnActivate:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnDeactivate:
+    m_PersistentCalls:
+      m_Calls: []
+  m_AttachTransform: {fileID: 0}
+  m_SecondaryAttachTransform: {fileID: 0}
+  m_UseDynamicAttach: 0
+  m_MatchAttachPosition: 1
+  m_MatchAttachRotation: 1
+  m_SnapToColliderVolume: 1
+  m_ReinitializeDynamicAttachEverySingleGrab: 1
+  m_AttachEaseInTime: 0.15
+  m_MovementType: 2
+  m_VelocityDamping: 1
+  m_VelocityScale: 1
+  m_AngularVelocityDamping: 1
+  m_AngularVelocityScale: 1
+  m_TrackPosition: 1
+  m_SmoothPosition: 0
+  m_SmoothPositionAmount: 8
+  m_TightenPosition: 0.1
+  m_TrackRotation: 1
+  m_SmoothRotation: 0
+  m_SmoothRotationAmount: 8
+  m_TightenRotation: 0.1
+  m_TrackScale: 1
+  m_SmoothScale: 0
+  m_SmoothScaleAmount: 8
+  m_TightenScale: 0.1
+  m_ThrowOnDetach: 0
+  m_ThrowSmoothingDuration: 0.25
+  m_ThrowSmoothingCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  m_ThrowVelocityScale: 1.5
+  m_ThrowAngularVelocityScale: 1
+  m_ForceGravityOnDetach: 0
+  m_RetainTransformParent: 1
+  m_AttachPointCompatibilityMode: 0
+  m_StartingSingleGrabTransformers: []
+  m_StartingMultipleGrabTransformers: []
+  m_AddDefaultGrabTransformers: 1
+--- !u!54 &608775490
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 608775482}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &608775491
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 608775482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 158639473, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SyncScale: 0
+  SyncParent: 0
+  _autoAOIOverride: 1
+  DisableSharedModeInterpolation: 0
+--- !u!114 &608775492
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 608775482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6389f1f0b3117ab41b32dd224fb322d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &608775493
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 608775482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 323bff89ba6c9284aabbf2d9dc76bc91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &608775494
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 608775482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22dcb22c88d948a4c8a7a87e2ba7bc54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fireParticle1: {fileID: 4411066064438499589}
+  fireParticle2: {fileID: 846049050}
+  fireParticle3: {fileID: 1118569261}
+  fireParticle4: {fileID: 273020426}
+  fireTip: {fileID: 380931476}
 --- !u!1001 &640625555
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10988,9 +11388,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5131870692393375113}
-  - {fileID: 1148750362}
-  - {fileID: 1692844759687935611}
   - {fileID: 608775483}
+  - {fileID: 1692844759687935611}
   - {fileID: 883115330}
   - {fileID: 220724499}
   - {fileID: 1340679203}
@@ -11467,8 +11866,8 @@ GameObject:
   - component: {fileID: 846049051}
   - component: {fileID: 846049055}
   - component: {fileID: 846049054}
-  - component: {fileID: 846049053}
-  - component: {fileID: 846049052}
+  - component: {fileID: 846049057}
+  - component: {fileID: 846049056}
   m_Layer: 0
   m_Name: fire_particle
   m_TagString: Untagged
@@ -11491,46 +11890,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 883115330}
   m_LocalEulerAnglesHint: {x: -90, y: 90, z: 0}
---- !u!114 &846049052
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 846049050}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: adab6894faa1a4fb5a8584a8d7b867f5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _mmTag: -1
-  tagCheckEnabled: 1
---- !u!114 &846049053
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 846049050}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2eab7cc3f6f5b47ea9014cdcb6fd92ba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _mmTag: -1
-  tagCheckEnabled: 1
-  FlipNetworkFlagOnSend: 0
-  AllowNetworkPropagationLocally: 0
-  ReparentClonedRespondersToSelf: 1
-  Initialized: 1
-  AutoGrabAttachedResponders: 1
-  RoutingTable:
-    _list:
-    - Name: fire_particle
-      Responder: {fileID: 846049052}
-      Clone: 0
-      Tags: 0
-      Level: 1
 --- !u!199 &846049054
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -16337,6 +16696,46 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
+--- !u!114 &846049056
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 846049050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adab6894faa1a4fb5a8584a8d7b867f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mmTag: -1
+  tagCheckEnabled: 1
+--- !u!114 &846049057
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 846049050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2eab7cc3f6f5b47ea9014cdcb6fd92ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mmTag: -1
+  tagCheckEnabled: 1
+  FlipNetworkFlagOnSend: 0
+  AllowNetworkPropagationLocally: 0
+  ReparentClonedRespondersToSelf: 1
+  Initialized: 1
+  AutoGrabAttachedResponders: 1
+  RoutingTable:
+    _list:
+    - Name: fire_particle
+      Responder: {fileID: 846049056}
+      Clone: 0
+      Tags: 2
+      Level: 1
 --- !u!1 &883115329
 GameObject:
   m_ObjectHideFlags: 0
@@ -16350,7 +16749,7 @@ GameObject:
   - component: {fileID: 883115332}
   - component: {fileID: 883115331}
   m_Layer: 0
-  m_Name: candle.task2 (2)
+  m_Name: Unlight2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16804,8 +17203,8 @@ GameObject:
   - component: {fileID: 1118569262}
   - component: {fileID: 1118569266}
   - component: {fileID: 1118569265}
-  - component: {fileID: 1118569264}
-  - component: {fileID: 1118569263}
+  - component: {fileID: 1118569267}
+  - component: {fileID: 1118569268}
   m_Layer: 0
   m_Name: fire_particle
   m_TagString: Untagged
@@ -16828,46 +17227,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 220724499}
   m_LocalEulerAnglesHint: {x: -90, y: 90, z: 0}
---- !u!114 &1118569263
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1118569261}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: adab6894faa1a4fb5a8584a8d7b867f5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _mmTag: -1
-  tagCheckEnabled: 1
---- !u!114 &1118569264
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1118569261}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2eab7cc3f6f5b47ea9014cdcb6fd92ba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _mmTag: -1
-  tagCheckEnabled: 1
-  FlipNetworkFlagOnSend: 0
-  AllowNetworkPropagationLocally: 0
-  ReparentClonedRespondersToSelf: 1
-  Initialized: 1
-  AutoGrabAttachedResponders: 1
-  RoutingTable:
-    _list:
-    - Name: fire_particle
-      Responder: {fileID: 1118569263}
-      Clone: 0
-      Tags: 0
-      Level: 1
 --- !u!199 &1118569265
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -21674,46 +22033,13 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
---- !u!1 &1148750361
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1148750362}
-  - component: {fileID: 1148750364}
-  - component: {fileID: 1148750363}
-  m_Layer: 0
-  m_Name: CandleHandler
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &1148750362
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1148750361}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 753134865}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1148750363
+--- !u!114 &1118569267
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1148750361}
+  m_GameObject: {fileID: 1118569261}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2eab7cc3f6f5b47ea9014cdcb6fd92ba, type: 3}
@@ -21724,30 +22050,29 @@ MonoBehaviour:
   FlipNetworkFlagOnSend: 0
   AllowNetworkPropagationLocally: 0
   ReparentClonedRespondersToSelf: 1
-  Initialized: 0
+  Initialized: 1
   AutoGrabAttachedResponders: 1
   RoutingTable:
     _list:
-    - Name: CandleHandler
-      Responder: {fileID: 1148750364}
+    - Name: fire_particle
+      Responder: {fileID: 1118569268}
       Clone: 0
-      Tags: 0
+      Tags: 4
       Level: 1
---- !u!114 &1148750364
+--- !u!114 &1118569268
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1148750361}
+  m_GameObject: {fileID: 1118569261}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b1c13f0d4427aa749ae196498b782434, type: 3}
+  m_Script: {fileID: 11500000, guid: adab6894faa1a4fb5a8584a8d7b867f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _mmTag: -1
   tagCheckEnabled: 1
-  candleAction: {fileID: -4928836406555347514, guid: c348712bda248c246b8c49b3db54643f, type: 3}
 --- !u!1 &1164471571
 GameObject:
   m_ObjectHideFlags: 0
@@ -22480,7 +22805,7 @@ GameObject:
   - component: {fileID: 1340679205}
   - component: {fileID: 1340679204}
   m_Layer: 0
-  m_Name: candle.task2 (4)
+  m_Name: Unlight4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -22808,6 +23133,93 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1370034642}
   m_CullTransparentMesh: 1
+--- !u!1 &1418083527
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1418083528}
+  - component: {fileID: 1418083530}
+  - component: {fileID: 1418083529}
+  - component: {fileID: 1418083531}
+  m_Layer: 0
+  m_Name: Task2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1418083528
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1418083527}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 170928834}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1418083529
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1418083527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adab6894faa1a4fb5a8584a8d7b867f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mmTag: -1
+  tagCheckEnabled: 1
+--- !u!114 &1418083530
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1418083527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2eab7cc3f6f5b47ea9014cdcb6fd92ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mmTag: -1
+  tagCheckEnabled: 1
+  FlipNetworkFlagOnSend: 0
+  AllowNetworkPropagationLocally: 0
+  ReparentClonedRespondersToSelf: 1
+  Initialized: 0
+  AutoGrabAttachedResponders: 1
+  RoutingTable:
+    _list:
+    - Name: Task2
+      Responder: {fileID: 1418083529}
+      Clone: 0
+      Tags: 2
+      Level: 1
+--- !u!114 &1418083531
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1418083527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aac49cb73d6539440beb9968931bffff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  taskText: {fileID: 1596694724}
 --- !u!1001 &1477014963
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22819,6 +23231,10 @@ PrefabInstance:
     - target: {fileID: 1258560044307105069, guid: 882d04309686623498f946a5b090bdc3, type: 3}
       propertyPath: m_Layer
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3029161385514851784, guid: 882d04309686623498f946a5b090bdc3, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3552706248279004164, guid: 882d04309686623498f946a5b090bdc3, type: 3}
       propertyPath: m_Layer
@@ -23966,8 +24382,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1700962348}
+  - component: {fileID: 1700962350}
+  - component: {fileID: 1700962349}
+  - component: {fileID: 1700962351}
   m_Layer: 0
-  m_Name: TaskManager
+  m_Name: Task1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23981,13 +24400,72 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1700962347}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.196503, y: -0.8420851, z: -0.74035716}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 170928834}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1700962349
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1700962347}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adab6894faa1a4fb5a8584a8d7b867f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mmTag: -1
+  tagCheckEnabled: 1
+--- !u!114 &1700962350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1700962347}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2eab7cc3f6f5b47ea9014cdcb6fd92ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mmTag: -1
+  tagCheckEnabled: 1
+  FlipNetworkFlagOnSend: 0
+  AllowNetworkPropagationLocally: 0
+  ReparentClonedRespondersToSelf: 1
+  Initialized: 1
+  AutoGrabAttachedResponders: 1
+  RoutingTable:
+    _list:
+    - Name: Task1
+      Responder: {fileID: 1700962349}
+      Clone: 0
+      Tags: 1
+      Level: 1
+--- !u!114 &1700962351
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1700962347}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8a1f2e218907e343930a129dd4824c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  candleLight: {fileID: 608775482}
+  candles:
+  - {fileID: 4411066064438499589}
+  - {fileID: 846049050}
+  - {fileID: 1118569261}
+  - {fileID: 273020426}
+  taskText: {fileID: 1596694724}
 --- !u!1001 &1703978777
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -29255,7 +29733,7 @@ GameObject:
   - component: {fileID: 1692844759690121629}
   - component: {fileID: 1692844759693940663}
   m_Layer: 0
-  m_Name: candle.task2
+  m_Name: UnlightCandle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -58011,7 +58489,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &6935977384855632346
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -58049,7 +58527,7 @@ MonoBehaviour:
   FlipNetworkFlagOnSend: 0
   AllowNetworkPropagationLocally: 0
   ReparentClonedRespondersToSelf: 1
-  Initialized: 1
+  Initialized: 0
   AutoGrabAttachedResponders: 1
   RoutingTable:
     _list:
@@ -58128,7 +58606,19 @@ MonoBehaviour:
         m_CallState: 2
   m_SelectExited:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6935977384855632353}
+        m_TargetAssemblyTypeName: NetworkTransfer, Assembly-CSharp
+        m_MethodName: ResetAuthority
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_FirstFocusEntered:
     m_PersistentCalls:
       m_Calls: []
@@ -58266,7 +58756,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22dcb22c88d948a4c8a7a87e2ba7bc54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fireParticle: {fileID: 4411066064438499589}
+  fireParticle1: {fileID: 0}
+  fireParticle2: {fileID: 0}
+  fireParticle3: {fileID: 0}
+  fireParticle4: {fileID: 0}
+  fireTip: {fileID: 0}
 --- !u!114 &6935977384855632351
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -65986,7 +66480,7 @@ MonoBehaviour:
     - Name: fire_particle
       Responder: {fileID: 8093664398888821454}
       Clone: 0
-      Tags: 0
+      Tags: 1
       Level: 1
 --- !u!4 &8101699158570692623
 Transform:
@@ -67131,7 +67625,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8454395720583061780
 Transform:
   m_ObjectHideFlags: 0
@@ -68945,7 +69439,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Welcome!
+  m_text: 'Welcome!
+
+    Wait to Join'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -69247,7 +69743,7 @@ SceneRoots:
   - {fileID: 2146029315}
   - {fileID: 50934905}
   - {fileID: 2047930297}
-  - {fileID: 1700962348}
   - {fileID: 957343770}
   - {fileID: 7966746882566509668}
   - {fileID: 402941023}
+  - {fileID: 170928834}

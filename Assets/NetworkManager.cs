@@ -20,6 +20,8 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     public GameObject handCanvas;
 
     public NetworkRunner Runner { get; private set; }
+
+    private bool GameStarted = false;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -37,7 +39,23 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     {
         // fixing the server to a perticular region
         Fusion.Photon.Realtime.PhotonAppSettings.Global.AppSettings.FixedRegion = "asia";
+        GameStarted = false;
 
+    }
+
+    private void Update()
+    {
+        if(!GameStarted)
+        {
+            GameStarted = true;
+            StartCoroutine(StartGame());
+        }
+    }
+
+    IEnumerator StartGame()
+    {
+        yield return new WaitForSeconds(3);
+        JoinSession("1234");
     }
 
     public async void CreateSession(string roomCode)

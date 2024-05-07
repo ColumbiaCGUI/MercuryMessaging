@@ -20,4 +20,12 @@ public class NetworkTransfer : MonoBehaviour
             networkObject.RequestStateAuthority();
         }
     }
+
+    public void ResetAuthority()
+    {
+        if(networkObject != null && networkObject.Runner !=null)
+        {
+            networkObject.ReleaseStateAuthority();
+        }
+    }
 }
