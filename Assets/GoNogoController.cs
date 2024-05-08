@@ -143,6 +143,8 @@ public class GoNogoController : MmBaseResponder
         advanceTrial = true;
         isButtonPressed = false;
         sphere.GetComponent<BallFlash>().SetShow(false);
+
+        this.transform.parent.gameObject.GetComponent<TaskManager>().TaskIncrement(Text);
     }
     
     private void OnTriggerEnter(Collider other)
