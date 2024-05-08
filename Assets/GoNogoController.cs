@@ -26,6 +26,8 @@ public class GoNogoController : MmBaseResponder
     public float trialDuration;
     public float interTrialInterval;
 
+    private string Text = "Task Completed!";
+
     [SerializeField] private Queue<int> goNoGoQueue = new Queue<int>();
 
     public bool isInTrial;
@@ -116,6 +118,11 @@ public class GoNogoController : MmBaseResponder
                 
             EndTrial();
             }
+        }
+
+        if(scores>=8)
+        {
+            this.transform.parent.gameObject.GetComponent<TaskManager>().TaskIncrement(Text);
         }
     }
 
