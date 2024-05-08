@@ -122,7 +122,7 @@ public class GoNogoController : MmBaseResponder
 
         if(scores>=8)
         {
-            this.transform.parent.gameObject.GetComponent<TaskManager>().TaskIncrement(Text);
+            this.transform.parent.gameObject.GetComponent<TaskManager>().TaskIncrement();
         }
     }
 
@@ -144,7 +144,7 @@ public class GoNogoController : MmBaseResponder
         isButtonPressed = false;
         sphere.GetComponent<BallFlash>().SetShow(false);
 
-        this.transform.parent.gameObject.GetComponent<TaskManager>().TaskIncrement(Text);
+        this.transform.parent.gameObject.GetComponent<TaskManager>().TaskIncrement();
     }
     
     private void OnTriggerEnter(Collider other)

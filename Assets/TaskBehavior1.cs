@@ -8,7 +8,7 @@ using UnityEngine.XR.Interaction.Toolkit;
 using Fusion;
 using MercuryMessaging;
 
-public class TaskBehavior1 : NetworkBehaviour
+public class TaskBehavior1 : MonoBehaviour
 {
     // candle light
     public GameObject candleLight;
@@ -27,7 +27,7 @@ public class TaskBehavior1 : NetworkBehaviour
     }
 
     // Update is called once per frame
-    void FixedNetworkUpdate()
+    void Update()
     {
         bool allCandlesLit = true;
         foreach(GameObject candle in candles)
@@ -40,7 +40,20 @@ public class TaskBehavior1 : NetworkBehaviour
         }
         if(allCandlesLit)
         {
-            this.transform.parent.gameObject.GetComponent<TaskManager>().TaskIncrement(Text);
+            this.transform.parent.gameObject.GetComponent<TaskManager>().taskText.text = Text;
+
+            if(this.transform.parent.gameObject.GetComponent<TaskManager>().wristMenu.activeSelf)
+            {
+                this.transform.parent.gameObject.GetComponent<TaskManager>().wristMenu.SetActive(false);
+            }
+            else
+            {
+                this.transform.parent.gameObject.GetComponent<TaskManager>().wristMenu.SetActive(true);
+            }
+
+            this.transform.parent.gameObject.GetComponent<TaskManager>().TaskNumber+=1;
+            // Debug.Log("TaskNumber: "+TaskNumber);
+            this.transform.parent.gameObject.GetComponent<TaskManager>().TaskIncrement();
         }
     }
 }

@@ -167,21 +167,8 @@ public class TaskManager : NetworkBehaviour
         // }
     }
 
-    public void TaskIncrement(string TaskText)
+    public void TaskIncrement()
     {
-        taskText.text = TaskText;
-
-        if(wristMenu.activeSelf)
-        {
-            wristMenu.SetActive(false);
-        }
-        else
-        {
-            wristMenu.SetActive(true);
-        }
-
-        TaskNumber+=1;
-
         _relayNode.MmInvoke(
             MmMethod.SetActive,
             false,

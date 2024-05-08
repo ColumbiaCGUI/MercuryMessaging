@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine.XR.Interaction.Toolkit;
 
 using Fusion;
-public class TaskBehavior2 : NetworkBehaviour
+public class TaskBehavior2 : MonoBehaviour
 {
     public GameObject pot;
 
@@ -31,7 +31,7 @@ public class TaskBehavior2 : NetworkBehaviour
     }
 
     // Update is called once per frame
-    void FixedNetworkUpdate()
+    void Update()
     {
         // var leftRayTarget = leftRay.selectTarget;
         // var rightRayTarget = rightRay.selectTarget;
@@ -130,7 +130,22 @@ public class TaskBehavior2 : NetworkBehaviour
             // this.transform.parent.gameObject.GetComponent<TaskManager>().wristMenu.SetActive(false);
 
             // this.transform.parent.gameObject.GetComponent<TaskManager>().TaskNumber++;
-            this.transform.parent.gameObject.GetComponent<TaskManager>().TaskIncrement(Text);
+            // this.transform.parent.gameObject.GetComponent<TaskManager>().TaskIncrement(Text);
+
+            this.transform.parent.gameObject.GetComponent<TaskManager>().taskText.text = Text;
+
+            if(this.transform.parent.gameObject.GetComponent<TaskManager>().wristMenu.activeSelf)
+            {
+                this.transform.parent.gameObject.GetComponent<TaskManager>().wristMenu.SetActive(false);
+            }
+            else
+            {
+                this.transform.parent.gameObject.GetComponent<TaskManager>().wristMenu.SetActive(true);
+            }
+
+            this.transform.parent.gameObject.GetComponent<TaskManager>().TaskNumber+=1;
+            // Debug.Log("TaskNumber: "+TaskNumber);
+            this.transform.parent.gameObject.GetComponent<TaskManager>().TaskIncrement();
         }
         else
         {
