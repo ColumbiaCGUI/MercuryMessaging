@@ -9,7 +9,7 @@ using UnityEngine.InputSystem;
 public class GoNoGoButtonHandler : MonoBehaviour
 {
     [SerializeField] private InputActionReference candleAction;
-    [SerializeField] private Task4GameController gameController;
+    [SerializeField] private GoNogoController gameController;
     void Awake()
     {
         // Enable the action

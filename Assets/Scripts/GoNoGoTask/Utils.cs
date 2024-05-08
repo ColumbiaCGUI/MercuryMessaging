@@ -361,16 +361,8 @@ public static class Utils
         List<T> list = new List<T>(originalQueue);
 
         // Shuffle the list using Fisher-Yates algorithm
-        Random rng = new Random();
-        int n = list.Count;
-        while (n > 1)
-        {
-            n--;
-            int k = rng.Next(n + 1);
-            T value = list[k];
-            list[k] = list[n];
-            list[n] = value;
-        }
+        
+        list.ShuffleFisherYates();
 
         // Convert the list back to a queue
         return new Queue<T>(list);

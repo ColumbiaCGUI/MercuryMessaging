@@ -1,10 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using Fusion;
+using MercuryMessaging;
 using UnityEngine;
+using UnityEngine.Serialization;
 
+public enum GoNogoMethods
+{
+    RecordTrial = 100
+}
 
-public class Task4GameController : MonoBehaviour
+public enum GoNogoMsgTypes
+{
+    Trial = 1100
+}
+
+public class GoNogoController : MmBaseResponder
 {
     public GameObject sphere;
     public GameObject instructionCanvas;
@@ -19,12 +30,30 @@ public class Task4GameController : MonoBehaviour
 
     public bool isInTrial;
     public float trialTimer;
-    public int curTrial;
+    [FormerlySerializedAs("curTrial")] public int curTrialType;
     public bool advanceTrial;
     
     public bool isButtonPressed;
 
     public int scores;
+    public int trialCounter;
+    
+    public DataRecorder dataRecorder;
+    
+    public override void MmInvoke(MmMessage message)
+    {
+        var type = message.MmMethod;
+
+        switch (type)
+        {
+            case ((MmMethod) GoNogoMethods.RecordTrial):
+                break;
+            default:
+                base.MmInvoke(message);
+                break;
+        }
+    }
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -36,6 +65,7 @@ public class Task4GameController : MonoBehaviour
         if (goNoGoQueue.Count == 0 && isInTrial)
         {
             ResetGame();
+            dataRecorder.SaveData();
         }
         if (isInTrial)
         {
@@ -43,13 +73,13 @@ public class Task4GameController : MonoBehaviour
 
             if (advanceTrial)
             {
-                curTrial = goNoGoQueue.Dequeue();
+                curTrialType = goNoGoQueue.Dequeue();
                 advanceTrial = false;
             }
 
             if (trialTimer < trialDuration)
             {
-                if (curTrial == 1)
+                if (curTrialType == 1)
                 {
                     sphere.GetComponent<BallFlash>().SetShow(true);
                     sphere.GetComponent<BallFlash>().SetColor(new Color(0, 1, 0));
@@ -66,9 +96,7 @@ public class Task4GameController : MonoBehaviour
             }
             else
             {
-                trialTimer = 0;
-                advanceTrial = true;
-                isButtonPressed = false;
+                EndTrial();
             }
             
             // if button pressed any time during a trial, advance to the next
@@ -77,7 +105,7 @@ public class Task4GameController : MonoBehaviour
                 // this if block is triggered when the button is pressed during the trial
                 // TODO you can record the button press time here, just use trialTimer
                 
-                if (curTrial == 1)
+                if (curTrialType == 1)
                 {
                     scores++;
                 }
@@ -86,12 +114,28 @@ public class Task4GameController : MonoBehaviour
                     scores--;
                 }
                 
-                trialTimer = 0;
-                advanceTrial = true;
-                isButtonPressed = false;
-                sphere.GetComponent<BallFlash>().SetShow(false);
+            EndTrial();
             }
         }
+    }
+
+    private void EndTrial()
+    {
+        if (!isButtonPressed)
+        {
+            trialTimer = -1f;
+        }
+        var trialData = new GoNogoTrialData(trialCounter, curTrialType, trialTimer, scores);
+        GetRelayNode().MmInvoke( 
+            new GoNoGoMessage(trialData,
+                (MmMethod)GoNogoMethods.RecordTrial, 
+                (MmMessageType)GoNogoMsgTypes.Trial, 
+                new MmMetadataBlock(MmLevelFilter.Child)));
+        
+        trialTimer = 0;
+        advanceTrial = true;
+        isButtonPressed = false;
+        sphere.GetComponent<BallFlash>().SetShow(false);
     }
     
     private void OnTriggerEnter(Collider other)
@@ -116,7 +160,7 @@ public class Task4GameController : MonoBehaviour
         {
             goNoGoQueue.Enqueue(0);
         }
-        Utils.ShuffleQueue(goNoGoQueue);
+        goNoGoQueue = Utils.ShuffleQueue(goNoGoQueue);
         isInTrial = true;
     }
 
@@ -134,5 +178,6 @@ public class Task4GameController : MonoBehaviour
         trialTimer = 0;
         isButtonPressed = false;
         scores = 0;
+        trialCounter = 0;
     }
 }
