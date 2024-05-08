@@ -8,9 +8,8 @@ public class TaskBehavior2 : MonoBehaviour
     public GameObject pot;
 
     public GameObject potShadow;
-    public TextMeshProUGUI taskText;
 
-    private string Text= "Task2\n Snap the pot";
+    private string Text= "Task3\n Go-no-go task";
 
     private bool rotationCheck = false;
 
@@ -27,55 +26,54 @@ public class TaskBehavior2 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        taskText.text = Text;
     }
 
     // Update is called once per frame
     void Update()
     {
-        taskText.text = Text;
-        var leftRayTarget = leftRay.selectTarget;
-        var rightRayTarget = rightRay.selectTarget;
-        var leftHandTarget = leftHand.selectTarget;
-        var rightHandTarget = rightHand.selectTarget;
+        // var leftRayTarget = leftRay.selectTarget;
+        // var rightRayTarget = rightRay.selectTarget;
+        // var leftHandTarget = leftHand.selectTarget;
+        // var rightHandTarget = rightHand.selectTarget;
 
-        bool leftRaySelect = false;
-        bool rightRaySelect = false;
-        bool leftHandSelect = false;
-        bool rightHandSelect = false;
+        // bool leftRaySelect = false;
+        // bool rightRaySelect = false;
+        // bool leftHandSelect = false;
+        // bool rightHandSelect = false;
 
-        if(leftRayTarget != null)
-        {
-            GameObject target = leftRayTarget.gameObject;
-            if(target == potShadow)
-            {
-                leftRaySelect = true;
-            }
-        }
-        if(rightRayTarget != null)
-        {
-            GameObject target = rightRayTarget.gameObject;
-            if(target == potShadow)
-            {
-                rightRaySelect = true;
-            }
-        }
-        if(leftHandTarget != null)
-        {
-            GameObject target = leftHandTarget.gameObject;
-            if(target == potShadow)
-            {
-                leftHandSelect = true;
-            }
-        }
-        if(rightHandTarget != null)
-        {
-            GameObject target = rightHandTarget.gameObject;
-            if(target == potShadow)
-            {
-                rightHandSelect = true;
-            }
-        }
+        // if(leftRayTarget != null)
+        // {
+        //     GameObject target = leftRayTarget.gameObject;
+        //     if(target == potShadow)
+        //     {
+        //         leftRaySelect = true;
+        //     }
+        // }
+        // if(rightRayTarget != null)
+        // {
+        //     GameObject target = rightRayTarget.gameObject;
+        //     if(target == potShadow)
+        //     {
+        //         rightRaySelect = true;
+        //     }
+        // }
+        // if(leftHandTarget != null)
+        // {
+        //     GameObject target = leftHandTarget.gameObject;
+        //     if(target == potShadow)
+        //     {
+        //         leftHandSelect = true;
+        //     }
+        // }
+        // if(rightHandTarget != null)
+        // {
+        //     GameObject target = rightHandTarget.gameObject;
+        //     if(target == potShadow)
+        //     {
+        //         rightHandSelect = true;
+        //     }
+        // }
+        potShadow.SetActive(true);
 
         rotationCheck =false;
         positionCheck = false;
@@ -96,23 +94,24 @@ public class TaskBehavior2 : MonoBehaviour
 
         if(rotationCheck && positionCheck)
         {   
-            if(leftRaySelect)
-            {
-                leftRay.EndManualInteraction();
-            }
-            if(rightRaySelect)
-            {
-                rightRay.EndManualInteraction();
-            }
-            if(leftHandSelect)
-            {
-                leftHand.EndManualInteraction();
-            }
-            if(rightHandSelect)
-            {
-                rightHand.EndManualInteraction();
-            }
+            // if(leftRaySelect)
+            // {
+            //     leftRay.EndManualInteraction();
+            // }
+            // if(rightRaySelect)
+            // {
+            //     rightRay.EndManualInteraction();
+            // }
+            // if(leftHandSelect)
+            // {
+            //     leftHand.EndManualInteraction();
+            // }
+            // if(rightHandSelect)
+            // {
+            //     rightHand.EndManualInteraction();
+            // }
             pot.GetComponent<XRGrabInteractable>().enabled = false;
+            potShadow.SetActive(false);
 
             pot.transform.position = potShadow.transform.position;
             pot.transform.rotation = potShadow.transform.rotation;
@@ -126,9 +125,10 @@ public class TaskBehavior2 : MonoBehaviour
             // {
             //     this.transform.parent.gameObject.GetComponent<TaskManager>().wristMenu.SetActive(false);
             // }
-            this.transform.parent.gameObject.GetComponent<TaskManager>().wristMenu.SetActive(false);
+            // this.transform.parent.gameObject.GetComponent<TaskManager>().wristMenu.SetActive(false);
 
-            this.transform.parent.gameObject.GetComponent<TaskManager>().TaskNumber++;
+            // this.transform.parent.gameObject.GetComponent<TaskManager>().TaskNumber++;
+            this.transform.parent.gameObject.GetComponent<TaskManager>().TaskIncrement(Text);
         }
         else
         {

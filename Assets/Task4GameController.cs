@@ -15,6 +15,8 @@ public class Task4GameController : MonoBehaviour
     public float trialDuration;
     public float interTrialInterval;
 
+    private string Text = "Task Completed!";
+
     [SerializeField] private Queue<int> goNoGoQueue = new Queue<int>();
 
     public bool isInTrial;
@@ -91,6 +93,11 @@ public class Task4GameController : MonoBehaviour
                 isButtonPressed = false;
                 sphere.GetComponent<BallFlash>().SetShow(false);
             }
+        }
+
+        if(scores>=8)
+        {
+            this.transform.parent.gameObject.GetComponent<TaskManager>().TaskIncrement(Text);
         }
     }
     
