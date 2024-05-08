@@ -261,6 +261,11 @@ MonoBehaviour:
       Clone: 0
       Tags: 2
       Level: 2
+    - Name: Task4
+      Responder: {fileID: 1133668221}
+      Clone: 0
+      Tags: 4
+      Level: 2
     - Name: EndTask
       Responder: {fileID: 527405924}
       Clone: 0
@@ -23439,7 +23444,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1133668220}
   - component: {fileID: 1133668219}
-  - component: {fileID: 1133668217}
   - component: {fileID: 1133668221}
   - component: {fileID: 1133668222}
   - component: {fileID: 1133668223}
@@ -23450,18 +23454,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
---- !u!114 &1133668217
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1133668216}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 960fb967653341a4bae5d1bc0b8de0e9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!65 &1133668219
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -23521,15 +23513,15 @@ MonoBehaviour:
   AutoGrabAttachedResponders: 1
   RoutingTable:
     _list:
-    - Name: Proximity
-      Responder: {fileID: 0}
-      Clone: 0
-      Tags: 0
-      Level: 1
     - Name: Task4
       Responder: {fileID: 1133668223}
       Clone: 0
       Tags: 4
+      Level: 1
+    - Name: Task4
+      Responder: {fileID: 1133668222}
+      Clone: 0
+      Tags: 0
       Level: 1
 --- !u!114 &1133668222
 MonoBehaviour:
