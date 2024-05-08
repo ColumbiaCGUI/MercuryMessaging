@@ -180,19 +180,21 @@ public class TaskManager : NetworkBehaviour
             wristMenu.SetActive(true);
         }
 
+        TaskNumber+=1;
+
         _relayNode.MmInvoke(
             MmMethod.SetActive,
             false,
-            new MmMetadataBlock(((MmTag)(Math.Pow(2, TaskNumber-1))),MmLevelFilter.Child, MmActiveFilter.All, MmSelectedFilter.All, MmNetworkFilter.Network)
+            new MmMetadataBlock(((MmTag)(Math.Pow(2, TaskNumber-2))),MmLevelFilter.Child, MmActiveFilter.All, MmSelectedFilter.All, MmNetworkFilter.Network)
         );
         
         _relayNode.MmInvoke(
             MmMethod.SetActive,
             true,
-            new MmMetadataBlock(((MmTag)(Math.Pow(2, TaskNumber))),MmLevelFilter.Child, MmActiveFilter.All, MmSelectedFilter.All, MmNetworkFilter.Network)
+            new MmMetadataBlock(((MmTag)(Math.Pow(2, TaskNumber-1))),MmLevelFilter.Child, MmActiveFilter.All, MmSelectedFilter.All, MmNetworkFilter.Network)
         );
 
-        TaskNumber+=1;
+        
     }
 
 }

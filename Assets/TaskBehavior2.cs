@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.XR.Interaction.Toolkit;
-public class TaskBehavior2 : MonoBehaviour
+
+using Fusion;
+public class TaskBehavior2 : NetworkBehaviour
 {
     public GameObject pot;
 
@@ -29,7 +31,7 @@ public class TaskBehavior2 : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedNetworkUpdate()
     {
         // var leftRayTarget = leftRay.selectTarget;
         // var rightRayTarget = rightRay.selectTarget;

@@ -62,7 +62,7 @@ public class GoNogoController : MmBaseResponder
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedNetworkUpdate()
     {
         if (goNoGoQueue.Count == 0 && isInTrial)
         {

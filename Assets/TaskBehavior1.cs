@@ -8,7 +8,7 @@ using UnityEngine.XR.Interaction.Toolkit;
 using Fusion;
 using MercuryMessaging;
 
-public class TaskBehavior1 : MonoBehaviour
+public class TaskBehavior1 : NetworkBehaviour
 {
     // candle light
     public GameObject candleLight;
@@ -27,7 +27,7 @@ public class TaskBehavior1 : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedNetworkUpdate()
     {
         bool allCandlesLit = true;
         foreach(GameObject candle in candles)
