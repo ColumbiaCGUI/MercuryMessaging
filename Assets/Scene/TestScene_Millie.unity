@@ -264,12 +264,12 @@ MonoBehaviour:
     - Name: Task4
       Responder: {fileID: 1133668221}
       Clone: 0
-      Tags: 4
+      Tags: 0
       Level: 2
     - Name: EndTask
       Responder: {fileID: 527405924}
       Clone: 0
-      Tags: 8
+      Tags: 4
       Level: 2
 --- !u!114 &170928837
 MonoBehaviour:
@@ -23516,12 +23516,12 @@ MonoBehaviour:
     - Name: Task4
       Responder: {fileID: 1133668223}
       Clone: 0
-      Tags: 8
+      Tags: 0
       Level: 1
     - Name: Task4
       Responder: {fileID: 1133668222}
       Clone: 0
-      Tags: 8
+      Tags: 0
       Level: 1
 --- !u!114 &1133668222
 MonoBehaviour:
