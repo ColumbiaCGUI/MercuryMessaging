@@ -62,7 +62,7 @@ public class GoNogoController : MmBaseResponder
     }
 
     // Update is called once per frame
-    void FixedNetworkUpdate()
+    void Update()
     {
         if (goNoGoQueue.Count == 0 && isInTrial)
         {
@@ -122,7 +122,21 @@ public class GoNogoController : MmBaseResponder
 
         if(scores>=8)
         {
+            this.transform.parent.gameObject.GetComponent<TaskManager>().taskText.text = Text;
+
+            if(this.transform.parent.gameObject.GetComponent<TaskManager>().wristMenu.activeSelf)
+            {
+                this.transform.parent.gameObject.GetComponent<TaskManager>().wristMenu.SetActive(false);
+            }
+            else
+            {
+                this.transform.parent.gameObject.GetComponent<TaskManager>().wristMenu.SetActive(true);
+            }
+
+            this.transform.parent.gameObject.GetComponent<TaskManager>().TaskNumber+=1;
+            // Debug.Log("TaskNumber: "+TaskNumber);
             this.transform.parent.gameObject.GetComponent<TaskManager>().TaskIncrement();
+
         }
     }
 
