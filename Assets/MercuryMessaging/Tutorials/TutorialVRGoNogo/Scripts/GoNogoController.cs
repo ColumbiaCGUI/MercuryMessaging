@@ -42,7 +42,7 @@ public class GoNogoController : MmBaseResponder
     [SerializeField] private float trialTimer;
     [SerializeField] private int curTrialType;
     [SerializeField] private bool advanceTrial;
-    [SerializeField] private bool isButtonPressed;
+    [SerializeField] public bool isButtonPressed;
     [SerializeField] private int scores;
     [SerializeField] private int trialCounter;
     
