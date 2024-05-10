@@ -16,31 +16,35 @@ public enum GoNogoMsgTypes
 }
 
 public class GoNogoController : MmBaseResponder
-{
+{   
+    [Header("In-game Objects, do not change")]
     public GameObject sphere;
     public GameObject instructionCanvas;
     public TMPro.TextMeshProUGUI scoreText;
+    public DataRecorder dataRecorder;
 
+    [Header("Parameters for the go/no-go experiment, you can edit in Unity Editor")]
+    [Tooltip("Number of trials (i.e., sphere flashes) in the experiment")]
     public int numTrials;
+    [Tooltip("Percentage of 'go' trials in the experiment")]
     public float goPercentage;
+    [Tooltip("Duration of how long the stimulus stays on screen")]
     public float trialDuration;
+    [Tooltip("Duration of the interval between trials")]
     public float interTrialInterval;
 
     private string Text = "Task Completed!";
 
-    [SerializeField] private Queue<int> goNoGoQueue = new Queue<int>();
-
-    public bool isInTrial;
-    public float trialTimer;
-    [FormerlySerializedAs("curTrial")] public int curTrialType;
-    public bool advanceTrial;
+    private Queue<int> goNoGoQueue = new Queue<int>();
     
-    public bool isButtonPressed;
-
-    public int scores;
-    public int trialCounter;
-    
-    public DataRecorder dataRecorder;
+    [Header("In-game Variables that change during a play, they are visible for debugging, do not change them manually unless you know what you are doing")]
+    [SerializeField] private bool isInTrial;
+    [SerializeField] private float trialTimer;
+    [SerializeField] private int curTrialType;
+    [SerializeField] private bool advanceTrial;
+    [SerializeField] private bool isButtonPressed;
+    [SerializeField] private int scores;
+    [SerializeField] private int trialCounter;
     
     public override void MmInvoke(MmMessage message)
     {
@@ -84,12 +88,12 @@ public class GoNogoController : MmBaseResponder
                 if (curTrialType == 1)
                 {
                     sphere.GetComponent<BallFlash>().SetShow(true);
-                    sphere.GetComponent<BallFlash>().SetColor(new Color(0, 1, 0));
+                    sphere.GetComponent<BallFlash>().SetColor(new Color(0, 1, 1));
                 }
                 else
                 {
                     sphere.GetComponent<BallFlash>().SetShow(true);
-                    sphere.GetComponent<BallFlash>().SetColor(new Color(1, 0, 0));
+                    sphere.GetComponent<BallFlash>().SetColor(new Color(1, 1, 0));
                 }
             }
             else if (trialTimer <= trialDuration + interTrialInterval)
@@ -120,24 +124,27 @@ public class GoNogoController : MmBaseResponder
             }
         }
 
-        if(scores>=8)
+        if (transform.parent != null)
         {
-            this.transform.parent.gameObject.GetComponent<TaskManager>().taskText.text = Text;
-
-            if(this.transform.parent.gameObject.GetComponent<TaskManager>().wristMenu.activeSelf)
+            if(scores>=8)
             {
-                this.transform.parent.gameObject.GetComponent<TaskManager>().wristMenu.SetActive(false);
-            }
-            else
-            {
-                this.transform.parent.gameObject.GetComponent<TaskManager>().wristMenu.SetActive(true);
-            }
+                this.transform.parent.gameObject.GetComponent<TaskManager>().taskText.text = Text;
 
-            this.transform.parent.gameObject.GetComponent<TaskManager>().TaskNumber+=1;
-            // Debug.Log("TaskNumber: "+TaskNumber);
-            this.transform.parent.gameObject.GetComponent<TaskManager>().TaskIncrement();
-
+                if(this.transform.parent.gameObject.GetComponent<TaskManager>().wristMenu.activeSelf)
+                {
+                    this.transform.parent.gameObject.GetComponent<TaskManager>().wristMenu.SetActive(false);
+                }
+                else
+                {
+                    this.transform.parent.gameObject.GetComponent<TaskManager>().wristMenu.SetActive(true);
+                }
+            
+                this.transform.parent.gameObject.GetComponent<TaskManager>().TaskNumber+=1;
+                // Debug.Log("TaskNumber: "+TaskNumber);
+                this.transform.parent.gameObject.GetComponent<TaskManager>().TaskIncrement();
+            }
         }
+
     }
 
     private void EndTrial()
@@ -157,8 +164,11 @@ public class GoNogoController : MmBaseResponder
         advanceTrial = true;
         isButtonPressed = false;
         sphere.GetComponent<BallFlash>().SetShow(false);
-
-        this.transform.parent.gameObject.GetComponent<TaskManager>().TaskIncrement();
+        
+        if (transform.parent != null)
+        {
+            transform.parent.gameObject.GetComponent<TaskManager>().TaskIncrement();
+        }
     }
     
     private void OnTriggerEnter(Collider other)
