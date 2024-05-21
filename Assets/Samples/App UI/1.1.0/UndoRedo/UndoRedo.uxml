@@ -1,0 +1,48 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:appui="Unity.AppUI.UI" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+
+    <appui:Panel name="root-panel">
+        
+        <ui:VisualElement class="undoredo-panel"> 
+
+            <appui:ActionGroup justified="true" style="flex-grow: 0">
+
+                <appui:ActionButton label="Undo" name="undoButton" />
+
+                <appui:ActionButton label="Redo" style="margin-right: 0" name="redoButton" />
+
+            </appui:ActionGroup>
+            
+        </ui:VisualElement>
+        
+        
+        <ui:VisualElement class="undoredo-panel">
+            
+            <appui:InputLabel label="Text">
+                <appui:TextField name="textInput" value="Result" />
+            </appui:InputLabel>
+            
+            <appui:InputLabel label="Color">
+                <appui:ColorField name="colorInput" />
+            </appui:InputLabel>
+            
+        </ui:VisualElement>
+
+        <ui:VisualElement class="undoredo-panel">
+            
+            <appui:Text name="result" text="Result" />
+            
+        </ui:VisualElement>
+
+        <ui:VisualElement class="undoredo-panel" style="flex-grow: 1">
+            
+            <appui:Heading text="History" size="S" />
+            
+            <ui:ListView name="history" style="flex-grow: 1">
+                
+            </ui:ListView>
+            
+        </ui:VisualElement>
+        
+    </appui:Panel>
+
+</ui:UXML>

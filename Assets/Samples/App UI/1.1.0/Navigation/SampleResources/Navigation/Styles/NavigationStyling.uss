@@ -1,0 +1,49 @@
+.appui-navigation-screen .unity-scroll-view__content-container {
+    padding: var(--appui-spacing-100);
+}
+
+.text-content {
+    margin: var(--appui-spacing-1000) 0;
+}
+
+.icon-content {
+    margin: var(--appui-spacing-1000) 0;
+}
+
+.item-content {
+    align-self: stretch;
+    padding: var(--appui-spacing-100);
+    background-color: var(--appui-backgrounds-200);
+    border-radius: var(--appui-alias-control-border-radius);
+    margin: var(--appui-spacing-100);
+}
+
+.setting-row {
+    cursor: var(--appui-alias-control-cursor-pointer);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--appui-backgrounds-200);
+    border-radius: var(--appui-alias-control-border-radius);
+    padding: var(--appui-spacing-100);
+    margin: 0 0 var(--appui-spacing-200) 0;
+}
+
+.setting-row.is-hovered {
+    background-color: var(--appui-backgrounds-300);
+}
+
+.setting-row.is-active {
+    background-color: var(--appui-backgrounds-50);
+}
+
+.setting-row .setting-row-title {
+    flex-grow: 1;
+}
+
+.setting-row .setting-row-value {
+    color: var(--appui-accent-100);
+    flex-shrink: 0;
+    margin-right: var(--appui-spacing-100);
+}
