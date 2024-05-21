@@ -180,8 +180,6 @@ public class TaskManager : NetworkBehaviour
             true,
             new MmMetadataBlock(((MmTag)(Math.Pow(2, TaskNumber-1))),MmLevelFilter.Child, MmActiveFilter.All, MmSelectedFilter.All, MmNetworkFilter.Network)
         );
-
-        
+        Debug.Log("Task logged");
     }
-
 }
