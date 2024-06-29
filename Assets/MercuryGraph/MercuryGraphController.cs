@@ -39,20 +39,36 @@ public class MercuryGraphController : MonoBehaviour
         List<MercuryGraphable> graphables = GetMercuryGraphables();
 
         // Create nodes for each graphable (Line them up for now)
+        // Save the nodeView objects created
+        List<NodeView> nodeViews = new List<NodeView>();
         Vector2 position = new Vector2(0, 0);
         foreach (MercuryGraphable graphable in graphables)
         {
-            // Debug.Log(graphable.gameObject.name);
+            Debug.Log("Creating " + graphable.gameObject.name);
 
             // Create a new node
             Type nodeType = typeof(MercuryGraphNode);
-            NodeView nodeView = CreateNewNode(position, graphable, nodeType);
-            graphable.nodeView = nodeView;
+            NodeController nodeController = CreateNewNode(position, graphable, nodeType);
+            graphable.nodeController = nodeController;
 
             // Move to next position
-            position.x += 200;
-            position.y += 200;
+            position.x -= 200;
+            position.y -= 200;
         }
+
+        // Link the nodes
+        foreach (MercuryGraphable graphable in graphables)
+        {
+            MercuryGraphNode mercuryGraphNode = graphable.nodeController.nodeItem.nodeData as MercuryGraphNode;
+            foreach (MercuryGraphable mercurySignalListener in graphable.mercurySignalListeners)
+            {
+                Debug.Log("Linking " + graphable.gameObject.name + " to " + mercurySignalListener.gameObject.name);
+                MercuryGraphNode mercurySignalListenerNode = mercurySignalListener.nodeController.nodeItem.nodeData as MercuryGraphNode;
+                mercuryGraphNode.mercuryOutputs.Add(mercurySignalListenerNode);
+            }
+        }
+
+        // Reload the graph
         graphController.Reload();
     }
 
@@ -64,11 +80,15 @@ public class MercuryGraphController : MonoBehaviour
     }
 
     // Modified from GraphController.CreateNewNode()
-    public NodeView CreateNewNode(Vector2 position, MercuryGraphable graphable, Type nodeType)
+    public NodeController CreateNewNode(Vector2 position, MercuryGraphable graphable, Type nodeType)
     {
         // Create a node and add it to the graph
         INode node = Activator.CreateInstance(nodeType) as INode;
         NodeModel nodeModel = graphController.graphData.AddNode(node, false);
+        if (node is MercuryGraphNode mercuryGraphNode)
+        {
+            mercuryGraphNode.mercuryGraphable = graphable;
+        }
 
         // Add its data
         nodeModel.SetData(graphController.graphData.GetLastAddedNodeProperty(false));
@@ -83,8 +103,8 @@ public class MercuryGraphController : MonoBehaviour
         // Select the new node
         graphController.graphView.SetSelected(nodeController.nodeView);
 
-        // Store the data for lookup by data later..?
+        // Store the data for data to node lookup later..?
         // graphController.dataToViewLookup.Add(node, nodeController.nodeView);
-        return nodeController.nodeView;
+        return nodeController;
     }
 }
