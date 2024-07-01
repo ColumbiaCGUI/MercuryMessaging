@@ -35,6 +35,7 @@ using UnityEngine;
 using System.Linq;
 #if PHOTON_AVAILABLE
 using Photon.Pun;
+using Fusion;
 #endif
 
 namespace MercuryMessaging
@@ -109,8 +110,13 @@ namespace MercuryMessaging
             bool networkedGameObject = (bool) data[index++];
             if (networkedGameObject)
             {
-                int photonViewId = (int) data[index++];
-                PhotonView photonView = PhotonView.Find(photonViewId);
+                // error still exists here (no type conversion from int to NetworkId)
+
+                int networkObjectId = (int) data[index++];
+                PhotonView photonView = PhotonView.Find(networkObjectId);
+                // NetworkId networkId =((NetworkId) networkObjectId);
+                
+                // NetworkRunner.TryFindObject(networkId, out NetworkObject photonView);
                 Value = null;
                 if (photonView != null)
                 {
@@ -139,10 +145,10 @@ namespace MercuryMessaging
             object[] thisSerialized; 
 
             #if PHOTON_AVAILABLE
-            if (Value.GetComponent<PhotonView>() != null)
+            if (Value.GetComponent<NetworkObject>() != null)
             {
-                PhotonView photonView = Value.GetComponent<PhotonView>();
-                thisSerialized = new object[] { true, photonView.ViewID };
+                NetworkObject photonView = Value.GetComponent<NetworkObject>();
+                thisSerialized = new object[] { true, photonView.Id };
             }
             else 
             {

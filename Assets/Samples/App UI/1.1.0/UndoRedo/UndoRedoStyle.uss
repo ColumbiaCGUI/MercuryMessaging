@@ -1,0 +1,18 @@
+.undoredo-panel {
+    padding: 16px;
+    background-color: var(--appui-backgrounds-200);
+    margin: 16px;
+    border-radius: var(--appui-alias-control-border-radius);
+}
+
+.centered {
+    justify-content: center;
+    align-items: center;
+}
+
+.history-item {
+    padding: var(--appui-spacing-100);
+    border-radius: var(--appui-alias-control-border-radius);
+    border-bottom-width: 1px;
+    border-bottom-color: var(--appui-backgrounds-300);
+}

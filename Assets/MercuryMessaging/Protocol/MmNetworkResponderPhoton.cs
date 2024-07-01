@@ -123,9 +123,16 @@ namespace MercuryMessaging
             // Need to call the right method based on whether this object 
             // is a client or a server.
             if (IsActiveAndEnabled)
+            {
+
+                Debug.Log("Photon Network send to client");
                 MmSendMessageToClient(msg);
+            }
             else if (AllowClientToSend)
+            {
+                Debug.Log("Photon Network send to server");
                 MmSendMessageToServer(msg);
+            }
         }
 
         #region Implementation of MmNetworkResponder

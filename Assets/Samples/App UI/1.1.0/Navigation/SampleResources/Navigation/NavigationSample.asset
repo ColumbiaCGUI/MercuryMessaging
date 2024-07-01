@@ -1,0 +1,800 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8944494395747817707
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78073c03d6154685bf631e4ad244b9b8, type: 3}
+  m_Name: signup_to_forgot_password
+  m_EditorClassIdentifier: 
+  m_Position: {x: 1260.5, y: -102}
+  m_Guid: a4f0b088-2242-44fd-b006-01198e2a38f7
+  m_Destination: {fileID: 0}
+  m_Options:
+    m_PopUpToStrategy: 0
+    m_PopUpToRoute: {fileID: 0}
+    m_PopUpToInclusive: 0
+    m_EnterAnim: 0
+    m_ExitAnim: 0
+    m_PopEnterAnim: 0
+    m_PopExitAnim: 0
+    m_PopUpToSaveState: 0
+    m_RestoreState: 0
+    m_LaunchSingleTop: 0
+  m_DefaultArguments: []
+--- !u!114 &-8222687815120031254
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78073c03d6154685bf631e4ad244b9b8, type: 3}
+  m_Name: login_to_forgot_password
+  m_EditorClassIdentifier: 
+  m_Position: {x: 338.5, y: 166.5}
+  m_Guid: c69636a8-c79a-4a28-9186-a5f12a4497b6
+  m_Destination: {fileID: -5736573374542230751}
+  m_Options:
+    m_PopUpToStrategy: 0
+    m_PopUpToRoute: {fileID: 0}
+    m_PopUpToInclusive: 0
+    m_EnterAnim: 2
+    m_ExitAnim: 0
+    m_PopEnterAnim: 0
+    m_PopExitAnim: 1
+    m_PopUpToSaveState: 0
+    m_RestoreState: 0
+    m_LaunchSingleTop: 0
+  m_DefaultArguments: []
+--- !u!114 &-8193955138269435670
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 819e9866b5cc41e7ac482ba5fe89e09b, type: 3}
+  m_Name: item_details
+  m_EditorClassIdentifier: 
+  m_Position: {x: 1689, y: 358.5}
+  m_Guid: 99278b17c447142699daef8b9698d0ab
+  m_Parent: {fileID: -5972414818343984710}
+  m_Actions: []
+  m_Label: '@UI:ItemDetails'
+  m_Template: Unity.AppUI.Samples.Navigation.ItemDetailScreen, Unity.AppUI.Samples.Navigation,
+    Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Arguments: []
+  m_ShowBottomNavBar: 0
+  m_ShowAppBar: 1
+  m_ShowBackButton: 1
+  m_ShowDrawer: 0
+  m_ShowNavigationRail: 0
+--- !u!114 &-7977548450297166600
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 819e9866b5cc41e7ac482ba5fe89e09b, type: 3}
+  m_Name: home
+  m_EditorClassIdentifier: 
+  m_Position: {x: 45.5, y: 113.5}
+  m_Guid: fe9d3cc17763a43769724d461520b87a
+  m_Parent: {fileID: -292077038807905323}
+  m_Actions: []
+  m_Label: '@UI:Home'
+  m_Template: Unity.AppUI.Samples.Navigation.HomeScreen, Unity.AppUI.Samples.Navigation,
+    Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Arguments: []
+  m_ShowBottomNavBar: 1
+  m_ShowAppBar: 1
+  m_ShowBackButton: 1
+  m_ShowDrawer: 1
+  m_ShowNavigationRail: 0
+--- !u!114 &-7705125689437715372
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 819e9866b5cc41e7ac482ba5fe89e09b, type: 3}
+  m_Name: items
+  m_EditorClassIdentifier: 
+  m_Position: {x: 855, y: 358.5}
+  m_Guid: d03a9f36df26c47e7aa67a3f31e84cdb
+  m_Parent: {fileID: -5972414818343984710}
+  m_Actions:
+  - {fileID: -2821836994351088311}
+  m_Label: '@UI:Items'
+  m_Template: Unity.AppUI.Samples.Navigation.ItemsScreen, Unity.AppUI.Samples.Navigation,
+    Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Arguments: []
+  m_ShowBottomNavBar: 1
+  m_ShowAppBar: 1
+  m_ShowBackButton: 1
+  m_ShowDrawer: 1
+  m_ShowNavigationRail: 0
+--- !u!114 &-7696130718974872040
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 819e9866b5cc41e7ac482ba5fe89e09b, type: 3}
+  m_Name: profile
+  m_EditorClassIdentifier: 
+  m_Position: {x: 624.5, y: 498.5}
+  m_Guid: 594db7ee4fdcd48f48c33667ecaef3e9
+  m_Parent: {fileID: -7065040197925367118}
+  m_Actions:
+  - {fileID: 1982092278574380023}
+  m_Label: '@UI:Profile'
+  m_Template: Unity.AppUI.Samples.Navigation.ProfileScreen, Unity.AppUI.Samples.Navigation,
+    Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Arguments: []
+  m_ShowBottomNavBar: 1
+  m_ShowAppBar: 1
+  m_ShowBackButton: 1
+  m_ShowDrawer: 1
+  m_ShowNavigationRail: 0
+--- !u!114 &-7065040197925367118
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ac212c624cd4a46acc6d3430ae62e14, type: 3}
+  m_Name: profile_graph
+  m_EditorClassIdentifier: 
+  m_Position: {x: 1004.5, y: 991}
+  m_Guid: 6314e6f5e42204414be40cd7f9808aed
+  m_Parent: {fileID: -4583345384254747798}
+  m_Actions: []
+  m_Label: 
+  m_StartDestination: {fileID: -7696130718974872040}
+--- !u!114 &-6129872551961252837
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 819e9866b5cc41e7ac482ba5fe89e09b, type: 3}
+  m_Name: theme_setting
+  m_EditorClassIdentifier: 
+  m_Position: {x: 2251, y: 498.5}
+  m_Guid: c498bddb05f6a4a8085f48e60275672e
+  m_Parent: {fileID: -7065040197925367118}
+  m_Actions: []
+  m_Label: '@UI:ThemeSetting'
+  m_Template: Unity.AppUI.Samples.Navigation.ThemeSettingScreen, Unity.AppUI.Samples.Navigation,
+    Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Arguments: []
+  m_ShowBottomNavBar: 0
+  m_ShowAppBar: 1
+  m_ShowBackButton: 1
+  m_ShowDrawer: 0
+  m_ShowNavigationRail: 0
+--- !u!114 &-5972414818343984710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ac212c624cd4a46acc6d3430ae62e14, type: 3}
+  m_Name: items_graph
+  m_EditorClassIdentifier: 
+  m_Position: {x: 1009.1428, y: 577.1429}
+  m_Guid: 3a862f5c46baf404086685c8830fc764
+  m_Parent: {fileID: -4583345384254747798}
+  m_Actions: []
+  m_Label: 
+  m_StartDestination: {fileID: -7705125689437715372}
+--- !u!114 &-5736573374542230751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 819e9866b5cc41e7ac482ba5fe89e09b, type: 3}
+  m_Name: forgot_password
+  m_EditorClassIdentifier: 
+  m_Position: {x: 707.5, y: 166.5}
+  m_Guid: 34955a282489045ac921cf70662eece2
+  m_Parent: {fileID: 332884780376400844}
+  m_Actions:
+  - {fileID: 1008478377226470355}
+  m_Label: '@UI:ForgotPassword'
+  m_Template: Unity.AppUI.Samples.Navigation.ForgotPasswordScreen, Unity.AppUI.Samples.Navigation,
+    Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Arguments: []
+  m_ShowBottomNavBar: 0
+  m_ShowAppBar: 0
+  m_ShowBackButton: 0
+  m_ShowDrawer: 0
+  m_ShowNavigationRail: 0
+--- !u!114 &-5069340082652505212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78073c03d6154685bf631e4ad244b9b8, type: 3}
+  m_Name: splash_to_home
+  m_EditorClassIdentifier: 
+  m_Position: {x: 202.5, y: 125}
+  m_Guid: ae638815-af46-4116-b6a0-b53aaef8f4e5
+  m_Destination: {fileID: -292077038807905323}
+  m_Options:
+    m_PopUpToStrategy: 1
+    m_PopUpToRoute: {fileID: -2729197796917824077}
+    m_PopUpToInclusive: 1
+    m_EnterAnim: 3
+    m_ExitAnim: 0
+    m_PopEnterAnim: 0
+    m_PopExitAnim: 0
+    m_PopUpToSaveState: 0
+    m_RestoreState: 0
+    m_LaunchSingleTop: 1
+  m_DefaultArguments: []
+--- !u!114 &-4583345384254747798
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ac212c624cd4a46acc6d3430ae62e14, type: 3}
+  m_Name: nav_graph
+  m_EditorClassIdentifier: 
+  m_Position: {x: 0, y: 0}
+  m_Guid: dd165c2d-79dd-4f58-a64e-5783811e3ced
+  m_Parent: {fileID: 0}
+  m_Actions:
+  - {fileID: 7770228449002525459}
+  - {fileID: -2625030994800049459}
+  - {fileID: -4464274316740271101}
+  - {fileID: 8805419817218759026}
+  m_Label: 
+  m_StartDestination: {fileID: -2729197796917824077}
+--- !u!114 &-4464274316740271101
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78073c03d6154685bf631e4ad244b9b8, type: 3}
+  m_Name: go_to_profile
+  m_EditorClassIdentifier: 
+  m_Position: {x: 610, y: 1153.5}
+  m_Guid: 39bf1a3c-5dcd-4fe2-88c3-9772c16a0288
+  m_Destination: {fileID: -7065040197925367118}
+  m_Options:
+    m_PopUpToStrategy: 2
+    m_PopUpToRoute: {fileID: 0}
+    m_PopUpToInclusive: 1
+    m_EnterAnim: 0
+    m_ExitAnim: 0
+    m_PopEnterAnim: 0
+    m_PopExitAnim: 0
+    m_PopUpToSaveState: 1
+    m_RestoreState: 1
+    m_LaunchSingleTop: 1
+  m_DefaultArguments: []
+--- !u!114 &-3532229334831396940
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 819e9866b5cc41e7ac482ba5fe89e09b, type: 3}
+  m_Name: settings
+  m_EditorClassIdentifier: 
+  m_Position: {x: 1455, y: 498.5}
+  m_Guid: 679e5d00849e6489db364365e3266d1b
+  m_Parent: {fileID: -7065040197925367118}
+  m_Actions:
+  - {fileID: 4361079467730119982}
+  m_Label: '@UI:Settings'
+  m_Template: Unity.AppUI.Samples.Navigation.SettingsScreen, Unity.AppUI.Samples.Navigation,
+    Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Arguments: []
+  m_ShowBottomNavBar: 0
+  m_ShowAppBar: 1
+  m_ShowBackButton: 1
+  m_ShowDrawer: 0
+  m_ShowNavigationRail: 0
+--- !u!114 &-2821836994351088311
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78073c03d6154685bf631e4ad244b9b8, type: 3}
+  m_Name: items_to_item_details
+  m_EditorClassIdentifier: 
+  m_Position: {x: 1326, y: 358.5}
+  m_Guid: ded4a6c2-3f8a-4877-9967-1fde109edbd9
+  m_Destination: {fileID: -8193955138269435670}
+  m_Options:
+    m_PopUpToStrategy: 0
+    m_PopUpToRoute: {fileID: 0}
+    m_PopUpToInclusive: 0
+    m_EnterAnim: 2
+    m_ExitAnim: 0
+    m_PopEnterAnim: 0
+    m_PopExitAnim: 1
+    m_PopUpToSaveState: 0
+    m_RestoreState: 0
+    m_LaunchSingleTop: 0
+  m_DefaultArguments: []
+--- !u!114 &-2729197796917824077
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 819e9866b5cc41e7ac482ba5fe89e09b, type: 3}
+  m_Name: splash_screen
+  m_EditorClassIdentifier: 
+  m_Position: {x: -361, y: -35.5}
+  m_Guid: 35fdaddd40d5344ca80d8a910bd8e2bf
+  m_Parent: {fileID: -4583345384254747798}
+  m_Actions:
+  - {fileID: -2542469425199634123}
+  - {fileID: -5069340082652505212}
+  m_Label: '@UI:SplashScreen'
+  m_Template: Unity.AppUI.Samples.Navigation.SplashScreen, Unity.AppUI.Samples.Navigation,
+    Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Arguments: []
+  m_ShowBottomNavBar: 0
+  m_ShowAppBar: 0
+  m_ShowBackButton: 0
+  m_ShowDrawer: 0
+  m_ShowNavigationRail: 0
+--- !u!114 &-2625030994800049459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78073c03d6154685bf631e4ad244b9b8, type: 3}
+  m_Name: go_to_items
+  m_EditorClassIdentifier: 
+  m_Position: {x: 610, y: 697.5}
+  m_Guid: 8882ce55-1a85-41d4-b19b-977a3cd1d668
+  m_Destination: {fileID: -5972414818343984710}
+  m_Options:
+    m_PopUpToStrategy: 2
+    m_PopUpToRoute: {fileID: 0}
+    m_PopUpToInclusive: 1
+    m_EnterAnim: 0
+    m_ExitAnim: 0
+    m_PopEnterAnim: 0
+    m_PopExitAnim: 0
+    m_PopUpToSaveState: 1
+    m_RestoreState: 1
+    m_LaunchSingleTop: 1
+  m_DefaultArguments: []
+--- !u!114 &-2542469425199634123
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78073c03d6154685bf631e4ad244b9b8, type: 3}
+  m_Name: splash_to_auth
+  m_EditorClassIdentifier: 
+  m_Position: {x: 202.5, y: -347.5}
+  m_Guid: 881aae7c-366e-4e3a-9d9d-42d77b72488b
+  m_Destination: {fileID: 332884780376400844}
+  m_Options:
+    m_PopUpToStrategy: 1
+    m_PopUpToRoute: {fileID: -2729197796917824077}
+    m_PopUpToInclusive: 1
+    m_EnterAnim: 3
+    m_ExitAnim: 0
+    m_PopEnterAnim: 0
+    m_PopExitAnim: 0
+    m_PopUpToSaveState: 0
+    m_RestoreState: 0
+    m_LaunchSingleTop: 0
+  m_DefaultArguments: []
+--- !u!114 &-1324690687480336713
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78073c03d6154685bf631e4ad244b9b8, type: 3}
+  m_Name: fp_to_signup
+  m_EditorClassIdentifier: 
+  m_Position: {x: 2111.5, y: 119}
+  m_Guid: 4bd1f162-c821-43fd-92f8-36912c43f192
+  m_Destination: {fileID: 0}
+  m_Options:
+    m_PopUpToStrategy: 0
+    m_PopUpToRoute: {fileID: 0}
+    m_PopUpToInclusive: 0
+    m_EnterAnim: 0
+    m_ExitAnim: 0
+    m_PopEnterAnim: 0
+    m_PopExitAnim: 0
+    m_PopUpToSaveState: 0
+    m_RestoreState: 0
+    m_LaunchSingleTop: 0
+  m_DefaultArguments: []
+--- !u!114 &-855852807714528360
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 819e9866b5cc41e7ac482ba5fe89e09b, type: 3}
+  m_Name: confirm_code
+  m_EditorClassIdentifier: 
+  m_Position: {x: 1673.5, y: 166.5}
+  m_Guid: d0535ed89a4e842dea8cf656dbefdaa6
+  m_Parent: {fileID: 332884780376400844}
+  m_Actions: []
+  m_Label: '@UI:ConfirmCode'
+  m_Template: Unity.AppUI.Samples.Navigation.CodeConfirmScreen, Unity.AppUI.Samples.Navigation,
+    Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Arguments: []
+  m_ShowBottomNavBar: 0
+  m_ShowAppBar: 0
+  m_ShowBackButton: 0
+  m_ShowDrawer: 0
+  m_ShowNavigationRail: 0
+--- !u!114 &-292077038807905323
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ac212c624cd4a46acc6d3430ae62e14, type: 3}
+  m_Name: home_graph
+  m_EditorClassIdentifier: 
+  m_Position: {x: 1003.5, y: 125}
+  m_Guid: 789e9f4a212a34067bd2c84adc3ab142
+  m_Parent: {fileID: -4583345384254747798}
+  m_Actions: []
+  m_Label: 
+  m_StartDestination: {fileID: -7977548450297166600}
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33d5b7fe0491446cbd625fd576a3105e, type: 3}
+  m_Name: NavigationSample
+  m_EditorClassIdentifier: 
+  m_Nodes:
+  - {fileID: -4583345384254747798}
+  - {fileID: -2729197796917824077}
+  - {fileID: -2542469425199634123}
+  - {fileID: 332884780376400844}
+  - {fileID: 4838759246690638305}
+  - {fileID: -292077038807905323}
+  - {fileID: -7977548450297166600}
+  - {fileID: -5069340082652505212}
+  - {fileID: 7770228449002525459}
+  - {fileID: -5972414818343984710}
+  - {fileID: -7705125689437715372}
+  - {fileID: -7065040197925367118}
+  - {fileID: -7696130718974872040}
+  - {fileID: -2625030994800049459}
+  - {fileID: -4464274316740271101}
+  - {fileID: 2105585262407127864}
+  - {fileID: -5736573374542230751}
+  - {fileID: 7687235773060265655}
+  - {fileID: -8222687815120031254}
+  - {fileID: -8944494395747817707}
+  - {fileID: -1324690687480336713}
+  - {fileID: 8805419817218759026}
+  - {fileID: 1008478377226470355}
+  - {fileID: -855852807714528360}
+  - {fileID: -2821836994351088311}
+  - {fileID: -8193955138269435670}
+  - {fileID: 1982092278574380023}
+  - {fileID: -3532229334831396940}
+  - {fileID: 4361079467730119982}
+  - {fileID: -6129872551961252837}
+--- !u!114 &332884780376400844
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ac212c624cd4a46acc6d3430ae62e14, type: 3}
+  m_Name: auth_graph
+  m_EditorClassIdentifier: 
+  m_Position: {x: 1003.5, y: -347.5}
+  m_Guid: 1b94f20d99ee844e8a76eb70be8bd7d7
+  m_Parent: {fileID: -4583345384254747798}
+  m_Actions: []
+  m_Label: 
+  m_StartDestination: {fileID: 4838759246690638305}
+--- !u!114 &1008478377226470355
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78073c03d6154685bf631e4ad244b9b8, type: 3}
+  m_Name: fp_to_confirm_code
+  m_EditorClassIdentifier: 
+  m_Position: {x: 1275, y: 166.5}
+  m_Guid: f56cbaa5-9f81-455a-a1e5-bbdcb0af0e49
+  m_Destination: {fileID: -855852807714528360}
+  m_Options:
+    m_PopUpToStrategy: 0
+    m_PopUpToRoute: {fileID: 0}
+    m_PopUpToInclusive: 0
+    m_EnterAnim: 2
+    m_ExitAnim: 0
+    m_PopEnterAnim: 0
+    m_PopExitAnim: 1
+    m_PopUpToSaveState: 0
+    m_RestoreState: 0
+    m_LaunchSingleTop: 0
+  m_DefaultArguments: []
+--- !u!114 &1982092278574380023
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78073c03d6154685bf631e4ad244b9b8, type: 3}
+  m_Name: profile_to_settings
+  m_EditorClassIdentifier: 
+  m_Position: {x: 1108, y: 498.5}
+  m_Guid: 4d42623d-9b91-41b0-950a-77f43a339574
+  m_Destination: {fileID: -3532229334831396940}
+  m_Options:
+    m_PopUpToStrategy: 0
+    m_PopUpToRoute: {fileID: 0}
+    m_PopUpToInclusive: 0
+    m_EnterAnim: 2
+    m_ExitAnim: 0
+    m_PopEnterAnim: 0
+    m_PopExitAnim: 1
+    m_PopUpToSaveState: 0
+    m_RestoreState: 0
+    m_LaunchSingleTop: 0
+  m_DefaultArguments: []
+--- !u!114 &2105585262407127864
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 819e9866b5cc41e7ac482ba5fe89e09b, type: 3}
+  m_Name: signup
+  m_EditorClassIdentifier: 
+  m_Position: {x: 707.5, y: -290.5}
+  m_Guid: 5be32f8b64e2349fe9761b6d69c32f72
+  m_Parent: {fileID: 332884780376400844}
+  m_Actions: []
+  m_Label: '@UI:SignUp'
+  m_Template: Unity.AppUI.Samples.Navigation.SignupScreen, Unity.AppUI.Samples.Navigation,
+    Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Arguments: []
+  m_ShowBottomNavBar: 0
+  m_ShowAppBar: 0
+  m_ShowBackButton: 0
+  m_ShowDrawer: 0
+  m_ShowNavigationRail: 0
+--- !u!114 &4361079467730119982
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78073c03d6154685bf631e4ad244b9b8, type: 3}
+  m_Name: settings_to_theme
+  m_EditorClassIdentifier: 
+  m_Position: {x: 1908, y: 498.5}
+  m_Guid: b76b7b76-9f4f-44fa-ab13-508590fb22f2
+  m_Destination: {fileID: -6129872551961252837}
+  m_Options:
+    m_PopUpToStrategy: 0
+    m_PopUpToRoute: {fileID: 0}
+    m_PopUpToInclusive: 0
+    m_EnterAnim: 2
+    m_ExitAnim: 0
+    m_PopEnterAnim: 0
+    m_PopExitAnim: 1
+    m_PopUpToSaveState: 0
+    m_RestoreState: 0
+    m_LaunchSingleTop: 0
+  m_DefaultArguments: []
+--- !u!114 &4838759246690638305
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 819e9866b5cc41e7ac482ba5fe89e09b, type: 3}
+  m_Name: login
+  m_EditorClassIdentifier: 
+  m_Position: {x: -238, y: 0}
+  m_Guid: 0c54a2a720c1e48369b144b294146b89
+  m_Parent: {fileID: 332884780376400844}
+  m_Actions:
+  - {fileID: 7687235773060265655}
+  - {fileID: -8222687815120031254}
+  m_Label: '@UI:Login'
+  m_Template: Unity.AppUI.Samples.Navigation.LoginScreen, Unity.AppUI.Samples.Navigation,
+    Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Arguments: []
+  m_ShowBottomNavBar: 0
+  m_ShowAppBar: 0
+  m_ShowBackButton: 0
+  m_ShowDrawer: 0
+  m_ShowNavigationRail: 0
+--- !u!114 &7687235773060265655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78073c03d6154685bf631e4ad244b9b8, type: 3}
+  m_Name: login_to_signup
+  m_EditorClassIdentifier: 
+  m_Position: {x: 338.5, y: -290.5}
+  m_Guid: 4ede4de9-914a-4027-8a0a-be6d079f7c7e
+  m_Destination: {fileID: 2105585262407127864}
+  m_Options:
+    m_PopUpToStrategy: 0
+    m_PopUpToRoute: {fileID: 0}
+    m_PopUpToInclusive: 0
+    m_EnterAnim: 2
+    m_ExitAnim: 0
+    m_PopEnterAnim: 0
+    m_PopExitAnim: 1
+    m_PopUpToSaveState: 0
+    m_RestoreState: 0
+    m_LaunchSingleTop: 0
+  m_DefaultArguments: []
+--- !u!114 &7770228449002525459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78073c03d6154685bf631e4ad244b9b8, type: 3}
+  m_Name: go_to_home
+  m_EditorClassIdentifier: 
+  m_Position: {x: 610, y: 229}
+  m_Guid: e9340a55-435e-41c3-9b8f-fcf156207c60
+  m_Destination: {fileID: -292077038807905323}
+  m_Options:
+    m_PopUpToStrategy: 2
+    m_PopUpToRoute: {fileID: 0}
+    m_PopUpToInclusive: 1
+    m_EnterAnim: 0
+    m_ExitAnim: 0
+    m_PopEnterAnim: 0
+    m_PopExitAnim: 0
+    m_PopUpToSaveState: 1
+    m_RestoreState: 1
+    m_LaunchSingleTop: 1
+  m_DefaultArguments: []
+--- !u!114 &8805419817218759026
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78073c03d6154685bf631e4ad244b9b8, type: 3}
+  m_Name: go_to_login
+  m_EditorClassIdentifier: 
+  m_Position: {x: 610, y: -221}
+  m_Guid: 5238eaae-b781-4dee-9ccd-5fe7e76b1015
+  m_Destination: {fileID: 332884780376400844}
+  m_Options:
+    m_PopUpToStrategy: 2
+    m_PopUpToRoute: {fileID: 0}
+    m_PopUpToInclusive: 1
+    m_EnterAnim: 2
+    m_ExitAnim: 0
+    m_PopEnterAnim: 0
+    m_PopExitAnim: 0
+    m_PopUpToSaveState: 0
+    m_RestoreState: 0
+    m_LaunchSingleTop: 0
+  m_DefaultArguments: []

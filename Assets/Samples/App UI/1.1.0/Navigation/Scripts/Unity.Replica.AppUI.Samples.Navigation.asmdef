@@ -1,0 +1,17 @@
+{
+    "name": "Unity.AppUI.Samples.Navigation",
+    "rootNamespace": "Unity.AppUI.Samples.Navigation",
+    "references": [
+        "GUID:2f101f87087d58f4ba92ca00188e763d",
+        "GUID:f7898ee836234b98a20cbddc2a6e0b08"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
