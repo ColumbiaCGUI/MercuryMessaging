@@ -15,7 +15,7 @@ public enum T6_myMsgTypes
 }
 
 
-public class T6_SphereHandler : MmBaseResponder
+public class T6_SphereHandler : MmSwitchResponder
 {
     // // Start is called before the first frame update
     // void Start()

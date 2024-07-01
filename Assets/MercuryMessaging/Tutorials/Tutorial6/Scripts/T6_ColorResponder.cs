@@ -4,7 +4,7 @@ using UnityEngine;
 
 using MercuryMessaging;
 
-public class T6_ColorResponder : MmBaseResponder
+public class T6_ColorResponder : MmSwitchResponder
 {
     // // Start is called before the first frame update
     // void Start()

@@ -310,6 +310,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _mmTag: -1
   tagCheckEnabled: 1
+  InitialState: 
 --- !u!114 &360286852
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -491,6 +492,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _mmTag: -1
   tagCheckEnabled: 1
+  InitialState: 
 --- !u!114 &381693327
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -531,6 +533,7 @@ GameObject:
   - component: {fileID: 430922299}
   - component: {fileID: 430922304}
   - component: {fileID: 430922305}
+  - component: {fileID: 430922306}
   m_Layer: 0
   m_Name: Sphere
   m_TagString: Untagged
@@ -631,7 +634,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 430922298}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2eab7cc3f6f5b47ea9014cdcb6fd92ba, type: 3}
   m_Name: 
@@ -660,6 +663,11 @@ MonoBehaviour:
       Clone: 0
       Tags: 0
       Level: 1
+    - Name: Sphere
+      Responder: {fileID: 430922306}
+      Clone: 0
+      Tags: 0
+      Level: 1
 --- !u!114 &430922305
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -674,6 +682,33 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _mmTag: -1
   tagCheckEnabled: 1
+  InitialState: 
+--- !u!114 &430922306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 430922298}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e837805e020e4878a5c430d613bc4b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mmTag: -1
+  tagCheckEnabled: 1
+  FlipNetworkFlagOnSend: 0
+  AllowNetworkPropagationLocally: 0
+  ReparentClonedRespondersToSelf: 1
+  Initialized: 0
+  AutoGrabAttachedResponders: 1
+  RoutingTable:
+    _list:
+    - Name: Sphere
+      Responder: {fileID: 430922304}
+      Clone: 0
+      Tags: 0
+      Level: 4
 --- !u!1 &1676511176
 GameObject:
   m_ObjectHideFlags: 0
