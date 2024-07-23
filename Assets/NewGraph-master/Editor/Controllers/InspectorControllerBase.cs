@@ -39,6 +39,9 @@ namespace NewGraph {
 
             inspectorContainer = parent.Q<VisualElement>(nameof(inspectorContainer));
             
+            Button refreshButton = commandPanel.Q<Button>(nameof(refreshButton));
+            SetupRefreshButton(refreshButton);
+
             Button createButton = commandPanel.Q<Button>(nameof(createButton));
             SetupCreateButton(createButton);
 
@@ -67,6 +70,7 @@ namespace NewGraph {
             SetSelectedNodeInfoActive();
             SetInspectorVisibility(EditorPrefs.GetBool(GraphSettings.isInspectorVisiblePrefsKey, isInspectorVisible));
         }
+        public abstract void SetupRefreshButton(Button refreshButton);
 
         public abstract void SetupCreateButton(Button createButton);
 

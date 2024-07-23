@@ -8,15 +8,14 @@ using NewGraph;
 public class MercuryGraphNode : INode
 {
     // The MercuryGraphable gameObject that this node represents.
+    [GraphDisplay(displayType = DisplayType.BothViews, editability = Editability.None, createGroup = false)]
     public MercuryGraphable mercuryGraphable;
 
-    // The Port attribute creates visual connectable ports in the graph view to connect to other nodes.
-    // it is important to also add the SerializeReference attribute, so that unity serializes this field as a reference.
-    // [Port, SerializeReference]
-    // public MercuryGraphNode output = null;
+    // Test toggle for the node.
+    [GraphDisplay(displayType = DisplayType.BothViews, editability = Editability.None, createGroup = false)]
+    public bool testToggle = false;
 
     // The PortList attribute instructs the graph view to visualize a dynamic list of ports. 
     [PortList, SerializeReference]
     public List<MercuryGraphNode> mercuryOutputs = new List<MercuryGraphNode>();
-
 }

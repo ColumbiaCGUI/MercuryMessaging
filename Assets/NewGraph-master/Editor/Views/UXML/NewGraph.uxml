@@ -1,9 +1,10 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
     <ui:VisualElement name="nodeGraphRoot" style="height: auto; width: auto; flex-grow: 1; flex-direction: row; flex-wrap: wrap;">
         <ui:VisualElement name="graphViewRoot" style="flex-direction: column; flex-wrap: nowrap; flex-grow: 1;" />
-        <ui:VisualElement name="inspectorRoot" style="flex-grow: 1; max-width: 200px; min-width: 200px;">
+        <ui:VisualElement name="inspectorRoot" style="flex-grow: 1; max-width: 400px; min-width: 200px;">
             <ui:VisualElement name="commandPanel">
                 <ui:Button tabindex="-1" display-tooltip-when-elided="true" tooltip="Center the viewport." name="homeButton" />
+                <ui:Button tabinsex="-1" text="Refresh" display-tooltip-when-elided="true" tooltip="Clear and rerender the Graph." name="refreshButton" />
                 <ui:Button tabindex="-1" text="Create" display-tooltip-when-elided="true" tooltip="Create a new Graph." name="createButton" />
                 <ui:Button tabindex="-1" text="Load" display-tooltip-when-elided="true" tooltip="Load a Graph." name="loadButton" />
                 <ui:Button tabindex="-1" text="Save" display-tooltip-when-elided="true" name="saveButton" />
