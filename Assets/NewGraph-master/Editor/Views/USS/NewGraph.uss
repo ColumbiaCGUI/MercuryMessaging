@@ -261,6 +261,11 @@ PortListView > ScrollView {
     max-width: 23px;
 }
 
+#commandPanel Button#refreshButton {
+    padding-right: 0px;
+    max-width: 67px;
+}
+
 #commandPanel Button#createButton {
     padding-right: 0px;
     max-width: 67px;

@@ -20,7 +20,7 @@ namespace NewGraph {
         public GraphView graphView;
 
         public bool isLoading = false;
-        private InspectorControllerBase inspector;
+        public InspectorControllerBase inspector;
         private ContextMenu contextMenu;
         private EdgeDropMenu edgeDropMenu;
         private Dictionary<Actions, Action<object>> internalActions;
@@ -240,7 +240,9 @@ namespace NewGraph {
         /// </summary>
         /// <param name="data"></param>
         public void OnDelete(object data = null) {
+            Debug.Log("GraphController: " + graphView.IsFocusedElementNullOrNotBindable);
 			if (graphView.IsFocusedElementNullOrNotBindable) {
+                Debug.Log("GraphController: Did Delete");
 				bool isDirty = false;
 
 				// go over every selected edge...

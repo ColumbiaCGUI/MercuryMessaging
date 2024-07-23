@@ -9,6 +9,9 @@ namespace NewGraph {
             Label graphName = inspectorHeader.Q<Label>();
             graphName.text = (graph as MonoGraphModel).name;
         }
+        public override void SetupRefreshButton(Button refreshButton) {
+            refreshButton.style.display = DisplayStyle.None;
+        }
 
         public override void SetupCreateButton(Button createButton) {
             createButton.style.display = DisplayStyle.None;

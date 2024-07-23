@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -8,6 +9,23 @@ namespace NewGraph {
 	public class ScriptableInspectorControllerGeneric<T> : InspectorControllerBase where T : ScriptableGraphModel {
 
 		public ScriptableInspectorControllerGeneric(VisualElement parent) : base(parent) { }
+
+        public static event Action<GraphWindow> OnRefreshButtonClicked;
+		/// <summary>
+		/// Setup the refresh button for this inspector
+		/// </summary>
+		/// <param name="refreshButton"></param>
+		public override void SetupRefreshButton(Button refreshButton) {
+			refreshButton.clicked += RefreshButtonClicked;
+			// refreshButton.Add(GraphSettings.RefreshButtonIcon);
+		}
+		/// <summary>
+		/// called when the create button was clicked.
+		/// </summary>
+        private void RefreshButtonClicked() {
+            Debug.Log("ScriptableInspectorControllerGeneric: Refresh Button clicked!");
+            OnRefreshButtonClicked?.Invoke(GraphWindow.GetWindow<GraphWindow>(utility: false));
+        }
 
 		/// <summary>
 		/// Setup the create button for this inspector
