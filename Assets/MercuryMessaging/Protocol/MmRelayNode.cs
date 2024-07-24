@@ -36,6 +36,7 @@ using System.Linq;
 using MercuryMessaging.Support.Extensions;
 using MercuryMessaging.Task;
 using UnityEngine;
+using Drawing;
 
 namespace MercuryMessaging
 {
@@ -216,6 +217,35 @@ namespace MercuryMessaging
             //    String.Join("\n", RoutingTable.GetMmNames(MmRoutingTable.ListFilter.All,
             //    MmLevelFilterHelper.SelfAndBidirectional).ToArray()));
         }
+
+        public void Update()
+        {
+            List<MmRoutingTableItem> itemsToGo = RoutingTable.GetMmRoutingTableItems(MmRoutingTable.ListFilter.All,
+                MmLevelFilterHelper.SelfAndChildren);
+            
+            foreach (MmRoutingTableItem item in itemsToGo)
+            {
+                Vector3 targetPosition = item.Responder.transform.position;
+                Vector3 currentPosition = transform.position;
+                Draw3DArrow(currentPosition, targetPosition, Color.white);
+            }
+        }
+
+        public void Draw3DArrow(Vector3 from, Vector3 to, Color color)
+        {
+            var draw = Draw.ingame;
+            Vector3 distance = to - from;
+
+            int numArrows = (int)(distance.magnitude / 0.35f);
+
+            for (int i = 1; i < numArrows-1; i++)
+            {
+                Vector3 pointA = Vector3.Lerp(from, to, i / (float)numArrows);
+                
+                draw.Arrowhead(pointA, distance.normalized, 0.1f, color);
+            }
+        }
+        
 
         protected void InitializeNode()
         {
