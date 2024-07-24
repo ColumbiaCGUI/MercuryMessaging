@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using GraphViewBase;
+using MercuryMessaging;
 using NewGraph;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -110,7 +111,7 @@ public class MercuryGraphController : MonoBehaviour
         foreach (var modificaton in modifications)
         {
             // Debug.Log("Post process modification: " + modificaton.currentValue.target);
-            if (modificaton.currentValue.target is MercuryGraphable)
+            if (modificaton.currentValue.target is MmRelayNodeGraphable)
             {
                 graphableModified = true;
                 break;
@@ -138,14 +139,14 @@ public class MercuryGraphController : MonoBehaviour
         instance.ClearGraph();
 
         // Get all graphables in scene
-        List<MercuryGraphable> graphables = GetMercuryGraphables();
+        List<MmRelayNodeGraphable> graphables = GetMercuryGraphables();
         Debug.Log(graphables.Count + " graphables found in Hierarchy.");
 
         // Create nodes for each graphable (Line them up for now)
         // Save the nodeView objects created
         List<NodeView> nodeViews = new List<NodeView>();
         // Vector2 position = new Vector2(0, 0);
-        foreach (MercuryGraphable graphable in graphables)
+        foreach (MmRelayNodeGraphable graphable in graphables)
         {
             Debug.Log("Creating " + graphable.gameObject.name);
 
@@ -167,13 +168,15 @@ public class MercuryGraphController : MonoBehaviour
         }
 
         // Link the nodes
-        foreach (MercuryGraphable graphable in graphables)
+        foreach (MmRelayNodeGraphable graphable in graphables)
         {
             MercuryGraphNode mercuryGraphNode = graphable.nodeController.nodeItem.nodeData as MercuryGraphNode;
-            foreach (MercuryGraphable mercurySignalListener in graphable.mercurySignalListeners)
+            // Debug.Log("MercuryGraphController: Calling GetMmMessageResponders for " + graphable.gameObject.name);
+            List<MmRelayNodeGraphable> responders = GetMmMessageResponders(graphable);
+            foreach (MmRelayNodeGraphable responder in responders)
             {
-                Debug.Log("Linking " + graphable.gameObject.name + " to " + mercurySignalListener.gameObject.name);
-                MercuryGraphNode mercurySignalListenerNode = mercurySignalListener.nodeController.nodeItem.nodeData as MercuryGraphNode;
+                Debug.Log("Linking " + graphable.gameObject.name + " to " + responder.gameObject.name);
+                MercuryGraphNode mercurySignalListenerNode = responder.nodeController.nodeItem.nodeData as MercuryGraphNode;
                 mercuryGraphNode.mercuryOutputs.Add(mercurySignalListenerNode);
             }
         }
@@ -185,6 +188,7 @@ public class MercuryGraphController : MonoBehaviour
         Debug.Log("Graph rendered.");
     }
     public void ClearGraph()
+
     {
         SaveNodePositions();
 
@@ -213,28 +217,54 @@ public class MercuryGraphController : MonoBehaviour
         Debug.Log("Deleted " + counter + " nodes.");
     }
 
-    public static List<MercuryGraphable> GetMercuryGraphables()
+    public static List<MmRelayNodeGraphable> GetMercuryGraphables()
     {
-        List<MercuryGraphable> graphables = new List<MercuryGraphable>();
+        List<MmRelayNodeGraphable> graphables = new List<MmRelayNodeGraphable>();
         if (Application.isPlaying)
         {
-            MercuryGraphable[] graphableArray = FindObjectsOfType<MercuryGraphable>();
-            graphables = new List<MercuryGraphable>(graphableArray);
+            MmRelayNodeGraphable[] graphableArray = FindObjectsOfType<MmRelayNodeGraphable>();
+            graphables = new List<MmRelayNodeGraphable>(graphableArray);
         }
         else
         {
             GameObject[] rootGameObjects = UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects();
             foreach (GameObject rootGameObject in rootGameObjects)
             {
-                MercuryGraphable[] graphableArray = rootGameObject.GetComponentsInChildren<MercuryGraphable>();
+                MmRelayNodeGraphable[] graphableArray = rootGameObject.GetComponentsInChildren<MmRelayNodeGraphable>();
                 graphables.AddRange(graphableArray);
             }
         }
         return graphables;
     }
+    public static List<MmRelayNodeGraphable> GetMmMessageResponders(MmRelayNodeGraphable graphable)
+    {
+        List<MmRelayNodeGraphable> responders = new List<MmRelayNodeGraphable>();
+        List<MmRoutingTableItem> mmRoutingTableItems = graphable.RoutingTable.GetMmRoutingTableItems(
+            MmRoutingTable.ListFilter.All,
+            MmLevelFilterHelper.SelfAndChildren);
+        // We only want the children (listeners) of the graphable
+        List<MmRoutingTableItem> mmRoutingTableItemsChildren = new List<MmRoutingTableItem>();
+        foreach (MmRoutingTableItem item in mmRoutingTableItems)
+        {
+            if (item.Level == MmLevelFilter.Child)
+            {
+                mmRoutingTableItemsChildren.Add(item);
+            }
+        }
+
+        foreach (MmRoutingTableItem item in mmRoutingTableItemsChildren)
+        {
+            if (item.Responder is MmRelayNodeGraphable)
+            {
+                responders.Add((MmRelayNodeGraphable)item.Responder);
+            }
+        }
+        Debug.Log("MercuryGraphController: Found " + responders.Count + " responders for " + graphable.gameObject.name);
+        return responders;
+    }
 
     // Modified from GraphController.CreateNewNode()
-    public NodeController CreateNewNode(Vector2 position, MercuryGraphable graphable, Type nodeType)
+    public NodeController CreateNewNode(Vector2 position, MmRelayNodeGraphable graphable, Type nodeType)
     {
         // Create a node and add it to the graph
         INode node = Activator.CreateInstance(nodeType) as INode;
@@ -269,8 +299,8 @@ public class MercuryGraphController : MonoBehaviour
     public void SaveNodePositions()
     {
         // Save positions of the graph nodes
-        List<MercuryGraphable> graphables = GetMercuryGraphables();
-        foreach (MercuryGraphable graphable in graphables)
+        List<MmRelayNodeGraphable> graphables = GetMercuryGraphables();
+        foreach (MmRelayNodeGraphable graphable in graphables)
         {
             if (graphable.nodeController != null)
             {
@@ -284,16 +314,16 @@ public class MercuryGraphController : MonoBehaviour
     public void SaveMercuryGraphableListeners()
     {
         // Save the listeners of each graphable in Playerprefs
-        List<MercuryGraphable> graphables = GetMercuryGraphables();
-        foreach (MercuryGraphable graphable in graphables)
+        List<MmRelayNodeGraphable> graphables = GetMercuryGraphables();
+        foreach (MmRelayNodeGraphable graphable in graphables)
         {
             if (graphable.nodeController != null)
             {
-                List<MercuryGraphable> listeners = graphable.mercurySignalListeners;
+                List<MmRelayNodeGraphable> listeners = GetMmMessageResponders(graphable);
                 if (listeners.Count > 0)
                 {
                     string listenerNames = "";
-                    foreach (MercuryGraphable listener in listeners)
+                    foreach (MmRelayNodeGraphable listener in listeners)
                     {
                         listenerNames += listener.gameObject.name + ",";
                     }
@@ -306,24 +336,36 @@ public class MercuryGraphController : MonoBehaviour
     public static void OverwriteMercuryGraphableListeners()
     {
         // Overwrite the listeners of each graphable
-        List<MercuryGraphable> graphables = GetMercuryGraphables();
+        List<MmRelayNodeGraphable> graphables = GetMercuryGraphables();
         Debug.Log("Overwriting Listeners of " + graphables.Count + " graphables.");
-        foreach (MercuryGraphable graphable in graphables)
+        foreach (MmRelayNodeGraphable graphable in graphables)
         {
+            graphable.RoutingTable.Clear();
             string listenerNames = PlayerPrefs.GetString(graphable.gameObject.name + "_listeners");
             if (listenerNames != "")
             {
                 string[] listenerNameArray = listenerNames.Split(',');
-                List<MercuryGraphable> listeners = new List<MercuryGraphable>();
+                List<MmRelayNodeGraphable> listeners = new List<MmRelayNodeGraphable>();
                 foreach (string listenerName in listenerNameArray)
                 {
                     if (listenerName != "")
                     {
-                        MercuryGraphable listener = GameObject.Find(listenerName).GetComponent<MercuryGraphable>();
-                        listeners.Add(listener);
+                        MmRelayNodeGraphable listener = GameObject.Find(listenerName).GetComponent<MmRelayNodeGraphable>();
+                        // MmRoutingTableItem newRoutingTableItem = new MmRoutingTableItem(
+                        //     listener.gameObject.name,
+                        //     listener,
+                        //     false);
+                        // if (graphable.doNotModifyRoutingTable)
+                        // {
+                        //     graphable.MmRespondersToAdd.Enqueue(newRoutingTableItem);
+                        // }
+                        // else
+                        // {
+                        //     graphable.RoutingTable.Add(newRoutingTableItem);
+                        // }
+                        graphable.MmAddToRoutingTable(listener, listener.gameObject.name);
                     }
                 }
-                graphable.mercurySignalListeners = listeners;
                 Debug.Log("Overwrote listeners of " + graphable.gameObject.name + ": " + listenerNames);
             }
         }
