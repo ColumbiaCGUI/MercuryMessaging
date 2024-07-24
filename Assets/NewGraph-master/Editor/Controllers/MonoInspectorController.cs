@@ -12,6 +12,9 @@ namespace NewGraph {
         public override void SetupRefreshButton(Button refreshButton) {
             refreshButton.style.display = DisplayStyle.None;
         }
+        public override void SetupApplyButton(Button applyButton) {
+            applyButton.style.display = DisplayStyle.None;
+        }
 
         public override void SetupCreateButton(Button createButton) {
             createButton.style.display = DisplayStyle.None;

@@ -42,6 +42,9 @@ namespace NewGraph {
             Button refreshButton = commandPanel.Q<Button>(nameof(refreshButton));
             SetupRefreshButton(refreshButton);
 
+            Button applyButton = commandPanel.Q<Button>(nameof(applyButton));
+            SetupApplyButton(applyButton);
+
             Button createButton = commandPanel.Q<Button>(nameof(createButton));
             SetupCreateButton(createButton);
 
@@ -71,6 +74,8 @@ namespace NewGraph {
             SetInspectorVisibility(EditorPrefs.GetBool(GraphSettings.isInspectorVisiblePrefsKey, isInspectorVisible));
         }
         public abstract void SetupRefreshButton(Button refreshButton);
+
+        public abstract void SetupApplyButton(Button applyButton);
 
         public abstract void SetupCreateButton(Button createButton);
 

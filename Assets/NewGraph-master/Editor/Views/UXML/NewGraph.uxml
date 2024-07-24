@@ -5,6 +5,7 @@
             <ui:VisualElement name="commandPanel">
                 <ui:Button tabindex="-1" display-tooltip-when-elided="true" tooltip="Center the viewport." name="homeButton" />
                 <ui:Button tabinsex="-1" text="Refresh" display-tooltip-when-elided="true" tooltip="Clear and rerender the Graph." name="refreshButton" />
+                <ui:Button tabinsex="-1" text="Apply" display-tooltip-when-elided="true" tooltip="Apply changes in Mercury." name="applyButton" />
                 <ui:Button tabindex="-1" text="Create" display-tooltip-when-elided="true" tooltip="Create a new Graph." name="createButton" />
                 <ui:Button tabindex="-1" text="Load" display-tooltip-when-elided="true" tooltip="Load a Graph." name="loadButton" />
                 <ui:Button tabindex="-1" text="Save" display-tooltip-when-elided="true" name="saveButton" />

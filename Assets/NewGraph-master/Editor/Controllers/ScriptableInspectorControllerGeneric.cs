@@ -27,6 +27,16 @@ namespace NewGraph {
             OnRefreshButtonClicked?.Invoke(GraphWindow.GetWindow<GraphWindow>(utility: false));
         }
 
+        public static event Action<GraphWindow> OnApplyButtonClicked;
+        public override void SetupApplyButton(Button applyButton) {
+            applyButton.clicked += ApplyButtonClicked;
+            // applyButton.Add(GraphSettings.ApplyButtonIcon);
+        }
+        private void ApplyButtonClicked() {
+            Debug.Log("ScriptableInspectorControllerGeneric: Apply Button clicked!");
+            OnApplyButtonClicked?.Invoke(GraphWindow.GetWindow<GraphWindow>(utility: false));
+        }
+
 		/// <summary>
 		/// Setup the create button for this inspector
 		/// </summary>
