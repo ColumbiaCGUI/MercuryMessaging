@@ -9,7 +9,7 @@ public class MercuryGraphNode : INode
 {
     // The MercuryGraphable gameObject that this node represents.
     [GraphDisplay(displayType = DisplayType.BothViews, editability = Editability.None, createGroup = false)]
-    public MercuryGraphable mercuryGraphable;
+    public MmRelayNodeGraphable mercuryGraphable;
 
     // Test toggle for the node.
     [GraphDisplay(displayType = DisplayType.BothViews, editability = Editability.None, createGroup = false)]
