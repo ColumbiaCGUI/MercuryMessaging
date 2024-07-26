@@ -258,6 +258,15 @@ public class MercuryGraphController : MonoBehaviour
             {
                 responders.Add((MmRelayNodeGraphable)item.Responder);
             }
+            else if (item.Responder is MmBaseResponder)
+            {
+                MmRelayNodeGraphable graphableResponder = item.Responder.gameObject.GetComponent<MmRelayNodeGraphable>();
+                if (graphableResponder != null)
+                {
+                    responders.Add(graphableResponder);
+                }
+            
+            }
         }
         Debug.Log("MercuryGraphController: Found " + responders.Count + " responders for " + graphable.gameObject.name);
         return responders;
