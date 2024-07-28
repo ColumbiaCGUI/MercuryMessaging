@@ -155,6 +155,9 @@ namespace MercuryMessaging
         [ReorderableList]
         public MmRoutingTable RoutingTable;
 
+        // the private variable for the path on/off
+        public GameManager gameManager;
+
         #endregion
 
         #region Properties
@@ -206,6 +209,7 @@ namespace MercuryMessaging
         /// </summary>
         public override void Start()
         {
+            gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 			base.Start ();
 
             MmLogger.LogFramework(gameObject.name + " MmRelayNode Start called.");
@@ -220,6 +224,7 @@ namespace MercuryMessaging
 
         public void Update()
         {
+            // draw the path between the nodes
             List<MmRoutingTableItem> itemsToGo = RoutingTable.GetMmRoutingTableItems(MmRoutingTable.ListFilter.All,
                 MmLevelFilterHelper.SelfAndChildren);
             
@@ -227,7 +232,10 @@ namespace MercuryMessaging
             {
                 Vector3 targetPosition = item.Responder.transform.position;
                 Vector3 currentPosition = transform.position;
-                Draw3DArrow(currentPosition, targetPosition, Color.white);
+                if(gameManager.pathOn && item.Responder.gameObject.activeSelf)
+                {
+                    Draw3DArrow(currentPosition, targetPosition, Color.white);
+                }
             }
         }
 
