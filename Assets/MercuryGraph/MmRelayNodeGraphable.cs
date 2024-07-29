@@ -5,7 +5,6 @@ using MercuryMessaging;
 using NewGraph;
 using UnityEngine;
 using Drawing;
-using EPOOutline;
 
 public class MmRelayNodeGraphable : MmRelayNode
 {
@@ -35,15 +34,17 @@ public class MmRelayNodeGraphable : MmRelayNode
     {
         base.Start();
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        // gameObject.AddComponent<Outlinable>();
-        gameObject.GetComponent<Outlinable>().enabled = false;
+        gameObject.AddComponent<Outline>();
+        gameObject.GetComponent<Outline>().enabled = false;
     }
 
     public void LateUpdate()
     {
+        // get messaging items
+        List<MmRoutingTableItem> itemsToGo = new List<MmRoutingTableItem>();
+
         // get the routing table child nodes
-        List<MmRoutingTableItem> childItems = RoutingTable.GetMmRoutingTableItems(MmRoutingTable.ListFilter.All,
-            MmLevelFilter.Child);
+        List<MmRoutingTableItem> childItems = RoutingTable.GetMmRoutingTableItems(MmRoutingTable.ListFilter.All,MmLevelFilter.Child);
 
         if(signalingOn == false)
         {
@@ -62,9 +63,6 @@ public class MmRelayNodeGraphable : MmRelayNode
         {
             // increment the time
             time += Time.deltaTime;
-
-            // get messaging items
-            List<MmRoutingTableItem> itemsToGo = new List<MmRoutingTableItem>();
 
             foreach (MmMessage message in messageBuffer)
             {
@@ -98,8 +96,13 @@ public class MmRelayNodeGraphable : MmRelayNode
                 if(gameManager.pathOn && item.Responder.gameObject.activeSelf)
                 {
                     SignalVisualizer(currentPosition, targetPosition, time);
-                    // gameObject.GetComponent<Outlinable>().OutlineParameters.Color = Color.green;
-                    // gameObject.GetComponent<Outlinable>().enabled = true;
+                    gameObject.GetComponent<Outline>().OutlineColor = Color.green;
+                    gameObject.GetComponent<Outline>().OutlineWidth = 4f;
+                    gameObject.GetComponent<Outline>().enabled = true;
+
+                    item.Responder.gameObject.GetComponent<Outline>().OutlineColor = Color.green;
+                    item.Responder.gameObject.GetComponent<Outline>().OutlineWidth = 4f;
+                    item.Responder.gameObject.GetComponent<Outline>().enabled = true;
 
                 }
             }
@@ -120,8 +123,14 @@ public class MmRelayNodeGraphable : MmRelayNode
         {
             signalingOn = false;
             time = 0.0f;
+
+            foreach (MmRoutingTableItem item in itemsToGo)
+            {
+                item.Responder.gameObject.GetComponent<Outline>().enabled = false;
+            }
+            gameObject.GetComponent<Outline>().enabled = false;
+            
             messageBuffer.Clear();
-            gameObject.GetComponent<Outlinable>().enabled = false;
         }
 
     }
