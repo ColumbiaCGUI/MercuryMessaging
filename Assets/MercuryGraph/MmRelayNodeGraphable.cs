@@ -35,7 +35,8 @@ public class MmRelayNodeGraphable : MmRelayNode
     {
         base.Start();
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        gameObject.AddComponent<Outlinable>();
+        // gameObject.AddComponent<Outlinable>();
+        gameObject.GetComponent<Outlinable>().enabled = false;
     }
 
     public void LateUpdate()
@@ -97,6 +98,9 @@ public class MmRelayNodeGraphable : MmRelayNode
                 if(gameManager.pathOn && item.Responder.gameObject.activeSelf)
                 {
                     SignalVisualizer(currentPosition, targetPosition, time);
+                    // gameObject.GetComponent<Outlinable>().OutlineParameters.Color = Color.green;
+                    // gameObject.GetComponent<Outlinable>().enabled = true;
+
                 }
             }
 
@@ -117,6 +121,7 @@ public class MmRelayNodeGraphable : MmRelayNode
             signalingOn = false;
             time = 0.0f;
             messageBuffer.Clear();
+            gameObject.GetComponent<Outlinable>().enabled = false;
         }
 
     }
