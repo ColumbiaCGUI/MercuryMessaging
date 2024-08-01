@@ -38,13 +38,34 @@ using MercuryMessaging;
 
 public class HandController : MmBaseResponder {
 
+	public GameObject lightMode;
+
 	private bool activeState = false;
 
-	void OnTriggerEnter(Collider col)
-	{
-		activeState = !activeState;
 
-		GetRelayNode().MmInvoke (MmMethod.SetActive, activeState, 
-			new MmMetadataBlock (MmLevelFilter.Child, MmActiveFilter.All));
+
+	// void OnTriggerEnter(Collider col)
+	// {
+	// 	activeState = !activeState;
+
+	// 	GetRelayNode().MmInvoke (MmMethod.SetActive, activeState, 
+	// 		new MmMetadataBlock (MmLevelFilter.Child, MmActiveFilter.All));
+	// }
+
+	public override void Update()
+	{
+		if (OVRInput.GetDown(OVRInput.RawButton.A)) {
+			if(lightMode.activeSelf)
+			{
+				activeState = false;
+			}
+			else
+			{
+				activeState = true;
+			}
+
+			GetRelayNode().MmInvoke (MmMethod.SetActive, activeState, 
+				new MmMetadataBlock (MmLevelFilter.Child, MmActiveFilter.All));
+		}
 	}
 }
