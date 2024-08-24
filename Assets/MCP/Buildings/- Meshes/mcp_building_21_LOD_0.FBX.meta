@@ -1,0 +1,313 @@
+fileFormatVersion: 2
+guid: a63fe3339926af64a8bd438a2c545c18
+ModelImporter:
+  serializedVersion: 18
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: mcp_building_21
+    100004: mcp_building_21_air_vent_01
+    100006: mcp_building_21_air_vent_02
+    100008: mcp_building_21_ammo
+    100010: mcp_building_21_billboards_01
+    100012: mcp_building_21_ceiling_fan
+    100014: mcp_building_21_concrete
+    100016: mcp_building_21_door_01
+    100018: mcp_building_21_door_02
+    100020: mcp_building_21_doors
+    100022: mcp_building_21_glass
+    100024: mcp_building_21_glass_windows
+    100026: mcp_building_21_granades
+    100028: mcp_building_21_interior_props_01
+    100030: mcp_building_21_interior_props_02
+    100032: mcp_building_21_light_lamps
+    100034: mcp_building_21_props
+    100036: mcp_building_21_roof
+    100038: mcp_building_21_smoke_granades
+    100040: mcp_building_21_w_ak47
+    100042: mcp_building_21_w_m16
+    100044: mcp_building_21_w_pistol
+    100046: mcp_building_21_w_RPG
+    100048: mcp_building_21_w_shotgun
+    100050: mcp_building_21_w_sniper_rifle
+    100052: mcp_building_21_w_uzi
+    100054: mcp_building_21_walls
+    100056: mcp_building_21_weapon_case
+    100058: Object001
+    100060: mcp_building_21_weapons
+    100062: mcp_building_21_weapons_MeshPart0
+    100064: mcp_building_21_weapons_MeshPart1
+    400000: mcp_building_21
+    400002: //RootNode
+    400004: mcp_building_21_air_vent_01
+    400006: mcp_building_21_air_vent_02
+    400008: mcp_building_21_ammo
+    400010: mcp_building_21_billboards_01
+    400012: mcp_building_21_ceiling_fan
+    400014: mcp_building_21_concrete
+    400016: mcp_building_21_door_01
+    400018: mcp_building_21_door_02
+    400020: mcp_building_21_doors
+    400022: mcp_building_21_glass
+    400024: mcp_building_21_glass_windows
+    400026: mcp_building_21_granades
+    400028: mcp_building_21_interior_props_01
+    400030: mcp_building_21_interior_props_02
+    400032: mcp_building_21_light_lamps
+    400034: mcp_building_21_props
+    400036: mcp_building_21_roof
+    400038: mcp_building_21_smoke_granades
+    400040: mcp_building_21_w_ak47
+    400042: mcp_building_21_w_m16
+    400044: mcp_building_21_w_pistol
+    400046: mcp_building_21_w_RPG
+    400048: mcp_building_21_w_shotgun
+    400050: mcp_building_21_w_sniper_rifle
+    400052: mcp_building_21_w_uzi
+    400054: mcp_building_21_walls
+    400056: mcp_building_21_weapon_case
+    400058: Object001
+    400060: mcp_building_21_weapons
+    400062: mcp_building_21_weapons_MeshPart0
+    400064: mcp_building_21_weapons_MeshPart1
+    2300000: mcp_building_21
+    2300002: mcp_building_21_air_vent_01
+    2300004: mcp_building_21_air_vent_02
+    2300006: mcp_building_21_ammo
+    2300008: mcp_building_21_billboards_01
+    2300010: mcp_building_21_ceiling_fan
+    2300012: mcp_building_21_concrete
+    2300014: mcp_building_21_door_01
+    2300016: mcp_building_21_door_02
+    2300018: mcp_building_21_doors
+    2300020: mcp_building_21_glass
+    2300022: mcp_building_21_glass_windows
+    2300024: mcp_building_21_granades
+    2300026: mcp_building_21_interior_props_01
+    2300028: mcp_building_21_interior_props_02
+    2300030: mcp_building_21_light_lamps
+    2300032: mcp_building_21_props
+    2300034: mcp_building_21_roof
+    2300036: mcp_building_21_smoke_granades
+    2300038: mcp_building_21_w_ak47
+    2300040: mcp_building_21_w_m16
+    2300042: mcp_building_21_w_pistol
+    2300044: mcp_building_21_w_RPG
+    2300046: mcp_building_21_w_shotgun
+    2300048: mcp_building_21_w_sniper_rifle
+    2300050: mcp_building_21_w_uzi
+    2300052: mcp_building_21_walls
+    2300054: mcp_building_21_weapon_case
+    2300056: Object001
+    2300058: mcp_building_21_weapons_MeshPart0
+    2300060: mcp_building_21_weapons_MeshPart1
+    3300000: mcp_building_21
+    3300002: mcp_building_21_air_vent_01
+    3300004: mcp_building_21_air_vent_02
+    3300006: mcp_building_21_ammo
+    3300008: mcp_building_21_billboards_01
+    3300010: mcp_building_21_ceiling_fan
+    3300012: mcp_building_21_concrete
+    3300014: mcp_building_21_door_01
+    3300016: mcp_building_21_door_02
+    3300018: mcp_building_21_doors
+    3300020: mcp_building_21_glass
+    3300022: mcp_building_21_glass_windows
+    3300024: mcp_building_21_granades
+    3300026: mcp_building_21_interior_props_01
+    3300028: mcp_building_21_interior_props_02
+    3300030: mcp_building_21_light_lamps
+    3300032: mcp_building_21_props
+    3300034: mcp_building_21_roof
+    3300036: mcp_building_21_smoke_granades
+    3300038: mcp_building_21_w_ak47
+    3300040: mcp_building_21_w_m16
+    3300042: mcp_building_21_w_pistol
+    3300044: mcp_building_21_w_RPG
+    3300046: mcp_building_21_w_shotgun
+    3300048: mcp_building_21_w_sniper_rifle
+    3300050: mcp_building_21_w_uzi
+    3300052: mcp_building_21_walls
+    3300054: mcp_building_21_weapon_case
+    3300056: Object001
+    3300058: mcp_building_21_weapons_MeshPart0
+    3300060: mcp_building_21_weapons_MeshPart1
+    4300000: mcp_building_21_interior_props_01
+    4300002: mcp_building_21_interior_props_02
+    4300004: mcp_building_21_glass
+    4300006: mcp_building_21_billboards_01
+    4300008: mcp_building_21
+    4300010: mcp_building_21_w_m16
+    4300012: mcp_building_21_w_pistol
+    4300014: mcp_building_21_ammo
+    4300016: mcp_building_21_weapon_case
+    4300018: mcp_building_21_granades
+    4300020: mcp_building_21_light_lamps
+    4300022: mcp_building_21_w_ak47
+    4300024: mcp_building_21_w_shotgun
+    4300026: mcp_building_21_w_uzi
+    4300028: mcp_building_21_w_sniper_rifle
+    4300030: mcp_building_21_w_RPG
+    4300032: mcp_building_21_concrete
+    4300034: mcp_building_21_roof
+    4300036: mcp_building_21_walls
+    4300038: mcp_building_21_door_01
+    4300040: mcp_building_21_glass_windows
+    4300042: mcp_building_21_air_vent_02
+    4300044: mcp_building_21_air_vent_01
+    4300046: mcp_building_21_props
+    4300048: mcp_building_21_doors
+    4300050: mcp_building_21_ceiling_fan
+    4300052: mcp_building_21_door_02
+    4300054: mcp_building_21_smoke_granades
+    4300056: Object001
+    4300058: mcp_building_21_weapons_MeshPart0
+    4300060: mcp_building_21_weapons_MeshPart1
+    7400000: Take 001
+    9500000: //RootNode
+    11100000: //RootNode
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 2
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Take 001
+      takeName: Take 001
+      firstFrame: 0
+      lastFrame: 100
+      wrapMode: 2
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: mcp_building_21
+        weight: 1
+      - path: mcp_building_21_air_vent_01
+        weight: 1
+      - path: mcp_building_21_air_vent_02
+        weight: 1
+      - path: mcp_building_21_ammo
+        weight: 1
+      - path: mcp_building_21_billboards_01
+        weight: 1
+      - path: mcp_building_21_ceiling_fan
+        weight: 1
+      - path: mcp_building_21_concrete
+        weight: 1
+      - path: mcp_building_21_door_01
+        weight: 1
+      - path: mcp_building_21_door_02
+        weight: 1
+      - path: mcp_building_21_doors
+        weight: 1
+      - path: mcp_building_21_glass
+        weight: 1
+      - path: mcp_building_21_glass_windows
+        weight: 1
+      - path: mcp_building_21_granades
+        weight: 1
+      - path: mcp_building_21_interior_props_01
+        weight: 1
+      - path: mcp_building_21_interior_props_02
+        weight: 1
+      - path: mcp_building_21_light_lamps
+        weight: 1
+      - path: mcp_building_21_props
+        weight: 1
+      - path: mcp_building_21_roof
+        weight: 1
+      - path: mcp_building_21_smoke_granades
+        weight: 1
+      - path: mcp_building_21_w_ak47
+        weight: 1
+      - path: mcp_building_21_w_m16
+        weight: 1
+      - path: mcp_building_21_w_pistol
+        weight: 1
+      - path: mcp_building_21_w_RPG
+        weight: 1
+      - path: mcp_building_21_w_shotgun
+        weight: 1
+      - path: mcp_building_21_w_sniper_rifle
+        weight: 1
+      - path: mcp_building_21_w_uzi
+        weight: 1
+      - path: mcp_building_21_walls
+        weight: 1
+      - path: mcp_building_21_weapon_case
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: .00999999978
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
