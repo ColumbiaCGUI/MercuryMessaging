@@ -72,6 +72,10 @@ namespace MercuryMessaging
 
         private float time = 0.0f;
 
+        public Transform positionOffset;
+
+        private GameObject XROrigin;
+
         private List<MmMessage> messageBuffer = new List<MmMessage>();
 
         /// <summary>
@@ -235,8 +239,20 @@ namespace MercuryMessaging
             MmLogger.LogFramework(gameObject.name + " MmRelayNode Start called.");
 
             gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-            gameObject.AddComponent<Outline>();
+            if(gameObject.GetComponent<Outline>() == null)
+            {
+                gameObject.AddComponent<Outline>();
+            }
             gameObject.GetComponent<Outline>().enabled = false;
+
+            if(positionOffset == null)
+            {
+                positionOffset = gameObject.transform;
+            }
+
+            XROrigin = GameObject.Find("OVRCameraRig");
+
+            positionOffset.position = gameObject.transform.position;
         }
 
         public void LateUpdate()
@@ -251,8 +267,8 @@ namespace MercuryMessaging
             {
                 foreach (MmRoutingTableItem item in childItems)
                 {
-                    Vector3 targetPosition = item.Responder.transform.position;
-                    Vector3 currentPosition = transform.position;
+                    Vector3 targetPosition = item.Responder.gameObject.GetComponent<MmRelayNode>().positionOffset.position;
+                    Vector3 currentPosition = positionOffset.position;
                     if(gameManager.pathOn)
                     {
                         Draw3DArrow(currentPosition, targetPosition, Color.white);
@@ -309,7 +325,7 @@ namespace MercuryMessaging
                 // }
                 foreach (MmRoutingTableItem item in itemsToGo)
                 {
-                    DrawSignals(item, transform.position);
+                    DrawSignals(item, positionOffset.position);
                 }
 
             }
@@ -320,7 +336,8 @@ namespace MercuryMessaging
 
                 foreach (MmRoutingTableItem item in itemsToGo)
                 {
-                    item.Responder.gameObject.GetComponent<Outline>().enabled = false;
+                    item.Responder.gameObject.GetComponent<Outline>().OutlineWidth = 0f;
+                    item.Responder.GetComponent<Outline>().enabled = false;
                 }
                 gameObject.GetComponent<Outline>().enabled = false;
                 
@@ -330,7 +347,7 @@ namespace MercuryMessaging
 
         private void DrawSignals(MmRoutingTableItem item, Vector3 currentPosition)
         {
-            Vector3 targetPosition = item.Responder.transform.position;
+            Vector3 targetPosition = item.Responder.gameObject.GetComponent<MmRelayNode>().positionOffset.position;
 
             if (gameManager.pathOn)
             {
@@ -364,13 +381,13 @@ namespace MercuryMessaging
             var draw = Draw.ingame;
             Vector3 distance = to - from;
 
-            int numArrows = (int)(distance.magnitude / 0.08f);
+            int numArrows = (int)(distance.magnitude / 0.3f);
 
             for (int i = 1; i < numArrows; i++)
             {
                 Vector3 pointA = Vector3.Lerp(from, to, i / (float)numArrows);
                 
-                draw.Arrowhead(pointA, distance.normalized, 0.02f, color);
+                draw.Arrowhead(pointA, distance.normalized, 0.06f, color);
             }
         }
 
@@ -382,7 +399,7 @@ namespace MercuryMessaging
             var draw = Draw.ingame;
             Vector3 distance = to - from;
 
-            int numArrows = (int)(distance.magnitude / 0.08f);
+            int numArrows = (int)(distance.magnitude / 0.3f);
 
             int greenElement = (int)( ratio * (float)numArrows);
 
@@ -393,11 +410,11 @@ namespace MercuryMessaging
                 
                 if(i == greenElement)
                 {
-                    draw.Arrowhead(pointA, distance.normalized, 0.04f, Color.green);
+                    draw.Arrowhead(pointA, distance.normalized, 0.12f, Color.green);
                 }
                 else
                 {
-                    draw.Arrowhead(pointA, distance.normalized, 0.02f, Color.cyan);
+                    draw.Arrowhead(pointA, distance.normalized, 0.06f, Color.cyan);
                 }
             }
         }
