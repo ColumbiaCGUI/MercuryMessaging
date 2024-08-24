@@ -38,7 +38,7 @@ using MercuryMessaging;
 
 public class HandController : MmBaseResponder {
 
-	public GameObject lightMode;
+	// public GameObject lightMode;
 
 	private bool activeState = false;
 
@@ -55,13 +55,15 @@ public class HandController : MmBaseResponder {
 	public override void Update()
 	{
 		if (OVRInput.GetDown(OVRInput.RawButton.A)) {
-			if(lightMode.activeSelf)
+			if(activeState)
 			{
 				activeState = false;
+				Debug.Log("HandController: Deactivating");
 			}
 			else
 			{
 				activeState = true;
+				Debug.Log("HandController: Activating");
 			}
 
 			GetRelayNode().MmInvoke (MmMethod.SetActive, activeState, 
