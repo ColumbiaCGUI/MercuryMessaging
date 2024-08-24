@@ -1,0 +1,102 @@
+fileFormatVersion: 2
+guid: f41129e7e32ca1546a6b93a5edfdd9e6
+ModelImporter:
+  serializedVersion: 16
+  fileIDToRecycleName:
+    100000: mcp_building_22
+    100002: mcp_building_22_billboard
+    100004: mcp_building_22_concrete_02
+    100006: mcp_building_22_concrete_03
+    100008: mcp_building_22_doors
+    100010: //RootNode
+    100012: mcp_building_22_props_01
+    100014: mcp_building_22_roof
+    100016: mcp_building_22_walls
+    400000: mcp_building_22
+    400002: mcp_building_22_billboard
+    400004: mcp_building_22_concrete_02
+    400006: mcp_building_22_concrete_03
+    400008: mcp_building_22_doors
+    400010: //RootNode
+    400012: mcp_building_22_props_01
+    400014: mcp_building_22_roof
+    400016: mcp_building_22_walls
+    2300000: mcp_building_22
+    2300002: mcp_building_22_billboard
+    2300004: mcp_building_22_concrete_02
+    2300006: mcp_building_22_concrete_03
+    2300008: mcp_building_22_doors
+    2300010: mcp_building_22_props_01
+    2300012: mcp_building_22_roof
+    2300014: mcp_building_22_walls
+    3300000: mcp_building_22
+    3300002: mcp_building_22_billboard
+    3300004: mcp_building_22_concrete_02
+    3300006: mcp_building_22_concrete_03
+    3300008: mcp_building_22_doors
+    3300010: mcp_building_22_props_01
+    3300012: mcp_building_22_roof
+    3300014: mcp_building_22_walls
+    4300000: mcp_building_22
+    4300002: mcp_building_22_billboard
+    4300004: mcp_building_22_walls
+    4300006: mcp_building_22_concrete_02
+    4300008: mcp_building_22_props_01
+    4300010: mcp_building_22_concrete_03
+    4300012: mcp_building_22_roof
+    4300014: mcp_building_22_doors
+    9500000: //RootNode
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: .00999999978
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  additionalBone: 0
+  userData: 

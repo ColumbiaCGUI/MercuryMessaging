@@ -1,0 +1,101 @@
+fileFormatVersion: 2
+guid: 2548179bd4825c44eb5063c1952d3093
+ModelImporter:
+  serializedVersion: 16
+  fileIDToRecycleName:
+    100000: mcp_street_light_pole_01_lamp
+    100002: mcp_traffic_lights_01
+    100004: mcp_traffic_lights_01_lamp
+    100006: mcp_traffic_lights_01_lights_a
+    100008: mcp_traffic_lights_01_lights_b
+    100010: //RootNode
+    100012: mcp_traffic_lights_02_lamp
+    100014: mcp_traffic_lights_02_light_a
+    100016: Object223
+    400000: mcp_street_light_pole_01_lamp
+    400002: mcp_traffic_lights_01
+    400004: mcp_traffic_lights_01_lamp
+    400006: mcp_traffic_lights_01_lights_a
+    400008: mcp_traffic_lights_01_lights_b
+    400010: //RootNode
+    400012: mcp_traffic_lights_02_lamp
+    400014: mcp_traffic_lights_02_light_a
+    400016: Object223
+    2300000: mcp_street_light_pole_01_lamp
+    2300002: mcp_traffic_lights_01
+    2300004: mcp_traffic_lights_01_lamp
+    2300006: mcp_traffic_lights_01_lights_a
+    2300008: mcp_traffic_lights_01_lights_b
+    2300010: mcp_traffic_lights_02_lamp
+    2300012: mcp_traffic_lights_02_light_a
+    2300014: Object223
+    3300000: mcp_street_light_pole_01_lamp
+    3300002: mcp_traffic_lights_01
+    3300004: mcp_traffic_lights_01_lamp
+    3300006: mcp_traffic_lights_01_lights_a
+    3300008: mcp_traffic_lights_01_lights_b
+    3300010: mcp_traffic_lights_02_lamp
+    3300012: mcp_traffic_lights_02_light_a
+    3300014: Object223
+    4300000: mcp_street_light_pole_01_lamp
+    4300002: mcp_traffic_lights_02_lamp
+    4300004: mcp_traffic_lights_02_light_a
+    4300006: mcp_traffic_lights_01_lights_a
+    4300008: mcp_traffic_lights_01_lights_b
+    4300010: mcp_traffic_lights_01_lamp
+    4300012: Object223
+    4300014: mcp_traffic_lights_01
+    9500000: //RootNode
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: .00999999978
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  additionalBone: 0
+  userData: 
