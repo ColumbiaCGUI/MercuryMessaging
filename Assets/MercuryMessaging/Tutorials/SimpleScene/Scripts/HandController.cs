@@ -35,26 +35,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using MercuryMessaging;
+using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.InputSystem;
 
 public class HandController : MmBaseResponder {
 
 	// public GameObject lightMode;
+	private InputActionAsset playerInput;
+
+	private InputAction signalAction;
 
 	private bool activeState = false;
 
 
 
-	// void OnTriggerEnter(Collider col)
-	// {
-	// 	activeState = !activeState;
-
-	// 	GetRelayNode().MmInvoke (MmMethod.SetActive, activeState, 
-	// 		new MmMetadataBlock (MmLevelFilter.Child, MmActiveFilter.All));
-	// }
-
+	void Start()
+	{
+		playerInput = GameObject.Find("GameManager").GetComponent<GameManager>().playerInput;
+		signalAction = playerInput.FindActionMap("XRI RightHand Interaction").FindAction("Signal");
+		signalAction.Enable();
+	}
 	public override void Update()
 	{
-		if (OVRInput.GetDown(OVRInput.RawButton.A)) {
+		if (OVRInput.GetDown(OVRInput.RawButton.A) || signalAction.triggered) {
 			if(activeState)
 			{
 				activeState = false;
