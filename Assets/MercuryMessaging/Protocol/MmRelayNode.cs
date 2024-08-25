@@ -74,6 +74,10 @@ namespace MercuryMessaging
 
         public Transform positionOffset;
 
+        private GameObject lineObject;
+
+        public List<GameObject> lineObjects = new List<GameObject>();
+
         private GameObject XROrigin;
 
         private List<MmMessage> messageBuffer = new List<MmMessage>();
@@ -236,6 +240,8 @@ namespace MercuryMessaging
         {
 			base.Start ();
 
+            lineObject = GameObject.Find("LineRenderer");
+
             MmLogger.LogFramework(gameObject.name + " MmRelayNode Start called.");
 
             gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
@@ -257,6 +263,13 @@ namespace MercuryMessaging
 
         public void LateUpdate()
         {
+            // // delete all previous line paths
+            // foreach (GameObject line in lineObjects)
+            // {
+            //     Destroy(line);
+            // }
+            // lineObjects.Clear();
+
             // get messaging items
             List<MmRoutingTableItem> itemsToGo = new List<MmRoutingTableItem>();
 
@@ -271,7 +284,11 @@ namespace MercuryMessaging
                     Vector3 currentPosition = positionOffset.position;
                     if(gameManager.pathOn)
                     {
-                        Draw3DArrow(currentPosition, targetPosition, Color.white);
+                        // Draw3DArrow(currentPosition, targetPosition, Color.white);
+
+                        // instead of drawing the arrow, draw the path between the nodes
+                        DrawPath(currentPosition, targetPosition, Color.white);
+
                     }
                 }
             }
@@ -391,12 +408,22 @@ namespace MercuryMessaging
             }
         }
 
+        // draw a 3d path between two points
+        public void DrawPath(Vector3 from, Vector3 to, Color color)
+        {
+            var draw = Draw.ingame;
+            draw.DashedLine(from, to, 0.1f, 0.06f, color);
+        }
+
         // draw a 3d arrow between invoked nodes
         public void SignalVisualizer(Vector3 from, Vector3 to,float time)
         {
             float ratio = time / displayPeriod;
             
             var draw = Draw.ingame;
+
+            draw.DashedLine(from, to, 0.1f, 0.06f, Color.cyan);
+
             Vector3 distance = to - from;
 
             int numArrows = (int)(distance.magnitude / 0.3f);
@@ -412,10 +439,10 @@ namespace MercuryMessaging
                 {
                     draw.Arrowhead(pointA, distance.normalized, 0.12f, Color.green);
                 }
-                else
-                {
-                    draw.Arrowhead(pointA, distance.normalized, 0.06f, Color.cyan);
-                }
+                // else
+                // {
+                //     draw.Arrowhead(pointA, distance.normalized, 0.06f, Color.cyan);
+                // }
             }
         }
 
