@@ -6,48 +6,90 @@ using UnityEditor.UI;
 
 public class TrafficLightResponder : MmBaseResponder
 {
-    public bool direction1 = true;
+    public bool direction1 = false;
 
     Renderer objRenderer;
 
     public int mode;
 
     float delay;
-    // Start is called before the first frame update
-    public override void Start()
-    {
-        objRenderer = GetComponent<Renderer>();
 
-        mode = 0;
-        SetLightColorMaterialOffset(new Vector2(0.0f, 0.0f));
+    public override void Awake()
+    {
         if(direction1)
         {
             mode = 2;
             SetLightColorMaterialOffset(new Vector2(0.0625f * 2.0f, 0.0f));
         }
+        else
+        {
+            mode = 0;
+            SetLightColorMaterialOffset(new Vector2(0.0f, 0.0f));
+        }
         delay = 2.0f;
+    }
+
+    // Start is called before the first frame update
+    public override void Start()
+    {
+        objRenderer = GetComponent<Renderer>();
+
+        
+        // if(direction1)
+        // {
+        //     mode = 2;
+        //     SetLightColorMaterialOffset(new Vector2(0.0625f * 2.0f, 0.0f));
+        // }
+        // else
+        // {
+        //     mode = 0;
+        //     SetLightColorMaterialOffset(new Vector2(0.0f, 0.0f));
+        // }
+        // mode = 0;
+        // SetLightColorMaterialOffset(new Vector2(0.0f, 0.0f));
+        // delay = 2.0f;
     }
 
     private void SetLightColorMaterialOffset(Vector2 vector2)
     {
-        // objRenderer.materials[1].SetTextureOffset("_MainTex", vector2);
-        List<Material> materials = new List<Material>();
-        GetComponent<Renderer>().GetSharedMaterials(materials);
-        materials[1].SetTextureOffset("_MainTex", vector2);
-        for (int i = 0; i < materials.Count; i++)
-        {
-            if (materials[i].name != "ampeln_de_4k-main" || materials[i].name != "ampeln_de_4k-lights")
+        // // objRenderer.materials[1].SetTextureOffset("_MainTex", vector2);
+        // List<Material> materials = new List<Material>();
+        // GetComponent<Renderer>().GetSharedMaterials(materials);
+        // materials[1].SetTextureOffset("_MainTex", vector2);
+        // for (int i = 0; i < materials.Count; i++)
+        // {
+        //     if (materials[i].name != "ampeln_de_4k-main" || materials[i].name != "ampeln_de_4k-lights")
+        //     {
+        //         materials.RemoveAt(i);
+        //         i--;
+        //     }
+        // }
+
+        // Get the original materials
+            Renderer renderer = GetComponent<Renderer>();
+            Material[] materials = renderer.materials; // This creates unique instances of the materials
+
+            // Modify the material you need to change
+            materials[1].SetTextureOffset("_MainTex", vector2);
+
+            // If you need to filter the materials and only keep certain ones
+            List<Material> filteredMaterials = new List<Material>();
+            foreach (var material in materials)
             {
-                materials.RemoveAt(i);
-                i--;
+                // Debug.Log("materialName"+material.name);
+                if (material.name.Contains("ampeln_de_4k-main") || material.name.Contains("ampeln_de_4k-lights"))
+                {
+                    filteredMaterials.Add(material);
+                }
             }
-        }
+
+            // Apply the filtered list back to the renderer if needed
+            renderer.materials = filteredMaterials.ToArray();
     }
 
     // Update is called once per frame
     public override void Update()
     {
-
         if(mode == 0)
         {    
             delay -= Time.deltaTime;
@@ -89,7 +131,7 @@ public class TrafficLightResponder : MmBaseResponder
             }
         }
 
-        base.Update();
+        // base.Update();
     }
 
     public override void SetActive(bool activeState)
