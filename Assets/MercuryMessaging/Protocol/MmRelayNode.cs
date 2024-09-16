@@ -38,6 +38,9 @@ using MercuryMessaging.Task;
 using UnityEngine;
 using NewGraph;
 using Drawing;
+using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.InputSystem;
+
 
 namespace MercuryMessaging
 {
@@ -67,6 +70,10 @@ namespace MercuryMessaging
         // private MmMessage signalMessage;
 
         public bool signalingOn = false;
+
+        public  List<string> messageInList = new List<string>();
+
+        public  List<string> messageOutList = new List<string>();
 
         private float displayPeriod = 2.0f;
 
@@ -173,6 +180,10 @@ namespace MercuryMessaging
         /// </summary>
         public bool AutoGrabAttachedResponders = true;
 
+        private GameObject rightController;
+
+        private Outline rightControllerModelOutline;
+
         /// <summary>
         /// List of associated Mercury Responders.
         /// Each Mercury Routing Table Item contains:
@@ -231,6 +242,14 @@ namespace MercuryMessaging
 			base.Awake ();
 
             MmLogger.LogFramework(gameObject.name + " MmRelayNode Awake called.");
+
+            // add XR simple interactable if not already added
+            if(gameObject.GetComponent<CustomXRSimpleInteractable>() == null)
+            {
+                gameObject.AddComponent<CustomXRSimpleInteractable>();
+            }
+
+            rightController = GameObject.Find("GameManager").GetComponent<GameManager>().rightController;
         }
 
         /// <summary>
@@ -258,20 +277,26 @@ namespace MercuryMessaging
 
             XROrigin = GameObject.Find("OVRCameraRig");
 
-            positionOffset.position = gameObject.transform.position;
+            // positionOffset.position = gameObject.transform.position;
         }
 
         public void LateUpdate()
         {
-            // // delete all previous line paths
-            // foreach (GameObject line in lineObjects)
-            // {
-            //     Destroy(line);
-            // }
-            // lineObjects.Clear();
+            try
+            {
+                if(rightController.transform.Find("XR Controller Right(Clone)/MetaQuestTouchPlus_Right").gameObject != null)
+                {
+                    rightControllerModelOutline = rightController.transform.Find("XR Controller Right(Clone)/MetaQuestTouchPlus_Right").gameObject.GetComponent<Outline>();
+                }
+            }
+            catch
+            {
+                Debug.Log("Right Controller not found");
+            }
 
             // get messaging items
             List<MmRoutingTableItem> itemsToGo = new List<MmRoutingTableItem>();
+            List<MmMessage> messages = new List<MmMessage>();
 
             // get the routing table child nodes
             List<MmRoutingTableItem> childItems = RoutingTable.GetMmRoutingTableItems(MmRoutingTable.ListFilter.All,MmLevelFilter.Child);
@@ -304,6 +329,7 @@ namespace MercuryMessaging
                     if(message.MetadataBlock.LevelFilter == MmLevelFilter.Parent)
                     {
                         items = RoutingTable.GetMmRoutingTableItems(MmRoutingTable.ListFilter.All,MmLevelFilter.Parent);
+
                     }
                     else if(message.MetadataBlock.LevelFilter == MmLevelFilter.Child)
                     {
@@ -315,41 +341,33 @@ namespace MercuryMessaging
                         if(item.Tags == message.MetadataBlock.Tag || message.MetadataBlock.Tag == (MmTag)(-1))
                         {
                             itemsToGo.Add(item);
+                            messages.Add(message);
                         }
                     }
                 }
-                // no messaging items
-                List<MmRoutingTableItem> itemsRest = childItems.Except(itemsToGo).ToList();
 
-                // draw messaging items
-                // foreach (MmRoutingTableItem item in itemsToGo)
-                // {
-                //     Vector3 targetPosition = item.Responder.transform.position;
-                //     Vector3 currentPosition = transform.position;
-                    
-                //     if(gameManager.pathOn && item.Responder.gameObject.activeSelf)
-                //     {
-                //         SignalVisualizer(currentPosition, targetPosition, time);
-                //         gameObject.GetComponent<Outline>().OutlineColor = Color.green;
-                //         gameObject.GetComponent<Outline>().OutlineWidth = 4f;
-                //         gameObject.GetComponent<Outline>().enabled = true;
+                if(rightControllerModelOutline != null && gameManager.pathOn == true)
+                {
+                    rightControllerModelOutline.OutlineColor = new Color(254f/255f, 254f/255f, 98f/255f);
+                    rightControllerModelOutline.OutlineWidth = 8f;
+                    rightControllerModelOutline.enabled = true;
+                }
 
-                //         item.Responder.gameObject.GetComponent<Outline>().OutlineColor = Color.green;
-                //         item.Responder.gameObject.GetComponent<Outline>().OutlineWidth = 4f;
-                //         item.Responder.gameObject.GetComponent<Outline>().enabled = true;
-
-                //     }
-                // }
                 foreach (MmRoutingTableItem item in itemsToGo)
                 {
                     DrawSignals(item, positionOffset.position);
                 }
-
             }
             else if(time >= displayPeriod && signalingOn == true)
             {
                 signalingOn = false;
                 time = 0.0f;
+
+                if(rightControllerModelOutline != null)
+                {
+                    rightControllerModelOutline.OutlineWidth = 0f;
+                    rightControllerModelOutline.enabled = false;
+                }
 
                 foreach (MmRoutingTableItem item in itemsToGo)
                 {
@@ -362,19 +380,31 @@ namespace MercuryMessaging
             }
         }
 
-        private void DrawSignals(MmRoutingTableItem item, Vector3 currentPosition)
+        private void DrawSignals(MmRoutingTableItem item, Vector3 currentPosition, int depth = 0)
         {
             Vector3 targetPosition = item.Responder.gameObject.GetComponent<MmRelayNode>().positionOffset.position;
 
             if (gameManager.pathOn)
             {
                 SignalVisualizer(currentPosition, targetPosition, time);
-                gameObject.GetComponent<Outline>().OutlineColor = Color.green;
-                gameObject.GetComponent<Outline>().OutlineWidth = 4f;
-                gameObject.GetComponent<Outline>().enabled = true;
+                int colorIndex = depth % 3;
+                Color currentColor = new Color(0,0,0);
+                if(colorIndex == 0)
+                {
+                    currentColor = new Color (93f/255f, 58f/255f, 155f/255f);
+                }
+                else if(colorIndex == 1)
+                {
+                    currentColor = new Color (230f/255f, 97f/255f, 0f);
+                }
+                else if(colorIndex == 2)
+                {
+                    currentColor = new Color (64f/255f, 176f/255f, 166f/255f);
+                    // currentColor = new Color (230f/255f, 97f/255f, 0f);
+                }
 
-                item.Responder.gameObject.GetComponent<Outline>().OutlineColor = Color.green;
-                item.Responder.gameObject.GetComponent<Outline>().OutlineWidth = 4f;
+                item.Responder.gameObject.GetComponent<Outline>().OutlineColor = currentColor;
+                item.Responder.gameObject.GetComponent<Outline>().OutlineWidth = 2f;
                 item.Responder.gameObject.GetComponent<Outline>().enabled = true;
 
                 // Check if the Responder is of type MmRelayNode
@@ -386,7 +416,7 @@ namespace MercuryMessaging
                     foreach (MmRoutingTableItem childItem in childItems)
                     {
                         // Recursively draw signals for each child
-                        DrawSignals(childItem, targetPosition);
+                        DrawSignals(childItem, targetPosition, depth + 1);
                     }
                 }
             }
@@ -412,7 +442,9 @@ namespace MercuryMessaging
         public void DrawPath(Vector3 from, Vector3 to, Color color)
         {
             var draw = Draw.ingame;
-            draw.DashedLine(from, to, 0.1f, 0.06f, color);
+            // draw.LineWidthMultiplier = 2.0f;
+            // draw.OrderOffset = 1;
+            draw.DashedLine(from, to, 0.06f, 0.06f, color);
         }
 
         // draw a 3d arrow between invoked nodes
@@ -421,12 +453,13 @@ namespace MercuryMessaging
             float ratio = time / displayPeriod;
             
             var draw = Draw.ingame;
+            // draw.OrderOffset = 1;
 
-            draw.DashedLine(from, to, 0.1f, 0.06f, Color.cyan);
+            // draw.DashedLine(from, to, 0.06f, 0.06f, Color.cyan);
 
             Vector3 distance = to - from;
 
-            int numArrows = (int)(distance.magnitude / 0.3f);
+            int numArrows = (int)(distance.magnitude / 0.2f);
 
             int greenElement = (int)( ratio * (float)numArrows);
 
@@ -437,12 +470,79 @@ namespace MercuryMessaging
                 
                 if(i == greenElement)
                 {
-                    draw.Arrowhead(pointA, distance.normalized, 0.12f, Color.green);
+                    // draw.Arrowhead(pointA, distance.normalized,(Camera.main.transform.position-pointA).normalized,0.12f, Color.green);
+                    DrawArrowheadMesh(pointA, distance.normalized,(Camera.main.transform.position-pointA).normalized, new Color(26f/255f,133f/255f,1f), 0.20f);
                 }
-                // else
-                // {
-                //     draw.Arrowhead(pointA, distance.normalized, 0.06f, Color.cyan);
-                // }
+                else
+                {
+                    DrawArrowheadMesh(pointA, distance.normalized, (Camera.main.transform.position-pointA).normalized,new Color(212f/255f,17f/255f, 89f/255f), 0.10f);
+                }
+            }
+        }
+
+        private void DrawArrowheadMesh(Vector3 position, Vector3 direction, Vector3 up, Color color, float size)
+        {
+            // Normalize the direction and up vectors
+            Vector3 forward = direction.normalized * size;
+            Vector3 upDirection = up.normalized * size * 0.5f;
+
+            // Calculate the right vector
+            Vector3 right = Vector3.Cross(forward, upDirection).normalized * size * 0.5f;
+
+            // Define the three corners of the triangle (arrowhead)
+            Vector3 tip = position + forward;              // Tip of the arrowhead
+            Vector3 base1 = position - right + upDirection;  // Base corner 1
+            Vector3 base2 = position + right + upDirection;  // Base corner 2
+
+            // Draw the solid triangle using ALINE's SolidTriangle function
+            Draw.ingame.SolidTriangle(tip, base1, base2, color);
+        }
+
+        public void UpdateMessages(MmMessage message)   
+        {
+            List<MmRoutingTableItem> items = new List<MmRoutingTableItem>();
+
+            // Determine which level to filter by
+            if (message.MetadataBlock.LevelFilter == MmLevelFilter.Parent)
+            {
+                items = RoutingTable.GetMmRoutingTableItems(MmRoutingTable.ListFilter.All, MmLevelFilter.Parent);
+            }
+            else if (message.MetadataBlock.LevelFilter == MmLevelFilter.Child)
+            {
+                items = RoutingTable.GetMmRoutingTableItems(MmRoutingTable.ListFilter.All, MmLevelFilter.Child);
+            }
+
+            // Update items and propagate the message recursively
+            foreach (MmRoutingTableItem item in items)
+            {
+                if (item.Tags == message.MetadataBlock.Tag || message.MetadataBlock.Tag == (MmTag)(-1))
+                {
+                    UpdateItemAndPropagate(item, message);
+                }
+            }
+        }
+
+        private void UpdateItemAndPropagate(MmRoutingTableItem item, MmMessage message)
+        {
+            System.DateTime currentTime = System.DateTime.Now;
+            // Update the messageOutList for the current node
+            messageOutList.Insert(0, item.Name + " : " + message.MmMessageType.ToString() + "\n" + currentTime.ToString("yyyy-MM-dd HH:mm:ss"));
+            if (messageOutList.Count > 10)
+            {
+                messageOutList.RemoveAt(10);
+            }
+
+            // If the item has a responder that is a MmRelayNode, update its messageInList
+            if (item.Responder is MmRelayNode relayNode && item.Responder != this)
+            {
+                relayNode.messageInList.Insert(0, gameObject.name + " : " + message.MmMessageType.ToString() + "\n" + currentTime.ToString("yyyy-MM-dd HH:mm:ss"));
+                if (relayNode.messageInList.Count > 10)
+                {
+                    relayNode.messageInList.RemoveAt(10);
+                }
+
+                // Recursively update the child nodes of the current relay node
+                relayNode.UpdateMessages(message);
             }
         }
 
@@ -636,6 +736,7 @@ namespace MercuryMessaging
         {
             signalingOn =true;
             messageBuffer.Add(message);
+            UpdateMessages(message);
             MmMessageType msgType = message.MmMessageType;
             //If the MmRelayNode has not been initialized, initialize it here,
             //  and refresh the parents - to ensure proper routing can occur.
@@ -778,6 +879,8 @@ namespace MercuryMessaging
 			MmMetadataBlock metadataBlock = null)
         {
 			MmMessage msg = new MmMessage (mmMethod, MmMessageType.MmVoid, metadataBlock);
+            messageBuffer.Add(msg);
+            UpdateMessages(msg);
             MmInvoke(msg);
         }
 
@@ -795,6 +898,8 @@ namespace MercuryMessaging
             MmMessage msg = param.Copy();
             msg.MmMethod = mmMethod;
             msg.MetadataBlock = metadataBlock;
+            messageBuffer.Add(msg);
+            UpdateMessages(msg);
             MmInvoke(msg);
         }
 
@@ -810,6 +915,8 @@ namespace MercuryMessaging
             MmMetadataBlock metadataBlock = null)
         {
 			MmMessage msg = new MmMessageBool (param, mmMethod, metadataBlock);
+            messageBuffer.Add(msg);
+            UpdateMessages(msg);
             MmInvoke(msg);
         }
 
@@ -825,6 +932,8 @@ namespace MercuryMessaging
             MmMetadataBlock metadataBlock = null)
         {
 			MmMessage msg = new MmMessageInt(param, mmMethod, metadataBlock);
+            messageBuffer.Add(msg);
+            UpdateMessages(msg);
             MmInvoke(msg);
         }
 
@@ -840,6 +949,8 @@ namespace MercuryMessaging
             MmMetadataBlock metadataBlock = null)
         {
 			MmMessage msg = new MmMessageFloat(param, mmMethod, metadataBlock);
+            messageBuffer.Add(msg);
+            UpdateMessages(msg);
             MmInvoke(msg);
         }
 
@@ -855,6 +966,8 @@ namespace MercuryMessaging
             MmMetadataBlock metadataBlock = null)
         {
 			MmMessage msg = new MmMessageVector3(param, mmMethod, metadataBlock);
+            messageBuffer.Add(msg);
+            UpdateMessages(msg);
             MmInvoke(msg);
 		}
 
@@ -870,6 +983,8 @@ namespace MercuryMessaging
             MmMetadataBlock metadataBlock = null)
         {
 			MmMessage msg = new MmMessageVector4(param, mmMethod, metadataBlock);
+            messageBuffer.Add(msg);
+            UpdateMessages(msg);
             MmInvoke(msg);
 		}
 
@@ -885,6 +1000,8 @@ namespace MercuryMessaging
             MmMetadataBlock metadataBlock = null)
         {
 			MmMessage msg = new MmMessageString(param, mmMethod, metadataBlock);
+            messageBuffer.Add(msg);
+            UpdateMessages(msg);
             MmInvoke(msg);
 		}
 
@@ -900,6 +1017,8 @@ namespace MercuryMessaging
             MmMetadataBlock metadataBlock = null)
         {
 			MmMessage msg = new MmMessageByteArray(param, mmMethod, metadataBlock);
+            messageBuffer.Add(msg);
+            UpdateMessages(msg);
             MmInvoke(msg);
 		}
 
@@ -915,6 +1034,8 @@ namespace MercuryMessaging
 			MmMetadataBlock metadataBlock = null)
 		{
 			MmMessage msg = new MmMessageTransform(param, mmMethod, metadataBlock);
+            messageBuffer.Add(msg);
+            UpdateMessages(msg);
 			MmInvoke(msg);
 		}
 
@@ -930,6 +1051,8 @@ namespace MercuryMessaging
 			MmMetadataBlock metadataBlock = null)
 		{
 			MmMessage msg = new MmMessageTransformList(param, mmMethod, metadataBlock);
+            messageBuffer.Add(msg);
+            UpdateMessages(msg);
 			MmInvoke(msg);
 		}
 
@@ -945,6 +1068,8 @@ namespace MercuryMessaging
             MmMetadataBlock metadataBlock = null)
         {
             MmMessage msg = new MmMessageSerializable(param, mmMethod, metadataBlock);
+            messageBuffer.Add(msg);
+            UpdateMessages(msg);
             MmInvoke(msg);
         }
 
@@ -959,6 +1084,8 @@ namespace MercuryMessaging
             MmMetadataBlock metadataBlock = null)
         {
             MmMessage msg = new MmMessageGameObject(param, mmMethod, metadataBlock);
+            messageBuffer.Add(msg);
+            UpdateMessages(msg);
             MmInvoke(msg);
         }
 
@@ -974,6 +1101,8 @@ namespace MercuryMessaging
             MmMetadataBlock metadataBlock = null)
         {
             MmMessage msg = new MmMessageQuaternion(param, mmMethod, metadataBlock);
+            messageBuffer.Add(msg);
+            UpdateMessages(msg);
             MmInvoke(msg);
         }
 
