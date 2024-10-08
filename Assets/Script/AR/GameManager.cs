@@ -28,6 +28,18 @@ public class GameManager : MonoBehaviour
 
         MessageIn.SetActive(false);
         MessageOut.SetActive(false);
+
+        
+
+        // instantiate 10 messages for each panel using message prefab
+        for (int i = 0; i < 10; i++)
+        {
+            // the messages do not have any content yet
+            GameObject messageTextIn = Instantiate(MessagePrefab, MessageIn.transform.Find("Panel/ScrollView/Viewport/Content"));
+            GameObject messageTextOut = Instantiate(MessagePrefab, MessageOut.transform.Find("Panel/ScrollView/Viewport/Content"));
+            
+        }
+        
     }
 
     void Update()
@@ -37,35 +49,6 @@ public class GameManager : MonoBehaviour
             pathOn = !pathOn;
         }
         
-        // Vector3 cameraPosition = Camera.main.transform.position;
-        // Vector3 forwardDirection = Camera.main.transform.forward;
-        
-        // // Calculate the desired position with the height offset
-        // Vector3 desiredPosition = cameraPosition + forwardDirection * 0.5f;
-        // desiredPosition.y -= 0.1f;
-
-        // // set the message position
-        // MessageIn.transform.position = desiredPosition + new Vector3(0.1f, 0, 0);
-        // MessageOut.transform.position = desiredPosition + new Vector3(-0.1f, 0, 0);
-
-        
-
-        // // Calculate the direction to face the camera
-        // Vector3 lookDirection = cameraPosition - MessageIn.transform.position;
-        // lookDirection.y = 0; // Keep the rotation only around the Y-axis
-
-        // // Calculate the rotation to face the camera with an upward tilt
-        // Quaternion targetRotation = Quaternion.LookRotation(lookDirection) * Quaternion.Euler(5f, 180, 0);
-        // MessageIn.transform.rotation = targetRotation;
-        // MessageIn.transform.rotation = Quaternion.Euler(MessageIn.transform.rotation.eulerAngles.x, MessageIn.transform.rotation.eulerAngles.y, 0);
-
-        // // Calculate the direction to face the camera
-        // lookDirection = cameraPosition - MessageOut.transform.position;
-        // lookDirection.y = 0; // Keep the rotation only around the Y-axis
-        // Quaternion targetRotation2 = Quaternion.LookRotation(lookDirection) * Quaternion.Euler(5f, 180, 0);
-        // MessageOut.transform.rotation = targetRotation2;
-        // MessageOut.transform.rotation = Quaternion.Euler(MessageOut.transform.rotation.eulerAngles.x, MessageOut.transform.rotation.eulerAngles.y, 0);
-
         Vector3 cameraPosition = Camera.main.transform.position;
         Vector3 forwardDirection = Camera.main.transform.forward;
         Vector3 rightDirection = Camera.main.transform.right; // Use the right direction for lateral spacing
@@ -93,8 +76,6 @@ public class GameManager : MonoBehaviour
         // Ensure that the panels remain upright and have no tilt
         MessageIn.transform.rotation = Quaternion.Euler(0, MessageIn.transform.rotation.eulerAngles.y, 0);
         MessageOut.transform.rotation = Quaternion.Euler(0, MessageOut.transform.rotation.eulerAngles.y, 0);
-
-
         
     }
 
@@ -104,13 +85,17 @@ public class GameManager : MonoBehaviour
         GameObject messagePanel = isInput ? MessageIn : MessageOut;
         foreach (Transform child in messagePanel.transform.Find("Panel/ScrollView/Viewport/Content"))
         {
-            Destroy(child.gameObject);
+            child.transform.Find("Text").GetComponent<Text>().text = "";
         }
-        foreach (string message in messages)
+
+        for(int i = 0; i < messages.Count; i++)
         {
-            GameObject messageText = Instantiate(MessagePrefab, messagePanel.transform.Find("Panel/ScrollView/Viewport/Content"));
-            messageText.transform.Find("Text").GetComponent<Text>().text = message;
+            messagePanel.transform.Find("Panel/ScrollView/Viewport/Content").GetChild(i).Find("Text").GetComponent<Text>().text = messages[i];
         }
+        // {
+        //     // GameObject messageText = Instantiate(MessagePrefab, messagePanel.transform.Find("Panel/ScrollView/Viewport/Content"));
+        //     // messageText.transform.Find("Text").GetComponent<Text>().text = message;
+        // }
     }
 
     public void UpdateCurrentMessage(List<string> messages, bool isInput)
@@ -127,15 +112,25 @@ public class GameManager : MonoBehaviour
         }
 
         // Only instantiate new messages that are not already displayed
-        foreach (string message in messages)
-        {
-            if (!existingMessages.Contains(message))
-            {
-                GameObject messageText = Instantiate(MessagePrefab, contentTransform);
-                messageText.transform.Find("Text").GetComponent<Text>().text = message;
+        // foreach (string message in messages)
+        // {
+        //     if (!existingMessages.Contains(message))
+        //     {
+        //         GameObject messageText = Instantiate(MessagePrefab, contentTransform);
+        //         messageText.transform.Find("Text").GetComponent<Text>().text = message;
 
-                messageText.transform.SetAsFirstSibling(); // Ensure new messages are displayed at the top
+        //         messageText.transform.SetAsFirstSibling(); // Ensure new messages are displayed at the top
+        //     }
+        // }
+
+        // instead of instantiating new messages, update the existing messages
+        for(int i = 0; i < messages.Count; i++)
+        {
+            if(!existingMessages.Contains(messages[i]))
+            {
+                contentTransform.GetChild(i).Find("Text").GetComponent<Text>().text = messages[i];
             }
+            // contentTransform.GetChild(i).Find("Text").GetComponent<Text>().text = messages[i];
         }
     }
 

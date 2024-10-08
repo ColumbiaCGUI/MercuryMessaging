@@ -75,7 +75,7 @@ namespace MercuryMessaging
 
         public  List<string> messageOutList = new List<string>();
 
-        private float displayPeriod = 2.0f;
+        private float displayPeriod = 0.5f;
 
         private float time = 0.0f;
 
