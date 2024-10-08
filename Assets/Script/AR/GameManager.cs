@@ -10,9 +10,15 @@ public class GameManager : MonoBehaviour
 {
     public bool pathOn = false;
 
+    private bool vuplexOn = false;
+
     public InputActionAsset playerInput;
 
     private InputAction pathAction;
+
+    private int triggerTimes = 0;
+
+    public GameObject Vuplex;
 
     public GameObject MessageIn;
 
@@ -62,7 +68,24 @@ public class GameManager : MonoBehaviour
     {
         if(pathAction.triggered)
         {
-            pathOn = !pathOn;
+            // pathOn = !pathOn;
+            triggerTimes= (triggerTimes + 1)%3;
+        }
+
+        if(triggerTimes == 0)
+        {
+            pathOn=false;
+            Vuplex.SetActive(false);
+        }
+        else if(triggerTimes == 1)
+        {
+            pathOn=true;
+            Vuplex.SetActive(false);
+        }
+        else
+        {
+            pathOn=false;
+            Vuplex.SetActive(true);
         }
         
         Vector3 cameraPosition = Camera.main.transform.position;
@@ -75,6 +98,12 @@ public class GameManager : MonoBehaviour
 
         // Set the positions for the panels with lateral spacing
         float panelSpacing = 0.1f; // Adjust this value for the desired spacing between panels
+        
+
+        Vector3 vuplexPosition = cameraPosition + forwardDirection * 2.5f;
+        // update the 3 panels to be in front of the camera
+        Vuplex.transform.position = vuplexPosition;
+        Vuplex.transform.position = new Vector3(Vuplex.transform.position.x, Camera.main.transform.position.y-0.1f, Vuplex.transform.position.z);
 
         MessageIn.transform.position = desiredPosition - rightDirection * panelSpacing;
         MessageOut.transform.position = desiredPosition + rightDirection * panelSpacing;
@@ -85,9 +114,15 @@ public class GameManager : MonoBehaviour
         Vector3 flatForward = new Vector3(forwardDirection.x, 0, forwardDirection.z).normalized;
         Quaternion targetRotation = Quaternion.LookRotation(flatForward) * Quaternion.Euler(0, 0, 0);
 
+        // Apply the same rotation on Vuplex menu
+        Vuplex.transform.rotation = targetRotation;
+
         // Apply the same rotation to both panels to keep them aligned
         MessageIn.transform.rotation = targetRotation;
         MessageOut.transform.rotation = targetRotation;
+
+        // ensure the panels of vuplex remain upright and no tilt
+        Vuplex.transform.rotation = Quaternion.Euler(0, Vuplex.transform.rotation.eulerAngles.y, 0);
 
         // Ensure that the panels remain upright and have no tilt
         MessageIn.transform.rotation = Quaternion.Euler(0, MessageIn.transform.rotation.eulerAngles.y, 0);
