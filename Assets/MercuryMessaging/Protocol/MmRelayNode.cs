@@ -880,7 +880,7 @@ namespace MercuryMessaging
         {
 			MmMessage msg = new MmMessage (mmMethod, MmMessageType.MmVoid, metadataBlock);
             messageBuffer.Add(msg);
-            UpdateMessages(msg);
+            // UpdateMessages(msg);
             MmInvoke(msg);
         }
 
@@ -899,7 +899,7 @@ namespace MercuryMessaging
             msg.MmMethod = mmMethod;
             msg.MetadataBlock = metadataBlock;
             messageBuffer.Add(msg);
-            UpdateMessages(msg);
+            // UpdateMessages(msg);
             MmInvoke(msg);
         }
 
@@ -916,7 +916,7 @@ namespace MercuryMessaging
         {
 			MmMessage msg = new MmMessageBool (param, mmMethod, metadataBlock);
             messageBuffer.Add(msg);
-            UpdateMessages(msg);
+            // UpdateMessages(msg);
             MmInvoke(msg);
         }
 
@@ -933,7 +933,7 @@ namespace MercuryMessaging
         {
 			MmMessage msg = new MmMessageInt(param, mmMethod, metadataBlock);
             messageBuffer.Add(msg);
-            UpdateMessages(msg);
+            // UpdateMessages(msg);
             MmInvoke(msg);
         }
 
@@ -950,7 +950,7 @@ namespace MercuryMessaging
         {
 			MmMessage msg = new MmMessageFloat(param, mmMethod, metadataBlock);
             messageBuffer.Add(msg);
-            UpdateMessages(msg);
+            // UpdateMessages(msg);
             MmInvoke(msg);
         }
 
@@ -967,7 +967,7 @@ namespace MercuryMessaging
         {
 			MmMessage msg = new MmMessageVector3(param, mmMethod, metadataBlock);
             messageBuffer.Add(msg);
-            UpdateMessages(msg);
+            // UpdateMessages(msg);
             MmInvoke(msg);
 		}
 
@@ -984,7 +984,7 @@ namespace MercuryMessaging
         {
 			MmMessage msg = new MmMessageVector4(param, mmMethod, metadataBlock);
             messageBuffer.Add(msg);
-            UpdateMessages(msg);
+            // UpdateMessages(msg);
             MmInvoke(msg);
 		}
 
@@ -1001,7 +1001,7 @@ namespace MercuryMessaging
         {
 			MmMessage msg = new MmMessageString(param, mmMethod, metadataBlock);
             messageBuffer.Add(msg);
-            UpdateMessages(msg);
+            // UpdateMessages(msg);
             MmInvoke(msg);
 		}
 
@@ -1018,7 +1018,7 @@ namespace MercuryMessaging
         {
 			MmMessage msg = new MmMessageByteArray(param, mmMethod, metadataBlock);
             messageBuffer.Add(msg);
-            UpdateMessages(msg);
+            // UpdateMessages(msg);
             MmInvoke(msg);
 		}
 
@@ -1035,7 +1035,7 @@ namespace MercuryMessaging
 		{
 			MmMessage msg = new MmMessageTransform(param, mmMethod, metadataBlock);
             messageBuffer.Add(msg);
-            UpdateMessages(msg);
+            // UpdateMessages(msg);
 			MmInvoke(msg);
 		}
 
@@ -1052,7 +1052,7 @@ namespace MercuryMessaging
 		{
 			MmMessage msg = new MmMessageTransformList(param, mmMethod, metadataBlock);
             messageBuffer.Add(msg);
-            UpdateMessages(msg);
+            // UpdateMessages(msg);
 			MmInvoke(msg);
 		}
 
@@ -1069,7 +1069,7 @@ namespace MercuryMessaging
         {
             MmMessage msg = new MmMessageSerializable(param, mmMethod, metadataBlock);
             messageBuffer.Add(msg);
-            UpdateMessages(msg);
+            // UpdateMessages(msg);
             MmInvoke(msg);
         }
 
@@ -1085,7 +1085,7 @@ namespace MercuryMessaging
         {
             MmMessage msg = new MmMessageGameObject(param, mmMethod, metadataBlock);
             messageBuffer.Add(msg);
-            UpdateMessages(msg);
+            // UpdateMessages(msg);
             MmInvoke(msg);
         }
 
@@ -1102,7 +1102,7 @@ namespace MercuryMessaging
         {
             MmMessage msg = new MmMessageQuaternion(param, mmMethod, metadataBlock);
             messageBuffer.Add(msg);
-            UpdateMessages(msg);
+            // UpdateMessages(msg);
             MmInvoke(msg);
         }
 
