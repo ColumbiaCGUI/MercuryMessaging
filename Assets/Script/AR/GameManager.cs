@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using Vuplex.WebView;
 
 public class GameManager : MonoBehaviour
 {
@@ -21,6 +22,21 @@ public class GameManager : MonoBehaviour
 
     public GameObject rightController;
 
+    void Awake() 
+    {
+        #if UNITY_STANDALONE || UNITY_EDITOR
+            // On Windows and macOS, change the User-Agent to mobile:
+            Web.SetUserAgent(true);
+        #elif UNITY_IOS
+            // On iOS, change the User-Agent to desktop:
+            Web.SetUserAgent(false);
+        #else
+            // Otherwise, change the User-Agent to a recent version of FireFox (Google blocks older versions).
+            var firefox100ReleaseDate = DateTime.Parse("2022-05-03");
+            var currentVersion = 100 + ((DateTime.Now.Year - firefox100ReleaseDate.Year) * 12) + DateTime.Now.Month - firefox100ReleaseDate.Month;
+            Web.SetUserAgent($"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:{currentVersion}.0) Gecko/20100101 Firefox/{currentVersion}.0");
+        #endif
+    }
     void Start()
     {
         pathAction = playerInput.FindActionMap("XRI LeftHand Interaction").FindAction("PathSwitch");
