@@ -87,10 +87,11 @@ Complete Documentation for the toolkit can be found on the toolkit's
 ## FAQ
 ### Q. Does the toolkit work in Unity version 5.4.x, 4.x, 3.x, and earlier?
 
-A. The framework has been tested in Unity 2020 up until 2020.3.21f1, Unity 2019 up until 2019.2.17f1, Unity 2018 up until 2018.3.13f1, Unity 2017 up until 2017.4f1, and 5.6.
+A. The framework has been tested in Unity 2022 up until 2022.3.18f1. This is the recommended version of Unity to use with Mercury!
+ 
+Core functions have been tested up until Unity 2020 up until 2020.3.21f1, Unity 2019 up until 2019.2.17f1, Unity 2018 up until 2018.3.13f1, Unity 2017 up until 2017.4f1, and 5.6. However, updated networking functionality with Photon Fusion *may not work*.
 
-The Framework was originally developed using Unity 5.6. The toolkit requires some features that were added in Unity 5. As such,
-we provide no support for the toolkit in earlier versions of Unity. That said, it may work in other versions of Unity 5, but we're not sure.
+The Framework was originally developed using Unity 5.6. The toolkit requires some features that were added in Unity 5. As such, we provide no support for the toolkit in earlier versions of Unity. That said, it may work in other versions of Unity 5, but we're not sure.
 
 ### Q. What is Unity?
 
@@ -104,7 +105,7 @@ work in our lab, where we use Unity.
 
 ### Q. UNET Deprecation
 
-A. MercuryMessaging uses a few components of UNET in the framework. Unity is deprecating and removing UNET from Unity post 2019.4 (LTS) and 2018.4.(LTS). We are already transitioning the code away from UNET, but while we are, if you try to use MercuryMessaging in Unity 2019.1.4 and beyond, you may encounter compilation issues. To resolve these, all you need to do is ensure that you have the Multiplayer HLAPI enabled in packages (Unity->Window->Package Manager->Multiplayer HLAPI (Install)).
+A. MercuryMessaging does not use UNET as of the current LTS 2022 upgrade. 
 
 # Acknowledgments
 
