@@ -42,6 +42,10 @@ public class GameManager : MonoBehaviour
             var currentVersion = 100 + ((DateTime.Now.Year - firefox100ReleaseDate.Year) * 12) + DateTime.Now.Month - firefox100ReleaseDate.Month;
             Web.SetUserAgent($"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:{currentVersion}.0) Gecko/20100101 Firefox/{currentVersion}.0");
         #endif
+
+        // Cursor.lockState = CursorLockMode.Locked;
+        // Cursor.visible = false;
+
     }
     void Start()
     {
@@ -66,6 +70,18 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        // if(Application.isFocused && !Application.isEditor)
+        // {
+        //     Cursor.lockState = CursorLockMode.Locked;
+        //     Cursor.visible = false;
+        // }
+        // else
+        // {
+        //     Cursor.lockState = CursorLockMode.None;
+        //     Cursor.visible = true;
+        // }
+
+
         if(pathAction.triggered)
         {
             // pathOn = !pathOn;
@@ -74,18 +90,28 @@ public class GameManager : MonoBehaviour
 
         if(triggerTimes == 0)
         {
+            vuplexOn = false;
             pathOn=false;
             Vuplex.SetActive(false);
+            // Vuplex.GetComponent<Canvas>().enabled = false;
         }
         else if(triggerTimes == 1)
         {
+            vuplexOn = false;
             pathOn=true;
             Vuplex.SetActive(false);
+            // Vuplex.GetComponent<Canvas>().enabled = false;
         }
-        else
+        else if(triggerTimes == 2)
         {
+            if(!vuplexOn)
+            {
+                ResetVuplex();
+                vuplexOn = true;
+            }
             pathOn=false;
             Vuplex.SetActive(true);
+            // Vuplex.GetComponent<Canvas>().enabled = true;
         }
         
         Vector3 cameraPosition = Camera.main.transform.position;
@@ -100,10 +126,10 @@ public class GameManager : MonoBehaviour
         float panelSpacing = 0.1f; // Adjust this value for the desired spacing between panels
         
 
-        Vector3 vuplexPosition = cameraPosition + forwardDirection * 2.5f;
-        // update the 3 panels to be in front of the camera
-        Vuplex.transform.position = vuplexPosition;
-        Vuplex.transform.position = new Vector3(Vuplex.transform.position.x, Camera.main.transform.position.y-0.1f, Vuplex.transform.position.z);
+        // Vector3 vuplexPosition = cameraPosition + forwardDirection * 1.8f;
+        // // update the 3 panels to be in front of the camera
+        // Vuplex.transform.position = vuplexPosition;
+        // Vuplex.transform.position = new Vector3(Vuplex.transform.position.x, Camera.main.transform.position.y-0.1f, Vuplex.transform.position.z);
 
         MessageIn.transform.position = desiredPosition - rightDirection * panelSpacing;
         MessageOut.transform.position = desiredPosition + rightDirection * panelSpacing;
@@ -114,20 +140,44 @@ public class GameManager : MonoBehaviour
         Vector3 flatForward = new Vector3(forwardDirection.x, 0, forwardDirection.z).normalized;
         Quaternion targetRotation = Quaternion.LookRotation(flatForward) * Quaternion.Euler(0, 0, 0);
 
-        // Apply the same rotation on Vuplex menu
-        Vuplex.transform.rotation = targetRotation;
+        // // Apply the same rotation on Vuplex menu
+        // Vuplex.transform.rotation = targetRotation;
 
         // Apply the same rotation to both panels to keep them aligned
         MessageIn.transform.rotation = targetRotation;
         MessageOut.transform.rotation = targetRotation;
 
         // ensure the panels of vuplex remain upright and no tilt
-        Vuplex.transform.rotation = Quaternion.Euler(0, Vuplex.transform.rotation.eulerAngles.y, 0);
+        // Vuplex.transform.rotation = Quaternion.Euler(0, Vuplex.transform.rotation.eulerAngles.y, 0);
 
         // Ensure that the panels remain upright and have no tilt
         MessageIn.transform.rotation = Quaternion.Euler(0, MessageIn.transform.rotation.eulerAngles.y, 0);
         MessageOut.transform.rotation = Quaternion.Euler(0, MessageOut.transform.rotation.eulerAngles.y, 0);
         
+    }
+
+
+    private void ResetVuplex()
+    {
+        Vector3 cameraPosition = Camera.main.transform.position;
+        Vector3 forwardDirection = Camera.main.transform.forward;
+
+        Vector3 vuplexPosition = cameraPosition + forwardDirection * 1.2f;
+        // update the 3 panels to be in front of the camera
+        Vuplex.transform.position = vuplexPosition;
+        Vuplex.transform.position = new Vector3(Vuplex.transform.position.x, Camera.main.transform.position.y-0.1f, Vuplex.transform.position.z);
+
+        // Calculate the rotation to face the camera, ignoring roll (Z-axis rotation)
+        Vector3 flatForward = new Vector3(forwardDirection.x, 0, forwardDirection.z).normalized;
+        Quaternion targetRotation = Quaternion.LookRotation(flatForward) * Quaternion.Euler(0, 0, 0);
+
+        // Apply the same rotation on Vuplex menu
+        Vuplex.transform.rotation = targetRotation;
+
+        // ensure the panels of vuplex remain upright and no tilt
+        Vuplex.transform.rotation = Quaternion.Euler(0, Vuplex.transform.rotation.eulerAngles.y, 0);
+
+
     }
 
     // show a UI panel to indicate the current edge/node message signal
