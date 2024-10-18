@@ -4,7 +4,9 @@
 
 The *Mercury* messaging toolkit is a new way to handle cross-component communication in the Unity
   game engine. It integrates seamlessly with the Unity Editor, and is both
- robust and expandable. It has been tested in Unity 2022 up until 2022.3.18f1. This is the recommended version of Unity to use with Mercury!
+ robust and expandable. 
+ 
+*It has been tested in Unity 2022 up until 2022.3.18f1. This is the recommended version of Unity to use with Mercury! Networking features have been tested and work for PUN and Fusion in LTS 2022.*
  
 The toolkit contains the *Mercury* messaging framework, which is a messaging
   and organizational framework built around the *Mercury Protocol*. 
@@ -93,7 +95,7 @@ Complete Documentation for the toolkit can be found on the toolkit's
 
 A. Core functions have been tested in Unity 2020 up until 2020.3.21f1, Unity 2019 up until 2019.2.17f1, Unity 2018 up until 2018.3.13f1, Unity 2017 up until 2017.4f1, and 5.6. 
 
-Updated networking functionality with Photon Fusion, which has only been tested in LTS 2022, *may not work* in any of these older versions.
+Updated networking functionality with Photon Fusion, which has only been tested in LTS 2022, *may not work* in any of these older versions. PUN works properly for these earlier versions.
 
 ### Q. What is Unity?
 
@@ -111,7 +113,7 @@ A. MercuryMessaging does not use UNET as of the current LTS 2022 upgrade.
 
 # Acknowledgments
 
-Funded in part by National Science Foundation Grant IIS-1514429. 
+Funded in part by National Science Foundation Grant IIS-1514429 and CMMI-2037101. 
 Any opinions, findings and conclusions or recommendations expressed in this material are those of the authors and do not necessarily reflect the views of the National Science Foundation.
 
 
