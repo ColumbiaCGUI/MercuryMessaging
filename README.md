@@ -107,9 +107,6 @@ A. Unity is a game engine. Please see here:
 A. As much as we like those engines, we originally built the toolkit to support us in our
 work in our lab, where we use Unity.
 
-### Q. UNET Deprecation
-
-A. MercuryMessaging does not use UNET as of the current LTS 2022 upgrade. 
 
 # Acknowledgments
 
