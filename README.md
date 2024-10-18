@@ -2,7 +2,7 @@
 
 ![Basic scene layout](https://github.com/ColumbiaCGUI/MercuryMessaging/wiki/Images/General/MercuryCollage2.png)
 
-The *Mercury* messaging toolkit is a new way to handle cross-component communication in the Unity
+The *Mercury Messaging* toolkit is a new way to handle cross-component communication in the Unity
   game engine. It integrates seamlessly with the Unity Editor, and is both
  robust and expandable. 
  
