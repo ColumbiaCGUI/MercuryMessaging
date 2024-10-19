@@ -790,6 +790,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "JoyStickPress",
+                    "type": "Button",
+                    "id": "9b02c69a-df4f-4287-a273-8ae7da87c8cd",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -966,6 +975,17 @@
                     "processors": "",
                     "groups": "Generic XR Controller",
                     "action": "PathSwitch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c05d4db8-f2fb-4427-bfd2-e4603de2dfb1",
+                    "path": "<XRController>{LeftHand}/{Primary2DAxisClick}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Generic XR Controller",
+                    "action": "JoyStickPress",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

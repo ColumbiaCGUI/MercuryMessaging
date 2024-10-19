@@ -16,6 +16,8 @@ public class GameManager : MonoBehaviour
 
     private InputAction pathAction;
 
+    private InputAction joyStickClick;
+
     private int triggerTimes = 0;
 
     public GameObject Vuplex;
@@ -43,14 +45,14 @@ public class GameManager : MonoBehaviour
             Web.SetUserAgent($"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:{currentVersion}.0) Gecko/20100101 Firefox/{currentVersion}.0");
         #endif
 
-        // Cursor.lockState = CursorLockMode.Locked;
-        // Cursor.visible = false;
-
     }
     void Start()
     {
         pathAction = playerInput.FindActionMap("XRI LeftHand Interaction").FindAction("PathSwitch");
         pathAction.Enable();
+
+        joyStickClick = playerInput.FindActionMap("XRI LeftHand Interaction").FindAction("JoyStickPress");
+        joyStickClick.Enable();
 
         MessageIn.SetActive(false);
         MessageOut.SetActive(false);
@@ -70,16 +72,10 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        // if(Application.isFocused && !Application.isEditor)
-        // {
-        //     Cursor.lockState = CursorLockMode.Locked;
-        //     Cursor.visible = false;
-        // }
-        // else
-        // {
-        //     Cursor.lockState = CursorLockMode.None;
-        //     Cursor.visible = true;
-        // }
+        if(joyStickClick.triggered)
+        {
+            Debug.Log("JoyStick Clicked");
+        }
 
 
         if(pathAction.triggered)
@@ -162,7 +158,7 @@ public class GameManager : MonoBehaviour
         Vector3 cameraPosition = Camera.main.transform.position;
         Vector3 forwardDirection = Camera.main.transform.forward;
 
-        Vector3 vuplexPosition = cameraPosition + forwardDirection * 1.2f;
+        Vector3 vuplexPosition = cameraPosition + forwardDirection * 2.0f;
         // update the 3 panels to be in front of the camera
         Vuplex.transform.position = vuplexPosition;
         Vuplex.transform.position = new Vector3(Vuplex.transform.position.x, Camera.main.transform.position.y-0.1f, Vuplex.transform.position.z);
