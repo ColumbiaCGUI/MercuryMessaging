@@ -58,11 +58,11 @@ This will trigger a special SetActive message on each of the objects involved
 
 Done!
 
-## ISMAR 2024
+## IEEE ISMAR 2024
 
-A library of debugging features and UI for Mercury was presented at ISMAR 2024 with the title *An XR GUI for Visualizing Messages in ECS Architectures*. 
+A library of debugging features and UI for Mercury was presented at IEEE ISMAR 2024 with the title "An XR GUI for Visualizing Messages in ECS Architectures". 
 
-This demo will be available soon at the ACM digital library.
+The extended abstract for this demo will be available soon in the Adjunct Proceedings of IEEE ISMAR 2024 in IEEE Xplore.
 
 ## CHI 2018
 
