@@ -30,6 +30,8 @@ public class GameManager : MonoBehaviour
 
     public GameObject rightController;
 
+    float panelSpacing = 0.1f;
+
     void Awake() 
     {
         #if UNITY_STANDALONE || UNITY_EDITOR
@@ -113,7 +115,7 @@ public class GameManager : MonoBehaviour
         desiredPosition.y -= 0.1f;  // Apply height offset
 
         // Set the positions for the panels with lateral spacing
-        float panelSpacing = 0.1f; // Adjust this value for the desired spacing between panels
+        // float panelSpacing = 0.1f; // Adjust this value for the desired spacing between panels
         
 
         // Vector3 vuplexPosition = cameraPosition + forwardDirection * 1.8f;
@@ -166,8 +168,6 @@ public class GameManager : MonoBehaviour
 
         // ensure the panels of vuplex remain upright and no tilt
         Vuplex.transform.rotation = Quaternion.Euler(0, Vuplex.transform.rotation.eulerAngles.y, 0);
-
-
     }
 
     // show a UI panel to indicate the current edge/node message signal
@@ -224,6 +224,4 @@ public class GameManager : MonoBehaviour
             // contentTransform.GetChild(i).Find("Text").GetComponent<Text>().text = messages[i];
         }
     }
-
-
 }
