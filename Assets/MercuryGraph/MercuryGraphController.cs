@@ -191,8 +191,8 @@ public class MercuryGraphController : MonoBehaviour
         SaveNodePositions();
         Debug.Log("Graph rendered.");
     }
+    
     public void ClearGraph()
-
     {
         SaveNodePositions();
 

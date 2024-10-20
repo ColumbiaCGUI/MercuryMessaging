@@ -72,12 +72,6 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if(joyStickClick.triggered)
-        {
-            Debug.Log("JoyStick Clicked");
-        }
-
-
         if(pathAction.triggered)
         {
             // pathOn = !pathOn;
@@ -105,7 +99,7 @@ public class GameManager : MonoBehaviour
                 ResetVuplex();
                 vuplexOn = true;
             }
-            pathOn=false;
+            pathOn=true;
             Vuplex.SetActive(true);
             // Vuplex.GetComponent<Canvas>().enabled = true;
         }
