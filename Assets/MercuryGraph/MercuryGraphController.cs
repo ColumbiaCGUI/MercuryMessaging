@@ -51,26 +51,26 @@ public class MercuryGraphController : MonoBehaviour
 
     private static void OnApplyButtonClicked()
     {
-        Debug.Log("MercuryGraphController: Apply Button clicked!");
+        // Debug.Log("MercuryGraphController: Apply Button clicked!");
 
         // If in play mode, we save the node positions and listeners
         if (Application.isPlaying)
         {
             if (instance == null) return;
-            Debug.Log("MercuryGraphController: In Play Mode: Saving node positions and listeners.");
+            // Debug.Log("MercuryGraphController: In Play Mode: Saving node positions and listeners.");
             instance.SaveNodePositions();
             instance.SaveMercuryGraphableListeners();
         }
         else
         {
             // If in edit mode, we change the listeners according to the saved changes
-            Debug.Log("MercuryGraphController: In Edit Mode: Overwriting listeners.");
+            // Debug.Log("MercuryGraphController: In Edit Mode: Overwriting listeners.");
             OverwriteMercuryGraphableListeners();
         }
     }
     private static void OnRefreshButtonClicked()
     {
-        Debug.Log("MercuryGraphController: Refresh Button clicked!");
+        // Debug.Log("MercuryGraphController: Refresh Button clicked!");
         if (instance == null) return;
         // instance.ClearGraph();
         instance.RenderGraph();
@@ -125,13 +125,13 @@ public class MercuryGraphController : MonoBehaviour
         {
             // instance.ClearGraph();
             instance.RenderGraph();
-            Debug.Log("MercuryGraphController: OnPostProcessModifications");
+            // Debug.Log("MercuryGraphController: OnPostProcessModifications");
         }
         return modifications;
     }
     private static void OnUndoRedoPerformed()
     {
-        Debug.Log("MercuryGraphController: OnUndoRedoPerformed");
+        // Debug.Log("MercuryGraphController: OnUndoRedoPerformed");
         if (instance == null) return;
         if (!instance.automaticGraphRendering) return;
         // instance.ClearGraph();
@@ -144,7 +144,7 @@ public class MercuryGraphController : MonoBehaviour
 
         // Get all graphables in scene
         List<MmRelayNode> graphables = GetMercuryGraphables();
-        Debug.Log(graphables.Count + " graphables found in Hierarchy.");
+        // Debug.Log(graphables.Count + " graphables found in Hierarchy.");
 
         // Create nodes for each graphable (Line them up for now)
         // Save the nodeView objects created
@@ -152,7 +152,7 @@ public class MercuryGraphController : MonoBehaviour
         // Vector2 position = new Vector2(0, 0);
         foreach (MmRelayNode graphable in graphables)
         {
-            Debug.Log("Creating " + graphable.gameObject.name);
+            // Debug.Log("Creating " + graphable.gameObject.name);
 
             // Create a new node
             Type nodeType = typeof(MercuryGraphNode);
@@ -161,7 +161,7 @@ public class MercuryGraphController : MonoBehaviour
             {
                 graphable.nodePosition.x = PlayerPrefs.GetFloat(graphable.gameObject.name + "_nodePosition_x");
                 graphable.nodePosition.y = PlayerPrefs.GetFloat(graphable.gameObject.name + "_nodePosition_y");
-                Debug.Log("Loaded position of " + graphable.gameObject.name + " at " + graphable.nodePosition);
+                // Debug.Log("Loaded position of " + graphable.gameObject.name + " at " + graphable.nodePosition);
             }
             NodeController nodeController = CreateNewNode(graphable.nodePosition, graphable, nodeType);
             graphable.nodeController = nodeController;
@@ -179,7 +179,7 @@ public class MercuryGraphController : MonoBehaviour
             List<MmRelayNode> responders = GetMmMessageResponders(graphable);
             foreach (MmRelayNode responder in responders)
             {
-                Debug.Log("Linking " + graphable.gameObject.name + " to " + responder.gameObject.name);
+                // Debug.Log("Linking " + graphable.gameObject.name + " to " + responder.gameObject.name);
                 if(responder.nodeController != null)
                 {
                     MercuryGraphNode mercurySignalListenerNode = responder.nodeController.nodeItem.nodeData as MercuryGraphNode;
@@ -193,14 +193,14 @@ public class MercuryGraphController : MonoBehaviour
         // graphController.graphView.Unbind();
         graphController.Reload();
         SaveNodePositions();
-        Debug.Log("Graph rendered.");
+        // Debug.Log("Graph rendered.");
     }
 
     public void ClearGraph()
     {
         SaveNodePositions();
 
-        Debug.Log("Clearing graph...");
+        // Debug.Log("Clearing graph...");
         graphController.inspector.Clear();
         graphController.graphView.ClearView();
         graphController.dataToViewLookup.Clear();
@@ -222,7 +222,7 @@ public class MercuryGraphController : MonoBehaviour
             counter++;
         });
         graphController.OnDelete();
-        Debug.Log("Deleted " + counter + " nodes.");
+        // Debug.Log("Deleted " + counter + " nodes.");
     }
 
     public static List<MmRelayNode> GetMercuryGraphables()
@@ -276,7 +276,7 @@ public class MercuryGraphController : MonoBehaviour
             
             }
         }
-        Debug.Log("MercuryGraphController: Found " + responders.Count + " responders for " + graphable.gameObject.name);
+        // Debug.Log("MercuryGraphController: Found " + responders.Count + " responders for " + graphable.gameObject.name);
         return responders;
     }
 
@@ -324,7 +324,7 @@ public class MercuryGraphController : MonoBehaviour
                 graphable.nodePosition = graphable.nodeController.nodeItem.GetPosition();
                 PlayerPrefs.SetFloat(graphable.gameObject.name + "_nodePosition_x", graphable.nodePosition.x);
                 PlayerPrefs.SetFloat(graphable.gameObject.name + "_nodePosition_y", graphable.nodePosition.y);
-                Debug.Log("Saved position of " + graphable.gameObject.name + " at " + graphable.nodePosition);
+                // Debug.Log("Saved position of " + graphable.gameObject.name + " at " + graphable.nodePosition);
             }
         }
     }
@@ -345,7 +345,7 @@ public class MercuryGraphController : MonoBehaviour
                         listenerNames += listener.gameObject.name + ",";
                     }
                     PlayerPrefs.SetString(graphable.gameObject.name + "_listeners", listenerNames);
-                    Debug.Log("Saved listeners of " + graphable.gameObject.name + ": " + listenerNames);
+                    // Debug.Log("Saved listeners of " + graphable.gameObject.name + ": " + listenerNames);
                 }
             }
         }
@@ -354,7 +354,7 @@ public class MercuryGraphController : MonoBehaviour
     {
         // Overwrite the listeners of each graphable
         List<MmRelayNode> graphables = GetMercuryGraphables();
-        Debug.Log("Overwriting Listeners of " + graphables.Count + " graphables.");
+        // Debug.Log("Overwriting Listeners of " + graphables.Count + " graphables.");
         foreach (MmRelayNode graphable in graphables)
         {
             graphable.RoutingTable.Clear();
@@ -383,7 +383,7 @@ public class MercuryGraphController : MonoBehaviour
                         graphable.MmAddToRoutingTable(listener, listener.gameObject.name);
                     }
                 }
-                Debug.Log("Overwrote listeners of " + graphable.gameObject.name + ": " + listenerNames);
+                // Debug.Log("Overwrote listeners of " + graphable.gameObject.name + ": " + listenerNames);
             }
         }
     }

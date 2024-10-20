@@ -25,7 +25,7 @@ public class CustomXRSimpleInteractable : XRSimpleInteractable
     {
         if(this.gameObject.GetComponent<MmRelayNode>() !=null)
         {
-            Debug.Log("CustomXRSimpleInteractable: OnSelectEntered");
+            // Debug.Log("CustomXRSimpleInteractable: OnSelectEntered");
 
             messageInList = this.gameObject.GetComponent<MmRelayNode>().messageInList;
             messageOutList = this.gameObject.GetComponent<MmRelayNode>().messageOutList;
