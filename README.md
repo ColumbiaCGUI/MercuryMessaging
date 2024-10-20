@@ -68,7 +68,7 @@ The extended abstract for this demo will be available soon in the Adjunct Procee
 
 *Mercury* was presented at CHI 2018. The paper is available online at the ACM Digital Library.
 
-Carmine Elvezio, Mengu Sukan, and Steven Feiner. 2018. Mercury: A Messaging Framework for Modular UI Components. In Proceedings of the 2018 CHI Conference on Human Factors in Computing Systems (CHI '18). ACM, New York, NY, USA, Paper 588, 12 pages. DOI:https://doi.org/10.1145/3173574.3174162
+Carmine Elvezio, Mengu Sukan, and Steven Feiner. 2018. Mercury: A Messaging Framework for Modular UI Components. In Proceedings of the 2018 CHI Conference on Human Factors in Computing Systems (CHI '18). ACM, New York, NY, USA, Paper 588, 12 pages. https://doi.org/10.1145/3173574.3174162
 
 ## Downloading MercuryMessaging
 
