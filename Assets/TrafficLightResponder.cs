@@ -88,51 +88,51 @@ public class TrafficLightResponder : MmBaseResponder
     }
 
     // Update is called once per frame
-    public override void Update()
-    {
-        if(mode == 0)
-        {    
-            delay -= Time.deltaTime;
-            if(delay < 0.0f)
-            {
-                delay = 1.0f;
-                SetLightColorMaterialOffset(new Vector2(0.0625f * 1.0f, 0.0f));                
-                mode = 1;
-            }
-        }
-        else if(mode == 1)
-        {    
-            delay -= Time.deltaTime;
-            if(delay < 0.0f)
-            {
-                delay = 5.0f;
-                SetLightColorMaterialOffset(new Vector2(0.0625f * 2.0f, 0.0f));                
-                mode = 2;
-            }
-        }
-        else if(mode == 2)
-        {    
-            delay -= Time.deltaTime;
-            if(delay < 0.0f)
-            {
-                delay = 1.0f;
-                SetLightColorMaterialOffset(new Vector2(0.0625f * 3.0f, 0.0f));                
-                mode = 3;
-            }
-        }
-        else if(mode == 3)
-        {    
-            delay -= Time.deltaTime;
-            if(delay < 0.0f)
-            {
-                delay = 5.0f;
-                SetLightColorMaterialOffset(new Vector2(0.0625f * 0.0f, 0.0f));                
-                mode = 0;
-            }
-        }
+    // public override void Update()
+    // {
+    //     if(mode == 0)
+    //     {    
+    //         delay -= Time.deltaTime;
+    //         if(delay < 0.0f)
+    //         {
+    //             delay = 1.0f;
+    //             SetLightColorMaterialOffset(new Vector2(0.0625f * 1.0f, 0.0f));                
+    //             mode = 1;
+    //         }
+    //     }
+    //     else if(mode == 1)
+    //     {    
+    //         delay -= Time.deltaTime;
+    //         if(delay < 0.0f)
+    //         {
+    //             delay = 5.0f;
+    //             SetLightColorMaterialOffset(new Vector2(0.0625f * 2.0f, 0.0f));                
+    //             mode = 2;
+    //         }
+    //     }
+    //     else if(mode == 2)
+    //     {    
+    //         delay -= Time.deltaTime;
+    //         if(delay < 0.0f)
+    //         {
+    //             delay = 1.0f;
+    //             SetLightColorMaterialOffset(new Vector2(0.0625f * 3.0f, 0.0f));                
+    //             mode = 3;
+    //         }
+    //     }
+    //     else if(mode == 3)
+    //     {    
+    //         delay -= Time.deltaTime;
+    //         if(delay < 0.0f)
+    //         {
+    //             delay = 5.0f;
+    //             SetLightColorMaterialOffset(new Vector2(0.0625f * 0.0f, 0.0f));                
+    //             mode = 0;
+    //         }
+    //     }
 
-        // base.Update();
-    }
+    //     // base.Update();
+    // }
 
     public override void SetActive(bool activeState)
     {

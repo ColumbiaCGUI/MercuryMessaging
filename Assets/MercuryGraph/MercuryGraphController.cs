@@ -75,33 +75,37 @@ public class MercuryGraphController : MonoBehaviour
         // instance.ClearGraph();
         instance.RenderGraph();
     }
+
     private static void OnHierarchyChanged()
     {
-        Debug.Log("MercuryGraphController: OnHierarchyChanged");
-        if (instance == null) return;
-        if (!instance.automaticGraphRendering) return;
+        // Debug.Log("MercuryGraphController: OnHierarchyChanged");
+        // if (instance == null) return;
+        // if (!instance.automaticGraphRendering) return;
         // instance.ClearGraph();
-        instance.RenderGraph();
+        // instance.RenderGraph();
     }
+
     private static void OnProjectChanged()
     {
-        Debug.Log("MercuryGraphController: OnProjectChanged");
-        if (instance == null) return;
-        if (!instance.automaticGraphRendering) return;
-        // instance.ClearGraph();
-        instance.RenderGraph();
+        // Debug.Log("MercuryGraphController: OnProjectChanged");
+        // if (instance == null) return;
+        // if (!instance.automaticGraphRendering) return;
+        // // instance.ClearGraph();
+        // instance.RenderGraph();
     }
+
     private static void OnEditorUpdate()
     {
-        Debug.Log("MercuryGraphController: OnEditorUpdate");
-        if (instance != null) return;
-        if (!instance.automaticGraphRendering) return;
-        if (EditorApplication.isCompiling)
-        {
-            // instance.ClearGraph();
-            instance.RenderGraph();
-        }
+        // Debug.Log("MercuryGraphController: OnEditorUpdate");
+        // if (instance != null) return;
+        // if (!instance.automaticGraphRendering) return;
+        // if (EditorApplication.isCompiling)
+        // {
+        //     // instance.ClearGraph();
+        //     instance.RenderGraph();
+        // }
     }
+
     private static UndoPropertyModification[] OnPostProcessModifications(UndoPropertyModification[] modifications)
     {
         if (instance == null) return modifications;
@@ -191,7 +195,7 @@ public class MercuryGraphController : MonoBehaviour
         SaveNodePositions();
         Debug.Log("Graph rendered.");
     }
-    
+
     public void ClearGraph()
     {
         SaveNodePositions();
