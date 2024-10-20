@@ -291,7 +291,7 @@ namespace MercuryMessaging
             }
             catch
             {
-                Debug.Log("Right Controller not found");
+                // Debug.Log("Right Controller not found");
             }
 
             // get messaging items
