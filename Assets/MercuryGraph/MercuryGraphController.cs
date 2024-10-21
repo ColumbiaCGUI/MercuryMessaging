@@ -25,8 +25,8 @@ public class MercuryGraphController : MonoBehaviour
     {
         ScriptableInspectorController.OnRefreshButtonClicked += (graphWindow) => OnRefreshButtonClicked();
         ScriptableInspectorController.OnApplyButtonClicked += (graphWindow) => OnApplyButtonClicked();
-        EditorApplication.hierarchyChanged += OnHierarchyChanged;
-        EditorApplication.projectChanged += OnProjectChanged;
+        // EditorApplication.hierarchyChanged += OnHierarchyChanged;
+        // EditorApplication.projectChanged += OnProjectChanged;
         // EditorApplication.update += OnEditorUpdate;
         Undo.postprocessModifications += ctx => OnPostProcessModifications(ctx);
         Undo.undoRedoPerformed += OnUndoRedoPerformed;
@@ -78,32 +78,32 @@ public class MercuryGraphController : MonoBehaviour
 
     private static void OnHierarchyChanged()
     {
-        // Debug.Log("MercuryGraphController: OnHierarchyChanged");
-        // if (instance == null) return;
-        // if (!instance.automaticGraphRendering) return;
-        // instance.ClearGraph();
-        // instance.RenderGraph();
+        Debug.Log("MercuryGraphController: OnHierarchyChanged");
+        if (instance == null) return;
+        if (!instance.automaticGraphRendering) return;
+        instance.ClearGraph();
+        instance.RenderGraph();
     }
 
     private static void OnProjectChanged()
     {
-        // Debug.Log("MercuryGraphController: OnProjectChanged");
-        // if (instance == null) return;
-        // if (!instance.automaticGraphRendering) return;
-        // // instance.ClearGraph();
-        // instance.RenderGraph();
+        Debug.Log("MercuryGraphController: OnProjectChanged");
+        if (instance == null) return;
+        if (!instance.automaticGraphRendering) return;
+        // instance.ClearGraph();
+        instance.RenderGraph();
     }
 
     private static void OnEditorUpdate()
     {
-        // Debug.Log("MercuryGraphController: OnEditorUpdate");
-        // if (instance != null) return;
-        // if (!instance.automaticGraphRendering) return;
-        // if (EditorApplication.isCompiling)
-        // {
-        //     // instance.ClearGraph();
-        //     instance.RenderGraph();
-        // }
+        Debug.Log("MercuryGraphController: OnEditorUpdate");
+        if (instance != null) return;
+        if (!instance.automaticGraphRendering) return;
+        if (EditorApplication.isCompiling)
+        {
+            // instance.ClearGraph();
+            instance.RenderGraph();
+        }
     }
 
     private static UndoPropertyModification[] OnPostProcessModifications(UndoPropertyModification[] modifications)

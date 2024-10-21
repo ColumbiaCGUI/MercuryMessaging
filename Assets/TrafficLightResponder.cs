@@ -35,19 +35,7 @@ public class TrafficLightResponder : MmBaseResponder
         objRenderer = GetComponent<Renderer>();
 
         
-        // if(direction1)
-        // {
-        //     mode = 2;
-        //     SetLightColorMaterialOffset(new Vector2(0.0625f * 2.0f, 0.0f));
-        // }
-        // else
-        // {
-        //     mode = 0;
-        //     SetLightColorMaterialOffset(new Vector2(0.0f, 0.0f));
-        // }
-        // mode = 0;
-        // SetLightColorMaterialOffset(new Vector2(0.0f, 0.0f));
-        // delay = 2.0f;
+       
     }
 
     private void SetLightColorMaterialOffset(Vector2 vector2)
@@ -136,7 +124,7 @@ public class TrafficLightResponder : MmBaseResponder
 
     public override void SetActive(bool activeState)
     {
-        Debug.Log("TrafficLightResponder: SetActive: " + activeState);
+        // Debug.Log("TrafficLightResponder: SetActive: " + activeState);
         if(activeState && direction1)
         {
             // turn on the green light
