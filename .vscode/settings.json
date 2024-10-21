@@ -56,5 +56,6 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "MercuryDemo.sln"
+    "dotnet.defaultSolution": "MercuryDemo.sln",
+    "dotnet.preferCSharpExtension": true
 }

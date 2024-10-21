@@ -47,6 +47,8 @@ public class HandController : MmBaseResponder {
 
 	private bool activeState = false;
 
+	private float timePast;
+
 
 
 	void Start()
@@ -57,7 +59,12 @@ public class HandController : MmBaseResponder {
 	}
 	public override void Update()
 	{
-		if (OVRInput.GetDown(OVRInput.RawButton.A) || signalAction.triggered) {
+		// set the automatic signal passing
+		// if (OVRInput.GetDown(OVRInput.RawButton.A) || signalAction.triggered) {
+
+		if(timePast>=5.0f || (OVRInput.GetDown(OVRInput.RawButton.A) || signalAction.triggered))
+		{
+			timePast =0;
 			if(activeState)
 			{
 				activeState = false;
@@ -72,5 +79,6 @@ public class HandController : MmBaseResponder {
 			GetRelayNode().MmInvoke (MmMethod.SetActive, activeState, 
 				new MmMetadataBlock (MmLevelFilter.Child, MmActiveFilter.All));
 		}
+		timePast+= Time.deltaTime;
 	}
 }

@@ -278,10 +278,7 @@ namespace MercuryMessaging
             XROrigin = GameObject.Find("OVRCameraRig");
 
             // positionOffset.position = gameObject.transform.position;
-        }
 
-        public void LateUpdate()
-        {
             try
             {
                 if(rightController.transform.Find("XR Controller Right(Clone)/MetaQuestTouchPlus_Right").gameObject != null)
@@ -293,6 +290,11 @@ namespace MercuryMessaging
             {
                 // Debug.Log("Right Controller not found");
             }
+        }
+
+        public void LateUpdate()
+        {
+            
 
             // get messaging items
             List<MmRoutingTableItem> itemsToGo = new List<MmRoutingTableItem>();
