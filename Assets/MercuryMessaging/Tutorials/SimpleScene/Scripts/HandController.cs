@@ -49,7 +49,9 @@ public class HandController : MmBaseResponder {
 
 	private float timePast;
 
+	public float messagePeriod;
 
+	public bool boxTriggered = true;
 
 	void Start()
 	{
@@ -62,7 +64,7 @@ public class HandController : MmBaseResponder {
 		// set the automatic signal passing
 		// if (OVRInput.GetDown(OVRInput.RawButton.A) || signalAction.triggered) {
 
-		if(timePast>=5.0f || (OVRInput.GetDown(OVRInput.RawButton.A) || signalAction.triggered))
+		if(signalAction.triggered || timePast >= messagePeriod)
 		{
 			timePast =0;
 			if(activeState)
@@ -76,9 +78,16 @@ public class HandController : MmBaseResponder {
 				Debug.Log("HandController: Activating");
 			}
 
+			if (signalAction.triggered) {
+				boxTriggered = false;
+			}
+			else {
+				boxTriggered = true;
+			}
+
 			GetRelayNode().MmInvoke (MmMethod.SetActive, activeState, 
 				new MmMetadataBlock (MmLevelFilter.Child, MmActiveFilter.All));
 		}
-		timePast+= Time.deltaTime;
+		timePast += Time.deltaTime;
 	}
 }
