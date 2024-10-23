@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
 
     private bool vuplexOn = false;
 
+    private bool sliderOn = false;
+
     public InputActionAsset playerInput;
 
     private InputAction pathAction;
@@ -30,7 +32,16 @@ public class GameManager : MonoBehaviour
 
     public GameObject rightController;
 
+    public GameObject SliderUI;
+
+
     float panelSpacing = 0.1f;
+
+    public float displayPeriod;
+
+    public HandController handController;
+
+    // public BoxController boxController;
 
     void Awake() 
     {
@@ -59,7 +70,7 @@ public class GameManager : MonoBehaviour
         MessageIn.SetActive(false);
         MessageOut.SetActive(false);
 
-        
+        handController = rightController.GetComponent<HandController>();
 
         // instantiate 10 messages for each panel using message prefab
         for (int i = 0; i < 10; i++)
@@ -69,11 +80,14 @@ public class GameManager : MonoBehaviour
             GameObject messageTextOut = Instantiate(MessagePrefab, MessageOut.transform.Find("Panel/ScrollView/Viewport/Content"));
             
         }
-        
     }
 
     void Update()
     {
+        Vector3 cameraPosition = Camera.main.transform.position;
+        Vector3 forwardDirection = Camera.main.transform.forward;
+        Vector3 rightDirection = Camera.main.transform.right;
+
         if(pathAction.triggered)
         {
             // pathOn = !pathOn;
@@ -84,7 +98,9 @@ public class GameManager : MonoBehaviour
         {
             vuplexOn = false;
             pathOn=false;
+            sliderOn = false;
             Vuplex.SetActive(false);
+            SliderUI.SetActive(false);
             // Vuplex.GetComponent<Canvas>().enabled = false;
         }
         else if(triggerTimes == 1)
@@ -92,7 +108,34 @@ public class GameManager : MonoBehaviour
             vuplexOn = false;
             pathOn=true;
             Vuplex.SetActive(false);
-            // Vuplex.GetComponent<Canvas>().enabled = false;
+            if(!sliderOn)
+            {
+
+            
+
+            // Calculate the desired position with the height offset
+            Vector3 SliderDesiredPosition = cameraPosition + forwardDirection * 0.5f;
+            SliderDesiredPosition.y -= 0.1f;  // Apply height offset
+
+            SliderUI.transform.position = SliderDesiredPosition;
+            
+            SliderUI.transform.position = new Vector3(MessageIn.transform.position.x, Camera.main.transform.position.y-0.1f, MessageIn.transform.position.z);
+
+
+            // Calculate the rotation to face the camera, ignoring roll (Z-axis rotation)
+            Vector3 SliderFoward = new Vector3(forwardDirection.x, 0, forwardDirection.z).normalized;
+            Quaternion SliderRotation = Quaternion.LookRotation(SliderFoward) * Quaternion.Euler(0, 0, 0);
+
+
+            // Apply the same rotation to both panels to keep them aligned
+            SliderUI.transform.rotation = SliderRotation;
+
+            // Ensure that the panels remain upright and have no tilt
+            SliderUI.transform.rotation = Quaternion.Euler(0, MessageIn.transform.rotation.eulerAngles.y, 0);
+            sliderOn = true;
+            }
+            
+            SliderUI.SetActive(true) ;
         }
         else if(triggerTimes == 2)
         {
@@ -103,19 +146,15 @@ public class GameManager : MonoBehaviour
             }
             pathOn=true;
             Vuplex.SetActive(true);
+            SliderUI.SetActive(false);
             // Vuplex.GetComponent<Canvas>().enabled = true;
         }
         
-        Vector3 cameraPosition = Camera.main.transform.position;
-        Vector3 forwardDirection = Camera.main.transform.forward;
-        Vector3 rightDirection = Camera.main.transform.right; // Use the right direction for lateral spacing
+         // Use the right direction for lateral spacing
 
         // Calculate the desired position with the height offset
         Vector3 desiredPosition = cameraPosition + forwardDirection * 0.5f;
         desiredPosition.y -= 0.1f;  // Apply height offset
-
-        // Set the positions for the panels with lateral spacing
-        // float panelSpacing = 0.1f; // Adjust this value for the desired spacing between panels
         
 
         // Vector3 vuplexPosition = cameraPosition + forwardDirection * 1.8f;
@@ -145,7 +184,6 @@ public class GameManager : MonoBehaviour
         // Ensure that the panels remain upright and have no tilt
         MessageIn.transform.rotation = Quaternion.Euler(0, MessageIn.transform.rotation.eulerAngles.y, 0);
         MessageOut.transform.rotation = Quaternion.Euler(0, MessageOut.transform.rotation.eulerAngles.y, 0);
-        
     }
 
 
@@ -170,10 +208,20 @@ public class GameManager : MonoBehaviour
         Vuplex.transform.rotation = Quaternion.Euler(0, Vuplex.transform.rotation.eulerAngles.y, 0);
     }
 
+    public void UpdateDisplayPeriod(Slider slider)
+    {
+        displayPeriod = slider.value;
+        handController.messagePeriod = slider.value * 4.0f;
+        // boxController.messagePeriod = slider.value * 3.0f;
+    }
+
     // show a UI panel to indicate the current edge/node message signal
-    public void ShowMessage(List<string> messages, bool isInput)
+    public void ShowMessage(List<string> messages, bool isInput, string objName)
     {
         GameObject messagePanel = isInput ? MessageIn : MessageOut;
+
+        messagePanel.transform.Find("Panel/GameName").GetComponent<Text>().text = objName;
+
         foreach (Transform child in messagePanel.transform.Find("Panel/ScrollView/Viewport/Content"))
         {
             child.transform.Find("Text").GetComponent<Text>().text = "";

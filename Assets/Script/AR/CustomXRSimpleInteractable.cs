@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using MercuryMessaging;
+using EPOOutline;
 
 public class CustomXRSimpleInteractable : XRSimpleInteractable
 {
@@ -12,12 +13,15 @@ public class CustomXRSimpleInteractable : XRSimpleInteractable
 
     private List<string> messageOutList = new List<string>();
 
-    private bool isSelected = false;
+    private string objName;
+
+    public bool isSelected = false;
 
     private bool updated = false;
     // Start is called before the first frame update
     void Start()
     {
+        objName = this.gameObject.name;
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
 
@@ -33,14 +37,25 @@ public class CustomXRSimpleInteractable : XRSimpleInteractable
 
         if(isSelected && updated == false)
         {
-            gameManager.ShowMessage(messageInList, true);
-            gameManager.ShowMessage(messageOutList, false);
+            gameManager.ShowMessage(messageInList, true, objName);
+            gameManager.ShowMessage(messageOutList, false, objName);
             updated = true;
+            
+            // this.gameObject.GetComponent<Outlinable>().OutlineParameters.DilateShift = 2f;
+
+
+            // this.gameObject.GetComponent<Outline>().OutlineWidth = 4f;
+            // this.gameObject.GetComponent<Outline>().enabled = true;
         }
         else if(isSelected)
         {
             gameManager.UpdateCurrentMessage(messageInList, true);
             gameManager.UpdateCurrentMessage(messageOutList, false);
+
+            // this.gameObject.GetComponent<Outlinable>().OutlineParameters.DilateShift = 2f;
+            
+            // this.gameObject.GetComponent<Outline>().OutlineWidth = 4f;
+            // this.gameObject.GetComponent<Outline>().enabled = true;
         }
 
     }
@@ -59,9 +74,6 @@ public class CustomXRSimpleInteractable : XRSimpleInteractable
 
     }
 
-
-
-
     // Override the OnHoverExited method
     protected override void OnSelectExited(SelectExitEventArgs args)
     {
@@ -69,6 +81,8 @@ public class CustomXRSimpleInteractable : XRSimpleInteractable
 
         gameManager.MessageIn.SetActive(false);
         gameManager.MessageOut.SetActive(false);
+
+        // this.gameObject.GetComponent<Outline>().OutlineWidth = 0f;
 
         isSelected = false;
         updated = false;

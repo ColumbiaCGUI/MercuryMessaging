@@ -32,6 +32,7 @@
 //  
 //  
 using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using MercuryMessaging.Support.Extensions;
 using MercuryMessaging.Task;
@@ -40,6 +41,7 @@ using NewGraph;
 using Drawing;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.InputSystem;
+using EPOOutline;
 
 
 namespace MercuryMessaging
@@ -62,20 +64,24 @@ namespace MercuryMessaging
 
         public bool testToggle = false;
 
-        // private bool signalingOn = false;
+        private bool messageDisplayIndicator = false;
 
         // the private variable for the path on/off
         public GameManager gameManager;
 
         // private MmMessage signalMessage;
 
-        public bool signalingOn = false;
+        // public int signalingOn = -1;
+
+        public int layer;
+
+        // public float waitTime = 0.5f;
 
         public  List<string> messageInList = new List<string>();
 
         public  List<string> messageOutList = new List<string>();
 
-        private float displayPeriod = 0.5f;
+        private float displayPeriod;
 
         private float time = 0.0f;
 
@@ -83,9 +89,20 @@ namespace MercuryMessaging
 
         private GameObject lineObject;
 
+        public List<MmRoutingTableItem> itemsToGo = new List<MmRoutingTableItem>();
+
+        private Color colorA = new Color (93f/255f, 58f/255f, 155f/255f); 
+        private Color colorB = new Color (230f/255f, 97f/255f, 0f);
+        private Color colorC = new Color (64f/255f, 176f/255f, 166f/255f);
+        private Color colorD = new Color (230f/255f, 97f/255f, 0f);
+
         public List<GameObject> lineObjects = new List<GameObject>();
 
         private GameObject XROrigin;
+
+        // public bool fromBox = false;
+
+        public HandController handController;
 
         private List<MmMessage> messageBuffer = new List<MmMessage>();
 
@@ -236,7 +253,6 @@ namespace MercuryMessaging
             MmNetworkResponder = GetComponent<IMmNetworkResponder>();
 
             InitializeNode();
-
             InstantiateSubResponders();
 
 			base.Awake ();
@@ -264,11 +280,42 @@ namespace MercuryMessaging
             MmLogger.LogFramework(gameObject.name + " MmRelayNode Start called.");
 
             gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-            if(gameObject.GetComponent<Outline>() == null)
+            displayPeriod = gameManager.displayPeriod;
+
+            handController = gameManager.handController;
+
+            // boxController = gameManager.boxController;
+
+
+            // if(gameObject.GetComponent<Outline>() == null)
+            // {
+            //     gameObject.AddComponent<Outline>();
+            // }
+
+
+            // gameObject.GetComponent<Outline>().OutlineWidth = 0f;
+
+            gameObject.GetComponent<Outlinable>().enabled = false;
+            
+
+            int colorIndex = layer % 4;
+            Color currentColor;
+            if(colorIndex == 0)
             {
-                gameObject.AddComponent<Outline>();
+                currentColor = colorA;
             }
-            gameObject.GetComponent<Outline>().enabled = false;
+            else if(colorIndex == 1)
+            {
+                currentColor = colorB;
+            }
+            else if(colorIndex == 2)
+            {
+                currentColor = colorC;
+            }
+            else {
+                currentColor = colorD;
+            }
+            // this.GetComponent<Outline>().OutlineColor = currentColor;
 
             if(positionOffset == null)
             {
@@ -279,37 +326,72 @@ namespace MercuryMessaging
 
             // positionOffset.position = gameObject.transform.position;
 
-            try
-            {
-                if(rightController.transform.Find("XR Controller Right(Clone)/MetaQuestTouchPlus_Right").gameObject != null)
-                {
-                    rightControllerModelOutline = rightController.transform.Find("XR Controller Right(Clone)/MetaQuestTouchPlus_Right").gameObject.GetComponent<Outline>();
-                }
-            }
-            catch
-            {
-                // Debug.Log("Right Controller not found");
-            }
+            itemsToGo = this.RoutingTable.GetMmRoutingTableItems(MmRoutingTable.ListFilter.All, MmLevelFilter.Child);
+           
+            // try
+            // {
+            //     if(rightController.transform.Find("XR Controller Right(Clone)/MetaQuestTouchPlus_Right").gameObject != null)
+            //     {
+            //         rightControllerModelOutline = rightController.transform.Find("XR Controller Right(Clone)/MetaQuestTouchPlus_Right").gameObject.GetComponent<Outline>();
+            //     }
+            // }
+            // catch
+            // {
+            //     // Debug.Log("Right Controller not found");
+            // }
         }
 
         public void LateUpdate()
         {
-            
+            // update to get the newest display period
+            displayPeriod = gameManager.displayPeriod;
 
-            // get messaging items
-            List<MmRoutingTableItem> itemsToGo = new List<MmRoutingTableItem>();
-            List<MmMessage> messages = new List<MmMessage>();
-
-            // get the routing table child nodes
-            List<MmRoutingTableItem> childItems = RoutingTable.GetMmRoutingTableItems(MmRoutingTable.ListFilter.All,MmLevelFilter.Child);
-
-            if(signalingOn == false)
+            // draw the path for 5 seconds
+            if ( ((time < ((layer + 1) * displayPeriod)) && (time >= ((layer) * displayPeriod)) && gameManager.pathOn))
             {
-                foreach (MmRoutingTableItem item in childItems)
+                if ((handController.boxTriggered && layer == 0)) {
+
+                    time += Time.deltaTime;
+                
+                    foreach (MmRoutingTableItem item in itemsToGo)
+                    {
+                        
+                        Vector3 targetPosition = item.Responder.gameObject.GetComponent<MmRelayNode>().positionOffset.position;
+                        Vector3 currentPosition = positionOffset.position;
+                        if (gameManager.pathOn)
+                        {
+                            // Draw3DArrow(currentPosition, targetPosition, Color.white);
+
+                            // instead of drawing the arrow, draw the path between the nodes
+                            DrawPath(currentPosition, targetPosition, Color.white);
+
+                        }
+                    }
+
+                }
+                else {
+                    gameObject.GetComponent<Outlinable>().enabled = true;   
+                    // increment the time
+                    time += Time.deltaTime;
+                    
+                    
+                    BroadCast(itemsToGo, positionOffset, layer);
+                }
+
+            }
+            else
+            {
+                // gameObject.GetComponent<Outlinable>().enabled = false;  
+
+                time += Time.deltaTime;
+                
+
+                foreach (MmRoutingTableItem item in itemsToGo)
                 {
+                    
                     Vector3 targetPosition = item.Responder.gameObject.GetComponent<MmRelayNode>().positionOffset.position;
                     Vector3 currentPosition = positionOffset.position;
-                    if(gameManager.pathOn)
+                    if (gameManager.pathOn)
                     {
                         // Draw3DArrow(currentPosition, targetPosition, Color.white);
 
@@ -318,109 +400,88 @@ namespace MercuryMessaging
 
                     }
                 }
+
+                 
             }
-            // draw the path for 5 seconds
-            else if( time <displayPeriod && signalingOn == true)
-            {
-                // increment the time
-                time += Time.deltaTime;
 
-                foreach (MmMessage message in messageBuffer)
-                {
-                    List<MmRoutingTableItem> items = new List<MmRoutingTableItem>();
-                    if(message.MetadataBlock.LevelFilter == MmLevelFilter.Parent)
-                    {
-                        items = RoutingTable.GetMmRoutingTableItems(MmRoutingTable.ListFilter.All,MmLevelFilter.Parent);
-
-                    }
-                    else if(message.MetadataBlock.LevelFilter == MmLevelFilter.Child)
-                    {
-                        items = RoutingTable.GetMmRoutingTableItems(MmRoutingTable.ListFilter.All,MmLevelFilter.Child);
-                    }
-
-                    foreach (MmRoutingTableItem item in items)
-                    {
-                        if(item.Tags == message.MetadataBlock.Tag || message.MetadataBlock.Tag == (MmTag)(-1))
-                        {
-                            itemsToGo.Add(item);
-                            messages.Add(message);
-                        }
-                    }
-                }
-
-                if(rightControllerModelOutline != null && gameManager.pathOn == true)
-                {
-                    rightControllerModelOutline.OutlineColor = new Color(254f/255f, 254f/255f, 98f/255f);
-                    rightControllerModelOutline.OutlineWidth = 8f;
-                    rightControllerModelOutline.enabled = true;
-                }
-
-                foreach (MmRoutingTableItem item in itemsToGo)
-                {
-                    DrawSignals(item, positionOffset.position);
-                }
+            if (gameObject.GetComponent<CustomXRSimpleInteractable>().isSelected) {
+                //gameObject.GetComponent<Outline>().OutlineWidth = 4f;
+                gameObject.GetComponent<Outlinable>().enabled = true;
             }
-            else if(time >= displayPeriod && signalingOn == true)
+            else {
+                //gameObject.GetComponent<Outline>().OutlineWidth = 0f;
+                // gameObject.GetComponent<Outlinable>().enabled = false;
+            }
+
+            if(time>3*displayPeriod)
             {
-                signalingOn = false;
-                time = 0.0f;
+                gameObject.GetComponent<Outlinable>().enabled = false;
+            }
 
-                if(rightControllerModelOutline != null)
-                {
-                    rightControllerModelOutline.OutlineWidth = 0f;
-                    rightControllerModelOutline.enabled = false;
-                }
-
-                foreach (MmRoutingTableItem item in itemsToGo)
-                {
-                    item.Responder.gameObject.GetComponent<Outline>().OutlineWidth = 0f;
-                    item.Responder.GetComponent<Outline>().enabled = false;
-                }
-                gameObject.GetComponent<Outline>().enabled = false;
+            //time += Time.deltaTime;
+            if (time > 4 * displayPeriod) {
                 
+                time = 0;
                 messageBuffer.Clear();
+
             }
         }
 
-        private void DrawSignals(MmRoutingTableItem item, Vector3 currentPosition, int depth = 0)
+        private void BroadCast(List<MmRoutingTableItem> itemsToGo, Transform PositionOffset, int depth)
+        {
+
+            // Debug.Log("Wait Time"+ waitTime*layer);
+            //Debug.Log("right outside broadcast loop");
+            foreach (MmRoutingTableItem item in itemsToGo)
+            {
+                //yield return new WaitForSeconds(waitTime*layer);
+                //Debug.Log("Broadcast loop : " + item);
+                //Debug.Log(item);
+
+                DrawSignals(item, PositionOffset.position, depth);
+                // messageDisplayIndicator = true;
+                // StartCoroutine(DrawSignalsCoroutine(item, positionOffset.position));
+
+                // messageDisplayIndicator = false;                    
+            }
+        }
+
+
+        private void DrawSignals(MmRoutingTableItem item, Vector3 currentPosition, int depth)
         {
             Vector3 targetPosition = item.Responder.gameObject.GetComponent<MmRelayNode>().positionOffset.position;
 
             if (gameManager.pathOn)
             {
-                SignalVisualizer(currentPosition, targetPosition, time);
-                int colorIndex = depth % 3;
-                Color currentColor = new Color(0,0,0);
+                //Debug.Log("in draw signals");
+                SignalVisualizer(currentPosition, targetPosition);
+
+                int colorIndex = depth % 4;
+                Color currentColor;
+
                 if(colorIndex == 0)
                 {
-                    currentColor = new Color (93f/255f, 58f/255f, 155f/255f);
+                    currentColor = colorA;
                 }
                 else if(colorIndex == 1)
                 {
-                    currentColor = new Color (230f/255f, 97f/255f, 0f);
+                    currentColor = colorB;
                 }
                 else if(colorIndex == 2)
                 {
-                    currentColor = new Color (64f/255f, 176f/255f, 166f/255f);
-                    // currentColor = new Color (230f/255f, 97f/255f, 0f);
+                    currentColor = colorC;
+                }
+                else {
+                    currentColor = colorD;
                 }
 
-                item.Responder.gameObject.GetComponent<Outline>().OutlineColor = currentColor;
-                item.Responder.gameObject.GetComponent<Outline>().OutlineWidth = 2f;
-                item.Responder.gameObject.GetComponent<Outline>().enabled = true;
+                // item.Responder.gameObject.GetComponent<Outline>().OutlineColor = currentColor;
+                // item.Responder.gameObject.GetComponent<Outline>().OutlineWidth = 2f;
+                // item.Responder.gameObject.GetComponent<Outline>().enabled = true;
 
-                // Check if the Responder is of type MmRelayNode
-                if (item.Responder is MmRelayNode relayNode)
-                {
-                    // Get children of this relay node
-                    List<MmRoutingTableItem> childItems = relayNode.RoutingTable.GetMmRoutingTableItems(MmRoutingTable.ListFilter.All,MmLevelFilter.Child);
+                item.Responder.gameObject.GetComponent<Outlinable>().enabled = true;
+                item.Responder.gameObject.GetComponent<Outlinable>().OutlineParameters.Color = currentColor;
 
-                    foreach (MmRoutingTableItem childItem in childItems)
-                    {
-                        // Recursively draw signals for each child
-                        DrawSignals(childItem, targetPosition, depth + 1);
-                    }
-                }
             }
         }
 
@@ -444,20 +505,17 @@ namespace MercuryMessaging
         public void DrawPath(Vector3 from, Vector3 to, Color color)
         {
             var draw = Draw.ingame;
-            // draw.LineWidthMultiplier = 2.0f;
-            // draw.OrderOffset = 1;
             draw.DashedLine(from, to, 0.06f, 0.06f, color);
+
+            gameObject.GetComponent<Outlinable>().enabled = false;
         }
 
         // draw a 3d arrow between invoked nodes
-        public void SignalVisualizer(Vector3 from, Vector3 to,float time)
+        public void SignalVisualizer(Vector3 from, Vector3 to)
         {
-            float ratio = time / displayPeriod;
+            float ratio = (time - ((layer) * displayPeriod)) / displayPeriod;
             
             var draw = Draw.ingame;
-            // draw.OrderOffset = 1;
-
-            // draw.DashedLine(from, to, 0.06f, 0.06f, Color.cyan);
 
             Vector3 distance = to - from;
 
@@ -468,11 +526,10 @@ namespace MercuryMessaging
             for (int i = 1; i < numArrows; i++)
             {
                 Vector3 pointA = Vector3.Lerp(from, to, i / (float)numArrows);
-                // Debug.Log("Green Element: " + greenElement);
                 
-                if(i == greenElement)
+
+                if (i == greenElement)
                 {
-                    // draw.Arrowhead(pointA, distance.normalized,(Camera.main.transform.position-pointA).normalized,0.12f, Color.green);
                     DrawArrowheadMesh(pointA, distance.normalized,(Camera.main.transform.position-pointA).normalized, new Color(26f/255f,133f/255f,1f), 0.20f);
                 }
                 else
@@ -736,7 +793,8 @@ namespace MercuryMessaging
         /// Auto [de]serialized by UNET.</param>
         public override void MmInvoke(MmMessage message)
         {
-            signalingOn =true;
+            // signalingOn = 0;
+            time = 0;
             messageBuffer.Add(message);
             UpdateMessages(message);
             MmMessageType msgType = message.MmMessageType;
