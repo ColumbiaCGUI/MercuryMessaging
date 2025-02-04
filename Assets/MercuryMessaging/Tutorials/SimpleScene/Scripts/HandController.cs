@@ -55,9 +55,10 @@ public class HandController : MmBaseResponder {
 
 	void Start()
 	{
-		playerInput = GameObject.Find("GameManager").GetComponent<GameManager>().playerInput;
-		signalAction = playerInput.FindActionMap("XRI RightHand Interaction").FindAction("Signal");
-		signalAction.Enable();
+		// ------------------------ save for later use --------------------------------------------------
+		// playerInput = GameObject.Find("GameManager").GetComponent<GameManager>().playerInput;
+		// signalAction = playerInput.FindActionMap("XRI RightHand Interaction").FindAction("Signal");
+		// signalAction.Enable();
 	}
 	public override void Update()
 	{

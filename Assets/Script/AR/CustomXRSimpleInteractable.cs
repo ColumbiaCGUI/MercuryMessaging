@@ -1,90 +1,90 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.XR.Interaction.Toolkit;
-using MercuryMessaging;
-using EPOOutline;
+// using System.Collections;
+// using System.Collections.Generic;
+// using UnityEngine;
+// using UnityEngine.XR.Interaction.Toolkit;
+// using MercuryMessaging;
+// using EPOOutline;
 
-public class CustomXRSimpleInteractable : XRSimpleInteractable
-{
-    private GameManager gameManager;
+// public class CustomXRSimpleInteractable : XRSimpleInteractable
+// {
+//     private GameManager gameManager;
 
-    private List<string> messageInList = new List<string>();
+//     private List<string> messageInList = new List<string>();
 
-    private List<string> messageOutList = new List<string>();
+//     private List<string> messageOutList = new List<string>();
 
-    private string objName;
+//     private string objName;
 
-    public bool isSelected = false;
+//     public bool isSelected = false;
 
-    private bool updated = false;
-    // Start is called before the first frame update
-    void Start()
-    {
-        objName = this.gameObject.name;
-        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-    }
+//     private bool updated = false;
+//     // Start is called before the first frame update
+//     void Start()
+//     {
+//         objName = this.gameObject.name;
+//         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+//     }
 
-    void Update()
-    {
-        if(this.gameObject.GetComponent<MmRelayNode>() !=null)
-        {
-            // Debug.Log("CustomXRSimpleInteractable: OnSelectEntered");
+//     void Update()
+//     {
+//         if(this.gameObject.GetComponent<MmRelayNode>() !=null)
+//         {
+//             // Debug.Log("CustomXRSimpleInteractable: OnSelectEntered");
 
-            messageInList = this.gameObject.GetComponent<MmRelayNode>().messageInList;
-            messageOutList = this.gameObject.GetComponent<MmRelayNode>().messageOutList;
-        }
+//             messageInList = this.gameObject.GetComponent<MmRelayNode>().messageInList;
+//             messageOutList = this.gameObject.GetComponent<MmRelayNode>().messageOutList;
+//         }
 
-        if(isSelected && updated == false)
-        {
-            gameManager.ShowMessage(messageInList, true, objName);
-            gameManager.ShowMessage(messageOutList, false, objName);
-            updated = true;
+//         if(isSelected && updated == false)
+//         {
+//             gameManager.ShowMessage(messageInList, true, objName);
+//             gameManager.ShowMessage(messageOutList, false, objName);
+//             updated = true;
             
-            // this.gameObject.GetComponent<Outlinable>().OutlineParameters.DilateShift = 2f;
+//             // this.gameObject.GetComponent<Outlinable>().OutlineParameters.DilateShift = 2f;
 
 
-            // this.gameObject.GetComponent<Outline>().OutlineWidth = 4f;
-            // this.gameObject.GetComponent<Outline>().enabled = true;
-        }
-        else if(isSelected)
-        {
-            gameManager.UpdateCurrentMessage(messageInList, true);
-            gameManager.UpdateCurrentMessage(messageOutList, false);
+//             // this.gameObject.GetComponent<Outline>().OutlineWidth = 4f;
+//             // this.gameObject.GetComponent<Outline>().enabled = true;
+//         }
+//         else if(isSelected)
+//         {
+//             gameManager.UpdateCurrentMessage(messageInList, true);
+//             gameManager.UpdateCurrentMessage(messageOutList, false);
 
-            // this.gameObject.GetComponent<Outlinable>().OutlineParameters.DilateShift = 2f;
+//             // this.gameObject.GetComponent<Outlinable>().OutlineParameters.DilateShift = 2f;
             
-            // this.gameObject.GetComponent<Outline>().OutlineWidth = 4f;
-            // this.gameObject.GetComponent<Outline>().enabled = true;
-        }
+//             // this.gameObject.GetComponent<Outline>().OutlineWidth = 4f;
+//             // this.gameObject.GetComponent<Outline>().enabled = true;
+//         }
 
-    }
+//     }
 
-    protected override void OnSelectEntered(SelectEnterEventArgs args)
-    {
-        base.OnSelectEntered(args); // Call the base class implementation
+//     protected override void OnSelectEntered(SelectEnterEventArgs args)
+//     {
+//         base.OnSelectEntered(args); // Call the base class implementation
 
-        gameManager.MessageIn.SetActive(true);
-        gameManager.MessageOut.SetActive(true);
+//         gameManager.MessageIn.SetActive(true);
+//         gameManager.MessageOut.SetActive(true);
 
-        isSelected = true;
+//         isSelected = true;
 
-        // gameManager.ShowMessage(messageInList, true);
-        // gameManager.ShowMessage(messageOutList, false);
+//         // gameManager.ShowMessage(messageInList, true);
+//         // gameManager.ShowMessage(messageOutList, false);
 
-    }
+//     }
 
-    // Override the OnHoverExited method
-    protected override void OnSelectExited(SelectExitEventArgs args)
-    {
-        base.OnSelectExited(args); // Call the base class implementation
+//     // Override the OnHoverExited method
+//     protected override void OnSelectExited(SelectExitEventArgs args)
+//     {
+//         base.OnSelectExited(args); // Call the base class implementation
 
-        gameManager.MessageIn.SetActive(false);
-        gameManager.MessageOut.SetActive(false);
+//         gameManager.MessageIn.SetActive(false);
+//         gameManager.MessageOut.SetActive(false);
 
-        // this.gameObject.GetComponent<Outline>().OutlineWidth = 0f;
+//         // this.gameObject.GetComponent<Outline>().OutlineWidth = 0f;
 
-        isSelected = false;
-        updated = false;
-    }
-}
+//         isSelected = false;
+//         updated = false;
+//     }
+// }
