@@ -29,6 +29,7 @@ public class SpawnManager : MonoBehaviour
 
     public void SpawnPedestrian() {
         Instantiate(pedestrianPrefab, spawnPos, pedestrianPrefab.transform.rotation);
+        EventSystem.Instance.updateStatus("Population", 1); 
     }
 
     public void spawnCar() {

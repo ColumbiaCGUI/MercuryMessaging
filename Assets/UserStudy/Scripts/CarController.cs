@@ -9,6 +9,7 @@ public class CarController : MonoBehaviour
     public float crossRoadStartZ = 81.0f;
     public float crossRoadEndZ = 72.0f;
     public float speed = 2.0f;  // Car's speed
+    public float recklessness = 0.0f; // determine if a car will rush a yellow light or not
 
     // Start is called before the first frame update
     void Start()
@@ -26,10 +27,17 @@ public class CarController : MonoBehaviour
         // Car has not crossed the road yet
         if (transform.position.z > crossRoadStartZ) { 
             // if the light is turning red or yellow
-            if (direction1Color == "Red" || direction1Color == "Yellow") {
+            if (direction1Color == "Red") {
                 destinationZ = 83; 
-            } else {
+            } else if (direction1Color == "Green") {
                 destinationZ = 50.0f;  // move to the end of the road
+            } else {
+                float level = Random.Range(0.0f, 1.0f); 
+                if (level <= recklessness) {
+                    destinationZ = 50.0f;  // rush to the end of the road
+                } else {
+                    destinationZ = 83.0f;  // move to the start of the road
+                }
             }
         }
     }
