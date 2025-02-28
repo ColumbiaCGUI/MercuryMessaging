@@ -10,8 +10,10 @@ public class EventSystem : MonoBehaviour
 
     // Traffic Light Change Event (String = Light Color)
     public event Action<string, string> OnTrafficLightChange;
-    public float phase1Duration = 5.0f;
-    public float phase2Duration = 2.0f; 
+    public event Action<float, GameObject> onSentimentChange;
+    public event Action<string, int> onStatusChange; 
+    public float phase1Duration = 10.0f;
+    public float phase2Duration = 3.0f; 
 
 
     private void Awake()
@@ -52,4 +54,17 @@ public class EventSystem : MonoBehaviour
     {
         OnTrafficLightChange?.Invoke(direction1Color, direction2Color);
     }
+
+    public void InduceFear(float amount, GameObject pedestrian) {
+        onSentimentChange?.Invoke(amount, pedestrian);
+    }
+
+    public void dispellFear(float amount = 0, GameObject pedestrian = null) {
+        onSentimentChange?.Invoke(amount, pedestrian); 
+    }
+
+    public void updateStatus(string type, int value) {
+        onStatusChange?.Invoke(type, value); 
+    }
+
 }

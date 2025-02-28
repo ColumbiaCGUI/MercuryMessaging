@@ -1,9 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.PackageManager;
 using UnityEngine;
 
-public class RoadCross : MonoBehaviour
+public class Pedestrian : MonoBehaviour
 {
     public float speed = 0.5f; 
     private float crossRoadStart = -51.0f; 
@@ -32,6 +33,10 @@ public class RoadCross : MonoBehaviour
                 float distance2End = transform.position.x - crossRoadEnd;
                 speed = Mathf.Max(distance2End / 1.5f, 0.5f); 
                 pedestrianAnimator.SetFloat("speed", speed);
+
+                // induce fear based on the distance to the other side
+                float fear = distance2End * 0.5f; 
+                EventSystem.Instance.InduceFear(fear, gameObject);
             }
         }
         // Pedestrian has not crossed the road yet
@@ -49,6 +54,7 @@ public class RoadCross : MonoBehaviour
         else {
             speed = 0.5f; 
             pedestrianAnimator.SetFloat("speed", speed);
+            EventSystem.Instance.InduceFear(0, gameObject); 
         }
     }
 
@@ -56,6 +62,7 @@ public class RoadCross : MonoBehaviour
         transform.Translate(Vector3.forward * speed * Time.deltaTime);
         if (transform.position.x <= -61.0f) {
             EventSystem.Instance.OnTrafficLightChange -= checkCrossState;  // remove listener when pedestrian is destroyed
+            EventSystem.Instance.updateStatus("Population", -1); 
             Destroy(gameObject); 
         }
         if (transform.position.x <= destinationX) {
