@@ -31,15 +31,29 @@ public class TrafficLightController : MonoBehaviour
     }
 
     void TrafficLightControl(string direction1Color, string direction2Color) {
-        if (direction1Color == "Red" && direction2Color == "Green") {
-            lightRenderer.materials[1].SetTextureOffset("_MainTex", redGreen);
-        } else if (direction1Color == "Yellow" && direction2Color == "Red") {
-            lightRenderer.materials[1].SetTextureOffset("_MainTex", yellowRed);
-        } else if (direction1Color == "Red" && direction2Color == "Yellow") {
-            lightRenderer.materials[1].SetTextureOffset("_MainTex", redYellow);
+        if (direction1) {
+            if (direction1Color == "Red" && direction2Color == "Green") {
+                lightRenderer.materials[1].SetTextureOffset("_MainTex", redGreen);
+            } else if (direction1Color == "Yellow" && direction2Color == "Red") {
+                lightRenderer.materials[1].SetTextureOffset("_MainTex", yellowRed);
+            } else if (direction1Color == "Red" && direction2Color == "Yellow") {
+                lightRenderer.materials[1].SetTextureOffset("_MainTex", redYellow);
+            } else {
+                lightRenderer.materials[1].SetTextureOffset("_MainTex", greenRed);
+            }
         } else {
-            lightRenderer.materials[1].SetTextureOffset("_MainTex", greenRed);
+            if (direction1Color == "Red" && direction2Color == "Green") {
+                lightRenderer.materials[1].SetTextureOffset("_MainTex", greenRed);
+            } else if (direction1Color == "Yellow" && direction2Color == "Red") {
+                lightRenderer.materials[1].SetTextureOffset("_MainTex", redYellow);
+            } else if (direction1Color == "Red" && direction2Color == "Yellow") {
+                lightRenderer.materials[1].SetTextureOffset("_MainTex", yellowRed);
+            } else {
+                lightRenderer.materials[1].SetTextureOffset("_MainTex", redGreen);
+            }
         }
+        EventSystem.Instance.ControlPedestrian(direction2Color); 
+        EventSystem.Instance.ControlVehicle(direction1Color); 
 
     }
 }
