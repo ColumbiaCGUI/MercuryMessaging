@@ -12,6 +12,8 @@ public class EventSystem : MonoBehaviour
     public event Action<string, string> OnTrafficLightChange;
     public event Action<float, GameObject> onSentimentChange;
     public event Action<string, int> onStatusChange; 
+    public event Action<string> onPedestrianCross; 
+    public event Action<string> onVehicleCross;
     public float phase1Duration = 10.0f;
     public float phase2Duration = 3.0f; 
 
@@ -65,6 +67,14 @@ public class EventSystem : MonoBehaviour
 
     public void updateStatus(string type, int value) {
         onStatusChange?.Invoke(type, value); 
+    }
+
+    public void ControlPedestrian(string color) {
+        onPedestrianCross?.Invoke(color);
+    }
+
+    public void ControlVehicle(string color) {
+        onVehicleCross?.Invoke(color);
     }
 
 }

@@ -14,7 +14,7 @@ public class CarController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        EventSystem.Instance.OnTrafficLightChange += checkCrossState; 
+        EventSystem.Instance.onVehicleCross += checkCrossState; 
     }
 
     // Update is called once per frame
@@ -23,13 +23,13 @@ public class CarController : MonoBehaviour
         carDrive(); 
     }
 
-    public void checkCrossState(string direction1Color, string direction2Color) {
+    public void checkCrossState(string color) {
         // Car has not crossed the road yet
         if (transform.position.z > crossRoadStartZ) { 
             // if the light is turning red or yellow
-            if (direction1Color == "Red") {
+            if (color == "Red") {
                 destinationZ = 83; 
-            } else if (direction1Color == "Green") {
+            } else if (color == "Green") {
                 destinationZ = 50.0f;  // move to the end of the road
             } else {
                 float level = Random.Range(0.0f, 1.0f); 
@@ -46,7 +46,7 @@ public class CarController : MonoBehaviour
         transform.Translate(Vector3.forward * speed * Time.deltaTime); 
         if (transform.position.z <= 60) {
             Destroy(gameObject); 
-            EventSystem.Instance.OnTrafficLightChange -= checkCrossState;
+            EventSystem.Instance.onVehicleCross -= checkCrossState;
         }
         if (transform.position.z <= destinationZ) {
             speed = 0; 

@@ -16,7 +16,7 @@ public class Pedestrian : MonoBehaviour
     void Start()
     {
         pedestrianAnimator = GetComponent<Animator>();
-        EventSystem.Instance.OnTrafficLightChange += checkCrossState; 
+        EventSystem.Instance.onPedestrianCross += checkCrossState; 
     }
 
     // Update is called once per frame
@@ -25,11 +25,11 @@ public class Pedestrian : MonoBehaviour
         pedestrianWalk(); 
     }
 
-    public void checkCrossState(string direction1Color, string direction2Color) {
+    public void checkCrossState(string color) {
         // Pedestrian is currently in the crossroads 
         if (transform.position.x > crossRoadEnd && transform.position.x < crossRoadStart) {
             // if the light is turning red for the pedestrian while on the cross road
-            if (direction2Color == "Red" || direction2Color == "Yellow") {
+            if (color == "Red" || color == "Yellow") {
                 float distance2End = transform.position.x - crossRoadEnd;
                 speed = Mathf.Max(distance2End / 1.5f, 0.5f); 
                 pedestrianAnimator.SetFloat("speed", speed);
@@ -42,7 +42,7 @@ public class Pedestrian : MonoBehaviour
         // Pedestrian has not crossed the road yet
         else if (transform.position.x > crossRoadStart) { 
             // if the light is turning red for the pedestrian
-            if (direction2Color == "Red" || direction2Color == "Yellow") {
+            if (color == "Red" || color == "Yellow") {
                 destinationX = -50.0f; 
             } else {
                 destinationX = -100.0f;  // move to the end of the road
@@ -61,7 +61,7 @@ public class Pedestrian : MonoBehaviour
     void pedestrianWalk() {
         transform.Translate(Vector3.forward * speed * Time.deltaTime);
         if (transform.position.x <= -61.0f) {
-            EventSystem.Instance.OnTrafficLightChange -= checkCrossState;  // remove listener when pedestrian is destroyed
+            EventSystem.Instance.onPedestrianCross -= checkCrossState;  // remove listener when pedestrian is destroyed
             EventSystem.Instance.updateStatus("Population", -1); 
             Destroy(gameObject); 
         }
