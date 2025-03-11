@@ -9,10 +9,10 @@ public class EventSystem : MonoBehaviour
     public static EventSystem Instance;
 
     // Traffic Light Change Event (String = Light Color)
-    public event Action<string, string> OnTrafficLightChange;
+    public event Action<string, string, int> OnTrafficLightChange;
     public event Action<float, GameObject> onSentimentChange;
     public event Action<string, int> onStatusChange; 
-    public event Action<string> onPedestrianCross; 
+    public event Action<string, string, int> onPedestrianCross; 
     public event Action<string> onVehicleCross;
     public float phase1Duration = 10.0f;
     public float phase2Duration = 3.0f; 
@@ -31,30 +31,30 @@ public class EventSystem : MonoBehaviour
     // Start the traffic light cycle
     private void Start()
     {
-        StartCoroutine(TrafficLightCycle());
+        StartCoroutine(TrafficLightCycle(1));
     }
 
     // Coroutine to simulate traffic light cycle
-    private IEnumerator TrafficLightCycle() {
+    private IEnumerator TrafficLightCycle(int intersection) {
         while (true) {
-            ChangeTrafficLight("Red", "Green");
+            ChangeTrafficLight("Red", "Green", intersection);
             yield return new WaitForSeconds(phase1Duration);
 
-            ChangeTrafficLight("Red", "Yellow");
+            ChangeTrafficLight("Red", "Yellow", intersection);
             yield return new WaitForSeconds(phase2Duration);
 
-            ChangeTrafficLight("Green", "Red");
+            ChangeTrafficLight("Green", "Red", intersection);
             yield return new WaitForSeconds(phase1Duration);
 
-            ChangeTrafficLight("Yellow", "Red");
+            ChangeTrafficLight("Yellow", "Red", intersection);
             yield return new WaitForSeconds(phase2Duration);
         }
     }
 
     // Method to trigger the event
-    public void ChangeTrafficLight(string direction1Color, string direction2Color)
+    public void ChangeTrafficLight(string direction1Color, string direction2Color, int intersection)
     {
-        OnTrafficLightChange?.Invoke(direction1Color, direction2Color);
+        OnTrafficLightChange?.Invoke(direction1Color, direction2Color, intersection);
     }
 
     public void InduceFear(float amount, GameObject pedestrian) {
@@ -69,8 +69,8 @@ public class EventSystem : MonoBehaviour
         onStatusChange?.Invoke(type, value); 
     }
 
-    public void ControlPedestrian(string color) {
-        onPedestrianCross?.Invoke(color);
+    public void ControlPedestrian(string direction1Color, string direction2Color, int intersection) {
+        onPedestrianCross?.Invoke(direction1Color, direction2Color, intersection);
     }
 
     public void ControlVehicle(string color) {
