@@ -7,16 +7,23 @@ using UnityEngine;
 public class Pedestrian : MonoBehaviour
 {
     public float speed = 0.5f; 
-    private float crossRoadStart = -51.0f; 
-    private float crossRoadEnd = -57.0f; 
+    private float crossRoadStart; 
+    private float crossRoadEnd; 
     private Animator pedestrianAnimator; 
-    private float destinationX = -100.0f; 
+    private float destination; 
+    private float despawnPoint; 
+    public bool direction1 = false; 
 
-    // Start is called before the first frame update
     void Start()
     {
         pedestrianAnimator = GetComponent<Animator>();
-        EventSystem.Instance.onPedestrianCross += checkCrossState; 
+        EventSystem.Instance.onPedestrianCross += CrossRoad; 
+
+        if (direction1) {
+            despawnPoint = StreetInfo.Instance.humanDespawnLocationZ; 
+        } else {
+            despawnPoint = StreetInfo.Instance.humanDespawnLocationX; 
+        }
     }
 
     // Update is called once per frame
@@ -25,47 +32,117 @@ public class Pedestrian : MonoBehaviour
         pedestrianWalk(); 
     }
 
-    public void checkCrossState(string color) {
-        // Pedestrian is currently in the crossroads 
-        if (transform.position.x > crossRoadEnd && transform.position.x < crossRoadStart) {
-            // if the light is turning red for the pedestrian while on the cross road
-            if (color == "Red" || color == "Yellow") {
-                float distance2End = transform.position.x - crossRoadEnd;
-                speed = Mathf.Max(distance2End / 1.5f, 0.5f); 
-                pedestrianAnimator.SetFloat("speed", speed);
+    public void CrossRoad(string direction1Color, string direction2Color, int intersection) {
+        // check if pedestrian is in current intersection 
+        if (!IsAtCurrentIntersection(intersection)) {
+            return; 
+        }
 
-                // induce fear based on the distance to the other side
-                float fear = distance2End * 0.5f; 
-                EventSystem.Instance.InduceFear(fear, gameObject);
+        SetStreetInfo(intersection);         
+        if (direction1) {
+            checkCrossState(direction1Color, transform.position.z); 
+        } else {
+            checkCrossState(direction2Color, transform.position.x); 
+        }   
+    }
+
+    void checkCrossState(string color, float position) {
+        // Pedestrian is currently in the crossroads 
+            if (position > crossRoadEnd && position < crossRoadStart) {
+                // if the light is turning red for the pedestrian while on the cross road
+                if (color == "Red" || color == "Yellow") {
+                    float distance2End = position - crossRoadEnd;
+                    speed = Mathf.Max(distance2End / 1.5f, 0.5f); 
+                    pedestrianAnimator.SetFloat("speed", speed);
+
+                    // induce fear based on the distance to the other side
+                    float fear = distance2End * 0.5f; 
+                    EventSystem.Instance.InduceFear(fear, gameObject);
+                }
             }
-        }
-        // Pedestrian has not crossed the road yet
-        else if (transform.position.x > crossRoadStart) { 
-            // if the light is turning red for the pedestrian
-            if (color == "Red" || color == "Yellow") {
-                destinationX = -50.0f; 
-            } else {
-                destinationX = -100.0f;  // move to the end of the road
+            // Pedestrian has not crossed the road yet
+            else if (position > crossRoadStart) { 
+                // if the light is turning red for the pedestrian
+                if (color == "Red" || color == "Yellow") {
+                    destination = crossRoadStart + 1; 
+                } else {
+                    destination = crossRoadEnd - 50;  // move to the end of the road
+                    speed = 0.5f; 
+                    pedestrianAnimator.SetFloat("speed", speed);  // reset to normal speed
+                }
+            }
+            // Pedestrian has crossed the road 
+            else {
                 speed = 0.5f; 
-                pedestrianAnimator.SetFloat("speed", speed);  // reset to normal speed
+                pedestrianAnimator.SetFloat("speed", speed);
+                EventSystem.Instance.InduceFear(0, gameObject); 
+            }
+    }
+
+    void SetStreetInfo(int intersection) {
+        if (direction1) {
+            if (intersection == 1) {
+                crossRoadStart = StreetInfo.Instance.direction1Intersection1Start; 
+                crossRoadEnd = StreetInfo.Instance.direction1Intersection1End; 
+            } else { 
+                crossRoadStart = StreetInfo.Instance.direction1Intersection2Start; 
+                crossRoadEnd = StreetInfo.Instance.direction1Intersection2End; 
+            }
+        } else {
+            if (intersection == 1) {
+                crossRoadStart = StreetInfo.Instance.direction2Intersection1Start; 
+                crossRoadEnd = StreetInfo.Instance.direction2Intersection1End;
+            } else {
+                crossRoadStart = StreetInfo.Instance.direction2Intersection2Start; 
+                crossRoadEnd = StreetInfo.Instance.direction2Intersection2End; 
             }
         }
-        // Pedestrian has crossed the road 
-        else {
-            speed = 0.5f; 
-            pedestrianAnimator.SetFloat("speed", speed);
-            EventSystem.Instance.InduceFear(0, gameObject); 
+    }
+
+    bool IsAtCurrentIntersection(int intersection) {
+        if (intersection == 1) {
+            if (direction1) {
+                if (transform.position.z <= StreetInfo.Instance.direction1Intersection1End) {
+                    return false; 
+                }
+            } else {
+                if (transform.position.x <= StreetInfo.Instance.direction2Intersection1End) {
+                    return false; 
+                }
+            }
+        } else {
+            if (direction1) {
+                if (transform.position.z > StreetInfo.Instance.direction1Intersection1End || transform.position.z <= StreetInfo.Instance.direction1Intersection2End) {
+                    return false; 
+                }
+            } else {
+                if (transform.position.x > StreetInfo.Instance.direction2Intersection1End || transform.position.x <= StreetInfo.Instance.direction2Intersection2End) {
+                    return false; 
+                }
+            }
         }
+        return true;  // pedestrian is in the current intersection
     }
 
     void pedestrianWalk() {
         transform.Translate(Vector3.forward * speed * Time.deltaTime);
-        if (transform.position.x <= -61.0f) {
-            EventSystem.Instance.onPedestrianCross -= checkCrossState;  // remove listener when pedestrian is destroyed
+
+        float position; 
+        if (direction1) {
+            position = transform.position.z; 
+        } else {
+            position = transform.position.x;
+        }
+
+        if (position <= despawnPoint) {
+            // remove listener when pedestrian is destroyed
+            EventSystem.Instance.onPedestrianCross -= CrossRoad; 
+
             EventSystem.Instance.updateStatus("Population", -1); 
             Destroy(gameObject); 
         }
-        if (transform.position.x <= destinationX) {
+
+        if (position <= destination) {
             speed = 0.0f; 
             pedestrianAnimator.SetFloat("speed", 0.0f);  // stop moving
         }
