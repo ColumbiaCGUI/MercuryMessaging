@@ -6,7 +6,8 @@ public class SpawnManager : MonoBehaviour
 {
     public GameObject pedestrianPrefab; 
     public GameObject[] carPrefabs; 
-    public Vector3 spawnPos = new Vector3(-40.0f, 0.02400017f, 79.21f); 
+    public Vector3 spawnPosDirection2;
+    public Vector3 spawnPosDirection1;
     public List<Vector3> carSpawnPos; 
     public float startDelay = 2.0f;
     public float spawnInterval = 10.0f; 
@@ -15,9 +16,12 @@ public class SpawnManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        spawnPosDirection2 = new Vector3(StreetInfo.Instance.humanSpawnLocationX, 0.02400017f, 79.21f); 
+        spawnPosDirection1 = new Vector3(-49.929f, 0.02399635f, StreetInfo.Instance.humanSpawnLocationZ);
         carSpawnPos.Add(new Vector3(-54.78f, 0.001151287f, 104)); 
         carSpawnPos.Add(new Vector3(-56.206f, 0.001151287f, 104)); 
-        InvokeRepeating("SpawnPedestrian", startDelay, spawnInterval);
+        InvokeRepeating("SpawnPedestrianDirection2", startDelay, spawnInterval);
+        InvokeRepeating("SpawnPedestrianDirection1", startDelay + 2.0f, spawnInterval);
         InvokeRepeating("spawnCar", startDelay, spawnInterval);
     }
 
@@ -27,8 +31,17 @@ public class SpawnManager : MonoBehaviour
         
     }
 
-    public void SpawnPedestrian() {
-        Instantiate(pedestrianPrefab, spawnPos, pedestrianPrefab.transform.rotation);
+    public void SpawnPedestrianDirection2() {
+        GameObject instance = Instantiate(pedestrianPrefab, spawnPosDirection2, Quaternion.Euler(0, -90, 0));
+        Pedestrian pedestrian = instance.GetComponent<Pedestrian>();
+        pedestrian.direction1 = false; 
+        EventSystem.Instance.updateStatus("Population", 1); 
+    }
+
+    public void SpawnPedestrianDirection1() {
+        GameObject instance = Instantiate(pedestrianPrefab, spawnPosDirection1, Quaternion.Euler(0, -180, 0));
+        Pedestrian pedestrian = instance.GetComponent<Pedestrian>();
+        pedestrian.direction1 = true; 
         EventSystem.Instance.updateStatus("Population", 1); 
     }
 

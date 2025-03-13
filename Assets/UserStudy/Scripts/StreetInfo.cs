@@ -20,8 +20,8 @@ public class StreetInfo : MonoBehaviour
     public float direction1Intersection2End; 
     public float direction2Intersection1Start = -51.0f;
     public float direction2Intersection1End = -57.0f;
-    public float direction2Intersection2Start;
-    public float direction2Intersection2End;
+    public float direction2Intersection2Start = -86.0f;
+    public float direction2Intersection2End = -94.0f;
 
     // Start is called before the first frame update
     void Start()

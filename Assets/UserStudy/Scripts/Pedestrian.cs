@@ -24,6 +24,7 @@ public class Pedestrian : MonoBehaviour
         } else {
             despawnPoint = StreetInfo.Instance.humanDespawnLocationX; 
         }
+        destination = despawnPoint;
     }
 
     // Update is called once per frame
@@ -100,23 +101,27 @@ public class Pedestrian : MonoBehaviour
     }
 
     bool IsAtCurrentIntersection(int intersection) {
+        float bound2 = (StreetInfo.Instance.direction2Intersection1End + StreetInfo.Instance.direction2Intersection2Start) / 2; 
+        float bound1 = (StreetInfo.Instance.direction1Intersection1End + StreetInfo.Instance.direction1Intersection2Start) / 2; 
+        Debug.Log("bound2: " + bound2 + " bound1: " + bound1); 
+
         if (intersection == 1) {
             if (direction1) {
-                if (transform.position.z <= StreetInfo.Instance.direction1Intersection1End) {
+                if (transform.position.z <= bound1) {
                     return false; 
                 }
             } else {
-                if (transform.position.x <= StreetInfo.Instance.direction2Intersection1End) {
+                if (transform.position.x <= bound2) {
                     return false; 
                 }
             }
         } else {
             if (direction1) {
-                if (transform.position.z > StreetInfo.Instance.direction1Intersection1End || transform.position.z <= StreetInfo.Instance.direction1Intersection2End) {
+                if (transform.position.z > bound1) {
                     return false; 
                 }
             } else {
-                if (transform.position.x > StreetInfo.Instance.direction2Intersection1End || transform.position.x <= StreetInfo.Instance.direction2Intersection2End) {
+                if (transform.position.x > bound2) {
                     return false; 
                 }
             }

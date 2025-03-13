@@ -32,6 +32,7 @@ public class EventSystem : MonoBehaviour
     private void Start()
     {
         StartCoroutine(TrafficLightCycle(1));
+        StartCoroutine(TrafficLightCycle(2));
     }
 
     // Coroutine to simulate traffic light cycle
