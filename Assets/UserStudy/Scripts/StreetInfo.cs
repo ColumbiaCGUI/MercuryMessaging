@@ -7,9 +7,9 @@ public class StreetInfo : MonoBehaviour
     public static StreetInfo Instance; 
 
     public float humanDespawnLocationX = -98.0f; 
-    public float humanSpawnLocationX; 
-    public float humanDespawnLocationZ; 
-    public float humanSpawnLocationZ; 
+    public float humanSpawnLocationX = -40.0f; 
+    public float humanDespawnLocationZ = 47.0f; 
+    public float humanSpawnLocationZ = 89.0f; 
     public float carDespawnLocationZ;
     public float carSpawnLocationZ; 
     public float carDespawnLocationX; 

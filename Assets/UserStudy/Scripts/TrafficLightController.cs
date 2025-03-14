@@ -55,8 +55,7 @@ public class TrafficLightController : MonoBehaviour
                 }
             }
             EventSystem.Instance.ControlPedestrian(direction1Color, direction2Color, intersection); 
-            EventSystem.Instance.ControlVehicle(direction1Color); 
+            EventSystem.Instance.ControlVehicle(direction1Color, direction2Color, intersection); 
         }
-
     }
 }

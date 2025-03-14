@@ -9,13 +9,14 @@ public class FollowCamera : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        camera = Camera.main;
+        
     }
 
     // Update is called once per frame
     void Update()
     {
         // ensure that the floating speech bubble always face the camera
+        camera = Camera.main;
         transform.LookAt(camera.transform);
         transform.Rotate(new Vector3(0, 180, 0)); 
     }

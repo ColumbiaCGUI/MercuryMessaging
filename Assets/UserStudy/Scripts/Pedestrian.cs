@@ -103,7 +103,6 @@ public class Pedestrian : MonoBehaviour
     bool IsAtCurrentIntersection(int intersection) {
         float bound2 = (StreetInfo.Instance.direction2Intersection1End + StreetInfo.Instance.direction2Intersection2Start) / 2; 
         float bound1 = (StreetInfo.Instance.direction1Intersection1End + StreetInfo.Instance.direction1Intersection2Start) / 2; 
-        Debug.Log("bound2: " + bound2 + " bound1: " + bound1); 
 
         if (intersection == 1) {
             if (direction1) {

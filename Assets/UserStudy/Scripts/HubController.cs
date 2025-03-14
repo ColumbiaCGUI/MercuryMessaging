@@ -33,10 +33,10 @@ public class HubController : MonoBehaviour
     void UpdateFear(int value) {
         // Update fear value in the game UI hub
         totalFear += value;         
-        fearText.text = "Total Fear: " + totalFear.ToString();
+        fearText.text = "Total Rushness: " + totalFear.ToString();
 
         float averageFear = totalFear / totalHuman;
-        averageText.text = "Average Fear: " + averageFear.ToString();
+        averageText.text = "Average Rushness: " + averageFear.ToString();
     }
 
     void UpdatePopulation(int value) {
@@ -44,6 +44,6 @@ public class HubController : MonoBehaviour
         totalHuman += value; 
         
         float averageFear = totalFear / totalHuman;
-        averageText.text = "Average Fear: " + averageFear.ToString(); 
+        averageText.text = "Average Rushness: " + averageFear.ToString(); 
     }
 }

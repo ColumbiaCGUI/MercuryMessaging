@@ -29,15 +29,19 @@ public class CameraManager : MonoBehaviour
     {
         currentIndex = (currentIndex + 1 + cameras.Length) % cameras.Length;
         currentCamera.gameObject.SetActive(false);
+        currentCamera.gameObject.tag = "Untagged";
         currentCamera = cameras[currentIndex];
         currentCamera.gameObject.SetActive(true);
+        currentCamera.gameObject.tag = "MainCamera";
     }
 
     void PreviousView() 
     {
         currentIndex = (currentIndex - 1 + cameras.Length) % cameras.Length;
         currentCamera.gameObject.SetActive(false);
+        currentCamera.gameObject.tag = "Untagged";
         currentCamera = cameras[currentIndex];
         currentCamera.gameObject.SetActive(true);
+        currentCamera.gameObject.tag = "MainCamera";
     }
 }
