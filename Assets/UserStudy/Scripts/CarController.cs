@@ -5,13 +5,14 @@ using UnityEngine.XR.Interaction.Toolkit.Inputs;
 
 public class CarController : MonoBehaviour
 {
-    public float destination = 50; 
-    public float crossRoadStart = 81.0f;
-    public float crossRoadEnd = 72.0f;
+    public float destination; 
+    public float crossRoadStart;
+    public float crossRoadEnd;
     public float speed = 2.0f;  // Car's speed
     public float recklessness = 0.0f; // determine if a car will rush a yellow light or not
     public bool direction1 = true; 
     private float despawnPoint; 
+    private bool inTriggerZone = false; 
 
     // Start is called before the first frame update
     void Start()
@@ -48,19 +49,11 @@ public class CarController : MonoBehaviour
 
     public void checkCrossState(string color, float position) {
         // Car has not crossed the road yet
-        if (position >= crossRoadStart + 4) { 
-            // if the light is turning red or yellow
-            if (color == "Red") {
-                destination = crossRoadStart + 5; 
-            } else if (color == "Green") {
+        if (position >= crossRoadStart + 2.7f) { 
+            if (color == "Green") {
                 destination = crossRoadEnd - 100;  // move to the end of the road
             } else {
-                float level = Random.Range(0.0f, 1.0f); 
-                if (level <= recklessness) {
-                    destination = crossRoadStart + 5;  // rush to the end of the road
-                } else {
-                    destination = crossRoadEnd - 100;  // move to the start of the road
-                }
+                destination = crossRoadStart + 4.5f; 
             }
         }
     }
@@ -123,11 +116,51 @@ public class CarController : MonoBehaviour
             Destroy(gameObject); 
             EventSystem.Instance.onVehicleCross -= CrossRoad;
         }
-        if (transform.position.z <= destination) {
-            speed = 0; 
+        
+        if (inTriggerZone) {
+            speed = 0.0f; 
         } else {
-            speed = 2; 
+            if (position <= destination) {
+                speed = 0; 
+            } else {
+                speed = 2.0f; 
+            }
         }
+    } 
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Car")) {
+            CarController carController = other.gameObject.GetComponent<CarController>(); 
+            if (carController.direction1 == direction1) {
+                if (direction1) {
+                    if (other.gameObject.transform.position.z < transform.position.z) {
+                        inTriggerZone = true; 
+                    }
+                } else {
+                    if (other.gameObject.transform.position.x < transform.position.x) {
+                        inTriggerZone = true; 
+                    }
+                }
+            }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.CompareTag("Car")) {
+            CarController carController = other.gameObject.GetComponent<CarController>(); 
+            if (carController.direction1 == direction1) {
+                if (direction1) {
+                    if (other.gameObject.transform.position.z < transform.position.z) {
+                        inTriggerZone = false; 
+                    }
+                } else {
+                    if (other.gameObject.transform.position.x < transform.position.x) {
+                        inTriggerZone = false; 
+                    }
+                }
+            }
+        }
     }
 }

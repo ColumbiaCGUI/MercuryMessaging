@@ -9,6 +9,7 @@ public class SpawnManager : MonoBehaviour
     public Vector3 spawnPosDirection2;
     public Vector3 spawnPosDirection1;
     public List<Vector3> carSpawnPos; 
+    private Vector3 carSpawnPosDirection2; 
     public float startDelay = 2.0f;
     public float spawnInterval = 10.0f; 
     private int currentSpawnIndex = 0; 
@@ -19,10 +20,12 @@ public class SpawnManager : MonoBehaviour
         spawnPosDirection2 = new Vector3(StreetInfo.Instance.humanSpawnLocationX, 0.02400017f, 79.21f); 
         spawnPosDirection1 = new Vector3(-49.929f, 0.02399635f, StreetInfo.Instance.humanSpawnLocationZ);
         carSpawnPos.Add(new Vector3(-54.78f, 0.001151287f, 104)); 
-        carSpawnPos.Add(new Vector3(-56.206f, 0.001151287f, 104)); 
+        carSpawnPos.Add(new Vector3(-56.206f, 0.001151287f, 104));
+        carSpawnPosDirection2 = new Vector3(StreetInfo.Instance.carSpawnLocationX, 0.0005757086f, 76.94f); 
         InvokeRepeating("SpawnPedestrianDirection2", startDelay, spawnInterval);
         InvokeRepeating("SpawnPedestrianDirection1", startDelay + 2.0f, spawnInterval);
-        InvokeRepeating("spawnCar", startDelay, spawnInterval);
+        InvokeRepeating("SpawnCarDirection1", startDelay, spawnInterval);
+        InvokeRepeating("SpawnCarDirection2", startDelay + 2.0f, spawnInterval);
     }
 
     // Update is called once per frame
@@ -45,11 +48,22 @@ public class SpawnManager : MonoBehaviour
         EventSystem.Instance.updateStatus("Population", 1); 
     }
 
-    public void spawnCar() {
+    public void SpawnCarDirection1() {
         int randomPrefabIndex = Random.Range(0, carPrefabs.Length);
         GameObject car = carPrefabs[randomPrefabIndex];
         Vector3 spawnPos = carSpawnPos[currentSpawnIndex]; 
         currentSpawnIndex = (currentSpawnIndex + 1) % 2;
-        Instantiate(car, spawnPos, car.transform.rotation);
+        GameObject instance = Instantiate(car, spawnPos, car.transform.rotation);
+        CarController carController = instance.GetComponent<CarController>();
+        carController.direction1 = true;
+    }
+
+    public void SpawnCarDirection2() {
+        int randomPrefabIndex = Random.Range(0, carPrefabs.Length);
+        GameObject car = carPrefabs[randomPrefabIndex];
+        Vector3 spawnPos = carSpawnPosDirection2;
+        GameObject instance = Instantiate(car, spawnPos, Quaternion.Euler(0, -90, 0));
+        CarController carController = instance.GetComponent<CarController>();
+        carController.direction1 = false;
     }
 }
