@@ -2,7 +2,7 @@
   "dependencies": {
     "com.gentlymad.graphviewbase": "https://github.com/Gentlymad-Studios/GraphViewBase.git",
     "com.gentlymad.odinserializer": "https://github.com/Gentlymad-Studios/OdinSerializer.git",
-    "com.meta.xr.sdk.interaction.ovr": "66.0.0",
+    "com.meta.xr.sdk.interaction.ovr": "74.0.2",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.2d.tilemap": "1.0.0",
     "com.unity.ai.navigation": "1.1.5",

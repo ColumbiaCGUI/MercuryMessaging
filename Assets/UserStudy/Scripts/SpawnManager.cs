@@ -13,6 +13,8 @@ public class SpawnManager : MonoBehaviour
     public float startDelay = 2.0f;
     public float spawnInterval = 10.0f; 
     private int currentSpawnIndex = 0; 
+    public GameObject CarRoot; 
+    public GameObject ZombieRoot; 
 
     // Start is called before the first frame update
     void Start()
@@ -39,6 +41,7 @@ public class SpawnManager : MonoBehaviour
         Pedestrian pedestrian = instance.GetComponent<Pedestrian>();
         pedestrian.direction1 = false; 
         EventSystem.Instance.updateStatus("Population", 1); 
+        instance.transform.SetParent(ZombieRoot.transform, true); 
     }
 
     public void SpawnPedestrianDirection1() {
@@ -46,6 +49,7 @@ public class SpawnManager : MonoBehaviour
         Pedestrian pedestrian = instance.GetComponent<Pedestrian>();
         pedestrian.direction1 = true; 
         EventSystem.Instance.updateStatus("Population", 1); 
+        instance.transform.SetParent(ZombieRoot.transform, true); 
     }
 
     public void SpawnCarDirection1() {
@@ -56,6 +60,7 @@ public class SpawnManager : MonoBehaviour
         GameObject instance = Instantiate(car, spawnPos, car.transform.rotation);
         CarController carController = instance.GetComponent<CarController>();
         carController.direction1 = true;
+        instance.transform.SetParent(CarRoot.transform, true); 
     }
 
     public void SpawnCarDirection2() {
@@ -65,5 +70,6 @@ public class SpawnManager : MonoBehaviour
         GameObject instance = Instantiate(car, spawnPos, Quaternion.Euler(0, -90, 0));
         CarController carController = instance.GetComponent<CarController>();
         carController.direction1 = false;
+        instance.transform.SetParent(CarRoot.transform, true); 
     }
 }
