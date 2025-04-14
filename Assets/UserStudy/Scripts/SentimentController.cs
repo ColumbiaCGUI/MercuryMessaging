@@ -14,7 +14,7 @@ public class SentimentController : MonoBehaviour
     void Start()
     {
         EventSystem.Instance.onSentimentChange += DisplayFearFactor; 
-        sentiment.text = "Rushness " + 0 + "\n";
+        sentiment.text = "Pace " + 0 + "\n";
         
     }
 
@@ -34,7 +34,7 @@ public class SentimentController : MonoBehaviour
         if (pedestrian == gameObject) {
             int change = (int)amount - currentFear; 
             currentFear = (int)amount;
-            sentiment.text = "Rushness " + currentFear + "\n";
+            sentiment.text = "Pace " + currentFear + "\n";
             EventSystem.Instance.updateStatus("Fear", (int)change);
         }
     }
