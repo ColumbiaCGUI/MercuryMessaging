@@ -32,12 +32,15 @@
 //  
 //  
 using System.Linq;
+// using UnityEngine;
+// using System;
 
 namespace MercuryMessaging
 {
     /// <summary>
     /// MmMessage with bool payload
     /// </summary>
+    // [Serializable]
     public class MmMessageBool : MmMessage
     {
         /// <summary>
