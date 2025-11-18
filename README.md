@@ -2,7 +2,38 @@
 
 ![Basic scene layout](https://github.com/ColumbiaCGUI/MercuryMessaging/wiki/Images/General/MercuryCollage2.png)
 
-**A Hierarchical Message Routing Framework for Unity**
+The *Mercury Messaging* toolkit is a new way to handle cross-component communication in the Unity
+  game engine. It integrates seamlessly with the Unity Editor, and is both
+ robust and expandable. 
+ 
+*It has been tested in Unity 2022 up until 2022.3.18f1. This is the recommended version of Unity to use with Mercury! Networking features have been tested and work for PUN and Fusion in LTS 2022.*
+ 
+The toolkit contains the *Mercury* messaging framework, which is a messaging
+  and organizational framework built around the *Mercury Protocol*. 
+
+Unity organizes its rendered scene objects
+(known in Unity as
+  [GameObjects](https://docs.unity3d.com/ScriptReference/GameObject.html))
+using a standard scene graph (known in Unity as the
+  [Scene Hierarchy](https://docs.unity3d.com/Manual/Hierarchy.html)).
+While Unity is very powerful,
+it is fairly difficult to achieve nonspatial communication between
+scriptable components of GameObjects (in Unity, known as
+  [MonoBehaviours](https://docs.unity3d.com/ScriptReference/MonoBehaviour.html))
+.
+
+Consider a visualization in a basketball game where you connect the ball to *each* 
+player on a court with individual lines. There will be a control script on each
+  line in the visualization.
+
+Normally, to disable a GameObject in Unity, you invoke the
+  [SetActive](https://docs.unity3d.com/ScriptReference/GameObject.SetActive.html)
+  method.
+This will disable the GameObject and its children in the scene hierarchy.
+However, in our example, to disable the entire visualization, you would need to
+  disable the endpoint spheres and the line objects.
+In a script, you would need to get a handle to the GameObjects, and invoke
+  SetActive on each of them individually.  
 
 Developed by **Columbia University CGUI Lab**
 
@@ -57,7 +88,13 @@ This will trigger a special SetActive message on each of the objects involved in
 
 Done!
 
----
+## IEEE ISMAR 2024
+
+A library of debugging features and UI for Mercury was presented at IEEE ISMAR 2024 with the title "An XR GUI for Visualizing Messages in ECS Architectures". 
+
+The extended abstract for this demo will be available soon in the Adjunct Proceedings of IEEE ISMAR 2024 in IEEE Xplore.
+
+## CHI 2018
 
 ## Quick Start
 
@@ -306,7 +343,7 @@ Carmine Elvezio, Mengu Sukan, and Steven Feiner. 2018. **Mercury: A Messaging Fr
 
 ### Q. Does the toolkit work in Unity version 5.4.x, 4.x, 3.x, and earlier?
 
-A. The framework has been tested in Unity 2020 up until 2020.3.21f1, Unity 2019 up until 2019.2.17f1, Unity 2018 up until 2018.3.13f1, Unity 2017 up until 2017.4f1, and 5.6.
+A. Core functions have been tested in Unity 2020 up until 2020.3.21f1, Unity 2019 up until 2019.2.17f1, Unity 2018 up until 2018.3.13f1, Unity 2017 up until 2017.4f1, and 5.6. 
 
 The Framework was originally developed using Unity 5.6. The toolkit requires some features that were added in Unity 5. As such, we provide no support for the toolkit in earlier versions of Unity. That said, it may work in other versions of Unity 5, but we're not sure.
 
