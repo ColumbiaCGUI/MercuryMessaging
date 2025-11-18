@@ -34,18 +34,65 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.Windows.Speech;
+using System.Linq;
 using MercuryMessaging;
 
 public class SpeechRecognitionResponder : MmBaseResponder {
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+	private KeywordRecognizer keywordRecognizer;
+    private Dictionary<string, System.Action> keywords = new Dictionary<string, System.Action>();
+    private bool activeState = false;
+
+    public override void  Start()
+    {
+        // Define the keywords and their corresponding actions
+        keywords.Add("light on", TurnOn);
+        keywords.Add("light off", TurnOff);
+
+        // Initialize the KeywordRecognizer with the keywords
+        keywordRecognizer = new KeywordRecognizer(keywords.Keys.ToArray());
+        keywordRecognizer.OnPhraseRecognized += OnPhraseRecognized;
+        keywordRecognizer.Start();
+    }
+
+    void OnDestroy()
+    {
+        if (keywordRecognizer != null && keywordRecognizer.IsRunning)
+        {
+            keywordRecognizer.OnPhraseRecognized -= OnPhraseRecognized;
+            keywordRecognizer.Stop();
+            keywordRecognizer.Dispose();
+        }
+    }
+
+    private void OnPhraseRecognized(PhraseRecognizedEventArgs args)
+    {
+        System.Action keywordAction;
+        if (keywords.TryGetValue(args.text, out keywordAction))
+        {
+            keywordAction.Invoke();
+        }
+    }
+
+    private void TurnOn()
+    {
+        Debug.Log("Voice command detected: Turn on");
+        activeState = true;
+        InvokeMethod();
+    }
+
+    private void TurnOff()
+    {
+        Debug.Log("Voice command detected: Turn off");
+        activeState = false;
+        InvokeMethod();
+    }
+
+    private void InvokeMethod()
+    {
+        GetRelayNode().MmInvoke(MmMethod.SetActive, activeState,
+            new MmMetadataBlock(MmLevelFilter.Child, MmActiveFilter.All));
+    }
+
 }

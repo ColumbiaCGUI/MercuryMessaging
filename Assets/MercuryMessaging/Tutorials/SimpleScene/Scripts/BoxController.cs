@@ -34,16 +34,48 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MercuryMessaging;
+using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.InputSystem;
 
-public class BoxController : MonoBehaviour {
+public class BoxController : MmBaseResponder {
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+	// public GameObject lightMode
+	private bool activeState = false;
+
+	private float timePast;
+
+	public float messagePeriod;
+
+	public bool boxTriggered = false;
+
+	public override void Update()
+	{
+		// set the automatic signal passing
+		// if (OVRInput.GetDown(OVRInput.RawButton.A) || signalAction.triggered) {
+
+		if(timePast >= messagePeriod)
+		{
+			timePast =0;
+			if(activeState)
+			{
+				activeState = false;
+				Debug.Log("BoxController: Deactivating");
+			}
+			else
+			{
+				activeState = true;
+				Debug.Log("BoxController: Activating");
+			}
+
+			GetRelayNode().MmInvoke (MmMethod.SetActive, activeState, 
+				new MmMetadataBlock (MmLevelFilter.Child, MmActiveFilter.All));
+			
+			boxTriggered = true;
+		}
+		else {
+			boxTriggered = false;
+		}
+		timePast += Time.deltaTime;
 	}
 }

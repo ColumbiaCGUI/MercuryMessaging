@@ -49,7 +49,7 @@ public class LightSwitchResponder : MmBaseResponder {
 	{
 		if(activeState)
 		{
-			lightSwitchMaterial.color = Color.red;
+			lightSwitchMaterial.color = new Color(1.0f, 62f/255f, 1.0f);
 		}
 		else
 		{

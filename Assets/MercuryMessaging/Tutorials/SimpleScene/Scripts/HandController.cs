@@ -35,16 +35,59 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using MercuryMessaging;
+using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.InputSystem;
 
 public class HandController : MmBaseResponder {
 
+	// public GameObject lightMode;
+	private InputActionAsset playerInput;
+
+	private InputAction signalAction;
+
 	private bool activeState = false;
 
-	void OnTriggerEnter(Collider col)
-	{
-		activeState = !activeState;
+	private float timePast;
 
-		GetRelayNode().MmInvoke (MmMethod.SetActive, activeState, 
-			new MmMetadataBlock (MmLevelFilter.Child, MmActiveFilter.All));
+	public float messagePeriod;
+
+	public bool boxTriggered = true;
+
+	void Start()
+	{
+		playerInput = GameObject.Find("GameManager").GetComponent<GameManager>().playerInput;
+		signalAction = playerInput.FindActionMap("XRI RightHand Interaction").FindAction("Signal");
+		signalAction.Enable();
+	}
+	public override void Update()
+	{
+		// set the automatic signal passing
+		// if (OVRInput.GetDown(OVRInput.RawButton.A) || signalAction.triggered) {
+
+		if(signalAction.triggered || timePast >= messagePeriod)
+		{
+			timePast =0;
+			if(activeState)
+			{
+				activeState = false;
+				Debug.Log("HandController: Deactivating");
+			}
+			else
+			{
+				activeState = true;
+				Debug.Log("HandController: Activating");
+			}
+
+			if (signalAction.triggered) {
+				boxTriggered = false;
+			}
+			else {
+				boxTriggered = true;
+			}
+
+			GetRelayNode().MmInvoke (MmMethod.SetActive, activeState, 
+				new MmMetadataBlock (MmLevelFilter.Child, MmActiveFilter.All));
+		}
+		timePast += Time.deltaTime;
 	}
 }

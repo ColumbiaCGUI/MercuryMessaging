@@ -32,10 +32,17 @@
 //  
 //  
 using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using MercuryMessaging.Support.Extensions;
 using MercuryMessaging.Task;
 using UnityEngine;
+using NewGraph;
+using Drawing;
+using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.InputSystem;
+using EPOOutline;
+
 
 namespace MercuryMessaging
 {
@@ -49,11 +56,61 @@ namespace MercuryMessaging
     {
         #region Member Variables
 
+        // Graphable properties
+        // The node view that represents this graphable in the graph view.
+        public NodeController nodeController;
+        // The position of the graph node in the graph view.
+        public Vector2 nodePosition = new Vector2(0, 0);
+
+        public bool testToggle = false;
+
+        private bool messageDisplayIndicator = false;
+
+        // the private variable for the path on/off
+        public GameManager gameManager;
+
+        // private MmMessage signalMessage;
+
+        // public int signalingOn = -1;
+
+        public int layer;
+
+        // public float waitTime = 0.5f;
+
+        public  List<string> messageInList = new List<string>();
+
+        public  List<string> messageOutList = new List<string>();
+
+        private float displayPeriod;
+
+        private float time = 0.0f;
+
+        public Transform positionOffset;
+
+        private GameObject lineObject;
+
+        public List<MmRoutingTableItem> itemsToGo = new List<MmRoutingTableItem>();
+
+        private Color colorA = new Color (93f/255f, 58f/255f, 155f/255f); 
+        private Color colorB = new Color (230f/255f, 97f/255f, 0f);
+        private Color colorC = new Color (64f/255f, 176f/255f, 166f/255f);
+        private Color colorD = new Color (230f/255f, 97f/255f, 0f);
+
+        public List<GameObject> lineObjects = new List<GameObject>();
+
+        private GameObject XROrigin;
+
+        // public bool fromBox = false;
+
+        public HandController handController;
+
+        private List<MmMessage> messageBuffer = new List<MmMessage>();
+
         /// <summary>
         ///  Queue of MmResponders to add once list is no longer in use
         /// by an MmInvoke
         /// </summary>
-		protected Queue<MmRoutingTableItem> MmRespondersToAdd =
+		public Queue<MmRoutingTableItem> MmRespondersToAdd =
 			new Queue<MmRoutingTableItem>();
 
         /// <summary>
@@ -72,7 +129,7 @@ namespace MercuryMessaging
         /// <summary>
         /// Flag to protect priority list from being modified while it's being iterated over
         /// </summary>
-		private bool doNotModifyRoutingTable;
+		public bool doNotModifyRoutingTable;
 
         /// <summary>
         /// Does the node convert the message to a local message from networked 
@@ -140,6 +197,10 @@ namespace MercuryMessaging
         /// </summary>
         public bool AutoGrabAttachedResponders = true;
 
+        private GameObject rightController;
+
+        private Outline rightControllerModelOutline;
+
         /// <summary>
         /// List of associated Mercury Responders.
         /// Each Mercury Routing Table Item contains:
@@ -192,12 +253,19 @@ namespace MercuryMessaging
             MmNetworkResponder = GetComponent<IMmNetworkResponder>();
 
             InitializeNode();
-
             InstantiateSubResponders();
 
 			base.Awake ();
 
             MmLogger.LogFramework(gameObject.name + " MmRelayNode Awake called.");
+
+            // add XR simple interactable if not already added
+            if(gameObject.GetComponent<CustomXRSimpleInteractable>() == null)
+            {
+                gameObject.AddComponent<CustomXRSimpleInteractable>();
+            }
+
+            rightController = GameObject.Find("GameManager").GetComponent<GameManager>().rightController;
         }
 
         /// <summary>
@@ -207,15 +275,338 @@ namespace MercuryMessaging
         {
 			base.Start ();
 
+            lineObject = GameObject.Find("LineRenderer");
+
             MmLogger.LogFramework(gameObject.name + " MmRelayNode Start called.");
 
-            //Show all items currently in the RoutingTable list.
-            //Debug.Log(gameObject.name + " MmRelayNode start called. With " +
-            //    RoutingTable.Count +
-            //    " items in the MmResponder List: " +
-            //    String.Join("\n", RoutingTable.GetMmNames(MmRoutingTable.ListFilter.All,
-            //    MmLevelFilterHelper.SelfAndBidirectional).ToArray()));
+            gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+            displayPeriod = gameManager.displayPeriod;
+
+            handController = gameManager.handController;
+
+            // boxController = gameManager.boxController;
+
+
+            // if(gameObject.GetComponent<Outline>() == null)
+            // {
+            //     gameObject.AddComponent<Outline>();
+            // }
+
+
+            // gameObject.GetComponent<Outline>().OutlineWidth = 0f;
+
+            gameObject.GetComponent<Outlinable>().enabled = false;
+            
+
+            int colorIndex = layer % 4;
+            Color currentColor;
+            if(colorIndex == 0)
+            {
+                currentColor = colorA;
+            }
+            else if(colorIndex == 1)
+            {
+                currentColor = colorB;
+            }
+            else if(colorIndex == 2)
+            {
+                currentColor = colorC;
+            }
+            else {
+                currentColor = colorD;
+            }
+            // this.GetComponent<Outline>().OutlineColor = currentColor;
+
+            if(positionOffset == null)
+            {
+                positionOffset = gameObject.transform;
+            }
+
+            XROrigin = GameObject.Find("OVRCameraRig");
+
+            // positionOffset.position = gameObject.transform.position;
+
+            itemsToGo = this.RoutingTable.GetMmRoutingTableItems(MmRoutingTable.ListFilter.All, MmLevelFilter.Child);
+           
+            // try
+            // {
+            //     if(rightController.transform.Find("XR Controller Right(Clone)/MetaQuestTouchPlus_Right").gameObject != null)
+            //     {
+            //         rightControllerModelOutline = rightController.transform.Find("XR Controller Right(Clone)/MetaQuestTouchPlus_Right").gameObject.GetComponent<Outline>();
+            //     }
+            // }
+            // catch
+            // {
+            //     // Debug.Log("Right Controller not found");
+            // }
         }
+
+        public void LateUpdate()
+        {
+            // update to get the newest display period
+            displayPeriod = gameManager.displayPeriod;
+
+            // draw the path for 5 seconds
+            if ( ((time < ((layer + 1) * displayPeriod)) && (time >= ((layer) * displayPeriod)) && gameManager.pathOn))
+            {
+                if ((handController.boxTriggered && layer == 0)) {
+
+                    time += Time.deltaTime;
+                
+                    foreach (MmRoutingTableItem item in itemsToGo)
+                    {
+                        
+                        Vector3 targetPosition = item.Responder.gameObject.GetComponent<MmRelayNode>().positionOffset.position;
+                        Vector3 currentPosition = positionOffset.position;
+                        if (gameManager.pathOn)
+                        {
+                            // Draw3DArrow(currentPosition, targetPosition, Color.white);
+
+                            // instead of drawing the arrow, draw the path between the nodes
+                            DrawPath(currentPosition, targetPosition, Color.white);
+
+                        }
+                    }
+
+                }
+                else {
+                    gameObject.GetComponent<Outlinable>().enabled = true;   
+                    // increment the time
+                    time += Time.deltaTime;
+                    
+                    
+                    BroadCast(itemsToGo, positionOffset, layer);
+                }
+
+            }
+            else
+            {
+                // gameObject.GetComponent<Outlinable>().enabled = false;  
+
+                time += Time.deltaTime;
+                
+
+                foreach (MmRoutingTableItem item in itemsToGo)
+                {
+                    
+                    Vector3 targetPosition = item.Responder.gameObject.GetComponent<MmRelayNode>().positionOffset.position;
+                    Vector3 currentPosition = positionOffset.position;
+                    if (gameManager.pathOn)
+                    {
+                        // Draw3DArrow(currentPosition, targetPosition, Color.white);
+
+                        // instead of drawing the arrow, draw the path between the nodes
+                        DrawPath(currentPosition, targetPosition, Color.white);
+
+                    }
+                }
+
+                 
+            }
+
+            if (gameObject.GetComponent<CustomXRSimpleInteractable>().isSelected) {
+                //gameObject.GetComponent<Outline>().OutlineWidth = 4f;
+                gameObject.GetComponent<Outlinable>().enabled = true;
+            }
+            else {
+                //gameObject.GetComponent<Outline>().OutlineWidth = 0f;
+                // gameObject.GetComponent<Outlinable>().enabled = false;
+            }
+
+            if(time>3*displayPeriod)
+            {
+                gameObject.GetComponent<Outlinable>().enabled = false;
+            }
+
+            //time += Time.deltaTime;
+            if (time > 4 * displayPeriod) {
+                
+                time = 0;
+                messageBuffer.Clear();
+
+            }
+        }
+
+        private void BroadCast(List<MmRoutingTableItem> itemsToGo, Transform PositionOffset, int depth)
+        {
+
+            // Debug.Log("Wait Time"+ waitTime*layer);
+            //Debug.Log("right outside broadcast loop");
+            foreach (MmRoutingTableItem item in itemsToGo)
+            {
+                //yield return new WaitForSeconds(waitTime*layer);
+                //Debug.Log("Broadcast loop : " + item);
+                //Debug.Log(item);
+
+                DrawSignals(item, PositionOffset.position, depth);
+                // messageDisplayIndicator = true;
+                // StartCoroutine(DrawSignalsCoroutine(item, positionOffset.position));
+
+                // messageDisplayIndicator = false;                    
+            }
+        }
+
+
+        private void DrawSignals(MmRoutingTableItem item, Vector3 currentPosition, int depth)
+        {
+            Vector3 targetPosition = item.Responder.gameObject.GetComponent<MmRelayNode>().positionOffset.position;
+
+            if (gameManager.pathOn)
+            {
+                //Debug.Log("in draw signals");
+                SignalVisualizer(currentPosition, targetPosition);
+
+                int colorIndex = depth % 4;
+                Color currentColor;
+
+                if(colorIndex == 0)
+                {
+                    currentColor = colorA;
+                }
+                else if(colorIndex == 1)
+                {
+                    currentColor = colorB;
+                }
+                else if(colorIndex == 2)
+                {
+                    currentColor = colorC;
+                }
+                else {
+                    currentColor = colorD;
+                }
+
+                // item.Responder.gameObject.GetComponent<Outline>().OutlineColor = currentColor;
+                // item.Responder.gameObject.GetComponent<Outline>().OutlineWidth = 2f;
+                // item.Responder.gameObject.GetComponent<Outline>().enabled = true;
+
+                item.Responder.gameObject.GetComponent<Outlinable>().enabled = true;
+                item.Responder.gameObject.GetComponent<Outlinable>().OutlineParameters.Color = currentColor;
+
+            }
+        }
+
+        // draw a 3d arrow between two points
+        public void Draw3DArrow(Vector3 from, Vector3 to, Color color)
+        {
+            var draw = Draw.ingame;
+            Vector3 distance = to - from;
+
+            int numArrows = (int)(distance.magnitude / 0.3f);
+
+            for (int i = 1; i < numArrows; i++)
+            {
+                Vector3 pointA = Vector3.Lerp(from, to, i / (float)numArrows);
+                
+                draw.Arrowhead(pointA, distance.normalized, 0.06f, color);
+            }
+        }
+
+        // draw a 3d path between two points
+        public void DrawPath(Vector3 from, Vector3 to, Color color)
+        {
+            var draw = Draw.ingame;
+            draw.DashedLine(from, to, 0.06f, 0.06f, color);
+
+            gameObject.GetComponent<Outlinable>().enabled = false;
+        }
+
+        // draw a 3d arrow between invoked nodes
+        public void SignalVisualizer(Vector3 from, Vector3 to)
+        {
+            float ratio = (time - ((layer) * displayPeriod)) / displayPeriod;
+            
+            var draw = Draw.ingame;
+
+            Vector3 distance = to - from;
+
+            int numArrows = (int)(distance.magnitude / 0.2f);
+
+            int greenElement = (int)( ratio * (float)numArrows);
+
+            for (int i = 1; i < numArrows; i++)
+            {
+                Vector3 pointA = Vector3.Lerp(from, to, i / (float)numArrows);
+                
+
+                if (i == greenElement)
+                {
+                    DrawArrowheadMesh(pointA, distance.normalized,(Camera.main.transform.position-pointA).normalized, new Color(26f/255f,133f/255f,1f), 0.20f);
+                }
+                else
+                {
+                    DrawArrowheadMesh(pointA, distance.normalized, (Camera.main.transform.position-pointA).normalized,new Color(212f/255f,17f/255f, 89f/255f), 0.10f);
+                }
+            }
+        }
+
+        private void DrawArrowheadMesh(Vector3 position, Vector3 direction, Vector3 up, Color color, float size)
+        {
+            // Normalize the direction and up vectors
+            Vector3 forward = direction.normalized * size;
+            Vector3 upDirection = up.normalized * size * 0.5f;
+
+            // Calculate the right vector
+            Vector3 right = Vector3.Cross(forward, upDirection).normalized * size * 0.5f;
+
+            // Define the three corners of the triangle (arrowhead)
+            Vector3 tip = position + forward;              // Tip of the arrowhead
+            Vector3 base1 = position - right + upDirection;  // Base corner 1
+            Vector3 base2 = position + right + upDirection;  // Base corner 2
+
+            // Draw the solid triangle using ALINE's SolidTriangle function
+            Draw.ingame.SolidTriangle(tip, base1, base2, color);
+        }
+
+        public void UpdateMessages(MmMessage message)   
+        {
+            List<MmRoutingTableItem> items = new List<MmRoutingTableItem>();
+
+            // Determine which level to filter by
+            if (message.MetadataBlock.LevelFilter == MmLevelFilter.Parent)
+            {
+                items = RoutingTable.GetMmRoutingTableItems(MmRoutingTable.ListFilter.All, MmLevelFilter.Parent);
+            }
+            else if (message.MetadataBlock.LevelFilter == MmLevelFilter.Child)
+            {
+                items = RoutingTable.GetMmRoutingTableItems(MmRoutingTable.ListFilter.All, MmLevelFilter.Child);
+            }
+
+            // Update items and propagate the message recursively
+            foreach (MmRoutingTableItem item in items)
+            {
+                if (item.Tags == message.MetadataBlock.Tag || message.MetadataBlock.Tag == (MmTag)(-1))
+                {
+                    UpdateItemAndPropagate(item, message);
+                }
+            }
+        }
+
+        private void UpdateItemAndPropagate(MmRoutingTableItem item, MmMessage message)
+        {
+            System.DateTime currentTime = System.DateTime.Now;
+            // Update the messageOutList for the current node
+            messageOutList.Insert(0, item.Name + " : " + message.MmMessageType.ToString() + "\n" + currentTime.ToString("yyyy-MM-dd HH:mm:ss"));
+            if (messageOutList.Count > 10)
+            {
+                messageOutList.RemoveAt(10);
+            }
+
+            // If the item has a responder that is a MmRelayNode, update its messageInList
+            if (item.Responder is MmRelayNode relayNode && item.Responder != this)
+            {
+                relayNode.messageInList.Insert(0, gameObject.name + " : " + message.MmMessageType.ToString() + "\n" + currentTime.ToString("yyyy-MM-dd HH:mm:ss"));
+                if (relayNode.messageInList.Count > 10)
+                {
+                    relayNode.messageInList.RemoveAt(10);
+                }
+
+                // Recursively update the child nodes of the current relay node
+                relayNode.UpdateMessages(message);
+            }
+        }
+
+        // ---------------------------------------------------------
+        
 
         protected void InitializeNode()
         {
@@ -402,6 +793,10 @@ namespace MercuryMessaging
         /// Auto [de]serialized by UNET.</param>
         public override void MmInvoke(MmMessage message)
         {
+            // signalingOn = 0;
+            time = 0;
+            messageBuffer.Add(message);
+            UpdateMessages(message);
             MmMessageType msgType = message.MmMessageType;
             //If the MmRelayNode has not been initialized, initialize it here,
             //  and refresh the parents - to ensure proper routing can occur.
@@ -544,6 +939,8 @@ namespace MercuryMessaging
 			MmMetadataBlock metadataBlock = null)
         {
 			MmMessage msg = new MmMessage (mmMethod, MmMessageType.MmVoid, metadataBlock);
+            messageBuffer.Add(msg);
+            // UpdateMessages(msg);
             MmInvoke(msg);
         }
 
@@ -561,6 +958,8 @@ namespace MercuryMessaging
             MmMessage msg = param.Copy();
             msg.MmMethod = mmMethod;
             msg.MetadataBlock = metadataBlock;
+            messageBuffer.Add(msg);
+            // UpdateMessages(msg);
             MmInvoke(msg);
         }
 
@@ -576,6 +975,8 @@ namespace MercuryMessaging
             MmMetadataBlock metadataBlock = null)
         {
 			MmMessage msg = new MmMessageBool (param, mmMethod, metadataBlock);
+            messageBuffer.Add(msg);
+            // UpdateMessages(msg);
             MmInvoke(msg);
         }
 
@@ -591,6 +992,8 @@ namespace MercuryMessaging
             MmMetadataBlock metadataBlock = null)
         {
 			MmMessage msg = new MmMessageInt(param, mmMethod, metadataBlock);
+            messageBuffer.Add(msg);
+            // UpdateMessages(msg);
             MmInvoke(msg);
         }
 
@@ -606,6 +1009,8 @@ namespace MercuryMessaging
             MmMetadataBlock metadataBlock = null)
         {
 			MmMessage msg = new MmMessageFloat(param, mmMethod, metadataBlock);
+            messageBuffer.Add(msg);
+            // UpdateMessages(msg);
             MmInvoke(msg);
         }
 
@@ -621,6 +1026,8 @@ namespace MercuryMessaging
             MmMetadataBlock metadataBlock = null)
         {
 			MmMessage msg = new MmMessageVector3(param, mmMethod, metadataBlock);
+            messageBuffer.Add(msg);
+            // UpdateMessages(msg);
             MmInvoke(msg);
 		}
 
@@ -636,6 +1043,8 @@ namespace MercuryMessaging
             MmMetadataBlock metadataBlock = null)
         {
 			MmMessage msg = new MmMessageVector4(param, mmMethod, metadataBlock);
+            messageBuffer.Add(msg);
+            // UpdateMessages(msg);
             MmInvoke(msg);
 		}
 
@@ -651,6 +1060,8 @@ namespace MercuryMessaging
             MmMetadataBlock metadataBlock = null)
         {
 			MmMessage msg = new MmMessageString(param, mmMethod, metadataBlock);
+            messageBuffer.Add(msg);
+            // UpdateMessages(msg);
             MmInvoke(msg);
 		}
 
@@ -666,6 +1077,8 @@ namespace MercuryMessaging
             MmMetadataBlock metadataBlock = null)
         {
 			MmMessage msg = new MmMessageByteArray(param, mmMethod, metadataBlock);
+            messageBuffer.Add(msg);
+            // UpdateMessages(msg);
             MmInvoke(msg);
 		}
 
@@ -681,6 +1094,8 @@ namespace MercuryMessaging
 			MmMetadataBlock metadataBlock = null)
 		{
 			MmMessage msg = new MmMessageTransform(param, mmMethod, metadataBlock);
+            messageBuffer.Add(msg);
+            // UpdateMessages(msg);
 			MmInvoke(msg);
 		}
 
@@ -696,6 +1111,8 @@ namespace MercuryMessaging
 			MmMetadataBlock metadataBlock = null)
 		{
 			MmMessage msg = new MmMessageTransformList(param, mmMethod, metadataBlock);
+            messageBuffer.Add(msg);
+            // UpdateMessages(msg);
 			MmInvoke(msg);
 		}
 
@@ -711,6 +1128,8 @@ namespace MercuryMessaging
             MmMetadataBlock metadataBlock = null)
         {
             MmMessage msg = new MmMessageSerializable(param, mmMethod, metadataBlock);
+            messageBuffer.Add(msg);
+            // UpdateMessages(msg);
             MmInvoke(msg);
         }
 
@@ -725,6 +1144,8 @@ namespace MercuryMessaging
             MmMetadataBlock metadataBlock = null)
         {
             MmMessage msg = new MmMessageGameObject(param, mmMethod, metadataBlock);
+            messageBuffer.Add(msg);
+            // UpdateMessages(msg);
             MmInvoke(msg);
         }
 
@@ -740,6 +1161,8 @@ namespace MercuryMessaging
             MmMetadataBlock metadataBlock = null)
         {
             MmMessage msg = new MmMessageQuaternion(param, mmMethod, metadataBlock);
+            messageBuffer.Add(msg);
+            // UpdateMessages(msg);
             MmInvoke(msg);
         }
 

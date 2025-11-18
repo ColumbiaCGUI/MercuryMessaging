@@ -1,0 +1,219 @@
+fileFormatVersion: 2
+guid: e97bd6503ec43ef478414d0e773e874f
+ModelImporter:
+  serializedVersion: 18
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: mcp_building_03
+    100004: mcp_building_03_air_vent_003
+    100006: mcp_building_03_air_vent_004
+    100008: mcp_building_03_air_vent_005
+    100010: mcp_building_03_air_vent_006
+    100012: mcp_building_03_air_vent_01
+    100014: mcp_building_03_air_vent_02
+    100016: mcp_building_03_concrete
+    100018: mcp_building_03_glass_01
+    100020: mcp_building_03_glass_02
+    100022: mcp_building_03_ground
+    100024: mcp_building_03_metal
+    100026: mcp_building_03_props_01
+    100028: mcp_building_03_props_02
+    100030: mcp_building_03_roof
+    100032: mcp_building_03_walls_01
+    100034: mcp_building_03_walls_02
+    400000: //RootNode
+    400002: mcp_building_03
+    400004: mcp_building_03_air_vent_003
+    400006: mcp_building_03_air_vent_004
+    400008: mcp_building_03_air_vent_005
+    400010: mcp_building_03_air_vent_006
+    400012: mcp_building_03_air_vent_01
+    400014: mcp_building_03_air_vent_02
+    400016: mcp_building_03_concrete
+    400018: mcp_building_03_glass_01
+    400020: mcp_building_03_glass_02
+    400022: mcp_building_03_ground
+    400024: mcp_building_03_metal
+    400026: mcp_building_03_props_01
+    400028: mcp_building_03_props_02
+    400030: mcp_building_03_roof
+    400032: mcp_building_03_walls_01
+    400034: mcp_building_03_walls_02
+    2300000: mcp_building_03
+    2300002: mcp_building_03_air_vent_003
+    2300004: mcp_building_03_air_vent_004
+    2300006: mcp_building_03_air_vent_005
+    2300008: mcp_building_03_air_vent_006
+    2300010: mcp_building_03_air_vent_01
+    2300012: mcp_building_03_air_vent_02
+    2300014: mcp_building_03_concrete
+    2300016: mcp_building_03_glass_01
+    2300018: mcp_building_03_glass_02
+    2300020: mcp_building_03_ground
+    2300022: mcp_building_03_metal
+    2300024: mcp_building_03_props_01
+    2300026: mcp_building_03_props_02
+    2300028: mcp_building_03_roof
+    2300030: mcp_building_03_walls_01
+    2300032: mcp_building_03_walls_02
+    3300000: mcp_building_03
+    3300002: mcp_building_03_air_vent_003
+    3300004: mcp_building_03_air_vent_004
+    3300006: mcp_building_03_air_vent_005
+    3300008: mcp_building_03_air_vent_006
+    3300010: mcp_building_03_air_vent_01
+    3300012: mcp_building_03_air_vent_02
+    3300014: mcp_building_03_concrete
+    3300016: mcp_building_03_glass_01
+    3300018: mcp_building_03_glass_02
+    3300020: mcp_building_03_ground
+    3300022: mcp_building_03_metal
+    3300024: mcp_building_03_props_01
+    3300026: mcp_building_03_props_02
+    3300028: mcp_building_03_roof
+    3300030: mcp_building_03_walls_01
+    3300032: mcp_building_03_walls_02
+    4300000: mcp_building_03
+    4300002: mcp_building_03_props_02
+    4300004: mcp_building_03_glass_01
+    4300006: mcp_building_03_ground
+    4300008: mcp_building_03_walls_01
+    4300010: mcp_building_03_concrete
+    4300012: mcp_building_03_props_01
+    4300014: mcp_building_03_air_vent_02
+    4300016: mcp_building_03_air_vent_01
+    4300018: mcp_building_03_air_vent_003
+    4300020: mcp_building_03_air_vent_004
+    4300022: mcp_building_03_air_vent_005
+    4300024: mcp_building_03_air_vent_006
+    4300026: mcp_building_03_roof
+    4300028: mcp_building_03_walls_02
+    4300030: mcp_building_03_glass_02
+    4300032: mcp_building_03_metal
+    7400000: Take 001
+    9500000: //RootNode
+    11100000: //RootNode
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 2
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Take 001
+      takeName: Take 001
+      firstFrame: 0
+      lastFrame: 100
+      wrapMode: 2
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: mcp_building_03
+        weight: 1
+      - path: mcp_building_03_air_vent_01
+        weight: 1
+      - path: mcp_building_03_air_vent_02
+        weight: 1
+      - path: mcp_building_03_air_vent_003
+        weight: 1
+      - path: mcp_building_03_air_vent_004
+        weight: 1
+      - path: mcp_building_03_air_vent_005
+        weight: 1
+      - path: mcp_building_03_air_vent_006
+        weight: 1
+      - path: mcp_building_03_concrete
+        weight: 1
+      - path: mcp_building_03_glass_01
+        weight: 1
+      - path: mcp_building_03_glass_02
+        weight: 1
+      - path: mcp_building_03_ground
+        weight: 1
+      - path: mcp_building_03_metal
+        weight: 1
+      - path: mcp_building_03_props_01
+        weight: 1
+      - path: mcp_building_03_props_02
+        weight: 1
+      - path: mcp_building_03_roof
+        weight: 1
+      - path: mcp_building_03_walls_01
+        weight: 1
+      - path: mcp_building_03_walls_02
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: .00999999978
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
