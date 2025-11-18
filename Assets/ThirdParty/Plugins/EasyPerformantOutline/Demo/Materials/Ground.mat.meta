@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: d5d9d040f497dc8418fbf3d58884e3fd
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 157187
+  packageName: Easy Performant Outline 2D | 3D (URP / HDRP and Built-in Renderer)
+  packageVersion: 3.6.2
+  assetPath: Assets/Plugins/Easy performant outline/Demo/Materials/Ground.mat
+  uploadId: 734343

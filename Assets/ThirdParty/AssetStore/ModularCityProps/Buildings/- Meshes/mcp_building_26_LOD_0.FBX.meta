@@ -1,0 +1,107 @@
+fileFormatVersion: 2
+guid: c5bac1d0c1bcf6646bd92ac88b0c7a55
+ModelImporter:
+  serializedVersion: 16
+  fileIDToRecycleName:
+    100000: mcp_building_26
+    100002: //RootNode
+    100004: mcp_building_26_atm_01
+    100006: mcp_building_26_concrete
+    100008: mcp_building_26_doors
+    100010: mcp_building_26_marble
+    100012: mcp_building_26_metal
+    100014: mcp_building_26_props_01
+    100016: mcp_building_26_props_02
+    100018: mcp_building_26_walls
+    400000: //RootNode
+    400002: mcp_building_26
+    400004: mcp_building_26_atm_01
+    400006: mcp_building_26_concrete
+    400008: mcp_building_26_doors
+    400010: mcp_building_26_marble
+    400012: mcp_building_26_metal
+    400014: mcp_building_26_props_01
+    400016: mcp_building_26_props_02
+    400018: mcp_building_26_walls
+    2300000: mcp_building_26
+    2300002: mcp_building_26_atm_01
+    2300004: mcp_building_26_concrete
+    2300006: mcp_building_26_doors
+    2300008: mcp_building_26_marble
+    2300010: mcp_building_26_metal
+    2300012: mcp_building_26_props_01
+    2300014: mcp_building_26_props_02
+    2300016: mcp_building_26_walls
+    3300000: mcp_building_26
+    3300002: mcp_building_26_atm_01
+    3300004: mcp_building_26_concrete
+    3300006: mcp_building_26_doors
+    3300008: mcp_building_26_marble
+    3300010: mcp_building_26_metal
+    3300012: mcp_building_26_props_01
+    3300014: mcp_building_26_props_02
+    3300016: mcp_building_26_walls
+    4300000: mcp_building_26
+    4300002: mcp_building_26_walls
+    4300004: mcp_building_26_metal
+    4300006: mcp_building_26_doors
+    4300008: mcp_building_26_concrete
+    4300010: mcp_building_26_props_02
+    4300012: mcp_building_26_props_01
+    4300014: mcp_building_26_marble
+    4300016: mcp_building_26_atm_01
+    9500000: //RootNode
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: .00999999978
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 1
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  additionalBone: 0
+  userData: 

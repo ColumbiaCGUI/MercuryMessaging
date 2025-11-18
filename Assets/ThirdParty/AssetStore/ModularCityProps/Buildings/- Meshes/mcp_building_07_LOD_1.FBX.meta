@@ -1,0 +1,132 @@
+fileFormatVersion: 2
+guid: c0f77bb4c31067b49ba42ffc80220066
+ModelImporter:
+  serializedVersion: 16
+  fileIDToRecycleName:
+    100000: mcp_building_07_01
+    100002: mcp_building_07_01_illumitation
+    100004: mcp_building_07_02
+    100006: mcp_building_07_03
+    100008: mcp_building_07_concrete
+    100010: mcp_building_07_doors
+    100012: mcp_building_07_glass
+    100014: mcp_building_07_lamps
+    100016: //RootNode
+    100018: mcp_building_07_props_03
+    100020: mcp_building_07_roof
+    100022: mcp_building_07_windows
+    100024: mcp_building_07_helipad001
+    100026: mcp_building_07_helipad_concrete
+    100028: mcp_helipad_lamps
+    400000: mcp_building_07_01
+    400002: mcp_building_07_01_illumitation
+    400004: mcp_building_07_02
+    400006: mcp_building_07_03
+    400008: mcp_building_07_concrete
+    400010: mcp_building_07_doors
+    400012: mcp_building_07_glass
+    400014: mcp_building_07_lamps
+    400016: //RootNode
+    400018: mcp_building_07_props_03
+    400020: mcp_building_07_roof
+    400022: mcp_building_07_windows
+    400024: mcp_building_07_helipad001
+    400026: mcp_building_07_helipad_concrete
+    400028: mcp_helipad_lamps
+    2300000: mcp_building_07_01
+    2300002: mcp_building_07_01_illumitation
+    2300004: mcp_building_07_02
+    2300006: mcp_building_07_03
+    2300008: mcp_building_07_concrete
+    2300010: mcp_building_07_doors
+    2300012: mcp_building_07_glass
+    2300014: mcp_building_07_lamps
+    2300016: mcp_building_07_props_03
+    2300018: mcp_building_07_roof
+    2300020: mcp_building_07_windows
+    2300022: mcp_building_07_helipad001
+    2300024: mcp_building_07_helipad_concrete
+    2300026: mcp_helipad_lamps
+    3300000: mcp_building_07_01
+    3300002: mcp_building_07_01_illumitation
+    3300004: mcp_building_07_02
+    3300006: mcp_building_07_03
+    3300008: mcp_building_07_concrete
+    3300010: mcp_building_07_doors
+    3300012: mcp_building_07_glass
+    3300014: mcp_building_07_lamps
+    3300016: mcp_building_07_props_03
+    3300018: mcp_building_07_roof
+    3300020: mcp_building_07_windows
+    3300022: mcp_building_07_helipad001
+    3300024: mcp_building_07_helipad_concrete
+    3300026: mcp_helipad_lamps
+    4300000: mcp_building_07_01
+    4300002: mcp_building_07_02
+    4300004: mcp_building_07_roof
+    4300006: mcp_building_07_glass
+    4300008: mcp_building_07_03
+    4300010: mcp_building_07_doors
+    4300012: mcp_building_07_concrete
+    4300014: mcp_building_07_props_03
+    4300016: mcp_building_07_01_illumitation
+    4300018: mcp_building_07_lamps
+    4300020: mcp_building_07_windows
+    4300022: mcp_building_07_helipad_concrete
+    4300024: mcp_building_07_helipad001
+    4300026: mcp_helipad_lamps
+    9500000: //RootNode
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: .00999999978
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  additionalBone: 0
+  userData: 

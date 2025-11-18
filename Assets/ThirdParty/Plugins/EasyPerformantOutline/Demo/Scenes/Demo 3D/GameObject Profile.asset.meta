@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 746c94d79aba85648bebd77a227a3560
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 157187
+  packageName: Easy Performant Outline 2D | 3D (URP / HDRP and Built-in Renderer)
+  packageVersion: 3.6.2
+  assetPath: Assets/Plugins/Easy performant outline/Demo/Scenes/Demo 3D/GameObject
+    Profile.asset
+  uploadId: 734343

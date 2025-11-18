@@ -1,0 +1,10 @@
+﻿fileFormatVersion: 2
+guid: 363ceed5886f4f06b5a5bb515ba91f0f
+timeCreated: 1730046744
+AssetOrigin:
+  serializedVersion: 1
+  productId: 157187
+  packageName: Easy Performant Outline 2D | 3D (URP / HDRP and Built-in Renderer)
+  packageVersion: 3.6.2
+  assetPath: Assets/Plugins/Easy performant outline/Scripts/OutlinableDrawingMode.cs
+  uploadId: 734343

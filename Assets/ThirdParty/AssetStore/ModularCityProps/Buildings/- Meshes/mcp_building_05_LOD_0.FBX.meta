@@ -1,0 +1,366 @@
+fileFormatVersion: 2
+guid: f2d1ac4ab35ae1a4d8ca7946140b7bb9
+ModelImporter:
+  serializedVersion: 18
+  fileIDToRecycleName:
+    100000: mcp_amplifier
+    100002: //RootNode
+    100004: mcp_building_05_01
+    100006: mcp_building_05_02
+    100008: mcp_building_05_air_vent_01
+    100010: mcp_building_05_air_vent_02
+    100012: mcp_building_05_brick_01
+    100014: mcp_building_05_ceiling
+    100016: mcp_building_05_ceiling_fan
+    100018: mcp_building_05_door_01
+    100020: mcp_building_05_door_02
+    100022: mcp_building_05_door_03
+    100024: mcp_building_05_door_04
+    100026: mcp_building_05_floors
+    100028: mcp_building_05_glass_02
+    100030: mcp_building_05_glass_03
+    100032: mcp_building_05_glass__04
+    100034: mcp_building_05_illumination
+    100036: mcp_building_05_interior_02
+    100038: mcp_building_05_metal
+    100040: mcp_building_05_metal 1
+    100042: mcp_building_05_mirror
+    100044: mcp_building_05_palm_plant
+    100046: mcp_building_05_props_01
+    100048: mcp_building_05_props_02
+    100050: mcp_building_05_props_03
+    100052: mcp_building_05_roof
+    100054: mcp_building_05_walls_01
+    100056: mcp_building_05_walls_02
+    100058: mcp_building_05_windows_01
+    100060: mcp_building_05_windows_02
+    100062: mcp_building_05_windows_03
+    100064: mcp_cup
+    100066: mcp_guitar
+    100068: mcp_juice_cup
+    100070: mcp_laptop
+    100072: mcp_pizza
+    100074: mcp_pizza_box
+    100076: mcp_satellite_dish
+    400000: mcp_amplifier
+    400002: //RootNode
+    400004: mcp_building_05_01
+    400006: mcp_building_05_02
+    400008: mcp_building_05_air_vent_01
+    400010: mcp_building_05_air_vent_02
+    400012: mcp_building_05_brick_01
+    400014: mcp_building_05_ceiling
+    400016: mcp_building_05_ceiling_fan
+    400018: mcp_building_05_door_01
+    400020: mcp_building_05_door_02
+    400022: mcp_building_05_door_03
+    400024: mcp_building_05_door_04
+    400026: mcp_building_05_floors
+    400028: mcp_building_05_glass_02
+    400030: mcp_building_05_glass_03
+    400032: mcp_building_05_glass__04
+    400034: mcp_building_05_illumination
+    400036: mcp_building_05_interior_02
+    400038: mcp_building_05_metal
+    400040: mcp_building_05_metal 1
+    400042: mcp_building_05_mirror
+    400044: mcp_building_05_palm_plant
+    400046: mcp_building_05_props_01
+    400048: mcp_building_05_props_02
+    400050: mcp_building_05_props_03
+    400052: mcp_building_05_roof
+    400054: mcp_building_05_walls_01
+    400056: mcp_building_05_walls_02
+    400058: mcp_building_05_windows_01
+    400060: mcp_building_05_windows_02
+    400062: mcp_building_05_windows_03
+    400064: mcp_cup
+    400066: mcp_guitar
+    400068: mcp_juice_cup
+    400070: mcp_laptop
+    400072: mcp_pizza
+    400074: mcp_pizza_box
+    400076: mcp_satellite_dish
+    2300000: mcp_amplifier
+    2300002: mcp_building_05_01
+    2300004: mcp_building_05_02
+    2300006: mcp_building_05_air_vent_01
+    2300008: mcp_building_05_air_vent_02
+    2300010: mcp_building_05_brick_01
+    2300012: mcp_building_05_ceiling
+    2300014: mcp_building_05_ceiling_fan
+    2300016: mcp_building_05_door_01
+    2300018: mcp_building_05_door_02
+    2300020: mcp_building_05_door_03
+    2300022: mcp_building_05_door_04
+    2300024: mcp_building_05_floors
+    2300026: mcp_building_05_glass_02
+    2300028: mcp_building_05_glass_03
+    2300030: mcp_building_05_glass__04
+    2300032: mcp_building_05_illumination
+    2300034: mcp_building_05_interior_02
+    2300036: mcp_building_05_metal
+    2300038: mcp_building_05_metal 1
+    2300040: mcp_building_05_mirror
+    2300042: mcp_building_05_palm_plant
+    2300044: mcp_building_05_props_01
+    2300046: mcp_building_05_props_02
+    2300048: mcp_building_05_props_03
+    2300050: mcp_building_05_roof
+    2300052: mcp_building_05_walls_01
+    2300054: mcp_building_05_walls_02
+    2300056: mcp_building_05_windows_01
+    2300058: mcp_building_05_windows_02
+    2300060: mcp_building_05_windows_03
+    2300062: mcp_cup
+    2300064: mcp_guitar
+    2300066: mcp_juice_cup
+    2300068: mcp_laptop
+    2300070: mcp_pizza
+    2300072: mcp_pizza_box
+    2300074: mcp_satellite_dish
+    3300000: mcp_amplifier
+    3300002: mcp_building_05_01
+    3300004: mcp_building_05_02
+    3300006: mcp_building_05_air_vent_01
+    3300008: mcp_building_05_air_vent_02
+    3300010: mcp_building_05_brick_01
+    3300012: mcp_building_05_ceiling
+    3300014: mcp_building_05_ceiling_fan
+    3300016: mcp_building_05_door_01
+    3300018: mcp_building_05_door_02
+    3300020: mcp_building_05_door_03
+    3300022: mcp_building_05_door_04
+    3300024: mcp_building_05_floors
+    3300026: mcp_building_05_glass_02
+    3300028: mcp_building_05_glass_03
+    3300030: mcp_building_05_glass__04
+    3300032: mcp_building_05_illumination
+    3300034: mcp_building_05_interior_02
+    3300036: mcp_building_05_metal
+    3300038: mcp_building_05_metal 1
+    3300040: mcp_building_05_mirror
+    3300042: mcp_building_05_palm_plant
+    3300044: mcp_building_05_props_01
+    3300046: mcp_building_05_props_02
+    3300048: mcp_building_05_props_03
+    3300050: mcp_building_05_roof
+    3300052: mcp_building_05_walls_01
+    3300054: mcp_building_05_walls_02
+    3300056: mcp_building_05_windows_01
+    3300058: mcp_building_05_windows_02
+    3300060: mcp_building_05_windows_03
+    3300062: mcp_cup
+    3300064: mcp_guitar
+    3300066: mcp_juice_cup
+    3300068: mcp_laptop
+    3300070: mcp_pizza
+    3300072: mcp_pizza_box
+    3300074: mcp_satellite_dish
+    4300000: mcp_building_05_floors
+    4300002: mcp_building_05_interior_02
+    4300004: mcp_building_05_metal
+    4300006: mcp_building_05_mirror
+    4300008: mcp_building_05_palm_plant
+    4300010: mcp_building_05_props_01
+    4300012: mcp_building_05_windows_01
+    4300014: mcp_building_05_02
+    4300016: mcp_building_05_ceiling
+    4300018: mcp_building_05_roof
+    4300020: mcp_building_05_windows_03
+    4300022: mcp_building_05_glass_02
+    4300024: mcp_building_05_glass_03
+    4300026: mcp_building_05_windows_02
+    4300028: mcp_building_05_01
+    4300030: mcp_building_05_glass__04
+    4300032: mcp_building_05_door_02
+    4300034: mcp_building_05_door_03
+    4300036: mcp_building_05_door_04
+    4300038: mcp_building_05_door_01
+    4300040: mcp_building_05_ceiling_fan
+    4300042: mcp_building_05_brick_01
+    4300044: mcp_building_05_walls_01
+    4300046: mcp_building_05_walls_02
+    4300048: mcp_building_05_illumination
+    4300050: mcp_guitar
+    4300052: mcp_amplifier
+    4300054: mcp_pizza_box
+    4300056: mcp_pizza
+    4300058: mcp_cup
+    4300060: mcp_juice_cup
+    4300062: mcp_laptop
+    4300064: mcp_building_05_props_02
+    4300066: mcp_building_05_props_03
+    4300068: mcp_building_05_air_vent_02
+    4300070: mcp_building_05_air_vent_01
+    4300072: mcp_building_05_metal
+    4300074: mcp_satellite_dish
+    7400000: Take 001
+    9500000: //RootNode
+    11100000: //RootNode
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 2
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Take 001
+      takeName: Take 001
+      firstFrame: 0
+      lastFrame: 100
+      wrapMode: 2
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: mcp_amplifier
+        weight: 1
+      - path: mcp_building_05_01
+        weight: 1
+      - path: mcp_building_05_02
+        weight: 1
+      - path: mcp_building_05_air_vent_01
+        weight: 1
+      - path: mcp_building_05_air_vent_02
+        weight: 1
+      - path: mcp_building_05_brick_01
+        weight: 1
+      - path: mcp_building_05_ceiling
+        weight: 1
+      - path: mcp_building_05_ceiling_fan
+        weight: 1
+      - path: mcp_building_05_door_01
+        weight: 1
+      - path: mcp_building_05_door_02
+        weight: 1
+      - path: mcp_building_05_door_03
+        weight: 1
+      - path: mcp_building_05_door_04
+        weight: 1
+      - path: mcp_building_05_floors
+        weight: 1
+      - path: mcp_building_05_glass_02
+        weight: 1
+      - path: mcp_building_05_glass_03
+        weight: 1
+      - path: mcp_building_05_glass__04
+        weight: 1
+      - path: mcp_building_05_illumination
+        weight: 1
+      - path: mcp_building_05_interior_02
+        weight: 1
+      - path: mcp_building_05_metal
+        weight: 1
+      - path: mcp_building_05_metal 1
+        weight: 1
+      - path: mcp_building_05_mirror
+        weight: 1
+      - path: mcp_building_05_palm_plant
+        weight: 1
+      - path: mcp_building_05_props_01
+        weight: 1
+      - path: mcp_building_05_props_02
+        weight: 1
+      - path: mcp_building_05_props_03
+        weight: 1
+      - path: mcp_building_05_roof
+        weight: 1
+      - path: mcp_building_05_walls_01
+        weight: 1
+      - path: mcp_building_05_walls_02
+        weight: 1
+      - path: mcp_building_05_windows_01
+        weight: 1
+      - path: mcp_building_05_windows_02
+        weight: 1
+      - path: mcp_building_05_windows_03
+        weight: 1
+      - path: mcp_cup
+        weight: 1
+      - path: mcp_guitar
+        weight: 1
+      - path: mcp_juice_cup
+        weight: 1
+      - path: mcp_laptop
+        weight: 1
+      - path: mcp_pizza
+        weight: 1
+      - path: mcp_pizza_box
+        weight: 1
+      - path: mcp_satellite_dish
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: .00999999978
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
