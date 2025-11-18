@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 48728b0801a10f928af3290e987db323
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 157187
+  packageName: Easy Performant Outline 2D | 3D (URP / HDRP and Built-in Renderer)
+  packageVersion: 3.6.2
+  assetPath: Assets/Plugins/Easy performant outline/Resources/Easy performant outline/Materials/_OutlineMask.mat
+  uploadId: 734343

@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: eb7355fad9e877d41ab5a04f85c7b2b0
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 157187
+  packageName: Easy Performant Outline 2D | 3D (URP / HDRP and Built-in Renderer)
+  packageVersion: 3.6.2
+  assetPath: Assets/Plugins/Easy performant outline/Demo/Prefabs/Speech bubble.prefab
+  uploadId: 734343

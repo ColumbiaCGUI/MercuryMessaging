@@ -1,0 +1,338 @@
+fileFormatVersion: 2
+guid: 7b83bd672ac45084ab94eb975d2da904
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 21300000
+    second: Speech bubble_0
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 0
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 174, y: 236, z: 92, w: 263}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
+  swizzle: 50462976
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Speech bubble_0
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 84
+        width: 482
+        height: 280
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -77, y: -73}
+        - {x: -76, y: -74}
+        - {x: -48, y: -74}
+        - {x: -47, y: -75}
+        - {x: -22, y: -75}
+        - {x: -21, y: -76}
+        - {x: 1, y: -76}
+        - {x: 2, y: -77}
+        - {x: 22, y: -77}
+        - {x: 23, y: -78}
+        - {x: 40, y: -78}
+        - {x: 41, y: -79}
+        - {x: 59, y: -79}
+        - {x: 60, y: -80}
+        - {x: 75, y: -80}
+        - {x: 76, y: -81}
+        - {x: 89, y: -81}
+        - {x: 90, y: -82}
+        - {x: 115, y: -83}
+        - {x: 116, y: -84}
+        - {x: 126, y: -84}
+        - {x: 127, y: -85}
+        - {x: 136, y: -85}
+        - {x: 137, y: -86}
+        - {x: 146, y: -86}
+        - {x: 147, y: -87}
+        - {x: 156, y: -87}
+        - {x: 157, y: -88}
+        - {x: 175, y: -89}
+        - {x: 176, y: -90}
+        - {x: 182, y: -90}
+        - {x: 183, y: -91}
+        - {x: 200, y: -92}
+        - {x: 201, y: -91}
+        - {x: 206, y: -91}
+        - {x: 207, y: -90}
+        - {x: 209, y: -90}
+        - {x: 218, y: -84}
+        - {x: 218, y: -83}
+        - {x: 221, y: -81}
+        - {x: 223, y: -76}
+        - {x: 224, y: -70}
+        - {x: 225, y: -69}
+        - {x: 225, y: -58}
+        - {x: 226, y: -57}
+        - {x: 226, y: -47}
+        - {x: 227, y: -46}
+        - {x: 227, y: -33}
+        - {x: 228, y: -32}
+        - {x: 228, y: -20}
+        - {x: 229, y: -19}
+        - {x: 229, y: -7}
+        - {x: 230, y: -6}
+        - {x: 230, y: 6}
+        - {x: 231, y: 7}
+        - {x: 231, y: 20}
+        - {x: 232, y: 21}
+        - {x: 232, y: 32}
+        - {x: 233, y: 33}
+        - {x: 233, y: 42}
+        - {x: 234, y: 43}
+        - {x: 234, y: 51}
+        - {x: 235, y: 52}
+        - {x: 235, y: 60}
+        - {x: 236, y: 61}
+        - {x: 236, y: 68}
+        - {x: 237, y: 69}
+        - {x: 237, y: 75}
+        - {x: 238, y: 76}
+        - {x: 238, y: 83}
+        - {x: 239, y: 84}
+        - {x: 240, y: 97}
+        - {x: 241, y: 98}
+        - {x: 241, y: 128}
+        - {x: 240, y: 131}
+        - {x: 234, y: 137}
+        - {x: 233, y: 137}
+        - {x: 231, y: 140}
+        - {x: 90, y: 140}
+        - {x: 89, y: 139}
+        - {x: 67, y: 139}
+        - {x: 66, y: 138}
+        - {x: 48, y: 138}
+        - {x: 47, y: 137}
+        - {x: 31, y: 137}
+        - {x: 30, y: 136}
+        - {x: 15, y: 136}
+        - {x: 14, y: 135}
+        - {x: -16, y: 134}
+        - {x: -17, y: 133}
+        - {x: -41, y: 132}
+        - {x: -42, y: 131}
+        - {x: -55, y: 131}
+        - {x: -56, y: 130}
+        - {x: -78, y: 129}
+        - {x: -79, y: 128}
+        - {x: -89, y: 128}
+        - {x: -90, y: 127}
+        - {x: -100, y: 127}
+        - {x: -101, y: 126}
+        - {x: -110, y: 126}
+        - {x: -111, y: 125}
+        - {x: -120, y: 125}
+        - {x: -121, y: 124}
+        - {x: -129, y: 124}
+        - {x: -130, y: 123}
+        - {x: -148, y: 122}
+        - {x: -149, y: 121}
+        - {x: -165, y: 120}
+        - {x: -166, y: 119}
+        - {x: -173, y: 119}
+        - {x: -174, y: 118}
+        - {x: -181, y: 118}
+        - {x: -182, y: 117}
+        - {x: -188, y: 117}
+        - {x: -189, y: 116}
+        - {x: -196, y: 116}
+        - {x: -197, y: 115}
+        - {x: -203, y: 115}
+        - {x: -204, y: 114}
+        - {x: -215, y: 113}
+        - {x: -216, y: 112}
+        - {x: -219, y: 112}
+        - {x: -220, y: 111}
+        - {x: -222, y: 111}
+        - {x: -225, y: 109}
+        - {x: -229, y: 108}
+        - {x: -231, y: 106}
+        - {x: -232, y: 106}
+        - {x: -239, y: 100}
+        - {x: -241, y: 95}
+        - {x: -241, y: 73}
+        - {x: -240, y: 71}
+        - {x: -239, y: 63}
+        - {x: -238, y: 62}
+        - {x: -238, y: 58}
+        - {x: -237, y: 57}
+        - {x: -237, y: 53}
+        - {x: -236, y: 52}
+        - {x: -235, y: 38}
+        - {x: -234, y: 37}
+        - {x: -234, y: 30}
+        - {x: -233, y: 29}
+        - {x: -233, y: 20}
+        - {x: -232, y: 19}
+        - {x: -232, y: 7}
+        - {x: -231, y: 6}
+        - {x: -231, y: -8}
+        - {x: -230, y: -9}
+        - {x: -230, y: -24}
+        - {x: -229, y: -25}
+        - {x: -229, y: -49}
+        - {x: -228, y: -50}
+        - {x: -228, y: -56}
+        - {x: -227, y: -57}
+        - {x: -227, y: -59}
+        - {x: -224, y: -66}
+        - {x: -220, y: -69}
+        - {x: -219, y: -69}
+        - {x: -218, y: -71}
+        - {x: -209, y: -75}
+        - {x: -206, y: -75}
+        - {x: -205, y: -76}
+        - {x: -162, y: -76}
+        - {x: -161, y: -75}
+        - {x: -152, y: -75}
+        - {x: -153, y: -91}
+        - {x: -154, y: -92}
+        - {x: -154, y: -100}
+        - {x: -155, y: -101}
+        - {x: -155, y: -110}
+        - {x: -156, y: -111}
+        - {x: -156, y: -120}
+        - {x: -157, y: -121}
+        - {x: -157, y: -129}
+        - {x: -158, y: -130}
+        - {x: -158, y: -137}
+        - {x: -159, y: -138}
+        - {x: -159, y: -140}
+        - {x: -153, y: -140}
+        - {x: -124, y: -111}
+        - {x: -124, y: -110}
+        - {x: -87, y: -73}
+      physicsShape: []
+      tessellationDetail: 1
+      bones: []
+      spriteID: 9aef8d01831f37b70800000000000000
+      internalID: 21300000
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      Speech bubble_0: 21300000
+  spritePackingTag: 
+  pSDRemoveMatte: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 157187
+  packageName: Easy Performant Outline 2D | 3D (URP / HDRP and Built-in Renderer)
+  packageVersion: 3.6.2
+  assetPath: Assets/Plugins/Easy performant outline/Demo/Textures/Speech bubble.psd
+  uploadId: 734343

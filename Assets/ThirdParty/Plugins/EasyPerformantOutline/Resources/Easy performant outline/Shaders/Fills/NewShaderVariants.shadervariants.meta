@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 504bd678d73c31149872971c106ad618
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 20000000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 157187
+  packageName: Easy Performant Outline 2D | 3D (URP / HDRP and Built-in Renderer)
+  packageVersion: 3.6.2
+  assetPath: Assets/Plugins/Easy performant outline/Resources/Easy performant outline/Shaders/Fills/NewShaderVariants.shadervariants
+  uploadId: 734343

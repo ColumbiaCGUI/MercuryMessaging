@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 91ea5e78feead6144a0f9afea7123268
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 157187
+  packageName: Easy Performant Outline 2D | 3D (URP / HDRP and Built-in Renderer)
+  packageVersion: 3.6.2
+  assetPath: Assets/Plugins/Easy performant outline/Demo/Models for Demo scene/Cartoon
+    Buildings/Materals/Material_alpha.mat
+  uploadId: 734343

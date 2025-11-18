@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: f0b1a457dc5e1bb4e9b4ffa491b88a26
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 157187
+  packageName: Easy Performant Outline 2D | 3D (URP / HDRP and Built-in Renderer)
+  packageVersion: 3.6.2
+  assetPath: Assets/Plugins/Easy performant outline/Resources/Easy performant outline/Shaders/Fills/_EmptyFill.shader
+  uploadId: 734343

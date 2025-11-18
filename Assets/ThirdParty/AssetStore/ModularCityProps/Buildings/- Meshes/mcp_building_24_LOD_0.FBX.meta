@@ -1,0 +1,107 @@
+fileFormatVersion: 2
+guid: 64dbca20b1fb66c43a3c9ddfc012c768
+ModelImporter:
+  serializedVersion: 16
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: mcp_building_24
+    100004: mcp_building_24_entrance
+    100006: mcp_building_24_flowerbed
+    100008: mcp_building_24_fountain
+    100010: mcp_building_24_fountain_marble
+    100012: mcp_building_24_glass
+    100014: mcp_building_24_marble
+    100016: mcp_building_24_props_01
+    100018: mcp_building_24_walls_01
+    400000: //RootNode
+    400002: mcp_building_24
+    400004: mcp_building_24_entrance
+    400006: mcp_building_24_flowerbed
+    400008: mcp_building_24_fountain
+    400010: mcp_building_24_fountain_marble
+    400012: mcp_building_24_glass
+    400014: mcp_building_24_marble
+    400016: mcp_building_24_props_01
+    400018: mcp_building_24_walls_01
+    2300000: mcp_building_24
+    2300002: mcp_building_24_entrance
+    2300004: mcp_building_24_flowerbed
+    2300006: mcp_building_24_fountain
+    2300008: mcp_building_24_fountain_marble
+    2300010: mcp_building_24_glass
+    2300012: mcp_building_24_marble
+    2300014: mcp_building_24_props_01
+    2300016: mcp_building_24_walls_01
+    3300000: mcp_building_24
+    3300002: mcp_building_24_entrance
+    3300004: mcp_building_24_flowerbed
+    3300006: mcp_building_24_fountain
+    3300008: mcp_building_24_fountain_marble
+    3300010: mcp_building_24_glass
+    3300012: mcp_building_24_marble
+    3300014: mcp_building_24_props_01
+    3300016: mcp_building_24_walls_01
+    4300000: mcp_building_24_props_01
+    4300002: mcp_building_24_walls_01
+    4300004: mcp_building_24
+    4300006: mcp_building_24_flowerbed
+    4300008: mcp_building_24_fountain
+    4300010: mcp_building_24_marble
+    4300012: mcp_building_24_glass
+    4300014: mcp_building_24_entrance
+    4300016: mcp_building_24_fountain_marble
+    9500000: //RootNode
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: .00999999978
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  additionalBone: 0
+  userData: 

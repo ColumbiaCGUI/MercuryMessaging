@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 34c1cba46568e6f4f8f6e6ffcfb57de3
+timeCreated: 1547400197
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 157187
+  packageName: Easy Performant Outline 2D | 3D (URP / HDRP and Built-in Renderer)
+  packageVersion: 3.6.2
+  assetPath: Assets/Plugins/Easy performant outline/Demo/Models for Demo scene/Free
+    2D Demo Character sprite sheet/Animation/Jump.anim
+  uploadId: 734343

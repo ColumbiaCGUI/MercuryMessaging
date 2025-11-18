@@ -1,0 +1,36 @@
+{
+  "name": "com.gentlymad.newgraph",
+  "version": "0.4.3",
+  "displayName": "NewGraph",
+  "description": "A general data oriented node graph solution. This is build upon the idea to visualize complex data structures as graph networks without having to modify already established data classes, except adding [Node], [Port] and [SerializeReference] attributes to call classes that should show in the Graph View.",
+  "unity": "2022.2",
+  "documentationUrl": "https://github.com/Gentlymad-Studios/NewGraph/wiki",
+  "changelogUrl": "https://github.com/Gentlymad-Studios/NewGraph/blob/master/CHANGELOG.md",
+  "licensesUrl": "https://github.com/Gentlymad-Studios/NewGraph/blob/master/LICENSE.md",
+  "custom_gitDependencies": {
+    "com.gentlymad.odinserializer": "https://github.com/Gentlymad-Studios/OdinSerializer.git",
+    "com.gentlymad.graphviewbase": "https://github.com/Gentlymad-Studios/GraphViewBase.git"
+ },
+ "keywords": [
+    "node",
+    "graph",
+    "network"
+  ],
+  "author": {
+    "name": "Gentlymad Studios",
+    "email": "m.guntrum@gentlymadstudios.com",
+    "url": "https://gentlymad.org"
+  },
+  "samples": [
+        {
+            "displayName": "WindowInitializer",
+            "description": "This sets you up with a menu to open the GraphWindow",
+            "path": "Samples~/WindowInitializer"
+        },
+        {
+            "displayName": "MonoGraphModel",
+            "description": "This showcases how you can create mono graph models",
+            "path": "Samples~/MonoGraphModel"
+        }
+    ]
+}

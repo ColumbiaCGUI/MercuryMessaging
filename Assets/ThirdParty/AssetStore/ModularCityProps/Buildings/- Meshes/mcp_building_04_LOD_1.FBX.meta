@@ -1,0 +1,246 @@
+fileFormatVersion: 2
+guid: a39362e4a41166a4e920a269d3302e4c
+ModelImporter:
+  serializedVersion: 16
+  fileIDToRecycleName:
+    100000: mcp_building_04_base_01
+    100002: mcp_building_04_billboards
+    100004: mcp_building_04_brick
+    100006: mcp_building_04_candy_01
+    100008: mcp_building_04_candy_02
+    100010: mcp_building_04_candy_03
+    100012: mcp_building_04_candy_04
+    100014: mcp_building_04_concrete
+    100016: //RootNode
+    100018: mcp_building_04_helipad
+    100020: mcp_building_04_helipad_concrete
+    100022: mcp_building_04_helipad_lamps
+    100024: mcp_building_04_metal_roof
+    100026: mcp_building_04_plastic
+    100028: mcp_building_04_props_02
+    100030: mcp_building_04_props_03
+    100032: mcp_building_04_screen_01
+    100034: mcp_building_04_screen_02
+    100036: mcp_building_04_screen_03
+    100038: mcp_building_04_wall_tile_01
+    100040: mcp_building_04_wall_tile_02
+    100042: mcp_building_04_windows_01
+    100044: mcp_building_04_windows_02
+    400000: mcp_building_04_base_01
+    400002: mcp_building_04_billboards
+    400004: mcp_building_04_brick
+    400006: mcp_building_04_candy_01
+    400008: mcp_building_04_candy_02
+    400010: mcp_building_04_candy_03
+    400012: mcp_building_04_candy_04
+    400014: mcp_building_04_concrete
+    400016: //RootNode
+    400018: mcp_building_04_helipad
+    400020: mcp_building_04_helipad_concrete
+    400022: mcp_building_04_helipad_lamps
+    400024: mcp_building_04_metal_roof
+    400026: mcp_building_04_plastic
+    400028: mcp_building_04_props_02
+    400030: mcp_building_04_props_03
+    400032: mcp_building_04_screen_01
+    400034: mcp_building_04_screen_02
+    400036: mcp_building_04_screen_03
+    400038: mcp_building_04_wall_tile_01
+    400040: mcp_building_04_wall_tile_02
+    400042: mcp_building_04_windows_01
+    400044: mcp_building_04_windows_02
+    2300000: mcp_building_04_base_01
+    2300002: mcp_building_04_billboards
+    2300004: mcp_building_04_brick
+    2300006: mcp_building_04_candy_01
+    2300008: mcp_building_04_candy_02
+    2300010: mcp_building_04_candy_03
+    2300012: mcp_building_04_candy_04
+    2300014: mcp_building_04_concrete
+    2300016: mcp_building_04_helipad
+    2300018: mcp_building_04_helipad_concrete
+    2300020: mcp_building_04_helipad_lamps
+    2300022: mcp_building_04_metal_roof
+    2300024: mcp_building_04_plastic
+    2300026: mcp_building_04_props_02
+    2300028: mcp_building_04_props_03
+    2300030: mcp_building_04_screen_01
+    2300032: mcp_building_04_screen_02
+    2300034: mcp_building_04_screen_03
+    2300036: mcp_building_04_wall_tile_01
+    2300038: mcp_building_04_wall_tile_02
+    2300040: mcp_building_04_windows_01
+    2300042: mcp_building_04_windows_02
+    3300000: mcp_building_04_base_01
+    3300002: mcp_building_04_billboards
+    3300004: mcp_building_04_brick
+    3300006: mcp_building_04_candy_01
+    3300008: mcp_building_04_candy_02
+    3300010: mcp_building_04_candy_03
+    3300012: mcp_building_04_candy_04
+    3300014: mcp_building_04_concrete
+    3300016: mcp_building_04_helipad
+    3300018: mcp_building_04_helipad_concrete
+    3300020: mcp_building_04_helipad_lamps
+    3300022: mcp_building_04_metal_roof
+    3300024: mcp_building_04_plastic
+    3300026: mcp_building_04_props_02
+    3300028: mcp_building_04_props_03
+    3300030: mcp_building_04_screen_01
+    3300032: mcp_building_04_screen_02
+    3300034: mcp_building_04_screen_03
+    3300036: mcp_building_04_wall_tile_01
+    3300038: mcp_building_04_wall_tile_02
+    3300040: mcp_building_04_windows_01
+    3300042: mcp_building_04_windows_02
+    4300000: mcp_building_04_billboards
+    4300002: mcp_building_04_windows_01
+    4300004: mcp_building_04_wall_tile_01
+    4300006: mcp_building_04_concrete
+    4300008: mcp_building_04_wall_tile_02
+    4300010: mcp_building_04_base_01
+    4300012: mcp_building_04_props_02
+    4300014: mcp_building_04_metal_roof
+    4300016: mcp_building_04_helipad
+    4300018: mcp_building_04_helipad_concrete
+    4300020: mcp_building_04_helipad_lamps
+    4300022: mcp_building_04_props_03
+    4300024: mcp_building_04_windows_02
+    4300026: mcp_building_04_brick
+    4300028: mcp_building_04_screen_03
+    4300030: mcp_building_04_candy_01
+    4300032: mcp_building_04_candy_04
+    4300034: mcp_building_04_candy_03
+    4300036: mcp_building_04_candy_02
+    4300038: mcp_building_04_plastic
+    4300040: mcp_building_04_screen_01
+    4300042: mcp_building_04_screen_02
+    7400000: Take 001
+    9500000: //RootNode
+    11100000: //RootNode
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 2
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Take 001
+      takeName: Take 001
+      firstFrame: 0
+      lastFrame: 150
+      wrapMode: 2
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: mcp_building_04_base_01
+        weight: 1
+      - path: mcp_building_04_billboards
+        weight: 1
+      - path: mcp_building_04_brick
+        weight: 1
+      - path: mcp_building_04_candy_01
+        weight: 1
+      - path: mcp_building_04_candy_02
+        weight: 1
+      - path: mcp_building_04_candy_03
+        weight: 1
+      - path: mcp_building_04_candy_04
+        weight: 1
+      - path: mcp_building_04_concrete
+        weight: 1
+      - path: mcp_building_04_helipad
+        weight: 1
+      - path: mcp_building_04_helipad_concrete
+        weight: 1
+      - path: mcp_building_04_helipad_lamps
+        weight: 1
+      - path: mcp_building_04_metal_roof
+        weight: 1
+      - path: mcp_building_04_plastic
+        weight: 1
+      - path: mcp_building_04_props_02
+        weight: 1
+      - path: mcp_building_04_props_03
+        weight: 1
+      - path: mcp_building_04_screen_01
+        weight: 1
+      - path: mcp_building_04_screen_02
+        weight: 1
+      - path: mcp_building_04_screen_03
+        weight: 1
+      - path: mcp_building_04_wall_tile_01
+        weight: 1
+      - path: mcp_building_04_wall_tile_02
+        weight: 1
+      - path: mcp_building_04_windows_01
+        weight: 1
+      - path: mcp_building_04_windows_02
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: .00999999978
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  additionalBone: 0
+  userData: 

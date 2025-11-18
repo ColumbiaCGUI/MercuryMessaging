@@ -1,0 +1,127 @@
+fileFormatVersion: 2
+guid: c1aba5a43e2bd08409e0f481eac78caa
+ModelImporter:
+  serializedVersion: 16
+  fileIDToRecycleName:
+    100000: mcp_building_21
+    100002: mcp_building_21_billboards_01
+    100004: mcp_building_21_concrete
+    100006: mcp_building_21_door_01
+    100008: mcp_building_21_door_02
+    100010: mcp_building_21_doors
+    100012: mcp_building_21_glass_windows
+    100014: mcp_building_21_interior_props_01
+    100016: //RootNode
+    100018: mcp_building_21_props
+    100020: mcp_building_21_roof
+    100022: mcp_building_21_walls
+    100024: Object001
+    100026: mcp_building_21_props001
+    400000: mcp_building_21
+    400002: mcp_building_21_billboards_01
+    400004: mcp_building_21_concrete
+    400006: mcp_building_21_door_01
+    400008: mcp_building_21_door_02
+    400010: mcp_building_21_doors
+    400012: mcp_building_21_glass_windows
+    400014: mcp_building_21_interior_props_01
+    400016: //RootNode
+    400018: mcp_building_21_props
+    400020: mcp_building_21_roof
+    400022: mcp_building_21_walls
+    400024: Object001
+    400026: mcp_building_21_props001
+    2300000: mcp_building_21
+    2300002: mcp_building_21_billboards_01
+    2300004: mcp_building_21_concrete
+    2300006: mcp_building_21_door_01
+    2300008: mcp_building_21_door_02
+    2300010: mcp_building_21_doors
+    2300012: mcp_building_21_glass_windows
+    2300014: mcp_building_21_interior_props_01
+    2300016: mcp_building_21_props
+    2300018: mcp_building_21_roof
+    2300020: mcp_building_21_walls
+    2300022: Object001
+    2300024: mcp_building_21_props001
+    3300000: mcp_building_21
+    3300002: mcp_building_21_billboards_01
+    3300004: mcp_building_21_concrete
+    3300006: mcp_building_21_door_01
+    3300008: mcp_building_21_door_02
+    3300010: mcp_building_21_doors
+    3300012: mcp_building_21_glass_windows
+    3300014: mcp_building_21_interior_props_01
+    3300016: mcp_building_21_props
+    3300018: mcp_building_21_roof
+    3300020: mcp_building_21_walls
+    3300022: Object001
+    3300024: mcp_building_21_props001
+    4300000: mcp_building_21_interior_props_01
+    4300002: mcp_building_21_billboards_01
+    4300004: mcp_building_21
+    4300006: mcp_building_21_concrete
+    4300008: mcp_building_21_roof
+    4300010: mcp_building_21_walls
+    4300012: mcp_building_21_door_01
+    4300014: mcp_building_21_glass_windows
+    4300016: mcp_building_21_props
+    4300018: mcp_building_21_doors
+    4300020: mcp_building_21_door_02
+    4300022: Object001
+    4300024: mcp_building_21_props001
+    9500000: //RootNode
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: .00999999978
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  additionalBone: 0
+  userData: 

@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 1d41bdd17bdf4c94eb132fc8d677167d
+AssemblyDefinitionImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 157187
+  packageName: Easy Performant Outline 2D | 3D (URP / HDRP and Built-in Renderer)
+  packageVersion: 3.6.2
+  assetPath: Assets/Plugins/Easy performant outline/Demo/Scripts/EPO Demo.asmdef
+  uploadId: 734343

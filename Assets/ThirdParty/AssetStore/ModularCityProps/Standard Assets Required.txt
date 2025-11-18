@@ -1,0 +1,6 @@
+To make Demo scenes work properly you need to import this packages:
+- Characters
+- Effects
+- Environment
+- Particle system
+- Post Processing Stack

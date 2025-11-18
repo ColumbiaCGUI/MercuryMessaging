@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: c8e0240e9684da34f8e797593fcd659e
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 157187
+  packageName: Easy Performant Outline 2D | 3D (URP / HDRP and Built-in Renderer)
+  packageVersion: 3.6.2
+  assetPath: Assets/Plugins/Easy performant outline/Demo/Models for Demo scene/CartoonLowPolyCityLite/Materials/CartoonLowPolyCityLite_01.mat
+  uploadId: 734343

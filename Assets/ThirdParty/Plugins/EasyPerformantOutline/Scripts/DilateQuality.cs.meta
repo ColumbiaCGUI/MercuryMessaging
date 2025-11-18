@@ -1,0 +1,10 @@
+fileFormatVersion: 2
+guid: 5925d7c8e45b470a80971b24577db8aa
+timeCreated: 1729342180
+AssetOrigin:
+  serializedVersion: 1
+  productId: 157187
+  packageName: Easy Performant Outline 2D | 3D (URP / HDRP and Built-in Renderer)
+  packageVersion: 3.6.2
+  assetPath: Assets/Plugins/Easy performant outline/Scripts/DilateQuality.cs
+  uploadId: 734343
