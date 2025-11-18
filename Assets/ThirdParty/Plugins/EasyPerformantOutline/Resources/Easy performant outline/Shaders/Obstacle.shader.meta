@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 5b17cd676c27913468907d0f9221d2de
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 157187
+  packageName: Easy Performant Outline 2D | 3D (URP / HDRP and Built-in Renderer)
+  packageVersion: 3.6.2
+  assetPath: Assets/Plugins/Easy performant outline/Resources/Easy performant outline/Shaders/Obstacle.shader
+  uploadId: 734343

@@ -18,7 +18,7 @@ public class TrafficLightController : MonoBehaviour
     void Start()
     {
         lightRenderer = GetComponent<Renderer>();
-        EventSystem.Instance.OnTrafficLightChange += TrafficLightControl; 
+        TrafficEventManager.Instance.OnTrafficLightChange += TrafficLightControl; 
     }
 
     // Update is called once per frame
@@ -28,7 +28,7 @@ public class TrafficLightController : MonoBehaviour
     }
 
     private void OnDisable() {
-        EventSystem.Instance.OnTrafficLightChange -= TrafficLightControl; 
+        TrafficEventManager.Instance.OnTrafficLightChange -= TrafficLightControl; 
     }
 
     void TrafficLightControl(string direction1Color, string direction2Color, int intersection) {
@@ -54,8 +54,8 @@ public class TrafficLightController : MonoBehaviour
                     lightRenderer.materials[1].SetTextureOffset("_MainTex", redGreen);
                 }
             }
-            EventSystem.Instance.ControlPedestrian(direction1Color, direction2Color, intersection); 
-            EventSystem.Instance.ControlVehicle(direction1Color, direction2Color, intersection); 
+            TrafficEventManager.Instance.ControlPedestrian(direction1Color, direction2Color, intersection); 
+            TrafficEventManager.Instance.ControlVehicle(direction1Color, direction2Color, intersection); 
         }
     }
 }

@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 0ebc8b7a28eef724f8fa2c9f4126e4b7
+timeCreated: 1547400835
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 157187
+  packageName: Easy Performant Outline 2D | 3D (URP / HDRP and Built-in Renderer)
+  packageVersion: 3.6.2
+  assetPath: Assets/Plugins/Easy performant outline/Demo/Models for Demo scene/Free
+    2D Demo Character sprite sheet/Animation/Death-end.anim
+  uploadId: 734343

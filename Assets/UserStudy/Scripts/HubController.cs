@@ -13,7 +13,7 @@ public class HubController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        EventSystem.Instance.onStatusChange += UpdateStatus; 
+        TrafficEventManager.Instance.onStatusChange += UpdateStatus; 
     }
 
     // Update is called once per frame

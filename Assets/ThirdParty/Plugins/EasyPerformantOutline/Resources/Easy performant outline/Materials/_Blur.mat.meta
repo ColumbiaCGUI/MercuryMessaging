@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: c57e2efc41ecd4b4fab68c3b28986190
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 157187
+  packageName: Easy Performant Outline 2D | 3D (URP / HDRP and Built-in Renderer)
+  packageVersion: 3.6.2
+  assetPath: Assets/Plugins/Easy performant outline/Resources/Easy performant outline/Materials/_Blur.mat
+  uploadId: 734343

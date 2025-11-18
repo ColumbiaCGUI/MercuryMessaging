@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 17986fbb77e96d643bf4c6da1860b9ef
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 157187
+  packageName: Easy Performant Outline 2D | 3D (URP / HDRP and Built-in Renderer)
+  packageVersion: 3.6.2
+  assetPath: Assets/Plugins/Easy performant outline/Resources/Easy performant outline/Shaders/Fills/Fresnel.shader
+  uploadId: 734343
