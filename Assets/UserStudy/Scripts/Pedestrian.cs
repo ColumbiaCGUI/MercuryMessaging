@@ -17,14 +17,29 @@ public class Pedestrian : MonoBehaviour
     void Start()
     {
         pedestrianAnimator = GetComponent<Animator>();
-        EventSystem.Instance.onPedestrianCross += CrossRoad; 
 
-        if (direction1) {
-            despawnPoint = StreetInfo.Instance.humanDespawnLocationZ; 
-        } else {
-            despawnPoint = StreetInfo.Instance.humanDespawnLocationX; 
+        if (TrafficEventManager.Instance != null)
+        {
+            TrafficEventManager.Instance.onPedestrianCross += CrossRoad;
         }
-        destination = despawnPoint;
+        else
+        {
+            Debug.LogError("TrafficEventManager.Instance is null in Pedestrian.Start()");
+        }
+
+        if (StreetInfo.Instance != null)
+        {
+            if (direction1) {
+                despawnPoint = StreetInfo.Instance.humanDespawnLocationZ;
+            } else {
+                despawnPoint = StreetInfo.Instance.humanDespawnLocationX;
+            }
+            destination = despawnPoint;
+        }
+        else
+        {
+            Debug.LogError("StreetInfo.Instance is null in Pedestrian.Start()");
+        }
     }
 
     // Update is called once per frame
@@ -57,8 +72,8 @@ public class Pedestrian : MonoBehaviour
                     pedestrianAnimator.SetFloat("speed", speed);
 
                     // induce fear based on the distance to the other side
-                    float fear = distance2End * 0.5f; 
-                    EventSystem.Instance.InduceFear(fear, gameObject);
+                    float fear = distance2End * 0.5f;
+                    TrafficEventManager.Instance.InduceFear(fear, gameObject);
                 }
             }
             // Pedestrian has not crossed the road yet
@@ -72,56 +87,60 @@ public class Pedestrian : MonoBehaviour
                     pedestrianAnimator.SetFloat("speed", speed);  // reset to normal speed
                 }
             }
-            // Pedestrian has crossed the road 
+            // Pedestrian has crossed the road
             else {
-                speed = 0.5f; 
+                speed = 0.5f;
                 pedestrianAnimator.SetFloat("speed", speed);
-                EventSystem.Instance.InduceFear(0, gameObject); 
+                TrafficEventManager.Instance.InduceFear(0, gameObject);
             }
     }
 
     void SetStreetInfo(int intersection) {
+        if (StreetInfo.Instance == null) return;
+
         if (direction1) {
             if (intersection == 1) {
-                crossRoadStart = StreetInfo.Instance.direction1Intersection1Start; 
-                crossRoadEnd = StreetInfo.Instance.direction1Intersection1End; 
-            } else { 
-                crossRoadStart = StreetInfo.Instance.direction1Intersection2Start; 
-                crossRoadEnd = StreetInfo.Instance.direction1Intersection2End; 
+                crossRoadStart = StreetInfo.Instance.direction1Intersection1Start;
+                crossRoadEnd = StreetInfo.Instance.direction1Intersection1End;
+            } else {
+                crossRoadStart = StreetInfo.Instance.direction1Intersection2Start;
+                crossRoadEnd = StreetInfo.Instance.direction1Intersection2End;
             }
         } else {
             if (intersection == 1) {
-                crossRoadStart = StreetInfo.Instance.direction2Intersection1Start; 
+                crossRoadStart = StreetInfo.Instance.direction2Intersection1Start;
                 crossRoadEnd = StreetInfo.Instance.direction2Intersection1End;
             } else {
-                crossRoadStart = StreetInfo.Instance.direction2Intersection2Start; 
-                crossRoadEnd = StreetInfo.Instance.direction2Intersection2End; 
+                crossRoadStart = StreetInfo.Instance.direction2Intersection2Start;
+                crossRoadEnd = StreetInfo.Instance.direction2Intersection2End;
             }
         }
     }
 
     bool IsAtCurrentIntersection(int intersection) {
-        float bound2 = (StreetInfo.Instance.direction2Intersection1End + StreetInfo.Instance.direction2Intersection2Start) / 2; 
-        float bound1 = (StreetInfo.Instance.direction1Intersection1End + StreetInfo.Instance.direction1Intersection2Start) / 2; 
+        if (StreetInfo.Instance == null) return false;
+
+        float bound2 = (StreetInfo.Instance.direction2Intersection1End + StreetInfo.Instance.direction2Intersection2Start) / 2;
+        float bound1 = (StreetInfo.Instance.direction1Intersection1End + StreetInfo.Instance.direction1Intersection2Start) / 2;
 
         if (intersection == 1) {
             if (direction1) {
                 if (transform.position.z <= bound1) {
-                    return false; 
+                    return false;
                 }
             } else {
                 if (transform.position.x <= bound2) {
-                    return false; 
+                    return false;
                 }
             }
         } else {
             if (direction1) {
                 if (transform.position.z > bound1) {
-                    return false; 
+                    return false;
                 }
             } else {
                 if (transform.position.x > bound2) {
-                    return false; 
+                    return false;
                 }
             }
         }
@@ -131,24 +150,29 @@ public class Pedestrian : MonoBehaviour
     void pedestrianWalk() {
         transform.Translate(Vector3.forward * speed * Time.deltaTime);
 
-        float position; 
+        float position;
         if (direction1) {
-            position = transform.position.z; 
+            position = transform.position.z;
         } else {
             position = transform.position.x;
         }
 
         if (position <= despawnPoint) {
             // remove listener when pedestrian is destroyed
-            EventSystem.Instance.onPedestrianCross -= CrossRoad; 
-
-            EventSystem.Instance.updateStatus("Population", -1); 
-            Destroy(gameObject); 
+            if (TrafficEventManager.Instance != null)
+            {
+                TrafficEventManager.Instance.onPedestrianCross -= CrossRoad;
+                TrafficEventManager.Instance.updateStatus("Population", -1);
+            }
+            Destroy(gameObject);
         }
 
         if (position <= destination) {
-            speed = 0.0f; 
-            pedestrianAnimator.SetFloat("speed", 0.0f);  // stop moving
+            speed = 0.0f;
+            if (pedestrianAnimator != null)
+            {
+                pedestrianAnimator.SetFloat("speed", 0.0f);  // stop moving
+            }
         }
     }
 }

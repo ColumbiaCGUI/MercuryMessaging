@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 86665e566268cb5469dbb3747ca2839d
+timeCreated: 1547400510
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 157187
+  packageName: Easy Performant Outline 2D | 3D (URP / HDRP and Built-in Renderer)
+  packageVersion: 3.6.2
+  assetPath: Assets/Plugins/Easy performant outline/Demo/Models for Demo scene/Free
+    2D Demo Character sprite sheet/Prefab/Player.prefab
+  uploadId: 734343

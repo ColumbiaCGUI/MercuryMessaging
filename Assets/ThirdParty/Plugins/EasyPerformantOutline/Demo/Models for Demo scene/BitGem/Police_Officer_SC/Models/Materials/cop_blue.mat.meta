@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: dce241fd739534401bcf0bc61dac0c00
+timeCreated: 1513331779
+licenseType: Store
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 157187
+  packageName: Easy Performant Outline 2D | 3D (URP / HDRP and Built-in Renderer)
+  packageVersion: 3.6.2
+  assetPath: Assets/Plugins/Easy performant outline/Demo/Models for Demo scene/BitGem/Police_Officer_SC/Models/Materials/cop_blue.mat
+  uploadId: 734343

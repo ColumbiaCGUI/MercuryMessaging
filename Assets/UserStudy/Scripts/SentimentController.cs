@@ -13,9 +13,19 @@ public class SentimentController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        EventSystem.Instance.onSentimentChange += DisplayFearFactor; 
-        sentiment.text = "Pace " + 0 + "\n";
-        
+        if (TrafficEventManager.Instance != null)
+        {
+            TrafficEventManager.Instance.onSentimentChange += DisplayFearFactor;
+        }
+        else
+        {
+            Debug.LogError("TrafficEventManager.Instance is null in SentimentController.Start()");
+        }
+
+        if (sentiment != null)
+        {
+            sentiment.text = "Pace " + 0 + "\n";
+        }
     }
 
     // Update is called once per frame
@@ -27,7 +37,10 @@ public class SentimentController : MonoBehaviour
     void OnDestroy()
     {
         // Unsubscribe when this GameObject is destroyed
-        EventSystem.Instance.onSentimentChange -= DisplayFearFactor;
+        if (TrafficEventManager.Instance != null)
+        {
+            TrafficEventManager.Instance.onSentimentChange -= DisplayFearFactor;
+        }
     }
 
     void DisplayFearFactor(float amount, GameObject pedestrian) {
@@ -35,7 +48,7 @@ public class SentimentController : MonoBehaviour
             int change = (int)amount - currentFear; 
             currentFear = (int)amount;
             sentiment.text = "Pace " + currentFear + "\n";
-            EventSystem.Instance.updateStatus("Fear", (int)change);
+            TrafficEventManager.Instance.updateStatus("Fear", (int)change);
         }
     }
 }

@@ -17,7 +17,7 @@ public class CarController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        EventSystem.Instance.onVehicleCross += CrossRoad; 
+        TrafficEventManager.Instance.onVehicleCross += CrossRoad; 
 
         if (direction1) {
             despawnPoint = StreetInfo.Instance.carDespawnLocationZ; 
@@ -114,7 +114,7 @@ public class CarController : MonoBehaviour
 
         if (position <= despawnPoint) {
             Destroy(gameObject); 
-            EventSystem.Instance.onVehicleCross -= CrossRoad;
+            TrafficEventManager.Instance.onVehicleCross -= CrossRoad;
         }
         
         if (inTriggerZone) {

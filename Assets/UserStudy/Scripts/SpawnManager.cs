@@ -40,7 +40,7 @@ public class SpawnManager : MonoBehaviour
         GameObject instance = Instantiate(pedestrianPrefab, spawnPosDirection2, Quaternion.Euler(0, -90, 0));
         Pedestrian pedestrian = instance.GetComponent<Pedestrian>();
         pedestrian.direction1 = false; 
-        EventSystem.Instance.updateStatus("Population", 1); 
+        TrafficEventManager.Instance.updateStatus("Population", 1); 
         instance.transform.SetParent(ZombieRoot.transform, true); 
     }
 
@@ -48,7 +48,7 @@ public class SpawnManager : MonoBehaviour
         GameObject instance = Instantiate(pedestrianPrefab, spawnPosDirection1, Quaternion.Euler(0, -180, 0));
         Pedestrian pedestrian = instance.GetComponent<Pedestrian>();
         pedestrian.direction1 = true; 
-        EventSystem.Instance.updateStatus("Population", 1); 
+        TrafficEventManager.Instance.updateStatus("Population", 1); 
         instance.transform.SetParent(ZombieRoot.transform, true); 
     }
 

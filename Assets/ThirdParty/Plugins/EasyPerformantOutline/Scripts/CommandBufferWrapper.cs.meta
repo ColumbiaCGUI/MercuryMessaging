@@ -1,0 +1,10 @@
+﻿fileFormatVersion: 2
+guid: 8468b1e3b8be48df8b4fc34896827305
+timeCreated: 1729518003
+AssetOrigin:
+  serializedVersion: 1
+  productId: 157187
+  packageName: Easy Performant Outline 2D | 3D (URP / HDRP and Built-in Renderer)
+  packageVersion: 3.6.2
+  assetPath: Assets/Plugins/Easy performant outline/Scripts/CommandBufferWrapper.cs
+  uploadId: 734343
