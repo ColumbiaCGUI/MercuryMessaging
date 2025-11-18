@@ -2,10 +2,12 @@
 
 ![Basic scene layout](https://github.com/ColumbiaCGUI/MercuryMessaging/wiki/Images/General/MercuryCollage2.png)
 
-The *Mercury* messaging toolkit is a new way to handle cross-component communication in the Unity
+The *Mercury Messaging* toolkit is a new way to handle cross-component communication in the Unity
   game engine. It integrates seamlessly with the Unity Editor, and is both
- robust and expandable. It has been tested in Unity 2020 up until 2020.3.21f1, Unity 2019 up until 2019.2.17f1, Unity 2018 up until 2018.3.13f1, Unity 2017 up until 2017.4f1, and 5.6.
-
+ robust and expandable. 
+ 
+*It has been tested in Unity 2022 up until 2022.3.18f1. This is the recommended version of Unity to use with Mercury! Networking features have been tested and work for PUN and Fusion in LTS 2022.*
+ 
 The toolkit contains the *Mercury* messaging framework, which is a messaging
   and organizational framework built around the *Mercury Protocol*. 
 
@@ -56,11 +58,17 @@ This will trigger a special SetActive message on each of the objects involved
 
 Done!
 
+## IEEE ISMAR 2024
+
+A library of debugging features and UI for Mercury was presented at IEEE ISMAR 2024 with the title "An XR GUI for Visualizing Messages in ECS Architectures". 
+
+The extended abstract for this demo will be available soon in the Adjunct Proceedings of IEEE ISMAR 2024 in IEEE Xplore.
+
 ## CHI 2018
 
 *Mercury* was presented at CHI 2018. The paper is available online at the ACM Digital Library.
 
-Carmine Elvezio, Mengu Sukan, and Steven Feiner. 2018. Mercury: A Messaging Framework for Modular UI Components. In Proceedings of the 2018 CHI Conference on Human Factors in Computing Systems (CHI '18). ACM, New York, NY, USA, Paper 588, 12 pages. DOI:https://doi.org/10.1145/3173574.3174162
+Carmine Elvezio, Mengu Sukan, and Steven Feiner. 2018. Mercury: A Messaging Framework for Modular UI Components. In Proceedings of the 2018 CHI Conference on Human Factors in Computing Systems (CHI '18). ACM, New York, NY, USA, Paper 588, 12 pages. https://doi.org/10.1145/3173574.3174162
 
 ## Downloading MercuryMessaging
 
@@ -83,12 +91,11 @@ Complete Documentation for the toolkit can be found on the toolkit's
 [documentation page](https://columbiacgui.github.io/MercuryMessaging/).
 
 ## FAQ
-### Q. Does the toolkit work in Unity version 5.4.x, 4.x, 3.x, and earlier?
+### Q. Does the toolkit work in Unity versions earlier than LTS 2022?
 
-A. The framework has been tested in Unity 2020 up until 2020.3.21f1, Unity 2019 up until 2019.2.17f1, Unity 2018 up until 2018.3.13f1, Unity 2017 up until 2017.4f1, and 5.6.
+A. Core functions have been tested in Unity 2020 up until 2020.3.21f1, Unity 2019 up until 2019.2.17f1, Unity 2018 up until 2018.3.13f1, Unity 2017 up until 2017.4f1, and 5.6. 
 
-The Framework was originally developed using Unity 5.6. The toolkit requires some features that were added in Unity 5. As such,
-we provide no support for the toolkit in earlier versions of Unity. That said, it may work in other versions of Unity 5, but we're not sure.
+Updated networking functionality with Photon Fusion, which has only been tested in LTS 2022, *may not work* in any of these older versions. PUN works properly for these earlier versions.
 
 ### Q. What is Unity?
 
@@ -100,13 +107,10 @@ A. Unity is a game engine. Please see here:
 A. As much as we like those engines, we originally built the toolkit to support us in our
 work in our lab, where we use Unity.
 
-### Q. UNET Deprecation
-
-A. MercuryMessaging uses a few components of UNET in the framework. Unity is deprecating and removing UNET from Unity post 2019.4 (LTS) and 2018.4.(LTS). We are already transitioning the code away from UNET, but while we are, if you try to use MercuryMessaging in Unity 2019.1.4 and beyond, you may encounter compilation issues. To resolve these, all you need to do is ensure that you have the Multiplayer HLAPI enabled in packages (Unity->Window->Package Manager->Multiplayer HLAPI (Install)).
 
 # Acknowledgments
 
-Funded in part by National Science Foundation Grant IIS-1514429. 
+Funded in part by National Science Foundation Grant IIS-1514429 and CMMI-2037101. 
 Any opinions, findings and conclusions or recommendations expressed in this material are those of the authors and do not necessarily reflect the views of the National Science Foundation.
 
 
