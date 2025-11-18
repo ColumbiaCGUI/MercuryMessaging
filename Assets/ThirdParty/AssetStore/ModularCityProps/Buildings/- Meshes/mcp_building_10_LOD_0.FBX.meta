@@ -1,0 +1,204 @@
+fileFormatVersion: 2
+guid: 50031ccd9a0b53b46a5980abae911000
+ModelImporter:
+  serializedVersion: 16
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: mcp_building_10
+    100004: mcp_building_10_air_vent_01
+    100006: mcp_building_10_air_vent_02
+    100008: mcp_building_10_concrete_01
+    100010: mcp_building_10_concrete_02
+    100012: mcp_building_10_doors
+    100014: mcp_building_10_fence
+    100016: mcp_building_10_fence_02
+    100018: mcp_building_10_glass
+    100020: mcp_building_10_metal_roof
+    100022: mcp_building_10_pipes_01
+    100024: mcp_building_10_props_01
+    100026: mcp_building_10_props_02
+    100028: mcp_building_10_props_03
+    100030: mcp_building_10_rooftop
+    100032: mcp_building_10_walls_01
+    400000: //RootNode
+    400002: mcp_building_10
+    400004: mcp_building_10_air_vent_01
+    400006: mcp_building_10_air_vent_02
+    400008: mcp_building_10_concrete_01
+    400010: mcp_building_10_concrete_02
+    400012: mcp_building_10_doors
+    400014: mcp_building_10_fence
+    400016: mcp_building_10_fence_02
+    400018: mcp_building_10_glass
+    400020: mcp_building_10_metal_roof
+    400022: mcp_building_10_pipes_01
+    400024: mcp_building_10_props_01
+    400026: mcp_building_10_props_02
+    400028: mcp_building_10_props_03
+    400030: mcp_building_10_rooftop
+    400032: mcp_building_10_walls_01
+    2300000: mcp_building_10
+    2300002: mcp_building_10_air_vent_01
+    2300004: mcp_building_10_air_vent_02
+    2300006: mcp_building_10_concrete_01
+    2300008: mcp_building_10_concrete_02
+    2300010: mcp_building_10_doors
+    2300012: mcp_building_10_fence
+    2300014: mcp_building_10_fence_02
+    2300016: mcp_building_10_glass
+    2300018: mcp_building_10_metal_roof
+    2300020: mcp_building_10_pipes_01
+    2300022: mcp_building_10_props_01
+    2300024: mcp_building_10_props_02
+    2300026: mcp_building_10_props_03
+    2300028: mcp_building_10_rooftop
+    2300030: mcp_building_10_walls_01
+    3300000: mcp_building_10
+    3300002: mcp_building_10_air_vent_01
+    3300004: mcp_building_10_air_vent_02
+    3300006: mcp_building_10_concrete_01
+    3300008: mcp_building_10_concrete_02
+    3300010: mcp_building_10_doors
+    3300012: mcp_building_10_fence
+    3300014: mcp_building_10_fence_02
+    3300016: mcp_building_10_glass
+    3300018: mcp_building_10_metal_roof
+    3300020: mcp_building_10_pipes_01
+    3300022: mcp_building_10_props_01
+    3300024: mcp_building_10_props_02
+    3300026: mcp_building_10_props_03
+    3300028: mcp_building_10_rooftop
+    3300030: mcp_building_10_walls_01
+    4300000: mcp_building_10_fence
+    4300002: mcp_building_10_fence_02
+    4300004: mcp_building_10_doors
+    4300006: mcp_building_10_concrete_01
+    4300008: mcp_building_10_walls_01
+    4300010: mcp_building_10_props_01
+    4300012: mcp_building_10
+    4300014: mcp_building_10_rooftop
+    4300016: mcp_building_10_concrete_02
+    4300018: mcp_building_10_props_02
+    4300020: mcp_building_10_pipes_01
+    4300022: mcp_building_10_metal_roof
+    4300024: mcp_building_10_props_03
+    4300026: mcp_building_10_glass
+    4300028: mcp_building_10_air_vent_02
+    4300030: mcp_building_10_air_vent_01
+    7400000: Take 001
+    9500000: //RootNode
+    11100000: //RootNode
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Take 001
+      takeName: Take 001
+      firstFrame: 0
+      lastFrame: 100
+      wrapMode: 2
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: mcp_building_10
+        weight: 1
+      - path: mcp_building_10_air_vent_01
+        weight: 1
+      - path: mcp_building_10_air_vent_02
+        weight: 1
+      - path: mcp_building_10_concrete_01
+        weight: 1
+      - path: mcp_building_10_concrete_02
+        weight: 1
+      - path: mcp_building_10_doors
+        weight: 1
+      - path: mcp_building_10_fence
+        weight: 1
+      - path: mcp_building_10_fence_02
+        weight: 1
+      - path: mcp_building_10_glass
+        weight: 1
+      - path: mcp_building_10_metal_roof
+        weight: 1
+      - path: mcp_building_10_pipes_01
+        weight: 1
+      - path: mcp_building_10_props_01
+        weight: 1
+      - path: mcp_building_10_props_02
+        weight: 1
+      - path: mcp_building_10_props_03
+        weight: 1
+      - path: mcp_building_10_rooftop
+        weight: 1
+      - path: mcp_building_10_walls_01
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: .00999999978
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  additionalBone: 0
+  userData: 

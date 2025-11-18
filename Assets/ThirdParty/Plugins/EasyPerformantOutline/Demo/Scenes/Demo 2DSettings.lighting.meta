@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: a1e80d255d2988d4e91d0e704f22f3d4
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 4890085278179872738
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 157187
+  packageName: Easy Performant Outline 2D | 3D (URP / HDRP and Built-in Renderer)
+  packageVersion: 3.6.2
+  assetPath: Assets/Plugins/Easy performant outline/Demo/Scenes/Demo 2DSettings.lighting
+  uploadId: 734343
