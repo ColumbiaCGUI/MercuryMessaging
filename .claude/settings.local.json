@@ -46,7 +46,12 @@
       "Bash(move EventSystem.cs.meta TrafficEventManager.cs.meta)",
       "Bash(cmd /c \"move EventSystem.cs TrafficEventManager.cs & move EventSystem.cs.meta TrafficEventManager.cs.meta\")",
       "Bash(powershell -Command \"Rename-Item -Path ''EventSystem.cs'' -NewName ''TrafficEventManager.cs''; Rename-Item -Path ''EventSystem.cs.meta'' -NewName ''TrafficEventManager.cs.meta''\")",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(test:*)",
+      "Bash(dir /s /b /ad 2)",
+      "Bash(findstr:*)",
+      "Bash(tree:*)",
+      "Bash(mkdir:*)"
     ],
     "deny": [],
     "ask": []
