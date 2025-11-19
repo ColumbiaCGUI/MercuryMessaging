@@ -51,7 +51,15 @@
       "Bash(dir /s /b /ad 2)",
       "Bash(findstr:*)",
       "Bash(tree:*)",
-      "Bash(mkdir:*)"
+      "Bash(mkdir:*)",
+      "Bash(git push:*)",
+      "Bash(git stash:*)",
+      "Bash(\"Assets/_Project/Scripts/Testing/HopLimitTest.cs.meta\")",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nfeat: Add Quick Win validation test scripts\n\nCreated comprehensive test infrastructure for validating QW-1, QW-2, and QW-4 implementations.\n\nTest Scripts:\n- TestManagerScript.cs: Main orchestrator with UI management\n- CircularBufferMemoryTest.cs: Validates memory stability over 10k messages\n- HopLimitTest.cs: Validates hop limit protection in 50-node chain\n- CycleDetectionTest.cs: Validates cycle detection in circular graphs\n- LazyCopyPerformanceTest.cs: Validates lazy copying optimization\n- QuickWinConfigHelper.cs: Configuration UI for test parameters\n- TestResultDisplay.cs: Results display with color-coded pass/fail\n\nAlso updated CLAUDE.md with development guidelines to prevent AI attribution in commits.\n\nUnity scene creation pending (requires Unity Editor).\nEOF\n)\")",
+      "Bash(git commit:*)",
+      "Bash(ren:*)",
+      "mcp__UnityMCP__execute_menu_item"
     ],
     "deny": [],
     "ask": []

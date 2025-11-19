@@ -85,7 +85,7 @@ namespace MercuryMessaging.Tests
             // Act - Try to send same message twice (simulating cycle)
             VisitCounterResponder.visitCount = 0;
             var message = new MmMessage(MmMethod.Initialize, MmMessageType.MmVoid,
-                new MmMetadataBlock(MmLevelFilterHelper.Self));
+                new MmMetadataBlock(MmLevelFilter.Self));
 
             relayA.MmInvoke(message);
             yield return null;

@@ -38,7 +38,9 @@ using MercuryMessaging.Support.Extensions;
 using MercuryMessaging.Support.Data;
 using MercuryMessaging.Task;
 using UnityEngine;
+#if UNITY_EDITOR
 using NewGraph;
+#endif
 using Drawing;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.InputSystem;
@@ -59,7 +61,9 @@ namespace MercuryMessaging
 
         // Graphable properties
         // The node view that represents this graphable in the graph view.
+#if UNITY_EDITOR
         public NodeController nodeController;
+#endif
         // The position of the graph node in the graph view.
         public Vector2 nodePosition = new Vector2(0, 0);
 
@@ -229,7 +233,8 @@ namespace MercuryMessaging
 
         private GameObject rightController;
 
-        private Outline rightControllerModelOutline;
+        // Commented out - unused field (referenced code is commented out at line 375)
+        // private Outline rightControllerModelOutline;
 
         /// <summary>
         /// List of associated Mercury Responders.
