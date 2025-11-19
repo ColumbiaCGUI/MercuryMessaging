@@ -136,7 +136,7 @@ namespace MercuryMessaging.Tests
             testRelay.MmInvoke(
                 MmMethod.MessageString,
                 testContent,
-                new MmMetadataBlock(MmLevelFilterHelper.Self)
+                new MmMetadataBlock(MmLevelFilter.Self)
             );
 
             yield return new WaitForSeconds(0.1f);
