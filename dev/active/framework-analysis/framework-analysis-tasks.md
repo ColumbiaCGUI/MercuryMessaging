@@ -23,27 +23,31 @@ High impact, low risk, immediate returns. Start here.
 
 ---
 
-### QW-1: Enable Message History Tracking + Hop Limits (8h)
+### QW-1: Enable Message History Tracking + Hop Limits (8h) - ✅ COMPLETE
 
 **Goal:** Prevent infinite message loops in complex hierarchies
 
 #### Subtasks:
-- [ ] Uncomment message history code (`MmRelayNode.cs:560-606`) (2h)
-- [ ] Add hop count field to MmMessage (1h)
-  ```csharp
-  public int HopCount = 0;
-  public const int MAX_HOPS = 32;
-  ```
-- [ ] Implement hop limit checking in MmInvoke (2h)
-  ```csharp
-  if (message.HopCount >= MmMessage.MAX_HOPS) {
-      MmLogger.LogFramework($"Max hops reached at {name}");
-      return;
-  }
-  message.HopCount++;
-  ```
-- [ ] Add visited nodes tracking (HashSet) (2h)
-- [ ] Write unit tests for circular detection (1h)
+- [N/A] Uncomment message history code (`MmRelayNode.cs:560-606`) (2h)
+  - Not applicable - message history already active with CircularBuffer from QW-4
+- [✅] Add hop count field to MmMessage (1h)
+  - Added `HopCount` field (default: 0)
+  - Added `MAX_HOPS_DEFAULT` constant (50, not 32 - more robust for complex hierarchies)
+  - Added `VisitedNodes` HashSet for cycle detection
+- [✅] Implement hop limit checking in MmInvoke (2h)
+  - Added hop checking before message processing in `MmRelayNode.MmInvoke()` (line 839-850)
+  - Increments hop count on each relay
+  - Drops message and logs warning when limit exceeded
+  - Configurable via `maxMessageHops` field (default: 50, range: 0-1000)
+- [✅] Add visited nodes tracking (HashSet) (2h)
+  - Implemented cycle detection with `VisitedNodes` HashSet
+  - Tracks GameObject instance IDs
+  - Detects and prevents circular message paths
+  - Configurable via `enableCycleDetection` flag (default: true)
+- [✅] Write unit tests for circular detection (1h)
+  - Created `Assets/MercuryMessaging/Tests/HopLimitTests.cs`
+  - 15+ test cases covering hop counting, limits, cycle detection
+  - Tests for configuration, deep hierarchies, edge cases
 
 **Acceptance Criteria:**
 - Circular loops detected and prevented
