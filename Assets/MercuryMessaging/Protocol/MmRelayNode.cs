@@ -35,6 +35,7 @@ using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
 using MercuryMessaging.Support.Extensions;
+using MercuryMessaging.Support.Data;
 using MercuryMessaging.Task;
 using UnityEngine;
 using NewGraph;
@@ -77,9 +78,19 @@ namespace MercuryMessaging
 
         // public float waitTime = 0.5f;
 
-        public  List<string> messageInList = new List<string>();
+        /// <summary>
+        /// Size of the message history circular buffers.
+        /// Controls how many recent incoming and outgoing messages are tracked for debugging.
+        /// Valid range: 10-10000. Default: 100.
+        /// </summary>
+        [Header("Message History Settings")]
+        [Tooltip("Number of recent messages to keep in history for debugging (10-10000)")]
+        [Range(10, 10000)]
+        public int messageHistorySize = 100;
 
-        public  List<string> messageOutList = new List<string>();
+        public CircularBuffer<string> messageInList;
+
+        public CircularBuffer<string> messageOutList;
 
         private float displayPeriod;
 
@@ -251,6 +262,16 @@ namespace MercuryMessaging
 		public override void Awake()
         {
             MmNetworkResponder = GetComponent<IMmNetworkResponder>();
+
+            // Initialize message history circular buffers with validated size
+            int validatedSize = Mathf.Clamp(messageHistorySize, 10, 10000);
+            if (validatedSize != messageHistorySize)
+            {
+                MmLogger.LogFramework($"Message history size {messageHistorySize} out of range. Clamped to {validatedSize}.");
+                messageHistorySize = validatedSize;
+            }
+            messageInList = new CircularBuffer<string>(messageHistorySize);
+            messageOutList = new CircularBuffer<string>(messageHistorySize);
 
             InitializeNode();
             InstantiateSubResponders();
@@ -586,19 +607,13 @@ namespace MercuryMessaging
             System.DateTime currentTime = System.DateTime.Now;
             // Update the messageOutList for the current node
             messageOutList.Insert(0, item.Name + " : " + message.MmMessageType.ToString() + "\n" + currentTime.ToString("yyyy-MM-dd HH:mm:ss"));
-            if (messageOutList.Count > 10)
-            {
-                messageOutList.RemoveAt(10);
-            }
+            // No truncation needed - circular buffer handles it automatically
 
             // If the item has a responder that is a MmRelayNode, update its messageInList
             if (item.Responder is MmRelayNode relayNode && item.Responder != this)
             {
                 relayNode.messageInList.Insert(0, gameObject.name + " : " + message.MmMessageType.ToString() + "\n" + currentTime.ToString("yyyy-MM-dd HH:mm:ss"));
-                if (relayNode.messageInList.Count > 10)
-                {
-                    relayNode.messageInList.RemoveAt(10);
-                }
+                // No truncation needed - circular buffer handles it automatically
 
                 // Recursively update the child nodes of the current relay node
                 relayNode.UpdateMessages(message);
