@@ -92,6 +92,25 @@ namespace MercuryMessaging
 
         public CircularBuffer<string> messageOutList;
 
+        /// <summary>
+        /// Maximum number of relay hops a message can make before being dropped.
+        /// Prevents infinite loops in circular or complex hierarchies.
+        /// Valid range: 5-1000. Default: 50.
+        /// Set to 0 to disable hop limit checking (not recommended).
+        /// </summary>
+        [Header("Loop Prevention Settings")]
+        [Tooltip("Maximum relay hops before message is dropped (prevents infinite loops). 0 = disabled")]
+        [Range(0, 1000)]
+        public int maxMessageHops = 50;
+
+        /// <summary>
+        /// Enable cycle detection by tracking visited nodes.
+        /// When enabled, messages track which nodes they've visited and stop if they revisit a node.
+        /// More aggressive than hop counting, but uses more memory.
+        /// </summary>
+        [Tooltip("Track visited nodes to detect and prevent circular message paths")]
+        public bool enableCycleDetection = true;
+
         private float displayPeriod;
 
         private float time = 0.0f;
@@ -816,6 +835,41 @@ namespace MercuryMessaging
             //If the MmRelayNode has not been initialized, initialize it here,
             //  and refresh the parents - to ensure proper routing can occur.
             InitializeNode();
+
+            // Check hop limit to prevent infinite loops
+            if (maxMessageHops > 0)
+            {
+                if (message.HopCount >= maxMessageHops)
+                {
+                    MmLogger.LogFramework($"[HOP LIMIT] Message dropped at '{name}' after {message.HopCount} hops (max: {maxMessageHops}). Method: {message.MmMethod}");
+                    return;
+                }
+
+                // Increment hop counter for this relay
+                message.HopCount++;
+            }
+
+            // Check for cycles if cycle detection is enabled
+            if (enableCycleDetection)
+            {
+                int nodeInstanceId = gameObject.GetInstanceID();
+
+                // Initialize visited nodes set if not already done
+                if (message.VisitedNodes == null)
+                {
+                    message.VisitedNodes = new System.Collections.Generic.HashSet<int>();
+                }
+
+                // Check if we've already visited this node (circular path detected)
+                if (message.VisitedNodes.Contains(nodeInstanceId))
+                {
+                    MmLogger.LogFramework($"[CYCLE DETECTED] Message dropped at '{name}' - circular path detected. Method: {message.MmMethod}, Hops: {message.HopCount}");
+                    return;
+                }
+
+                // Mark this node as visited
+                message.VisitedNodes.Add(nodeInstanceId);
+            }
 
             //TODO: Switch to using mutex for threaded applications
             doNotModifyRoutingTable = true;
