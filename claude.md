@@ -598,6 +598,44 @@ Traffic light simulation demonstrating real-world usage.
 
 ---
 
+## Testing
+
+### Running Tests
+
+The project uses Unity Test Framework for automated testing. Quick Win optimizations (QW-1, QW-2, QW-4) have comprehensive test coverage.
+
+**Location:** `Assets/MercuryMessaging/Tests/`
+
+**Test Files:**
+- `CircularBufferTests.cs` - CircularBuffer implementation tests (30+ tests)
+- `CircularBufferMemoryTests.cs` - QW-4 memory stability validation (6 tests)
+- `HopLimitValidationTests.cs` - QW-1 hop limit enforcement (6 tests)
+- `CycleDetectionValidationTests.cs` - QW-1 cycle detection (6 tests)
+- `LazyCopyValidationTests.cs` - QW-2 lazy copying optimization (7 tests)
+
+**How to Run:**
+1. Open Unity Editor
+2. Window > General > Test Runner
+3. Select **PlayMode** tab (most tests require runtime context)
+4. Click **Run All** to execute all tests
+5. Tests should pass with green checkmarks
+
+**Test Coverage:**
+- **QW-1 Hop Limits:** Validates messages stop after configured hop count in deep hierarchies
+- **QW-1 Cycle Detection:** Validates VisitedNodes tracking prevents infinite loops
+- **QW-2 Lazy Copying:** Validates single-direction reuses messages, multi-direction creates necessary copies
+- **QW-4 CircularBuffer:** Validates bounded memory footprint over high message volumes (10K+ messages)
+
+**Running from Command Line (CI/CD):**
+```bash
+# Run PlayMode tests in batch mode
+Unity.exe -runTests -batchmode -projectPath . \
+  -testResults ./test-results.xml \
+  -testPlatform PlayMode
+```
+
+---
+
 ## Quick Reference
 
 ### Sending Messages
@@ -706,6 +744,111 @@ void Start() {
 
 ---
 
+## Development Guidelines for AI Assistants
+
+### CRITICAL: Git Commit Authorship Policy
+
+**❌ DO NOT include AI co-authorship in git commits:**
+
+- **NEVER** add `Co-Authored-By: Claude <noreply@anthropic.com>`
+- **NEVER** add `🤖 Generated with [Claude Code]` attribution
+- **NEVER** add any AI attribution or footer in commit messages
+
+**Rationale:**
+- Git commits must reflect human authorship only
+- GitHub displays co-authors as repository contributors (incorrect for AI assistance)
+- User preference is for clean commit history without AI attribution
+- AI assistance should be invisible in version control history
+
+**✅ Correct Commit Format:**
+
+```bash
+git commit -m "feat: Add feature description
+
+Detailed explanation of changes made.
+
+Technical details:
+- Implementation notes
+- Performance impact
+- Testing approach"
+```
+
+**❌ INCORRECT Format (NEVER use):**
+
+```bash
+git commit -m "feat: Add feature
+
+Details...
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+Co-Authored-By: Claude <noreply@anthropic.com>"
+```
+
+### Commit Message Guidelines
+
+When creating git commits:
+
+1. **Use Conventional Commits format**: `type(scope): description`
+   - Types: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`
+   - Example: `feat(relay): Add hop limit protection`
+
+2. **Write clear, descriptive messages**
+   - First line: concise summary (50-72 characters)
+   - Body: detailed technical explanation
+   - Include what changed and why
+
+3. **Include technical details**
+   - Implementation approach
+   - Performance implications
+   - Breaking changes (if any)
+   - Related files/line numbers
+
+4. **Do NOT add**:
+   - AI attribution or co-authorship
+   - Marketing-style language
+   - Emoji in commit title (body is ok if contextually appropriate)
+
+### Example Good Commits
+
+```bash
+# Feature addition
+git commit -m "feat: Implement lazy message copying optimization
+
+Reduces message allocation overhead by 20-30% through intelligent
+copy-on-demand algorithm. Only creates message copies when routing
+in multiple directions.
+
+Changes:
+- Added direction scanning in MmRelayNode.MmInvoke()
+- Single-direction routing reuses original message (0 copies)
+- Multi-direction creates only necessary copies (1-2 instead of 2)
+
+Performance: 20-30% fewer allocations in typical scenarios."
+
+# Bug fix
+git commit -m "fix: Prevent infinite loops with hop limit checking
+
+Added hop counter and cycle detection to MmMessage to prevent
+infinite message propagation in circular hierarchies.
+
+Implementation:
+- HopCount field tracks relay depth
+- VisitedNodes HashSet detects cycles
+- Both configurable via MmRelayNode inspector
+
+Fixes potential Unity crashes in complex message graphs."
+
+# Documentation
+git commit -m "docs: Update framework analysis context
+
+Captured implementation details for QW-4, QW-1, QW-2.
+Added code patterns, design decisions, and continuation notes
+for seamless context handoff."
+```
+
+---
+
 ## Support and Resources
 
 **Developer**: Columbia University CGUI Lab
@@ -713,6 +856,29 @@ void Start() {
 **Repository**: This codebase is part of a research project focused on VR interaction and messaging frameworks.
 
 **Key Contacts**: Check project documentation for research lab contact information.
+
+---
+
+# Starting Large Tasks
+
+When exiting plan mode with an accepted plan: 
+
+1.**Create Task Directory**:
+mkdir -p ~/git/project/dev/active/[task-name]/
+
+2.**Create Documents**:
+
+- `[task-name]-plan.md` - The accepted plan
+- `[task-name]-context.md` - Key files, decisions
+- `[task-name]-tasks.md` - Checklist of work
+
+3.**Update Regularly**: Mark tasks complete immediately
+
+### Continuing Tasks
+
+- Check `/dev/active/` for existing tasks
+- Read all three files before proceeding
+- Update "Last Updated" timestamps
 
 ---
 
