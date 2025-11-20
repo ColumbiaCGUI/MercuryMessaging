@@ -461,10 +461,22 @@ namespace MercuryMessaging
             }
 
             // Add own implementations of IMmResponder to priority list
+            // Also update Tags for existing responders (in case tags changed)
             foreach (var responder in responders)
             {
 				if (!RoutingTable.Contains(responder))
+				{
                 	MmAddToRoutingTable(responder, MmLevelFilter.Self);
+				}
+				else
+				{
+					// Update Tags for existing routing table item
+					var existingItem = RoutingTable[responder];
+					if (existingItem != null)
+					{
+						existingItem.Tags = responder.Tag;
+					}
+				}
             }
 
             for (int i = RoutingTable.Count - 1; i >= 0; i--)
