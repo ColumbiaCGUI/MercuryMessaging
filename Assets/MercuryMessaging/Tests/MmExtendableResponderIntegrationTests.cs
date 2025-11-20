@@ -51,6 +51,11 @@ namespace MercuryMessaging.Tests
             parentResponder.RegisterHandler((MmMethod)1000, parentResponder.OnCustomMethod);
             childResponder.RegisterHandler((MmMethod)1000, childResponder.OnCustomMethod);
 
+            // Refresh responders on each relay to register them with their local routing tables
+            rootRelay.MmRefreshResponders();
+            parentRelay.MmRefreshResponders();
+            childRelay.MmRefreshResponders();
+
             // Setup hierarchy
             rootRelay.MmAddToRoutingTable(parentRelay, MmLevelFilter.Child);
             parentRelay.MmAddToRoutingTable(childRelay, MmLevelFilter.Child);
