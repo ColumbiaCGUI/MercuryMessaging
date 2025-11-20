@@ -19,36 +19,37 @@ None currently identified.
 
 ## PRIORITY 2: Important Improvements
 
-### 1. Thread Safety for Concurrent Message Processing
+### 1. Thread Safety for Concurrent Message Processing ⏭️ MOVED TO ACTIVE
 
-**Location:** `Assets/MercuryMessaging/Protocol/MmRelayNode.cs` (removed line 816 TODO)
+**Status:** Documented and ready for implementation when needed
 
-**Issue:** The current implementation uses a simple flag (`doNotModifyRoutingTable`) to prevent routing table modifications during message processing. This approach is not thread-safe for multi-threaded applications.
+**Location:** `Assets/MercuryMessaging/Protocol/MmRelayNode.cs` (lines 142, 414, 630, 760)
 
-**Current Approach:**
-```csharp
-doNotModifyRoutingTable = true;
-// ... process message ...
-doNotModifyRoutingTable = false;
-```
+**Comprehensive Documentation Created:** `dev/active/thread-safety/`
 
-**Recommended Solution:**
-- Implement proper locking mechanism using `lock` or `System.Threading.Mutex`
-- Consider using `ReaderWriterLockSlim` for better concurrent read performance
-- Add thread-safe message queue if supporting async message processing
+This task has been fully researched and documented with:
+- ✅ **README.md** - Executive summary with 3 solution options
+- ✅ **thread-safety-context.md** - Technical design (9000+ characters)
+  - Current implementation analysis
+  - Why it works now (Unity main thread)
+  - Why it would fail (async/await, Jobs System)
+  - Detailed code examples for all 3 approaches
+  - Testing strategy, performance characteristics, error handling
+- ✅ **thread-safety-tasks.md** - Implementation checklist (4 phases)
+  - Phase 1: Add Lock (1-2h) - Recommended approach
+  - Phase 2: Remove Flag (0.5h)
+  - Phase 3: Add Async API (1-2h)
+  - Phase 4: Testing & Documentation (1-2h)
 
-**Impact:**
-- Current: Single-threaded Unity main thread execution (safe)
-- Future: Required if supporting multi-threaded message processing or async/await patterns
+**When to Implement:**
+- ✅ Planning async/await message processing
+- ✅ Integrating with Unity Jobs System
+- ✅ Experiencing collection modification crashes
+- ✅ Need multithreaded message generation
 
-**Effort:** 4-8 hours
+**Current Status:** Very low priority - Unity's main thread model makes this unnecessary for current use cases
 
-**Dependencies:**
-- Research Unity's main thread requirements
-- Design thread-safe message queue pattern
-- Comprehensive multi-threading tests
-
-**Status:** Deferred - Unity's main thread model makes this low priority
+**Next Steps:** See `dev/active/thread-safety/README.md` for implementation when needed
 
 ---
 
@@ -292,11 +293,12 @@ After the initial test run, 2 integration tests still failed:
 - 🟢 **Zero blockers for development**
 
 **Deferred Items (Separate Sessions):**
-1. **Thread Safety Improvements** (Priority 2, 4-8 hours)
+1. **Thread Safety Improvements** (Priority 2, 4-6 hours) ✅ Documented
    - Implement proper locking for multi-threaded scenarios
    - Very low priority: Unity's main thread model makes this unnecessary currently
    - Only needed if implementing async/await message processing
-   - See dev/active/thread-safety/ for implementation plan (to be created)
+   - **Comprehensive documentation:** `dev/active/thread-safety/` (README, context, tasks)
+   - Ready for implementation when async/await support is needed
 
 ---
 
