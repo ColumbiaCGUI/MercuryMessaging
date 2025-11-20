@@ -17,6 +17,47 @@ Tasks are organized by namespace and feature area. Each task includes effort est
 
 ---
 
+## Testing Standards
+
+All tests for this project MUST follow these patterns:
+
+### Required Approach
+- ✅ Use **Unity Test Framework** (PlayMode or EditMode)
+- ✅ Create **GameObjects programmatically** in `[SetUp]` methods
+- ✅ All components added via `GameObject.AddComponent<T>()`
+- ✅ Clean up in `[TearDown]` with `Object.DestroyImmediate()`
+
+### Prohibited Patterns
+- ❌ NO manual scene creation or loading
+- ❌ NO manual UI element prefabs
+- ❌ NO prefab dependencies from Resources folder
+
+### Example Test Pattern
+```csharp
+[Test]
+public void TestMessageVersioning()
+{
+    // Arrange - create message with version
+    GameObject obj = new GameObject("TestObj");
+    MmRelayNode relay = obj.AddComponent<MmRelayNode>();
+
+    MmMessageUIClick clickMsg = new MmMessageUIClick();
+    clickMsg.version = new Version(1, 0);
+    clickMsg.elementId = "SubmitButton";
+
+    // Act - send versioned message
+    relay.MmInvoke(clickMsg);
+
+    // Assert - verify version compatibility
+    Assert.IsTrue(clickMsg.IsCompatible(new Version(1, 0)));
+
+    // Cleanup
+    Object.DestroyImmediate(obj);
+}
+```
+
+---
+
 ## Phase 1: Architecture & Versioning (32 hours)
 
 ### Task 1.1: Design Message Library Architecture (12h)

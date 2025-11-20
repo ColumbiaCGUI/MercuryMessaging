@@ -4,6 +4,49 @@
 
 ---
 
+## Testing Standards
+
+All tests for this project MUST follow these patterns:
+
+### Required Approach
+- ✅ Use **Unity Test Framework** (PlayMode or EditMode)
+- ✅ Create **GameObjects programmatically** in `[SetUp]` methods
+- ✅ All components added via `GameObject.AddComponent<T>()`
+- ✅ Clean up in `[TearDown]` with `Object.DestroyImmediate()`
+
+### Prohibited Patterns
+- ❌ NO manual scene creation or loading
+- ❌ NO manual UI element prefabs
+- ❌ NO prefab dependencies from Resources folder
+
+### Example Test Pattern
+```csharp
+[Test]
+public void TestSiblingRouting()
+{
+    // Arrange - create hierarchy programmatically
+    GameObject parent = new GameObject("Parent");
+    GameObject child1 = new GameObject("Child1");
+    GameObject child2 = new GameObject("Child2");
+    child1.transform.SetParent(parent.transform);
+    child2.transform.SetParent(parent.transform);
+
+    MmRelayNode relay1 = child1.AddComponent<MmRelayNode>();
+    MmRelayNode relay2 = child2.AddComponent<MmRelayNode>();
+
+    // Act - test sibling message routing
+    relay1.MmInvoke(MmMethod.Initialize, new MmMetadataBlock(MmLevelFilter.Siblings));
+
+    // Assert - verify sibling received message
+    Assert.IsTrue(relay2.ReceivedMessage);
+
+    // Cleanup
+    Object.DestroyImmediate(parent);
+}
+```
+
+---
+
 ## Phase 2.1: Advanced Message Routing (6 weeks, 254 hours)
 
 ### Design & Architecture (24 hours)
