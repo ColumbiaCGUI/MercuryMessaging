@@ -51,7 +51,7 @@ namespace MercuryMessaging.Tests
             public MmMessage LastMessage { get; private set; }
             public int LastMethodValue { get; private set; }
             public bool HandlerThrew { get; private set; }
-            public bool InitializeCalled { get; private set; }
+            public bool InitializeCalled { get; set; }
 
             public void RegisterHandler(MmMethod method, Action<MmMessage> handler)
             {
