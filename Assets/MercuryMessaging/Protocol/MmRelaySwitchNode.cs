@@ -117,9 +117,9 @@ namespace MercuryMessaging
 			RespondersFSM.JumpTo(RoutingTable[newState]);
 		}
 
-        //TODO: Test this again
         /// <summary>
         /// FSM control method: Jump to State, using MmRoutingTableItem Responder reference.
+        /// Comprehensive test coverage added in FsmStateTransitionTests.cs.
         /// </summary>
         /// <param name="newState">Name of target state.</param>
 		public virtual void JumpTo(MmRelayNode newState)
