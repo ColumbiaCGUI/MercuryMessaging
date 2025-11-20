@@ -33,18 +33,10 @@
 //  
 using System.Collections.Generic;
 using System.Collections;
-using System.Linq;
 using MercuryMessaging.Support.Extensions;
 using MercuryMessaging.Support.Data;
 using MercuryMessaging.Task;
 using UnityEngine;
-#if UNITY_EDITOR
-using NewGraph;
-#endif
-using Drawing;
-using UnityEngine.XR.Interaction.Toolkit;
-using UnityEngine.InputSystem;
-using EPOOutline;
 
 
 namespace MercuryMessaging
@@ -59,28 +51,22 @@ namespace MercuryMessaging
     {
         #region Member Variables
 
-        // Graphable properties
-        // The node view that represents this graphable in the graph view.
-#if UNITY_EDITOR
-        public NodeController nodeController;
-#endif
+        /// <summary>
+        /// Performance Mode - disables debug message tracking overhead.
+        /// Enable this during performance testing to remove UpdateMessages() overhead.
+        /// When true: messageBuffer and message history tracking are disabled.
+        /// When false: Full debug visualization and message tracking enabled.
+        /// </summary>
+        [Header("Performance Settings")]
+        [Tooltip("Enable during performance tests to disable debug overhead (UpdateMessages tracking)")]
+        public static bool PerformanceMode = false;
+
         // The position of the graph node in the graph view.
         public Vector2 nodePosition = new Vector2(0, 0);
 
         public bool testToggle = false;
 
-        private bool messageDisplayIndicator = false;
-
-        // the private variable for the path on/off
-        // public GameManager gameManager;
-
-        // private MmMessage signalMessage;
-
-        // public int signalingOn = -1;
-
         public int layer;
-
-        // public float waitTime = 0.5f;
 
         /// <summary>
         /// Size of the message history circular buffers.
@@ -92,9 +78,9 @@ namespace MercuryMessaging
         [Range(10, 10000)]
         public int messageHistorySize = 100;
 
-        public CircularBuffer<string> messageInList;
+        public MmCircularBuffer<string> messageInList;
 
-        public CircularBuffer<string> messageOutList;
+        public MmCircularBuffer<string> messageOutList;
 
         /// <summary>
         /// Maximum number of relay hops a message can make before being dropped.
@@ -117,26 +103,16 @@ namespace MercuryMessaging
 
         private float displayPeriod;
 
-        private float time = 0.0f;
-
         public Transform positionOffset;
-
-        private GameObject lineObject;
 
         public List<MmRoutingTableItem> itemsToGo = new List<MmRoutingTableItem>();
 
-        private Color colorA = new Color (93f/255f, 58f/255f, 155f/255f); 
+        private Color colorA = new Color (93f/255f, 58f/255f, 155f/255f);
         private Color colorB = new Color (230f/255f, 97f/255f, 0f);
         private Color colorC = new Color (64f/255f, 176f/255f, 166f/255f);
         private Color colorD = new Color (230f/255f, 97f/255f, 0f);
 
         public List<GameObject> lineObjects = new List<GameObject>();
-
-        private GameObject XROrigin;
-
-        // public bool fromBox = false;
-
-        public HandController handController;
 
         private List<MmMessage> messageBuffer = new List<MmMessage>();
 
@@ -231,11 +207,6 @@ namespace MercuryMessaging
         /// </summary>
         public bool AutoGrabAttachedResponders = true;
 
-        private GameObject rightController;
-
-        // Commented out - unused field (referenced code is commented out at line 375)
-        // private Outline rightControllerModelOutline;
-
         /// <summary>
         /// List of associated Mercury Responders.
         /// Each Mercury Routing Table Item contains:
@@ -294,8 +265,8 @@ namespace MercuryMessaging
                 MmLogger.LogFramework($"Message history size {messageHistorySize} out of range. Clamped to {validatedSize}.");
                 messageHistorySize = validatedSize;
             }
-            messageInList = new CircularBuffer<string>(messageHistorySize);
-            messageOutList = new CircularBuffer<string>(messageHistorySize);
+            messageInList = new MmCircularBuffer<string>(messageHistorySize);
+            messageOutList = new MmCircularBuffer<string>(messageHistorySize);
 
             InitializeNode();
             InstantiateSubResponders();
@@ -303,14 +274,6 @@ namespace MercuryMessaging
 			base.Awake ();
 
             MmLogger.LogFramework(gameObject.name + " MmRelayNode Awake called.");
-
-            // // add XR simple interactable if not already added
-            // if(gameObject.GetComponent<CustomXRSimpleInteractable>() == null)
-            // {
-            //     gameObject.AddComponent<CustomXRSimpleInteractable>();
-            // }
-
-            // rightController = GameObject.Find("GameManager").GetComponent<GameManager>().rightController;
         }
 
         /// <summary>
@@ -320,28 +283,7 @@ namespace MercuryMessaging
         {
 			base.Start ();
 
-            lineObject = GameObject.Find("LineRenderer");
-
             MmLogger.LogFramework(gameObject.name + " MmRelayNode Start called.");
-
-            // gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-            // displayPeriod = gameManager.displayPeriod;
-
-            // handController = gameManager.handController;
-
-            // boxController = gameManager.boxController;
-
-
-            // if(gameObject.GetComponent<Outline>() == null)
-            // {
-            //     gameObject.AddComponent<Outline>();
-            // }
-
-
-            // gameObject.GetComponent<Outline>().OutlineWidth = 0f;
-
-            // gameObject.GetComponent<Outlinable>().enabled = false;
-            
 
             int colorIndex = layer % 4;
             Color currentColor;
@@ -360,246 +302,13 @@ namespace MercuryMessaging
             else {
                 currentColor = colorD;
             }
-            // this.GetComponent<Outline>().OutlineColor = currentColor;
 
             if(positionOffset == null)
             {
                 positionOffset = gameObject.transform;
             }
 
-            XROrigin = GameObject.Find("OVRCameraRig");
-
-            // positionOffset.position = gameObject.transform.position;
-
             itemsToGo = this.RoutingTable.GetMmRoutingTableItems(MmRoutingTable.ListFilter.All, MmLevelFilter.Child);
-           
-            // try
-            // {
-            //     if(rightController.transform.Find("XR Controller Right(Clone)/MetaQuestTouchPlus_Right").gameObject != null)
-            //     {
-            //         rightControllerModelOutline = rightController.transform.Find("XR Controller Right(Clone)/MetaQuestTouchPlus_Right").gameObject.GetComponent<Outline>();
-            //     }
-            // }
-            // catch
-            // {
-            //     // Debug.Log("Right Controller not found");
-            // }
-        }
-
-        public void LateUpdate()
-        {
-            // update to get the newest display period
-            // displayPeriod = gameManager.displayPeriod;
-
-            // draw the path for 5 seconds
-            // if ( ((time < ((layer + 1) * displayPeriod)) && (time >= ((layer) * displayPeriod)) && gameManager.pathOn))
-            // {
-            //     if ((handController.boxTriggered && layer == 0)) {
-
-            //         time += Time.deltaTime;
-                
-            //         foreach (MmRoutingTableItem item in itemsToGo)
-            //         {
-                        
-            //             Vector3 targetPosition = item.Responder.gameObject.GetComponent<MmRelayNode>().positionOffset.position;
-            //             Vector3 currentPosition = positionOffset.position;
-            //             if (gameManager.pathOn)
-            //             {
-            //                 // Draw3DArrow(currentPosition, targetPosition, Color.white);
-
-            //                 // instead of drawing the arrow, draw the path between the nodes
-            //                 DrawPath(currentPosition, targetPosition, Color.white);
-
-            //             }
-            //         }
-
-            //     }
-            //     else {
-            //         gameObject.GetComponent<Outlinable>().enabled = true;   
-            //         // increment the time
-            //         time += Time.deltaTime;
-                    
-                    
-            //         BroadCast(itemsToGo, positionOffset, layer);
-            //     }
-
-            // }
-            // else
-            // {
-            //     // gameObject.GetComponent<Outlinable>().enabled = false;  
-
-            //     time += Time.deltaTime;
-                
-
-            //     foreach (MmRoutingTableItem item in itemsToGo)
-            //     {
-                    
-            //         Vector3 targetPosition = item.Responder.gameObject.GetComponent<MmRelayNode>().positionOffset.position;
-            //         Vector3 currentPosition = positionOffset.position;
-            //         if (gameManager.pathOn)
-            //         {
-            //             // Draw3DArrow(currentPosition, targetPosition, Color.white);
-
-            //             // instead of drawing the arrow, draw the path between the nodes
-            //             DrawPath(currentPosition, targetPosition, Color.white);
-
-            //         }
-            //     }
-
-                 
-            // }
-
-            // if (gameObject.GetComponent<CustomXRSimpleInteractable>().isSelected) {
-            //     //gameObject.GetComponent<Outline>().OutlineWidth = 4f;
-            //     gameObject.GetComponent<Outlinable>().enabled = true;
-            // }
-            // else {
-            //     //gameObject.GetComponent<Outline>().OutlineWidth = 0f;
-            //     // gameObject.GetComponent<Outlinable>().enabled = false;
-            // }
-
-            // if(time>3*displayPeriod)
-            // {
-            //     gameObject.GetComponent<Outlinable>().enabled = false;
-            // }
-
-            // //time += Time.deltaTime;
-            // if (time > 4 * displayPeriod) {
-                
-            //     time = 0;
-            //     messageBuffer.Clear();
-
-            // }
-        }
-
-        // private void BroadCast(List<MmRoutingTableItem> itemsToGo, Transform PositionOffset, int depth)
-        // {
-
-        //     // Debug.Log("Wait Time"+ waitTime*layer);
-        //     //Debug.Log("right outside broadcast loop");
-        //     foreach (MmRoutingTableItem item in itemsToGo)
-        //     {
-        //         //yield return new WaitForSeconds(waitTime*layer);
-        //         //Debug.Log("Broadcast loop : " + item);
-        //         //Debug.Log(item);
-
-        //         DrawSignals(item, PositionOffset.position, depth);
-        //         // messageDisplayIndicator = true;
-        //         // StartCoroutine(DrawSignalsCoroutine(item, positionOffset.position));
-
-        //         // messageDisplayIndicator = false;                    
-        //     }
-        // }
-
-
-        // private void DrawSignals(MmRoutingTableItem item, Vector3 currentPosition, int depth)
-        // {
-        //     Vector3 targetPosition = item.Responder.gameObject.GetComponent<MmRelayNode>().positionOffset.position;
-
-        //     if (gameManager.pathOn)
-        //     {
-        //         //Debug.Log("in draw signals");
-        //         SignalVisualizer(currentPosition, targetPosition);
-
-        //         int colorIndex = depth % 4;
-        //         Color currentColor;
-
-        //         if(colorIndex == 0)
-        //         {
-        //             currentColor = colorA;
-        //         }
-        //         else if(colorIndex == 1)
-        //         {
-        //             currentColor = colorB;
-        //         }
-        //         else if(colorIndex == 2)
-        //         {
-        //             currentColor = colorC;
-        //         }
-        //         else {
-        //             currentColor = colorD;
-        //         }
-
-        //         // item.Responder.gameObject.GetComponent<Outline>().OutlineColor = currentColor;
-        //         // item.Responder.gameObject.GetComponent<Outline>().OutlineWidth = 2f;
-        //         // item.Responder.gameObject.GetComponent<Outline>().enabled = true;
-
-        //         item.Responder.gameObject.GetComponent<Outlinable>().enabled = true;
-        //         item.Responder.gameObject.GetComponent<Outlinable>().OutlineParameters.Color = currentColor;
-
-        //     }
-        // }
-
-        // draw a 3d arrow between two points
-        public void Draw3DArrow(Vector3 from, Vector3 to, Color color)
-        {
-            var draw = Draw.ingame;
-            Vector3 distance = to - from;
-
-            int numArrows = (int)(distance.magnitude / 0.3f);
-
-            for (int i = 1; i < numArrows; i++)
-            {
-                Vector3 pointA = Vector3.Lerp(from, to, i / (float)numArrows);
-                
-                draw.Arrowhead(pointA, distance.normalized, 0.06f, color);
-            }
-        }
-
-        // draw a 3d path between two points
-        public void DrawPath(Vector3 from, Vector3 to, Color color)
-        {
-            var draw = Draw.ingame;
-            draw.DashedLine(from, to, 0.06f, 0.06f, color);
-
-            gameObject.GetComponent<Outlinable>().enabled = false;
-        }
-
-        // draw a 3d arrow between invoked nodes
-        public void SignalVisualizer(Vector3 from, Vector3 to)
-        {
-            float ratio = (time - ((layer) * displayPeriod)) / displayPeriod;
-            
-            var draw = Draw.ingame;
-
-            Vector3 distance = to - from;
-
-            int numArrows = (int)(distance.magnitude / 0.2f);
-
-            int greenElement = (int)( ratio * (float)numArrows);
-
-            for (int i = 1; i < numArrows; i++)
-            {
-                Vector3 pointA = Vector3.Lerp(from, to, i / (float)numArrows);
-                
-
-                if (i == greenElement)
-                {
-                    DrawArrowheadMesh(pointA, distance.normalized,(Camera.main.transform.position-pointA).normalized, new Color(26f/255f,133f/255f,1f), 0.20f);
-                }
-                else
-                {
-                    DrawArrowheadMesh(pointA, distance.normalized, (Camera.main.transform.position-pointA).normalized,new Color(212f/255f,17f/255f, 89f/255f), 0.10f);
-                }
-            }
-        }
-
-        private void DrawArrowheadMesh(Vector3 position, Vector3 direction, Vector3 up, Color color, float size)
-        {
-            // Normalize the direction and up vectors
-            Vector3 forward = direction.normalized * size;
-            Vector3 upDirection = up.normalized * size * 0.5f;
-
-            // Calculate the right vector
-            Vector3 right = Vector3.Cross(forward, upDirection).normalized * size * 0.5f;
-
-            // Define the three corners of the triangle (arrowhead)
-            Vector3 tip = position + forward;              // Tip of the arrowhead
-            Vector3 base1 = position - right + upDirection;  // Base corner 1
-            Vector3 base2 = position + right + upDirection;  // Base corner 2
-
-            // Draw the solid triangle using ALINE's SolidTriangle function
-            Draw.ingame.SolidTriangle(tip, base1, base2, color);
         }
 
         public void UpdateMessages(MmMessage message)   
@@ -739,8 +448,16 @@ namespace MercuryMessaging
         /// </summary>
         public void MmRefreshResponders()
         {
-            List<MmResponder> responders = GetComponents<MmResponder>().Where(
-                x => (!(x is MmRelayNode))).ToList();
+            // Get all MmResponders and filter out MmRelayNodes (removed LINQ for performance)
+            var components = GetComponents<MmResponder>();
+            List<MmResponder> responders = new List<MmResponder>(components.Length);
+            foreach (var component in components)
+            {
+                if (!(component is MmRelayNode))
+                {
+                    responders.Add(component);
+                }
+            }
 
             // Add own implementations of IMmResponder to priority list
             foreach (var responder in responders)
@@ -757,25 +474,38 @@ namespace MercuryMessaging
         }
 
         /// <summary>
-        /// Iterates through RoutingTable list and assigns 
+        /// Iterates through RoutingTable list and assigns
         /// this MmRelayNode as a parent to child MmResponders.
         /// </summary>
         public void RefreshParents()
         {
 			MmLogger.LogFramework("Refreshing parents on MmRelayNode: " + gameObject.name);
 
-            foreach (var child in RoutingTable.Where(x => x.Level == MmLevelFilter.Child))
+            // Iterate through routing table and process child nodes (removed LINQ for performance)
+            foreach (var child in RoutingTable)
             {
-                var childNode = child.Responder.GetRelayNode();
-                childNode.AddParent(this);
-                childNode.RefreshParents();
+                if (child.Level == MmLevelFilter.Child)
+                {
+                    var childNode = child.Responder.GetRelayNode();
+                    childNode.AddParent(this);
+                    childNode.RefreshParents();
+                }
             }
 
-            //Optimize later
+            // Update parent entries in routing table (removed LINQ for performance)
             foreach (var parent in MmParentList)
             {
-				//bool foundItem = RoutingTable.Select ((x) => x.Responder).Any (responder => responder == parent);
-				MmRoutingTableItem foundItem = RoutingTable.First (x => x.Responder == parent);
+				// Find parent in routing table (manual search avoids LINQ allocation)
+				MmRoutingTableItem foundItem = null;
+				foreach (var item in RoutingTable)
+				{
+					if (item.Responder == parent)
+					{
+						foundItem = item;
+						break;
+					}
+				}
+
 				if (foundItem == null) {
 					MmAddToRoutingTable (parent, MmLevelFilter.Parent);
 				}
@@ -832,10 +562,18 @@ namespace MercuryMessaging
         /// Auto [de]serialized by UNET.</param>
         public override void MmInvoke(MmMessage message)
         {
-            // signalingOn = 0;
-            time = 0;
-            messageBuffer.Add(message);
-            UpdateMessages(message);
+            // Debug tracking - disabled in PerformanceMode
+            if (!PerformanceMode)
+            {
+                messageBuffer.Add(message);
+                // Prevent unbounded growth - clear buffer periodically
+                if (messageBuffer.Count > 1000)
+                {
+                    messageBuffer.Clear();
+                }
+                UpdateMessages(message);
+            }
+
             MmMessageType msgType = message.MmMessageType;
             //If the MmRelayNode has not been initialized, initialize it here,
             //  and refresh the parents - to ensure proper routing can occur.
@@ -876,28 +614,8 @@ namespace MercuryMessaging
                 message.VisitedNodes.Add(nodeInstanceId);
             }
 
-            //TODO: Switch to using mutex for threaded applications
             doNotModifyRoutingTable = true;
             MmNetworkFilter networkFilter = message.MetadataBlock.NetworkFilter;
-
-            //Experimental: Allow forced serial execution (ordered) of messages.
-            //if (serialExecution)
-            //{
-            //    if (!_executing)
-            //    {
-            //        _executing = true;
-            //    }
-            //    else
-            //    {
-            //        MmLogger.LogFramework("<<<<<>>>>>Queueing<<<<<>>>>>");
-            //        KeyValuePair<MmMessageType, MmMessage> newMessage =
-            //            new KeyValuePair<MmMessageType, MmMessage>(msgType, message);
-            //        SerialExecutionQueue.Enqueue(newMessage);
-            //        return;
-            //    }
-            //}
-            
-            //MmLogger.LogFramework (gameObject.name + ": MmRelayNode received MmMethod call: " + param.MmMethod.ToString ());
             
             //	If an MmNetworkResponder is attached to this object, and the MmMessage has not already been deserialized
             //	then call the MmNetworkResponder's network message invocation function.
@@ -1028,7 +746,8 @@ namespace MercuryMessaging
 
             doNotModifyRoutingTable = false;
 
-            while (MmRespondersToAdd.Any())
+            // Process queued responders (replaced Any() with Count for performance)
+            while (MmRespondersToAdd.Count > 0)
             {
                 var routingTableItem = MmRespondersToAdd.Dequeue();
 
