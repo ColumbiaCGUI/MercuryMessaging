@@ -23,7 +23,7 @@ public class T4_ModernCylinderResponder : MmExtendableResponder
     /// Register custom method handlers during Awake.
     /// This is called before Start() and before any messages are received.
     /// </summary>
-    protected override void Awake()
+    public override void Awake()
     {
         base.Awake(); // IMPORTANT: Always call base.Awake()
 
