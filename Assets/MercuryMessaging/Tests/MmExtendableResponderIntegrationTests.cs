@@ -205,6 +205,11 @@ namespace MercuryMessaging.Tests
             parentResponder.TagCheckEnabled = true;
             childResponder.TagCheckEnabled = true;
 
+            // CRITICAL: Refresh routing tables after changing tags to update cached tag values
+            rootRelay.MmRefreshResponders();
+            parentRelay.MmRefreshResponders();
+            childRelay.MmRefreshResponders();
+
             var message = new MmMessage { MmMethod = (MmMethod)1000 };
             message.MetadataBlock = new MmMetadataBlock(
                 MmTag.Tag1, // Only Tag1 should receive
@@ -374,6 +379,15 @@ namespace MercuryMessaging.Tests
 
             // Arrange
             var message = new MmMessageBool { MmMethod = MmMethod.SetActive, value = false };
+            // IMPORTANT: Must use MmActiveFilter.All because Unity automatically sets children
+            // inactive when parent is set inactive. Default Active filter would prevent
+            // message from reaching children after root is set inactive.
+            message.MetadataBlock = new MmMetadataBlock(
+                MmTagHelper.Everything,
+                MmLevelFilterHelper.SelfAndChildren,
+                MmActiveFilter.All,  // Include inactive GameObjects
+                MmSelectedFilter.All,
+                MmNetworkFilter.Local);
 
             // Act
             rootRelay.MmInvoke(message);
