@@ -1,0 +1,6 @@
+test_type,iterations,total_ms,avg_ms,total_ticks,avg_ticks
+Control,100000,6,0.000060,69590,0.70
+Mercury,100000,168,0.001680,1686427,16.86
+SendMessage,100000,64,0.000640,641495,6.41
+Event,100000,6,0.000060,67895,0.68
+Execute,100000,160,0.001600,1600655,16.01
