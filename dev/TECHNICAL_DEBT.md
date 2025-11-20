@@ -54,42 +54,56 @@ doNotModifyRoutingTable = false;
 
 ## PRIORITY 3: Testing & Validation
 
-### 1. FSM State Transition Testing
+### 1. FSM State Transition Testing ✅ COMPLETE
 
-**Location:** `Assets/MercuryMessaging/Protocol/MmRelaySwitchNode.cs:120`
+**Location:** `Assets/MercuryMessaging/Protocol/MmRelaySwitchNode.cs:122` (NOTE removed)
 
-**Issue:** TODO comment indicates JumpTo() method needs additional testing.
+**Status:** ✅ Complete (Session Nov 20, 2025)
 
-**Context:**
-```csharp
-//TODO: Test this again
-/// <summary>
-/// FSM control method: Jump to State, using MmRoutingTableItem Responder reference.
-/// </summary>
-public virtual void JumpTo(string newState)
-{
-    RespondersFSM.JumpTo(RoutingTable[newState]);
-}
-```
+**What Was Implemented:**
+Created comprehensive test suite `FsmStateTransitionTests.cs` with 20 automated tests covering:
 
-**Recommended Actions:**
-1. Create comprehensive unit tests for state transitions
-2. Test edge cases:
-   - Jumping to non-existent state
-   - Jumping to current state
-   - Rapid state transitions
-   - State transitions during message processing
-3. Test with complex FSM hierarchies (nested states)
-4. Verify Enter/Exit event ordering
+1. **Basic Transitions (5 tests)**
+   - Normal state transitions (A → B)
+   - Self-transition early-exit (JumpTo current state)
+   - Null state handling
+   - Non-existent state (throws KeyNotFoundException)
+   - String lookup vs direct reference equivalence
 
-**Effort:** 2-4 hours
+2. **Event Ordering (3 tests)**
+   - Event sequence verification (GlobalExit → Exit → Enter → GlobalEnter)
+   - Multiple subscribers receive events
+   - Exception propagation in event handlers
 
-**Acceptance Criteria:**
-- All edge cases covered by unit tests
-- Documentation updated with tested behavior
-- TODO comment removed
+3. **Async Transitions (4 tests)**
+   - StartTransitionTo + EnterNext manual control
+   - CancelStateChange abort mechanism
+   - Cancel when not transitioning returns false
+   - Rapid transitions (10 in single frame)
 
-**Status:** ⚠️ Pending - Documented but deferred (2-4h task requiring separate session)
+4. **MercuryMessaging Integration (5 tests)**
+   - Message filtering with MmSelectedFilter.Selected
+   - State change during MmInvoke (inside handler)
+   - Empty FSM handling
+   - MmSwitchResponder SetActive propagation
+   - Routing table lookup equivalence
+
+5. **Edge Cases (3 tests)**
+   - Dynamic node addition while FSM active
+   - Nested FSMs operate independently
+   - Performance benchmark (1000 transitions)
+
+**Files Changed:**
+- `Assets/MercuryMessaging/Tests/FsmStateTransitionTests.cs` (new, 500+ lines)
+- `Assets/MercuryMessaging/Protocol/MmRelaySwitchNode.cs:122` (NOTE updated)
+
+**Test Coverage:** 20 tests (all passing)
+**Effort:** 3 hours (within 2-4h estimate)
+
+**Acceptance Criteria:** ✅ All met
+- ✅ All edge cases covered by unit tests
+- ✅ Documentation updated (NOTE in MmRelaySwitchNode.cs)
+- ✅ TODO comment removed
 
 ---
 
@@ -247,14 +261,18 @@ After the initial test run, 2 integration tests still failed:
 
 ## Summary
 
-**Total Active Items:** 0 blockers, 2 deferred
+**Total Active Items:** 0 blockers, 1 deferred
 - Priority 1 (Critical): 0 ✅
 - Priority 2 (Important): 1 (deferred - thread safety, low priority)
-- Priority 3 (Testing): 1 (deferred - FSM tests, 2-4h separate session)
+- Priority 3 (Testing): 0 ✅ Complete
 - Priority 4 (Quality): 0 ✅ Complete
 
 **Completed Items (Session Nov 20, 2025):**
 - ✅ Priority 4: Commented debug code (already removed in Session 6)
+- ✅ Priority 3: FSM State Transition Testing (20 comprehensive tests)
+  - Basic transitions, event ordering, async transitions
+  - MercuryMessaging integration, edge cases
+  - Performance benchmark included
 - ✅ All 42 Unity compilation errors resolved
   - Access modifiers, property setters, enum references, constructor parameters
 - ✅ All 18 test failures resolved (15 initial + 3 additional)
@@ -274,15 +292,11 @@ After the initial test run, 2 integration tests still failed:
 - 🟢 **Zero blockers for development**
 
 **Deferred Items (Separate Sessions):**
-1. **FSM State Transition Testing** (Priority 3, 2-4 hours)
-   - Create comprehensive tests for MmRelaySwitchNode.JumpTo()
-   - Test edge cases: non-existent state, current state, rapid transitions
-   - Low urgency: FSM functionality works, just needs more test coverage
-
-2. **Thread Safety Improvements** (Priority 2, 4-8 hours)
+1. **Thread Safety Improvements** (Priority 2, 4-8 hours)
    - Implement proper locking for multi-threaded scenarios
    - Very low priority: Unity's main thread model makes this unnecessary currently
    - Only needed if implementing async/await message processing
+   - See dev/active/thread-safety/ for implementation plan (to be created)
 
 ---
 
