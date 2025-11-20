@@ -15,6 +15,46 @@
 
 ---
 
+## Testing Standards
+
+All tests for this project MUST follow these patterns:
+
+### Required Approach
+- ✅ Use **Unity Test Framework** (PlayMode or EditMode)
+- ✅ Create **GameObjects programmatically** in `[SetUp]` methods
+- ✅ All components added via `GameObject.AddComponent<T>()`
+- ✅ Clean up in `[TearDown]` with `Object.DestroyImmediate()`
+
+### Prohibited Patterns
+- ❌ NO manual scene creation or loading
+- ❌ NO manual UI element prefabs
+- ❌ NO prefab dependencies from Resources folder
+
+### Example Test Pattern
+```csharp
+[Test]
+public void TestDeltaStateSerialization()
+{
+    // Arrange - create network component programmatically
+    GameObject networkObj = new GameObject("NetworkObject");
+    MmNetworkResponder responder = networkObj.AddComponent<MmNetworkResponder>();
+    responder.SetProperty("health", 100);
+
+    // Act - modify state and serialize delta
+    responder.SetProperty("health", 75);
+    byte[] delta = responder.SerializeStateDelta();
+
+    // Assert - verify delta contains only changed properties
+    Assert.IsNotNull(delta);
+    Assert.AreEqual(75, responder.GetProperty("health"));
+
+    // Cleanup
+    Object.DestroyImmediate(networkObj);
+}
+```
+
+---
+
 ## Phase 2.2: Network Synchronization 2.0 (156 hours)
 
 ### Week 1-2: State Tracking (44 hours)

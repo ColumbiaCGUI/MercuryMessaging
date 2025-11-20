@@ -1,73 +1,76 @@
 # Mercury Improvements - Active Task Folders Summary
 
 **Created:** 2025-11-18
-**Updated:** 2025-11-18 (Late Evening - Custom Method Extensibility added)
-**Total Folders:** 6 focused task areas + 1 analysis
-**Total Files:** 18 documentation files (All plan + context + tasks files complete)
+**Updated:** 2025-11-20 (Consolidation - Completed tasks archived)
+**Total Active Folders:** 5 planning + 1 in-progress + 1 scripts-only
+**Status:** 3 tasks completed and archived, 4 tasks documented (planning phase), 1 task in progress
 
 ---
 
 ## Overview
 
-The mercury-improvements master documentation has been split into 4 core focused task folders plus a comprehensive framework analysis, each containing:
-1. **README.md** - Overview, goals, scope, timeline, quick start
-2. **[name]-context.md** - Technical details, architecture, design decisions
-3. **[name]-tasks.md** - Specific task checklist with acceptance criteria
+The mercury-improvements master documentation has been split into focused task folders. Completed tasks (framework-analysis, custom-method-extensibility, performance-analysis) have been archived. Active folders contain either planning documentation or in-progress work.
+
+**Folder Types:**
+1. **Planning folders** - Complete documentation, awaiting implementation (README, context, tasks)
+2. **In-progress folders** - Active development work
+3. **Scripts-only folders** - Completed analysis, keeping only reusable tools
 
 ---
 
-## Folder Structure
+## Current Folder Structure
 
 ```
 dev/active/
-├── user-study/                    [🔨 IN PROGRESS]
-│   └── (existing traffic simulation work)
+├── user-study/                    [🔨 IN PROGRESS - 140h remain]
+│   ├── user-study-context.md
+│   └── user-study-tasks.md
 │
-├── framework-analysis/            [✅ COMPLETE - 4 files] NEW
-│   ├── README.md                  [✅ NEW - Nov 18 Final]
-│   ├── framework-analysis-context.md  [✅ NEW - Nov 18 Final]
-│   ├── framework-analysis-tasks.md    [✅ NEW - Nov 18 Final]
-│   └── ANALYSIS_COMPLETE.md           [✅ NEW - Nov 18 Final]
-│
-├── custom-method-extensibility/   [✅ COMPLETE - 3 files] NEW
-│   ├── custom-method-extensibility-plan.md     [✅ NEW - Nov 18]
-│   ├── custom-method-extensibility-context.md  [✅ NEW - Nov 18]
-│   └── custom-method-extensibility-tasks.md    [✅ NEW - Nov 18]
-│
-├── routing-optimization/          [✅ COMPLETE - 3 files]
+├── routing-optimization/          [📋 DOCS COMPLETE - 420h planned]
 │   ├── README.md
 │   ├── routing-optimization-context.md
 │   └── routing-optimization-tasks.md
 │
-├── network-performance/           [✅ COMPLETE - 3 files]
-│   ├── README.md                  [✅ Complete]
-│   ├── network-performance-context.md  [✅ NEW - Nov 18]
-│   └── network-performance-tasks.md    [✅ NEW - Nov 18]
+├── network-performance/           [📋 DOCS COMPLETE - 500h planned]
+│   ├── README.md
+│   ├── network-performance-context.md
+│   └── network-performance-tasks.md
 │
-├── visual-composer/               [✅ COMPLETE - 3 files]
-│   ├── README.md                  [✅ Complete]
-│   ├── visual-composer-context.md      [✅ Complete]
-│   └── visual-composer-tasks.md        [✅ NEW - Nov 18 Final]
+├── visual-composer/               [📋 DOCS COMPLETE - 360h planned]
+│   ├── README.md
+│   ├── visual-composer-context.md
+│   └── visual-composer-tasks.md
 │
-├── standard-library/              [✅ COMPLETE - 3 files]
-│   ├── README.md                  [✅ Complete]
-│   ├── standard-library-context.md     [✅ NEW - Nov 18 Final]
-│   └── standard-library-tasks.md       [✅ NEW - Nov 18 Final]
+├── standard-library/              [📋 DOCS COMPLETE - 290h planned]
+│   ├── README.md
+│   ├── standard-library-context.md
+│   └── standard-library-tasks.md
 │
-REMOVED (Nov 18, 2025):
-├── developer-tools/               [❌ REMOVED - Deferred]
-├── marketplace-ecosystem/         [❌ REMOVED - Deferred]
-├── cross-platform/                [❌ REMOVED - Deferred]
-└── documentation-community/       [❌ REMOVED - Deferred]
+└── performance-analysis/          [📊 SCRIPTS ONLY - for future re-runs]
+    ├── README.md                  [Usage guide]
+    ├── analyze_performance.py     [Analysis tool]
+    └── requirements.txt           [Dependencies]
+
+dev/archive/
+├── framework-analysis/            [✅ ARCHIVED Nov 20 - Analysis complete]
+├── custom-method-extensibility/   [✅ ARCHIVED Nov 20 - Implementation complete]
+├── performance-analysis-final/    [✅ ARCHIVED Nov 20 - Optimization results]
+├── performance-analysis-baseline/ [✅ ARCHIVED Nov 20 - Pre-optimization baseline]
+├── mercury-improvements-original/ [✅ ARCHIVED Nov 18 - Split into focused tasks]
+├── reorganization/                [✅ ARCHIVED Nov 18 - Project restructure complete]
+└── quick-win-scene/               [✅ ARCHIVED - Scene setup complete]
 ```
 
 ---
 
-## 0. Framework Analysis (✅ COMPLETE - NEW)
+## ARCHIVED TASKS (Completed & Moved to dev/archive/)
 
-**Effort:** Analysis complete; implementation 38-46h (quick wins) + 1,570h (planned) + 200-300h (new opportunities)
+### 0. Framework Analysis (✅ ARCHIVED Nov 20)
+
+**Effort:** Analysis complete; identified 38-46h quick wins + 1,570h planned improvements
 **Priority:** HIGH (Foundation for all improvements)
 **Type:** Research & Analysis
+**Location:** `dev/archive/framework-analysis/`
 
 ### What It Covers
 - Comprehensive codebase analysis (109 C# scripts)
@@ -99,11 +102,13 @@ REMOVED (Nov 18, 2025):
 
 ---
 
-## 0.5. Custom Method Extensibility (✅ COMPLETE DOCS - NEW)
+### 0.5. Custom Method Extensibility (✅ ARCHIVED Nov 20)
 
-**Effort:** 30-40 hours (1-1.5 weeks)
+**Effort:** 30-40 hours (1-1.5 weeks) - Implementation complete
 **Priority:** MEDIUM-HIGH (Usability improvement)
 **Type:** Framework Enhancement
+**Location:** `dev/archive/custom-method-extensibility/`
+**Git Commit:** 01893adf
 
 ### What It Covers
 - New `MmExtendableResponder` base class with registration-based API
@@ -152,6 +157,8 @@ public class MyResponder : MmExtendableResponder
 1. `custom-method-extensibility-plan.md` - Strategic plan (~4,000 words)
 2. `custom-method-extensibility-context.md` - Technical context (~3,500 words)
 3. `custom-method-extensibility-tasks.md` - Task checklist (19 tasks, 30-40h)
+4. `MIGRATION_GUIDE.md` - Migration guide for existing code
+5. `SESSION_6_HANDOFF.md` - Session handoff documentation
 
 ### Integration with Other Tasks
 Complements:
@@ -161,7 +168,47 @@ Complements:
 
 ---
 
-## 1. Routing Optimization (✅ COMPLETE)
+### 0.7. Performance Analysis (✅ ARCHIVED Nov 20)
+
+**Effort:** 15.5 hours actual (10 phases complete)
+**Priority:** HIGH (Quick Win validation)
+**Type:** Testing & Validation
+**Locations:**
+- `dev/archive/performance-analysis-baseline/` - Pre-optimization baseline data
+- `dev/archive/performance-analysis-final/` - Optimization results and documentation
+- `dev/active/performance-analysis/` - Reusable analysis scripts (README, analyze_performance.py, requirements.txt)
+
+### What It Covers
+- Comprehensive performance testing infrastructure
+- Baseline performance measurement (3 scales: Small, Medium, Large)
+- Quick Win optimization validation (QW-1 through QW-6)
+- Performance comparison (Mercury vs Unity built-ins)
+- Memory stability analysis with CircularBuffer validation
+
+### Key Results
+- **Frame Time Improvement:** 2-2.2x faster (32-36ms → 15-19ms)
+- **Throughput Improvement:** 3-35x faster (28-30 msg/sec → 98-980 msg/sec)
+- **Memory Stability:** Validated - bounded and stable with QW-4
+- **Scaling:** Excellent sub-linear scaling (10 → 100 responders adds only 4ms)
+
+### Deliverables
+1. Performance test infrastructure (PerformanceTestHarness, PerformanceMonitor)
+2. Baseline + optimized performance data (CSV, graphs, statistics)
+3. PERFORMANCE_REPORT.md - Comprehensive analysis
+4. OPTIMIZATION_RESULTS.md - Optimization validation
+5. Python analysis scripts for future re-runs
+6. Performance characteristics documented in CLAUDE.md
+
+### Files Archived
+- Documentation: plan.md, context.md, tasks.md, reports, SESSION_7_HANDOFF.md
+- Results: All CSV data files, graphs/, performance statistics
+- Baseline: Pre-optimization snapshot in performance-analysis-baseline/
+
+---
+
+## ACTIVE TASKS (Planning or In-Progress)
+
+### 1. Routing Optimization (📋 DOCS COMPLETE)
 
 **Effort:** ~420 hours (10-11 weeks)
 **Priority:** CRITICAL
@@ -188,7 +235,7 @@ Complements:
 
 ---
 
-## 2. Network Performance (🔨 IN PROGRESS)
+### 2. Network Performance (📋 DOCS COMPLETE)
 
 **Effort:** ~500 hours (12-13 weeks)
 **Priority:** HIGH
@@ -216,7 +263,7 @@ Complements:
 
 ---
 
-## 3. Visual Composer
+### 3. Visual Composer (📋 DOCS COMPLETE)
 
 **Effort:** ~360 hours (9 weeks)
 **Priority:** MEDIUM-HIGH
@@ -243,7 +290,7 @@ Complements:
 
 ---
 
-## 4. Standard Library
+### 4. Standard Library (📋 DOCS COMPLETE)
 
 **Effort:** ~290 hours (7 weeks)
 **Priority:** MEDIUM
@@ -273,28 +320,56 @@ Complements:
 
 ---
 
+### 5. User Study (🔨 IN PROGRESS)
+
+**Effort:** 240 hours total (140 hours remaining)
+**Priority:** HIGH (Research deliverable)
+**Type:** Active Research
+
+### What It Covers
+- Traffic light simulation for user studies
+- Custom VR interaction scenarios
+- Data collection and analysis
+- User testing scenarios
+
+### Files
+1. `user-study-context.md` - Context and background
+2. `user-study-tasks.md` - Task checklist
+
+---
+
 ## Effort Summary by Folder
+
+**Completed Tasks (Archived):**
 
 | Folder | Effort (hours) | Weeks | Priority | Status |
 |--------|---------------|-------|----------|--------|
-| framework-analysis (quick wins) | 38-46 | 1-2 | HIGH | ✅ Complete Docs |
-| custom-method-extensibility | 30-40 | 1-1.5 | MEDIUM-HIGH | ✅ Complete Docs |
-| routing-optimization | 420 | 10-11 | CRITICAL | ✅ Complete Docs |
-| network-performance | 500 | 12-13 | HIGH | ✅ Complete Docs |
-| visual-composer | 360 | 9 | MEDIUM | ✅ Complete Docs |
-| standard-library | 290 | 7 | MEDIUM | ✅ Complete Docs |
-| framework-analysis (new features) | 200-300 | 5-8 | MEDIUM | ✅ Complete Docs |
-| **TOTAL** | **1,838-1,966** | **~44-50** | | |
+| framework-analysis | 38-46 | 1-2 | HIGH | ✅ Archived Nov 20 |
+| custom-method-extensibility | 30-40 | 1-1.5 | MEDIUM-HIGH | ✅ Archived Nov 20 |
+| performance-analysis | 15.5 | 0.4 | HIGH | ✅ Archived Nov 20 |
+| **Completed Total** | **83.5-101.5** | **~2-3** | | |
 
-**With parallelization:** ~28-33 weeks (7-8.5 months)
-**With quick wins + extensibility first:** ~30-35 weeks (7.5-9 months total, but 20-30% faster and better UX after weeks 2-3)
+**Active Tasks (Planning or In-Progress):**
 
-**Removed folders (deferred):**
+| Folder | Effort (hours) | Weeks | Priority | Status |
+|--------|---------------|-------|----------|--------|
+| user-study | 140 remain | 3.5 | HIGH | 🔨 In Progress |
+| routing-optimization | 420 | 10-11 | CRITICAL | 📋 Planning |
+| network-performance | 500 | 12-13 | HIGH | 📋 Planning |
+| visual-composer | 360 | 9 | MEDIUM | 📋 Planning |
+| standard-library | 290 | 7 | MEDIUM | 📋 Planning |
+| **Active Total** | **1,710** | **~42-43** | | |
+
+**Grand Total:** 1,793.5-1,811.5 hours (~45-46 weeks)
+
+**With parallelization:** ~28-30 weeks (7-7.5 months)
+
+**Deferred Tasks (Not currently planned):**
 - developer-tools (~680h)
 - marketplace-ecosystem (~360h)
 - cross-platform (~560h)
 - documentation-community (~720h)
-- **Total removed:** ~2,320 hours (58 weeks)
+- **Total deferred:** ~2,320 hours (58 weeks)
 
 ---
 
@@ -322,35 +397,27 @@ Complements:
 
 ## Next Actions
 
-### Immediate (Weeks 1-2) - RECOMMENDED START
-- [x] Complete remaining 6 documentation files (context + tasks for 3 folders) ✅ DONE Nov 18
+### Completed (✅ Nov 18-20)
+- [x] Complete documentation for 4 core folders ✅ DONE Nov 18
 - [x] Comprehensive framework analysis ✅ DONE Nov 18
-- [x] Custom method extensibility planning ✅ DONE Nov 18
-- [ ] **OPTION A:** Implement quick wins from framework-analysis (38-46h)
-  - [ ] Enable message history + hop limits (8h)
-  - [ ] Lazy message copying (12h)
-  - [ ] Filter result caching (8h)
-  - [ ] Circular buffers (6h)
-  - [ ] Remove LINQ allocations (4h)
-  - [ ] Validate 20-30% performance improvement
-- [ ] **OPTION B:** Implement custom method extensibility (30-40h)
-  - [ ] Create MmExtendableResponder base class
-  - [ ] Implement registration API
-  - [ ] Write comprehensive tests
-  - [ ] Update Tutorial 4 with modern pattern
-  - [ ] Create migration guide
-- [ ] Review and approve all 6 folder plans
-- [ ] Assign teams to priority folders
+- [x] Custom method extensibility implementation ✅ DONE Nov 20
+- [x] Performance analysis with optimization validation ✅ DONE Nov 20
+- [x] Archive completed tasks ✅ DONE Nov 20
+
+### Immediate (Current Priority)
+- [ ] Continue user-study work (140h remaining)
+- [ ] Begin routing-optimization implementation (420h, CRITICAL)
+- [ ] Optional: Begin network-performance in parallel (500h, HIGH)
 
 ### Short-term (Months 1-3)
-- [ ] Begin routing-optimization (after quick wins)
+- [ ] Complete user-study
 - [ ] Complete routing-optimization (Phase 2.1 + 3.1)
-- [ ] Begin network-performance (can parallel with routing Phase 3.1)
+- [ ] Begin network-performance if not already started
 - [ ] Complete network-performance (Phase 2.2 + 3.2)
 
 ### Medium-term (Months 3-6)
-- [ ] Complete visual-composer
-- [ ] Complete standard-library
+- [ ] Complete visual-composer (360h)
+- [ ] Complete standard-library (290h)
 
 ### Long-term (Months 6-8)
 - [ ] Integration and testing
@@ -396,6 +463,7 @@ All content extracted from (now archived):
 
 ---
 
-**Document Version:** 1.0
+**Document Version:** 2.0
 **Created:** 2025-11-18
+**Updated:** 2025-11-20 (Consolidation - archived completed tasks)
 **Maintained By:** Mercury Development Team

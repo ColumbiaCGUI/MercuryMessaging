@@ -17,6 +17,45 @@ Tasks are organized by tool in chronological order. Each task includes effort es
 
 ---
 
+## Testing Standards
+
+All tests for this project MUST follow these patterns:
+
+### Required Approach
+- ✅ Use **Unity Test Framework** (PlayMode or EditMode)
+- ✅ Create **GameObjects programmatically** in `[SetUp]` methods
+- ✅ All components added via `GameObject.AddComponent<T>()`
+- ✅ Clean up in `[TearDown]` with `Object.DestroyImmediate()`
+
+### Prohibited Patterns
+- ❌ NO manual scene creation or loading
+- ❌ NO manual UI element prefabs
+- ❌ NO prefab dependencies from Resources folder
+
+### Example Test Pattern
+```csharp
+[Test]
+public void TestHierarchyMirroring()
+{
+    // Arrange - create hierarchy programmatically
+    GameObject root = new GameObject("Root");
+    GameObject child = new GameObject("Child");
+    child.transform.SetParent(root.transform);
+
+    // Act - apply hierarchy mirroring
+    MmHierarchyMirror.MirrorHierarchy(root);
+
+    // Assert - verify MmRelayNodes created
+    Assert.IsNotNull(root.GetComponent<MmRelayNode>());
+    Assert.IsNotNull(child.GetComponent<MmRelayNode>());
+
+    // Cleanup
+    Object.DestroyImmediate(root);
+}
+```
+
+---
+
 ## Tool 1: Hierarchy Mirroring (36 hours)
 
 ### Task 1.1: Design UI Architecture (8h)
