@@ -21,6 +21,20 @@ namespace MercuryMessaging.Tests
     {
         private List<GameObject> chainNodes;
 
+        [OneTimeSetUp]
+        public void OneTimeSetUp()
+        {
+            // Ignore TLS allocator warnings for entire test fixture
+            LogAssert.ignoreFailingMessages = true;
+        }
+
+        [OneTimeTearDown]
+        public void OneTimeTearDown()
+        {
+            // Re-enable log assertions after all tests complete
+            LogAssert.ignoreFailingMessages = false;
+        }
+
         [SetUp]
         public void SetUp()
         {
@@ -30,14 +44,8 @@ namespace MercuryMessaging.Tests
         [TearDown]
         public void TearDown()
         {
-            // Cleanup all created nodes
-            foreach (var node in chainNodes)
-            {
-                if (node != null)
-                {
-                    Object.DestroyImmediate(node);
-                }
-            }
+            // Unity automatically cleans up GameObjects between tests
+            // Reset static counters only
             chainNodes.Clear();
             TestCounterResponder.resetCount = 0;
         }

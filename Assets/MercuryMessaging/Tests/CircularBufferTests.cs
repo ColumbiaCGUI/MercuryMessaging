@@ -1,7 +1,7 @@
 // Copyright (c) 2017-2019, Columbia University
 // All rights reserved.
 //
-// Unit tests for CircularBuffer<T> class
+// Unit tests for MmCircularBuffer<T> class
 
 using NUnit.Framework;
 using System.Collections.Generic;
@@ -11,11 +11,11 @@ using MercuryMessaging.Support.Data;
 namespace MercuryMessaging.Tests
 {
     /// <summary>
-    /// Comprehensive unit tests for CircularBuffer implementation.
+    /// Comprehensive unit tests for MmCircularBuffer implementation.
     /// Tests circular wrapping, enumeration, edge cases, and performance.
     /// </summary>
     [TestFixture]
-    public class CircularBufferTests
+    public class MmCircularBufferTests
     {
         #region Basic Functionality Tests
 
@@ -23,7 +23,7 @@ namespace MercuryMessaging.Tests
         public void Constructor_CreatesBufferWithCorrectCapacity()
         {
             // Arrange & Act
-            var buffer = new CircularBuffer<int>(50);
+            var buffer = new MmCircularBuffer<int>(50);
 
             // Assert
             Assert.AreEqual(50, buffer.Capacity);
@@ -34,7 +34,7 @@ namespace MercuryMessaging.Tests
         public void Add_IncreasesCount()
         {
             // Arrange
-            var buffer = new CircularBuffer<string>(10);
+            var buffer = new MmCircularBuffer<string>(10);
 
             // Act
             buffer.Add("item1");
@@ -48,7 +48,7 @@ namespace MercuryMessaging.Tests
         public void Add_StoresItemsInOrder()
         {
             // Arrange
-            var buffer = new CircularBuffer<int>(10);
+            var buffer = new MmCircularBuffer<int>(10);
 
             // Act
             buffer.Add(1);
@@ -71,7 +71,7 @@ namespace MercuryMessaging.Tests
         public void Add_WhenFull_OverwritesOldestItem()
         {
             // Arrange
-            var buffer = new CircularBuffer<int>(3);
+            var buffer = new MmCircularBuffer<int>(3);
             buffer.Add(1);
             buffer.Add(2);
             buffer.Add(3);
@@ -91,7 +91,7 @@ namespace MercuryMessaging.Tests
         public void Add_MultipleWraps_MaintainsCorrectOrder()
         {
             // Arrange
-            var buffer = new CircularBuffer<int>(3);
+            var buffer = new MmCircularBuffer<int>(3);
 
             // Act - Add 10 items to a size-3 buffer (wraps 3+ times)
             for (int i = 1; i <= 10; i++)
@@ -111,7 +111,7 @@ namespace MercuryMessaging.Tests
         public void Insert_WithIndexZero_AddsToFront()
         {
             // Arrange
-            var buffer = new CircularBuffer<string>(5);
+            var buffer = new MmCircularBuffer<string>(5);
             buffer.Add("first");
             buffer.Add("second");
 
@@ -130,7 +130,7 @@ namespace MercuryMessaging.Tests
         public void Insert_WhenFull_OverwritesOldest()
         {
             // Arrange
-            var buffer = new CircularBuffer<int>(3);
+            var buffer = new MmCircularBuffer<int>(3);
             buffer.Add(1);
             buffer.Add(2);
             buffer.Add(3);
@@ -154,7 +154,7 @@ namespace MercuryMessaging.Tests
         public void GetEnumerator_ReturnsItemsInCorrectOrder()
         {
             // Arrange
-            var buffer = new CircularBuffer<int>(5);
+            var buffer = new MmCircularBuffer<int>(5);
             buffer.Add(10);
             buffer.Add(20);
             buffer.Add(30);
@@ -177,7 +177,7 @@ namespace MercuryMessaging.Tests
         public void GetEnumerator_AfterWrapping_ReturnsCorrectOrder()
         {
             // Arrange
-            var buffer = new CircularBuffer<int>(3);
+            var buffer = new MmCircularBuffer<int>(3);
             buffer.Add(1);
             buffer.Add(2);
             buffer.Add(3);
@@ -198,7 +198,7 @@ namespace MercuryMessaging.Tests
         public void LINQ_Methods_WorkCorrectly()
         {
             // Arrange
-            var buffer = new CircularBuffer<int>(10);
+            var buffer = new MmCircularBuffer<int>(10);
             buffer.Add(1);
             buffer.Add(2);
             buffer.Add(3);
@@ -223,7 +223,7 @@ namespace MercuryMessaging.Tests
         public void EmptyBuffer_HasZeroCount()
         {
             // Arrange & Act
-            var buffer = new CircularBuffer<int>(10);
+            var buffer = new MmCircularBuffer<int>(10);
 
             // Assert
             Assert.AreEqual(0, buffer.Count);
@@ -234,7 +234,7 @@ namespace MercuryMessaging.Tests
         public void EmptyBuffer_EnumerationDoesNotThrow()
         {
             // Arrange
-            var buffer = new CircularBuffer<int>(10);
+            var buffer = new MmCircularBuffer<int>(10);
 
             // Act & Assert
             Assert.DoesNotThrow(() =>
@@ -251,7 +251,7 @@ namespace MercuryMessaging.Tests
         public void SingleItemBuffer_WorksCorrectly()
         {
             // Arrange
-            var buffer = new CircularBuffer<string>(1);
+            var buffer = new MmCircularBuffer<string>(1);
 
             // Act
             buffer.Add("first");
@@ -266,7 +266,7 @@ namespace MercuryMessaging.Tests
         public void Clear_RemovesAllItems()
         {
             // Arrange
-            var buffer = new CircularBuffer<int>(5);
+            var buffer = new MmCircularBuffer<int>(5);
             buffer.Add(1);
             buffer.Add(2);
             buffer.Add(3);
@@ -283,7 +283,7 @@ namespace MercuryMessaging.Tests
         public void Clear_AllowsReuse()
         {
             // Arrange
-            var buffer = new CircularBuffer<int>(3);
+            var buffer = new MmCircularBuffer<int>(3);
             buffer.Add(1);
             buffer.Add(2);
             buffer.Clear();
@@ -307,7 +307,7 @@ namespace MercuryMessaging.Tests
         public void WorksWithReferenceTypes()
         {
             // Arrange
-            var buffer = new CircularBuffer<string>(3);
+            var buffer = new MmCircularBuffer<string>(3);
 
             // Act
             buffer.Add("apple");
@@ -323,7 +323,7 @@ namespace MercuryMessaging.Tests
         public void WorksWithNullValues()
         {
             // Arrange
-            var buffer = new CircularBuffer<string>(3);
+            var buffer = new MmCircularBuffer<string>(3);
 
             // Act
             buffer.Add("value");
@@ -342,7 +342,7 @@ namespace MercuryMessaging.Tests
         public void WorksWithComplexTypes()
         {
             // Arrange
-            var buffer = new CircularBuffer<List<int>>(3);
+            var buffer = new MmCircularBuffer<List<int>>(3);
             var list1 = new List<int> { 1, 2, 3 };
             var list2 = new List<int> { 4, 5, 6 };
 
@@ -364,7 +364,7 @@ namespace MercuryMessaging.Tests
         public void Add_LargeNumberOfItems_PerformsEfficiently()
         {
             // Arrange
-            var buffer = new CircularBuffer<int>(1000);
+            var buffer = new MmCircularBuffer<int>(1000);
 
             // Act - Add 10,000 items (10x capacity)
             var startTime = System.DateTime.Now;
@@ -383,7 +383,7 @@ namespace MercuryMessaging.Tests
         public void Enumeration_LargeBuffer_PerformsEfficiently()
         {
             // Arrange
-            var buffer = new CircularBuffer<int>(1000);
+            var buffer = new MmCircularBuffer<int>(1000);
             for (int i = 0; i < 1000; i++)
             {
                 buffer.Add(i);
@@ -411,7 +411,7 @@ namespace MercuryMessaging.Tests
         public void Insert_BehavesLikeListInsertAtZero()
         {
             // Arrange
-            var buffer = new CircularBuffer<string>(5);
+            var buffer = new MmCircularBuffer<string>(5);
             var list = new List<string>();
 
             // Act - Perform same operations on both
@@ -444,7 +444,7 @@ namespace MercuryMessaging.Tests
         public void StressTest_AlternatingAddAndInsert()
         {
             // Arrange
-            var buffer = new CircularBuffer<int>(100);
+            var buffer = new MmCircularBuffer<int>(100);
 
             // Act - Alternate between Add and Insert
             for (int i = 0; i < 1000; i++)
@@ -464,7 +464,7 @@ namespace MercuryMessaging.Tests
         public void StressTest_ClearAndRefill()
         {
             // Arrange
-            var buffer = new CircularBuffer<int>(50);
+            var buffer = new MmCircularBuffer<int>(50);
 
             // Act - Fill, clear, refill multiple times
             for (int cycle = 0; cycle < 10; cycle++)
