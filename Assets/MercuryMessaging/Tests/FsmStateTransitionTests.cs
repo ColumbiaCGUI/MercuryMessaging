@@ -500,13 +500,13 @@ namespace MercuryMessaging.Tests
         {
             public int InitializeCount { get; private set; }
 
-            public override void MmInvoke(MmMethod mmMethod, MmMetadataBlock mmMetadataBlock, bool transmit)
+            public override void MmInvoke(MmMessage message)
             {
-                if (mmMethod == MmMethod.Initialize)
+                if (message.MmMethod == MmMethod.Initialize)
                 {
                     InitializeCount++;
                 }
-                base.MmInvoke(mmMethod, mmMetadataBlock, transmit);
+                base.MmInvoke(message);
             }
         }
 
@@ -515,9 +515,9 @@ namespace MercuryMessaging.Tests
             public MmRelayNode targetNode;
             public MmRelaySwitchNode switchNode;
 
-            public override void MmInvoke(MmMethod mmMethod, MmMetadataBlock mmMetadataBlock, bool transmit)
+            public override void MmInvoke(MmMessage message)
             {
-                if (mmMethod == MmMethod.Initialize)
+                if (message.MmMethod == MmMethod.Initialize)
                 {
                     // Trigger state transition during message processing
                     if (targetNode != null && switchNode != null)
@@ -525,7 +525,7 @@ namespace MercuryMessaging.Tests
                         switchNode.RespondersFSM.JumpTo(targetNode);
                     }
                 }
-                base.MmInvoke(mmMethod, mmMetadataBlock, transmit);
+                base.MmInvoke(message);
             }
         }
 
