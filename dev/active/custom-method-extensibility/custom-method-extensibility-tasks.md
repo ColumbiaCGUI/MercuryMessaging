@@ -22,6 +22,43 @@ This document provides a detailed, actionable checklist for implementing the cus
 
 ---
 
+## Testing Standards
+
+All tests for this project MUST follow these patterns:
+
+### Required Approach
+- ✅ Use **Unity Test Framework** (PlayMode or EditMode)
+- ✅ Create **GameObjects programmatically** in `[SetUp]` methods
+- ✅ All components added via `GameObject.AddComponent<T>()`
+- ✅ Clean up in `[TearDown]` with `Object.DestroyImmediate()`
+
+### Prohibited Patterns
+- ❌ NO manual scene creation or loading
+- ❌ NO manual UI element prefabs
+- ❌ NO prefab dependencies from Resources folder
+
+### Example Test Pattern
+```csharp
+[Test]
+public void TestCustomMethodRegistration()
+{
+    // Arrange - create hierarchy programmatically
+    GameObject testObj = new GameObject("TestObject");
+    MmExtendableResponder responder = testObj.AddComponent<MmExtendableResponder>();
+
+    // Act - perform test
+    responder.RegisterCustomHandler((MmMethod)1001, HandleCustomMethod);
+
+    // Assert - verify behavior
+    Assert.IsTrue(responder.HasHandler((MmMethod)1001));
+
+    // Cleanup
+    Object.DestroyImmediate(testObj);
+}
+```
+
+---
+
 ## Phase 1: Core Implementation (12-16 hours)
 
 **Goal:** Create fully functional `MmExtendableResponder` class with hybrid fast/slow path routing.
