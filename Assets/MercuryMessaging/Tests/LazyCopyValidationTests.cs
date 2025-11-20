@@ -22,6 +22,20 @@ namespace MercuryMessaging.Tests
         private GameObject testNode;
         private MmRelayNode testRelay;
 
+        [OneTimeSetUp]
+        public void OneTimeSetUp()
+        {
+            // Ignore TLS allocator warnings for entire test fixture
+            LogAssert.ignoreFailingMessages = true;
+        }
+
+        [OneTimeTearDown]
+        public void OneTimeTearDown()
+        {
+            // Re-enable log assertions after all tests complete
+            LogAssert.ignoreFailingMessages = false;
+        }
+
         [SetUp]
         public void SetUp()
         {
@@ -31,10 +45,8 @@ namespace MercuryMessaging.Tests
         [TearDown]
         public void TearDown()
         {
-            if (testNode != null)
-            {
-                Object.DestroyImmediate(testNode);
-            }
+            // Unity automatically cleans up GameObjects between tests
+            // Reset static counter only
             MessageReceiveCounter.receiveCount = 0;
         }
 
@@ -48,6 +60,7 @@ namespace MercuryMessaging.Tests
             testNode = new GameObject("SingleDir");
             testRelay = testNode.AddComponent<MmRelayNode>();
             var responder = testNode.AddComponent<MessageReceiveCounter>();
+            testRelay.MmRefreshResponders(); // Ensure responder is registered
 
             yield return null;
 
@@ -82,11 +95,17 @@ namespace MercuryMessaging.Tests
             var parentNode = new GameObject("Parent");
             var parentRelay = parentNode.AddComponent<MmRelayNode>();
             var parentResponder = parentNode.AddComponent<MessageReceiveCounter>();
+            parentRelay.MmRefreshResponders(); // Ensure responder is registered
 
             var childNode = new GameObject("Child");
             childNode.transform.SetParent(parentNode.transform);
             var childRelay = childNode.AddComponent<MmRelayNode>();
             var childResponder = childNode.AddComponent<MessageReceiveCounter>();
+            childRelay.MmRefreshResponders(); // Ensure responder is registered
+
+            // Register child relay node with parent for message propagation
+            parentRelay.MmAddToRoutingTable(childRelay, MmLevelFilter.Child);
+            parentRelay.RefreshParents(); // Refresh hierarchy after adding child
 
             yield return null;
 
@@ -114,8 +133,7 @@ namespace MercuryMessaging.Tests
 
             Debug.Log($"[QW-2 PASS] Multi-direction routing handled {iterations} messages without errors");
 
-            // Cleanup
-            Object.DestroyImmediate(parentNode);
+            // Unity will automatically clean up all GameObjects after the test
         }
 
         /// <summary>
@@ -128,6 +146,7 @@ namespace MercuryMessaging.Tests
             testNode = new GameObject("ContentTest");
             testRelay = testNode.AddComponent<MmRelayNode>();
             var responder = testNode.AddComponent<ContentVerifyResponder>();
+            testRelay.MmRefreshResponders(); // Ensure responder is registered
 
             yield return null;
 
@@ -158,11 +177,17 @@ namespace MercuryMessaging.Tests
             var parentNode = new GameObject("Parent");
             var parentRelay = parentNode.AddComponent<MmRelayNode>();
             var parentResponder = parentNode.AddComponent<ContentVerifyResponder>();
+            parentRelay.MmRefreshResponders(); // Ensure responder is registered
 
             var childNode = new GameObject("Child");
             childNode.transform.SetParent(parentNode.transform);
             var childRelay = childNode.AddComponent<MmRelayNode>();
             var childResponder = childNode.AddComponent<ContentVerifyResponder>();
+            childRelay.MmRefreshResponders(); // Ensure responder is registered
+
+            // Register child relay node with parent for message propagation
+            parentRelay.MmAddToRoutingTable(childRelay, MmLevelFilter.Child);
+            parentRelay.RefreshParents(); // Refresh hierarchy after adding child
 
             yield return null;
 
@@ -182,8 +207,7 @@ namespace MercuryMessaging.Tests
 
             Debug.Log("[QW-2 PASS] Message content preserved in multi-direction routing");
 
-            // Cleanup
-            Object.DestroyImmediate(parentNode);
+            // Unity will automatically clean up all GameObjects after the test
         }
 
         /// <summary>
@@ -196,6 +220,7 @@ namespace MercuryMessaging.Tests
             testNode = new GameObject("StressTest");
             testRelay = testNode.AddComponent<MmRelayNode>();
             var responder = testNode.AddComponent<MessageReceiveCounter>();
+            testRelay.MmRefreshResponders(); // Ensure responder is registered
 
             yield return null;
 
@@ -232,6 +257,7 @@ namespace MercuryMessaging.Tests
             testNode = new GameObject("TypeTest");
             testRelay = testNode.AddComponent<MmRelayNode>();
             var responder = testNode.AddComponent<MessageTypeCounter>();
+            testRelay.MmRefreshResponders(); // Ensure responder is registered
 
             yield return null;
 

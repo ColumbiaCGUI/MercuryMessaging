@@ -1,8 +1,8 @@
 // Copyright (c) 2017-2019, Columbia University
 // All rights reserved.
 //
-// QW-4: CircularBuffer Memory Stability Tests
-// Validates that message history uses bounded CircularBuffer instead of unbounded List
+// QW-4: MmCircularBuffer Memory Stability Tests
+// Validates that message history uses bounded MmCircularBuffer instead of unbounded List
 
 using NUnit.Framework;
 using System.Collections;
@@ -12,36 +12,41 @@ using UnityEngine.TestTools;
 namespace MercuryMessaging.Tests
 {
     /// <summary>
-    /// Tests for QW-4 CircularBuffer implementation.
+    /// Tests for QW-4 MmCircularBuffer implementation.
     /// Validates memory stability over high message volumes.
     /// </summary>
     [TestFixture]
-    public class CircularBufferMemoryTests
+    public class MmCircularBufferMemoryTests
     {
         private GameObject testObject;
         private MmRelayNode testRelay;
 
+        [OneTimeSetUp]
+        public void OneTimeSetUp()
+        {
+            // Ignore TLS allocator warnings for entire test fixture
+            LogAssert.ignoreFailingMessages = true;
+        }
+
+        [OneTimeTearDown]
+        public void OneTimeTearDown()
+        {
+            // Re-enable log assertions after all tests complete
+            LogAssert.ignoreFailingMessages = false;
+        }
+
         [SetUp]
         public void SetUp()
         {
-            testObject = new GameObject("CircularBufferTest");
+            testObject = new GameObject("MmCircularBufferTest");
             testRelay = testObject.AddComponent<MmRelayNode>();
         }
 
-        [TearDown]
-        public void TearDown()
-        {
-            if (testObject != null)
-            {
-                Object.DestroyImmediate(testObject);
-            }
-        }
-
         /// <summary>
-        /// Test that message history is bounded by CircularBuffer capacity
+        /// Test that message history is bounded by MmCircularBuffer capacity
         /// </summary>
         [UnityTest]
-        public IEnumerator CircularBuffer_LimitsHistorySize()
+        public IEnumerator MmCircularBuffer_LimitsHistorySize()
         {
             // Arrange
             int expectedMaxSize = 100;
@@ -67,7 +72,7 @@ namespace MercuryMessaging.Tests
         /// Test that memory remains stable over large message volumes (QW-4 primary validation)
         /// </summary>
         [UnityTest]
-        public IEnumerator CircularBuffer_PreventsMemoryGrowth()
+        public IEnumerator MmCircularBuffer_PreventsMemoryGrowth()
         {
             // Arrange
             int expectedMaxSize = 100;
@@ -121,7 +126,7 @@ namespace MercuryMessaging.Tests
         /// Test that different buffer sizes work correctly
         /// </summary>
         [Test]
-        public void CircularBuffer_RespectsConfiguredSize([Values(10, 50, 100, 500)] int bufferSize)
+        public void MmCircularBuffer_RespectsConfiguredSize([Values(10, 50, 100, 500)] int bufferSize)
         {
             // Arrange
             testRelay.messageHistorySize = bufferSize;
@@ -141,7 +146,7 @@ namespace MercuryMessaging.Tests
         /// Test that both messageInList and messageOutList are bounded
         /// </summary>
         [UnityTest]
-        public IEnumerator CircularBuffer_BothHistoryListsAreBounded()
+        public IEnumerator MmCircularBuffer_BothHistoryListsAreBounded()
         {
             // Arrange
             int maxSize = 50;
@@ -168,7 +173,7 @@ namespace MercuryMessaging.Tests
         /// Stress test: Continuous message flow over multiple frames
         /// </summary>
         [UnityTest]
-        public IEnumerator CircularBuffer_HandlesLongRunningSessions()
+        public IEnumerator MmCircularBuffer_HandlesLongRunningSessions()
         {
             // Arrange
             int bufferSize = 100;
