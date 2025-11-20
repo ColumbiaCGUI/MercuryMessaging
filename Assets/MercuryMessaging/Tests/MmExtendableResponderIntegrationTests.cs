@@ -129,7 +129,7 @@ namespace MercuryMessaging.Tests
             var message = new MmMessage { MmMethod = (MmMethod)1000 };
             message.MetadataBlock = new MmMetadataBlock(
                 MmTagHelper.Everything,
-                MmLevelFilterHelper.Child,
+                MmLevelFilter.Child,
                 MmActiveFilter.All,
                 MmSelectedFilter.All,
                 MmNetworkFilter.Local);
@@ -150,7 +150,7 @@ namespace MercuryMessaging.Tests
             var message = new MmMessage { MmMethod = (MmMethod)1000 };
             message.MetadataBlock = new MmMetadataBlock(
                 MmTagHelper.Everything,
-                MmLevelFilterHelper.Parent,
+                MmLevelFilter.Parent,
                 MmActiveFilter.All,
                 MmSelectedFilter.All,
                 MmNetworkFilter.Local);
@@ -202,7 +202,7 @@ namespace MercuryMessaging.Tests
 
             var message = new MmMessage { MmMethod = (MmMethod)1000 };
             message.MetadataBlock = new MmMetadataBlock(
-                MmTagHelper.Tag1, // Only Tag1 should receive
+                MmTag.Tag1, // Only Tag1 should receive
                 MmLevelFilterHelper.SelfAndChildren,
                 MmActiveFilter.All,
                 MmSelectedFilter.All,
@@ -256,11 +256,11 @@ namespace MercuryMessaging.Tests
             parentObject.SetActive(false); // Deactivate parent
             var message = new MmMessage { MmMethod = (MmMethod)1000 };
             message.MetadataBlock = new MmMetadataBlock(
-                MmLevelFilter.SelfAndChildren,
+                MmTagHelper.Everything,
+                MmLevelFilterHelper.SelfAndChildren,
                 MmActiveFilter.Active,
                 MmSelectedFilter.All,
-                MmNetworkFilter.Local,
-                MmTag.Everything);
+                MmNetworkFilter.Local);
 
             // Act
             rootRelay.MmInvoke(message);
