@@ -1,14 +1,23 @@
 # MercuryMessaging Documentation Inventory
 
-**Last Updated:** 2025-11-18
-**Total Files:** 34 markdown files + 8 Claude custom files
-**Total Content:** 60,000+ words
+**Historical Snapshot:** 2025-11-18
+**Status:** ⚠️ Historical reference - see note below
+**Total Files (Nov 18):** 34 markdown files + 8 Claude custom files
+**Total Content (Nov 18):** 60,000+ words
+
+**📌 Note:** This inventory reflects the state as of Nov 18, 2025. Since then:
+- 3 tasks have been completed and archived (framework-analysis, custom-method-extensibility, performance-analysis)
+- Documentation has grown to 70+ markdown files (~150,000 words)
+- For current status, see:
+  - [dev/active/MASTER-SUMMARY.md](./active/MASTER-SUMMARY.md) - Current active tasks
+  - [dev/active/STATUS-REPORT.md](./active/STATUS-REPORT.md) - Detailed status (Nov 20)
+  - [dev/archive/README.md](./archive/README.md) - Archived tasks overview
 
 ---
 
-## Documentation Organization Summary
+## Documentation Organization Summary (Nov 18)
 
-This document provides a complete inventory of all documentation files in the MercuryMessaging project and recommendations for consolidation.
+This document provides a historical inventory of documentation files as of November 18, 2025.
 
 ---
 

@@ -1,6 +1,6 @@
 # MercuryMessaging Complete Documentation Index
 
-**Last Updated:** 2025-11-18
+**Last Updated:** 2025-11-20
 **Purpose:** Central navigation hub for all project documentation
 
 ---
@@ -13,9 +13,9 @@
 3. [`Assets/MercuryMessaging/Examples/`](../Assets/MercuryMessaging/Examples/) - Code examples
 
 **💻 Developer starting work?** Start here:
-1. [`dev/CONTEXT_RESET_READY.md`](./CONTEXT_RESET_READY.md) - Latest session summary
-2. [`dev/active/MASTER-SUMMARY.md`](./active/MASTER-SUMMARY.md) - All active tasks
-3. [`dev/active/framework-analysis/`](./active/framework-analysis/) - Performance analysis
+1. [`dev/active/MASTER-SUMMARY.md`](./active/MASTER-SUMMARY.md) - All active tasks (5 planning + 1 in-progress)
+2. [`dev/active/STATUS-REPORT.md`](./active/STATUS-REPORT.md) - Current status (Nov 20)
+3. [`dev/archive/framework-analysis/`](./archive/framework-analysis/) - Performance analysis (completed)
 
 **📊 Project manager tracking progress?** Start here:
 1. [`dev/active/MASTER-SUMMARY.md`](./active/MASTER-SUMMARY.md) - Timeline and effort estimates
@@ -80,36 +80,32 @@
 | File | Purpose | When to Read |
 |------|---------|--------------|
 | [dev/README.md](./README.md) | Dev docs pattern explanation | First time in dev/ |
-| [dev/CONTEXT_RESET_READY.md](./CONTEXT_RESET_READY.md) | Session summary (Nov 18) | After context reset |
-| [dev/SESSION_HANDOFF.md](./SESSION_HANDOFF.md) | Critical handoff info | Starting new session |
-| [dev/DOCUMENTATION_COMPLETE.md](./DOCUMENTATION_COMPLETE.md) | Documentation summary | Understanding docs scope |
+| [dev/TECHNICAL_DEBT.md](./TECHNICAL_DEBT.md) | Active technical debt tracking | Planning work |
 | [dev/DOCUMENTATION_INVENTORY.md](./DOCUMENTATION_INVENTORY.md) | Complete file catalog | Finding specific docs |
 | [dev/DOCUMENTATION_INDEX.md](./DOCUMENTATION_INDEX.md) | This file | Navigation |
+
+### Historical Session Handoffs (Archived)
+
+| File | Purpose |
+|------|---------|
+| [dev/archive/session-handoffs/SESSION_HANDOFF_2025-11-18.md](./archive/session-handoffs/SESSION_HANDOFF_2025-11-18.md) | Nov 18 session handoff |
+| [dev/archive/session-handoffs/CONTEXT_RESET_READY_2025-11-18.md](./archive/session-handoffs/CONTEXT_RESET_READY_2025-11-18.md) | Nov 18 context summary |
+| [dev/archive/documentation-history/DOCUMENTATION_COMPLETE_2025-11-18.md](./archive/documentation-history/DOCUMENTATION_COMPLETE_2025-11-18.md) | Nov 18 documentation milestone |
 
 ---
 
 ## Active Tasks (dev/active/)
 
+**Active Folders:** 6 (5 planning + 1 in-progress)
+**Archived Tasks:** 7 (see archive section below)
+
 ### Master Documentation
 
 | File | Purpose |
 |------|---------|
-| [MASTER-SUMMARY.md](./active/MASTER-SUMMARY.md) | Overview of all 5 active task areas |
-| [STATUS-REPORT.md](./active/STATUS-REPORT.md) | Completion status (46% files) |
-| [SESSION_HANDOFF.md](./active/SESSION_HANDOFF.md) | Active tasks status |
-
-### Task #0: Framework Analysis (NEW - Nov 18)
-
-**Priority:** HIGH | **Effort:** 38-46h (quick wins) + 1,808-1,926h (total)
-
-| File | Purpose |
-|------|---------|
-| [README.md](./active/framework-analysis/README.md) | Executive summary, quick wins list |
-| [ANALYSIS_COMPLETE.md](./active/framework-analysis/ANALYSIS_COMPLETE.md) | Analysis completion report |
-| [framework-analysis-context.md](./active/framework-analysis/framework-analysis-context.md) | Comprehensive findings (20,000+ words) |
-| [framework-analysis-tasks.md](./active/framework-analysis/framework-analysis-tasks.md) | Quick wins + actionable tasks |
-
-**Key Findings:** 10 optimization opportunities, 6 quick wins (38-46h for 20-30% improvement)
+| [MASTER-SUMMARY.md](./active/MASTER-SUMMARY.md) | Overview of all active tasks (v2.0 - Nov 20) |
+| [STATUS-REPORT.md](./active/STATUS-REPORT.md) | Current status (Nov 20 consolidation) |
+| [SESSION_HANDOFF.md](./active/SESSION_HANDOFF.md) | Active tasks status (Nov 18) |
 
 ---
 
@@ -184,14 +180,49 @@
 
 ---
 
+### Task #6: Performance Analysis (📊 SCRIPTS ONLY)
+
+**Status:** Analysis complete (Nov 20), scripts kept for future re-runs
+
+| File | Purpose |
+|------|---------|
+| [README.md](./active/performance-analysis/README.md) | Usage guide for analysis tools |
+| [analyze_performance.py](./active/performance-analysis/analyze_performance.py) | Python analysis script |
+| [requirements.txt](./active/performance-analysis/requirements.txt) | Python dependencies |
+
+**Purpose:** Reusable performance testing infrastructure for future validation
+
+**Related:** See [dev/archive/performance-analysis-final/](./archive/performance-analysis-final/) for optimization results
+
+---
+
 ## Archived Tasks (dev/archive/)
 
-### Completed Work
+**Total Archived:** 7 completed tasks with full documentation
 
-| Folder | Completion Date | Documentation |
-|--------|----------------|---------------|
-| [reorganization/](./archive/reorganization/) | Nov 18, 2025 | 3 files (context + tasks + archive report) |
-| [mercury-improvements-original/](./archive/mercury-improvements-original/) | Nov 18, 2025 | 5 files (original master plan, now split) |
+### Completed Implementation Tasks
+
+| Folder | Completion Date | Effort | Status |
+|--------|----------------|--------|--------|
+| [framework-analysis/](./archive/framework-analysis/) | Nov 18, 2025 | Analysis complete | ✅ 10 bottlenecks identified, 6 quick wins documented |
+| [custom-method-extensibility/](./archive/custom-method-extensibility/) | Nov 20, 2025 | 30-40h | ✅ MmExtendableResponder implemented (commit 01893adf) |
+| [performance-analysis-final/](./archive/performance-analysis-final/) | Nov 20, 2025 | 15.5h | ✅ 2-2.2x frame time improvement validated |
+| [performance-analysis-baseline/](./archive/performance-analysis-baseline/) | Nov 20, 2025 | N/A | ✅ Pre-optimization baseline data preserved |
+
+### Completed Organizational Tasks
+
+| Folder | Completion Date | Purpose |
+|--------|----------------|---------|
+| [reorganization/](./archive/reorganization/) | Nov 18, 2025 | Assets folder restructure (29 → 10 folders) |
+| [mercury-improvements-original/](./archive/mercury-improvements-original/) | Nov 18, 2025 | Original master plan (split into 6 focused tasks) |
+| [quick-win-scene/](./archive/quick-win-scene/) | Earlier | Scene setup for performance testing |
+
+### Historical Documentation
+
+| Folder | Purpose |
+|--------|---------|
+| [session-handoffs/](./archive/session-handoffs/) | Session handoff documents (Nov 18) |
+| [documentation-history/](./archive/documentation-history/) | Documentation milestone records |
 
 ---
 
@@ -230,21 +261,23 @@
 
 1. [BRANCHES.md](../BRANCHES.md) - Git workflow
 2. [CLAUDE.md](../CLAUDE.md) - Architecture and patterns
-3. [dev/active/framework-analysis/](./active/framework-analysis/) - Performance considerations
+3. [dev/archive/framework-analysis/](./archive/framework-analysis/) - Performance considerations
 4. Task-specific context files
 
 ### For Project Planning
 
-1. [dev/active/MASTER-SUMMARY.md](./active/MASTER-SUMMARY.md) - All tasks overview
-2. [dev/CONTEXT_RESET_READY.md](./CONTEXT_RESET_READY.md) - Current state
+1. [dev/active/MASTER-SUMMARY.md](./active/MASTER-SUMMARY.md) - All tasks overview (v2.0)
+2. [dev/active/STATUS-REPORT.md](./active/STATUS-REPORT.md) - Current status (Nov 20)
 3. Individual task READMEs - Effort estimates
 4. Individual task files - Detailed breakdowns
 
 ### For Understanding Past Work
 
-1. [dev/archive/](./archive/) - Completed task documentation
-2. [REORGANIZATION_SUMMARY.md](../REORGANIZATION_SUMMARY.md) - Assets reorganization history
-3. [dev/DOCUMENTATION_COMPLETE.md](./DOCUMENTATION_COMPLETE.md) - Documentation history
+1. [dev/archive/](./archive/) - 7 completed tasks with full documentation
+2. [dev/archive/framework-analysis/](./archive/framework-analysis/) - Performance analysis findings
+3. [dev/archive/custom-method-extensibility/](./archive/custom-method-extensibility/) - MmExtendableResponder implementation
+4. [dev/archive/performance-analysis-final/](./archive/performance-analysis-final/) - Optimization validation results
+5. [REORGANIZATION_SUMMARY.md](../REORGANIZATION_SUMMARY.md) - Assets reorganization history
 
 ---
 
@@ -287,20 +320,24 @@
 
 ## File Statistics
 
-**Total Documentation:** 43+ markdown files
-**Total Content:** 60,000+ words
+**Total Documentation:** 70+ markdown files (~150,000 words)
+**Active Tasks:** 6 folders (5 planning + 1 in-progress)
+**Archived Tasks:** 7 completed tasks
 **Coverage:** 100% of active work documented
 
-**By Type:**
-- User-facing: 15 files
-- Developer-facing: 20+ files
-- Third-party: 5 files
-- Custom tooling: 8 files
+**Active Development:**
+- User-study: 2 files (in progress)
+- Planning tasks: 12 files (4 tasks × 3 files each)
+- Performance scripts: 3 files (reusable tools)
 
-**By Status:**
-- Complete: 38 files (90%)
-- In progress: 2 files
-- Planned: 3 files
+**Archive:**
+- Completed tasks: 70+ files
+- Session handoffs: 2 files
+- Documentation history: 1 file
+
+**Root Documentation:**
+- Project docs: 3 files (README, CLAUDE, BRANCHES)
+- Dev infrastructure: 4 files
 
 ---
 
@@ -315,22 +352,23 @@
 
 **Framework Contributor:**
 1. [CLAUDE.md](../CLAUDE.md)
-2. [dev/active/framework-analysis/](./active/framework-analysis/)
+2. [dev/archive/framework-analysis/](./archive/framework-analysis/)
 3. [dev/active/routing-optimization/](./active/routing-optimization/)
 
 **Project Manager:**
 1. [dev/active/MASTER-SUMMARY.md](./active/MASTER-SUMMARY.md)
-2. [dev/CONTEXT_RESET_READY.md](./CONTEXT_RESET_READY.md)
-3. [dev/active/STATUS-REPORT.md](./active/STATUS-REPORT.md)
+2. [dev/active/STATUS-REPORT.md](./active/STATUS-REPORT.md)
+3. [dev/TECHNICAL_DEBT.md](./TECHNICAL_DEBT.md)
 
 **User Study Researcher:**
 1. [Assets/UserStudy/README.md](../Assets/UserStudy/README.md)
 2. [dev/active/user-study/](./active/user-study/)
 
 **Performance Engineer:**
-1. [dev/active/framework-analysis/](./active/framework-analysis/)
-2. [dev/active/routing-optimization/](./active/routing-optimization/)
-3. [dev/active/network-performance/](./active/network-performance/)
+1. [dev/archive/framework-analysis/](./archive/framework-analysis/)
+2. [dev/archive/performance-analysis-final/](./archive/performance-analysis-final/)
+3. [dev/active/routing-optimization/](./active/routing-optimization/)
+4. [dev/active/network-performance/](./active/network-performance/)
 
 ---
 
@@ -343,7 +381,8 @@ What do you need?
 ├─ Learn about the project → README.md
 ├─ Learn the framework → CLAUDE.md
 ├─ See code examples → Assets/MercuryMessaging/Examples/
-├─ Start development work → dev/CONTEXT_RESET_READY.md
+├─ Start development work → dev/active/MASTER-SUMMARY.md
+├─ Understand current status → dev/active/STATUS-REPORT.md
 ├─ Understand a specific task → dev/active/[task]/README.md
 ├─ See implementation details → dev/active/[task]/[task]-context.md
 ├─ Track task progress → dev/active/[task]/[task]-tasks.md
@@ -354,8 +393,8 @@ What do you need?
 
 ---
 
-**Document Version:** 1.0
-**Last Updated:** 2025-11-18
+**Document Version:** 2.0
+**Last Updated:** 2025-11-20 (Consolidation - 3 tasks archived, 6 active)
 **Maintained By:** Development Team
 
 **This file:** Central navigation hub - bookmark this!
