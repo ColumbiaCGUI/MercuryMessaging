@@ -402,7 +402,8 @@ namespace MercuryMessaging
         public virtual MmRoutingTableItem MmAddToRoutingTable(MmResponder mmResponder, MmLevelFilter level)
         {
 			var routingTableItem = new MmRoutingTableItem (mmResponder.name, mmResponder) {
-				Level = level
+				Level = level,
+				Tags = mmResponder.Tag  // Copy tag from responder to routing table item
 			};
 
             if (RoutingTable.Contains(mmResponder))
