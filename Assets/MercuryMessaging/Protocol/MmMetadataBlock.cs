@@ -67,6 +67,20 @@ namespace MercuryMessaging
         public MmTag Tag;
 
         /// <summary>
+        /// Advanced routing options for this message (null = use defaults).
+        /// Part of Phase 2.1: Advanced Message Routing.
+        /// Optional - defaults to null for backward compatibility.
+        /// </summary>
+        public MmRoutingOptions Options;
+
+        /// <summary>
+        /// Explicit routing path specification (e.g., "parent/sibling/child").
+        /// Part of Phase 2.1: Advanced Message Routing.
+        /// Optional - null = use LevelFilter instead.
+        /// </summary>
+        public string ExplicitRoutePath;
+
+        /// <summary>
         /// Create an MmMetadataBlock
         /// </summary>
         /// <param name="levelFilter"><see cref="MmLevelFilter"/></param>
@@ -118,14 +132,21 @@ namespace MercuryMessaging
 			SelectedFilter = original.SelectedFilter;
 		    NetworkFilter = original.NetworkFilter;
 		    Tag = original.Tag;
+		    Options = original.Options?.Clone(); // Deep copy if present
+		    ExplicitRoutePath = original.ExplicitRoutePath;
 		}
 
         /// <summary>
         /// Deserialize the MmMetadataBlock
         /// </summary>
         /// <param name="data">Object array representation of a MmMetadataBlock</param>
-        /// <param name="index">The index of the next element to be read from data</param> 
+        /// <param name="index">The index of the next element to be read from data</param>
         /// <returns>The index of the next element to be read from data</returns>
+        /// <remarks>
+        /// Note: Options and ExplicitRoutePath are NOT serialized/deserialized.
+        /// They are local routing hints and should not be transmitted over network.
+        /// MmRoutingOptions contains function delegates that cannot be serialized.
+        /// </remarks>
         public virtual int Deserialize(object[] data, int index)
         {
             LevelFilter = (MercuryMessaging.MmLevelFilter) ((short) data[index++]);
@@ -133,6 +154,7 @@ namespace MercuryMessaging
             SelectedFilter = (MercuryMessaging.MmSelectedFilter) ((short) data[index++]);
             NetworkFilter = (MercuryMessaging.MmNetworkFilter) ((short) data[index++]);
             Tag = (MercuryMessaging.MmTag) ((short) data[index++]);
+            // Options and ExplicitRoutePath intentionally not deserialized
             return index;
         }
 
@@ -140,15 +162,21 @@ namespace MercuryMessaging
         /// Serialize the MmMetadataBlock
         /// </summary>
         /// <returns>Object array representation of a MmMetadataBlock</returns>
+        /// <remarks>
+        /// Note: Options and ExplicitRoutePath are NOT serialized/deserialized.
+        /// They are local routing hints and should not be transmitted over network.
+        /// MmRoutingOptions contains function delegates that cannot be serialized.
+        /// </remarks>
         public virtual object[] Serialize()
         {
-            object[] thisSerialized = new object[] { 
-                (short) LevelFilter, 
-                (short) ActiveFilter, 
-                (short) SelectedFilter, 
-                (short) NetworkFilter, 
-                (short) Tag 
+            object[] thisSerialized = new object[] {
+                (short) LevelFilter,
+                (short) ActiveFilter,
+                (short) SelectedFilter,
+                (short) NetworkFilter,
+                (short) Tag
             };
+            // Options and ExplicitRoutePath intentionally not serialized
             return thisSerialized;
         }
     }
