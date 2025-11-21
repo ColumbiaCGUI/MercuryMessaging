@@ -1307,7 +1307,12 @@ namespace MercuryMessaging
                 foreach (var node in filteredNodes)
                 {
                     if (node != null)
-                        node.MmInvoke(message);
+                    {
+                        // Transform level filter so target can process its Self responders
+                        var forwardedMessage = message.Copy();
+                        forwardedMessage.MetadataBlock.LevelFilter = MmLevelFilterHelper.SelfAndChildren;
+                        node.MmInvoke(forwardedMessage);
+                    }
                 }
             }
         }
@@ -1484,11 +1489,16 @@ namespace MercuryMessaging
                 lateralNodes.AddRange(cousins);
             }
 
-            // Route message to each lateral node
+            // Route message to each lateral node with transformed filter
             foreach (var node in lateralNodes)
             {
                 if (node != null)
-                    node.MmInvoke(message);
+                {
+                    // Transform level filter so target can process its Self responders
+                    var forwardedMessage = message.Copy();
+                    forwardedMessage.MetadataBlock.LevelFilter = MmLevelFilterHelper.SelfAndChildren;
+                    node.MmInvoke(forwardedMessage);
+                }
             }
         }
 
@@ -1507,11 +1517,16 @@ namespace MercuryMessaging
             else
                 CollectAncestors(nodes);
 
-            // Route message to each node
+            // Route message to each node with transformed filter
             foreach (var node in nodes)
             {
                 if (node != null)
-                    node.MmInvoke(message);
+                {
+                    // Transform level filter so target can process its Self responders
+                    var forwardedMessage = message.Copy();
+                    forwardedMessage.MetadataBlock.LevelFilter = MmLevelFilterHelper.SelfAndChildren;
+                    node.MmInvoke(forwardedMessage);
+                }
             }
         }
 
