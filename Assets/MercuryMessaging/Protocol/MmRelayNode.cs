@@ -752,6 +752,9 @@ namespace MercuryMessaging
 				}
 			}
 
+            // Phase 2.1: Advanced Routing - Handle new level filters
+            HandleAdvancedRouting(message, levelFilter);
+
 			//if (dirty && _prevMessageTime == message.TimeStamp)
 			//{
 			//    dirty = false;
@@ -1239,7 +1242,306 @@ namespace MercuryMessaging
 			return this;
 		}
 
-		#endregion 
+		#endregion
+
+        #region Phase 2.1: Advanced Routing
+
+        /// <summary>
+        /// Handles advanced routing for Phase 2.1 level filters.
+        /// Processes Siblings, Cousins, Descendants, Ancestors, and Custom filters.
+        /// </summary>
+        /// <param name="message">Message to route</param>
+        /// <param name="levelFilter">Level filter from message</param>
+        protected virtual void HandleAdvancedRouting(MmMessage message, MmLevelFilter levelFilter)
+        {
+            // Check if any advanced filters are present
+            bool hasSiblings = (levelFilter & MmLevelFilter.Siblings) != 0;
+            bool hasCousins = (levelFilter & MmLevelFilter.Cousins) != 0;
+            bool hasDescendants = (levelFilter & MmLevelFilter.Descendants) != 0;
+            bool hasAncestors = (levelFilter & MmLevelFilter.Ancestors) != 0;
+            bool hasCustom = (levelFilter & MmLevelFilter.Custom) != 0;
+
+            // If no advanced filters, skip
+            if (!hasSiblings && !hasCousins && !hasDescendants && !hasAncestors && !hasCustom)
+                return;
+
+            // Validate MmRoutingOptions if needed
+            MmRoutingOptions options = message.MetadataBlock.Options;
+
+            // Validate lateral routing (siblings/cousins) requires AllowLateralRouting
+            if ((hasSiblings || hasCousins) && (options == null || !options.AllowLateralRouting))
+            {
+                MmLogger.LogFramework($"[ROUTING] Lateral routing (Siblings/Cousins) requires MmRoutingOptions.AllowLateralRouting = true at '{name}'");
+                return;
+            }
+
+            // Validate custom filter requires CustomFilter predicate
+            if (hasCustom && (options == null || options.CustomFilter == null))
+            {
+                MmLogger.LogFramework($"[ROUTING] Custom filter requires MmRoutingOptions.CustomFilter predicate at '{name}'");
+                return;
+            }
+
+            // Handle lateral routing (siblings/cousins)
+            if (hasSiblings || hasCousins)
+            {
+                RouteLateral(message, hasSiblings, hasCousins);
+            }
+
+            // Handle recursive descendants
+            if (hasDescendants)
+            {
+                RouteRecursive(message, useDescendants: true);
+            }
+
+            // Handle recursive ancestors
+            if (hasAncestors)
+            {
+                RouteRecursive(message, useDescendants: false);
+            }
+
+            // Handle custom predicate filtering
+            if (hasCustom && options != null && options.CustomFilter != null)
+            {
+                var filteredNodes = ApplyCustomFilter(options.CustomFilter);
+                foreach (var node in filteredNodes)
+                {
+                    if (node != null)
+                        node.MmInvoke(message);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Collects sibling relay nodes (nodes sharing the same parent).
+        /// Used for lateral routing (MmLevelFilter.Siblings).
+        /// </summary>
+        /// <param name="siblings">Output list to populate with sibling nodes</param>
+        protected virtual void CollectSiblings(List<MmRelayNode> siblings)
+        {
+            siblings.Clear();
+
+            // If no parents, no siblings possible
+            if (MmParentList == null || MmParentList.Count == 0)
+                return;
+
+            // Collect siblings from each parent
+            foreach (var parent in MmParentList)
+            {
+                if (parent == null) continue;
+
+                // Get parent's children (our siblings + self)
+                foreach (var routingItem in parent.RoutingTable)
+                {
+                    if (routingItem.Level != MmLevelFilter.Child)
+                        continue;
+
+                    var siblingNode = routingItem.Responder.GetRelayNode();
+                    if (siblingNode == null || siblingNode == this)
+                        continue; // Skip self
+
+                    if (!siblings.Contains(siblingNode))
+                        siblings.Add(siblingNode);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Collects cousin relay nodes (parent's siblings' children).
+        /// Used for extended family routing (MmLevelFilter.Cousins).
+        /// </summary>
+        /// <param name="cousins">Output list to populate with cousin nodes</param>
+        protected virtual void CollectCousins(List<MmRelayNode> cousins)
+        {
+            cousins.Clear();
+
+            // If no parents, no cousins possible
+            if (MmParentList == null || MmParentList.Count == 0)
+                return;
+
+            // For each parent, collect their siblings' children
+            foreach (var parent in MmParentList)
+            {
+                if (parent == null) continue;
+
+                // Collect parent's siblings
+                List<MmRelayNode> parentSiblings = new List<MmRelayNode>();
+                parent.CollectSiblings(parentSiblings);
+
+                // For each parent's sibling, collect their children (our cousins)
+                foreach (var parentSibling in parentSiblings)
+                {
+                    if (parentSibling == null) continue;
+
+                    foreach (var routingItem in parentSibling.RoutingTable)
+                    {
+                        if (routingItem.Level != MmLevelFilter.Child)
+                            continue;
+
+                        var cousinNode = routingItem.Responder.GetRelayNode();
+                        if (cousinNode == null || cousinNode == this)
+                            continue; // Skip self
+
+                        if (!cousins.Contains(cousinNode))
+                            cousins.Add(cousinNode);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Collects all descendant relay nodes recursively (all children, grandchildren, etc.).
+        /// Used for deep tree traversal (MmLevelFilter.Descendants).
+        /// </summary>
+        /// <param name="descendants">Output list to populate with descendant nodes</param>
+        /// <param name="visited">Set of visited nodes to prevent infinite loops</param>
+        protected virtual void CollectDescendants(List<MmRelayNode> descendants, HashSet<int> visited = null)
+        {
+            // Initialize visited set on first call
+            if (visited == null)
+            {
+                descendants.Clear();
+                visited = new HashSet<int>();
+                visited.Add(gameObject.GetInstanceID()); // Mark self as visited
+            }
+
+            // Collect direct children
+            foreach (var routingItem in RoutingTable)
+            {
+                if (routingItem.Level != MmLevelFilter.Child)
+                    continue;
+
+                var childNode = routingItem.Responder.GetRelayNode();
+                if (childNode == null) continue;
+
+                int childId = childNode.gameObject.GetInstanceID();
+                if (visited.Contains(childId))
+                    continue; // Already visited (circular prevention)
+
+                visited.Add(childId);
+                descendants.Add(childNode);
+
+                // Recursively collect grandchildren
+                childNode.CollectDescendants(descendants, visited);
+            }
+        }
+
+        /// <summary>
+        /// Collects all ancestor relay nodes recursively (all parents, grandparents, etc.).
+        /// Used for upward tree traversal (MmLevelFilter.Ancestors).
+        /// </summary>
+        /// <param name="ancestors">Output list to populate with ancestor nodes</param>
+        /// <param name="visited">Set of visited nodes to prevent infinite loops</param>
+        protected virtual void CollectAncestors(List<MmRelayNode> ancestors, HashSet<int> visited = null)
+        {
+            // Initialize visited set on first call
+            if (visited == null)
+            {
+                ancestors.Clear();
+                visited = new HashSet<int>();
+                visited.Add(gameObject.GetInstanceID()); // Mark self as visited
+            }
+
+            // If no parents, we're done
+            if (MmParentList == null || MmParentList.Count == 0)
+                return;
+
+            // Collect direct parents
+            foreach (var parent in MmParentList)
+            {
+                if (parent == null) continue;
+
+                int parentId = parent.gameObject.GetInstanceID();
+                if (visited.Contains(parentId))
+                    continue; // Already visited (circular prevention)
+
+                visited.Add(parentId);
+                ancestors.Add(parent);
+
+                // Recursively collect grandparents
+                parent.CollectAncestors(ancestors, visited);
+            }
+        }
+
+        /// <summary>
+        /// Routes message to lateral relatives (siblings/cousins).
+        /// Part of Phase 2.1: Advanced Message Routing.
+        /// </summary>
+        /// <param name="message">Message to route</param>
+        /// <param name="includeSiblings">Include sibling nodes</param>
+        /// <param name="includeCousins">Include cousin nodes</param>
+        protected virtual void RouteLateral(MmMessage message, bool includeSiblings, bool includeCousins)
+        {
+            List<MmRelayNode> lateralNodes = new List<MmRelayNode>();
+
+            if (includeSiblings)
+                CollectSiblings(lateralNodes);
+
+            if (includeCousins)
+            {
+                List<MmRelayNode> cousins = new List<MmRelayNode>();
+                CollectCousins(cousins);
+                lateralNodes.AddRange(cousins);
+            }
+
+            // Route message to each lateral node
+            foreach (var node in lateralNodes)
+            {
+                if (node != null)
+                    node.MmInvoke(message);
+            }
+        }
+
+        /// <summary>
+        /// Routes message to recursive descendants or ancestors.
+        /// Part of Phase 2.1: Advanced Message Routing.
+        /// </summary>
+        /// <param name="message">Message to route</param>
+        /// <param name="useDescendants">True for descendants, false for ancestors</param>
+        protected virtual void RouteRecursive(MmMessage message, bool useDescendants)
+        {
+            List<MmRelayNode> nodes = new List<MmRelayNode>();
+
+            if (useDescendants)
+                CollectDescendants(nodes);
+            else
+                CollectAncestors(nodes);
+
+            // Route message to each node
+            foreach (var node in nodes)
+            {
+                if (node != null)
+                    node.MmInvoke(message);
+            }
+        }
+
+        /// <summary>
+        /// Applies custom predicate filtering to routing table items.
+        /// Part of Phase 2.1: Advanced Message Routing.
+        /// </summary>
+        /// <param name="customFilter">Predicate function to apply</param>
+        /// <returns>Filtered list of relay nodes</returns>
+        protected virtual List<MmRelayNode> ApplyCustomFilter(System.Func<MmRelayNode, bool> customFilter)
+        {
+            List<MmRelayNode> filteredNodes = new List<MmRelayNode>();
+
+            if (customFilter == null)
+                return filteredNodes;
+
+            // Apply predicate to all nodes in routing table
+            foreach (var routingItem in RoutingTable)
+            {
+                var node = routingItem.Responder.GetRelayNode();
+                if (node != null && customFilter(node))
+                {
+                    filteredNodes.Add(node);
+                }
+            }
+
+            return filteredNodes;
+        }
+
+        #endregion
 
         #region Static Methods
 
