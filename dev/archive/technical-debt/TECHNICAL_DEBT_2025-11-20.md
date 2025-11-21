@@ -1,7 +1,11 @@
 # MercuryMessaging Technical Debt
 
+**📁 ARCHIVED:** This document is archived as of 2025-11-20. All Priority 1-4 items have been completed or moved to active task folders.
+
 **Last Updated:** 2025-11-20 (Post-test fixes)
-**Status:** All immediate blockers resolved, 2 items deferred
+**Status:** All immediate blockers resolved, all tasks complete
+**Archive Date:** 2025-11-20
+**Archive Reason:** All technical debt items resolved. Thread safety task moved to dev/active/thread-safety/
 
 ---
 
