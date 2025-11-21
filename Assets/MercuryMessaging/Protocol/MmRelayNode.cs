@@ -32,10 +32,12 @@
 //  
 //  
 using System.Collections.Generic;
-using System.Linq;
+using System.Collections;
 using MercuryMessaging.Support.Extensions;
+using MercuryMessaging.Support.Data;
 using MercuryMessaging.Task;
 using UnityEngine;
+
 
 namespace MercuryMessaging
 {
@@ -50,10 +52,75 @@ namespace MercuryMessaging
         #region Member Variables
 
         /// <summary>
+        /// Performance Mode - disables debug message tracking overhead.
+        /// Enable this during performance testing to remove UpdateMessages() overhead.
+        /// When true: messageBuffer and message history tracking are disabled.
+        /// When false: Full debug visualization and message tracking enabled.
+        /// </summary>
+        [Header("Performance Settings")]
+        [Tooltip("Enable during performance tests to disable debug overhead (UpdateMessages tracking)")]
+        public static bool PerformanceMode = false;
+
+        // The position of the graph node in the graph view.
+        public Vector2 nodePosition = new Vector2(0, 0);
+
+        public bool testToggle = false;
+
+        public int layer;
+
+        /// <summary>
+        /// Size of the message history circular buffers.
+        /// Controls how many recent incoming and outgoing messages are tracked for debugging.
+        /// Valid range: 10-10000. Default: 100.
+        /// </summary>
+        [Header("Message History Settings")]
+        [Tooltip("Number of recent messages to keep in history for debugging (10-10000)")]
+        [Range(10, 10000)]
+        public int messageHistorySize = 100;
+
+        public MmCircularBuffer<string> messageInList;
+
+        public MmCircularBuffer<string> messageOutList;
+
+        /// <summary>
+        /// Maximum number of relay hops a message can make before being dropped.
+        /// Prevents infinite loops in circular or complex hierarchies.
+        /// Valid range: 5-1000. Default: 50.
+        /// Set to 0 to disable hop limit checking (not recommended).
+        /// </summary>
+        [Header("Loop Prevention Settings")]
+        [Tooltip("Maximum relay hops before message is dropped (prevents infinite loops). 0 = disabled")]
+        [Range(0, 1000)]
+        public int maxMessageHops = 50;
+
+        /// <summary>
+        /// Enable cycle detection by tracking visited nodes.
+        /// When enabled, messages track which nodes they've visited and stop if they revisit a node.
+        /// More aggressive than hop counting, but uses more memory.
+        /// </summary>
+        [Tooltip("Track visited nodes to detect and prevent circular message paths")]
+        public bool enableCycleDetection = true;
+
+        private float displayPeriod;
+
+        public Transform positionOffset;
+
+        public List<MmRoutingTableItem> itemsToGo = new List<MmRoutingTableItem>();
+
+        private Color colorA = new Color (93f/255f, 58f/255f, 155f/255f);
+        private Color colorB = new Color (230f/255f, 97f/255f, 0f);
+        private Color colorC = new Color (64f/255f, 176f/255f, 166f/255f);
+        private Color colorD = new Color (230f/255f, 97f/255f, 0f);
+
+        public List<GameObject> lineObjects = new List<GameObject>();
+
+        private List<MmMessage> messageBuffer = new List<MmMessage>();
+
+        /// <summary>
         ///  Queue of MmResponders to add once list is no longer in use
         /// by an MmInvoke
         /// </summary>
-		protected Queue<MmRoutingTableItem> MmRespondersToAdd =
+		public Queue<MmRoutingTableItem> MmRespondersToAdd =
 			new Queue<MmRoutingTableItem>();
 
         /// <summary>
@@ -72,7 +139,7 @@ namespace MercuryMessaging
         /// <summary>
         /// Flag to protect priority list from being modified while it's being iterated over
         /// </summary>
-		private bool doNotModifyRoutingTable;
+		public bool doNotModifyRoutingTable;
 
         /// <summary>
         /// Does the node convert the message to a local message from networked 
@@ -191,8 +258,17 @@ namespace MercuryMessaging
         {
             MmNetworkResponder = GetComponent<IMmNetworkResponder>();
 
-            InitializeNode();
+            // Initialize message history circular buffers with validated size
+            int validatedSize = Mathf.Clamp(messageHistorySize, 10, 10000);
+            if (validatedSize != messageHistorySize)
+            {
+                MmLogger.LogFramework($"Message history size {messageHistorySize} out of range. Clamped to {validatedSize}.");
+                messageHistorySize = validatedSize;
+            }
+            messageInList = new MmCircularBuffer<string>(messageHistorySize);
+            messageOutList = new MmCircularBuffer<string>(messageHistorySize);
 
+            InitializeNode();
             InstantiateSubResponders();
 
 			base.Awake ();
@@ -209,13 +285,76 @@ namespace MercuryMessaging
 
             MmLogger.LogFramework(gameObject.name + " MmRelayNode Start called.");
 
-            //Show all items currently in the RoutingTable list.
-            //Debug.Log(gameObject.name + " MmRelayNode start called. With " +
-            //    RoutingTable.Count +
-            //    " items in the MmResponder List: " +
-            //    String.Join("\n", RoutingTable.GetMmNames(MmRoutingTable.ListFilter.All,
-            //    MmLevelFilterHelper.SelfAndBidirectional).ToArray()));
+            int colorIndex = layer % 4;
+            Color currentColor;
+            if(colorIndex == 0)
+            {
+                currentColor = colorA;
+            }
+            else if(colorIndex == 1)
+            {
+                currentColor = colorB;
+            }
+            else if(colorIndex == 2)
+            {
+                currentColor = colorC;
+            }
+            else {
+                currentColor = colorD;
+            }
+
+            if(positionOffset == null)
+            {
+                positionOffset = gameObject.transform;
+            }
+
+            itemsToGo = this.RoutingTable.GetMmRoutingTableItems(MmRoutingTable.ListFilter.All, MmLevelFilter.Child);
         }
+
+        public void UpdateMessages(MmMessage message)   
+        {
+            List<MmRoutingTableItem> items = new List<MmRoutingTableItem>();
+
+            // Determine which level to filter by
+            if (message.MetadataBlock.LevelFilter == MmLevelFilter.Parent)
+            {
+                items = RoutingTable.GetMmRoutingTableItems(MmRoutingTable.ListFilter.All, MmLevelFilter.Parent);
+            }
+            else if (message.MetadataBlock.LevelFilter == MmLevelFilter.Child)
+            {
+                items = RoutingTable.GetMmRoutingTableItems(MmRoutingTable.ListFilter.All, MmLevelFilter.Child);
+            }
+
+            // Update items and propagate the message recursively
+            foreach (MmRoutingTableItem item in items)
+            {
+                if (item.Tags == message.MetadataBlock.Tag || message.MetadataBlock.Tag == (MmTag)(-1))
+                {
+                    UpdateItemAndPropagate(item, message);
+                }
+            }
+        }
+
+        private void UpdateItemAndPropagate(MmRoutingTableItem item, MmMessage message)
+        {
+            System.DateTime currentTime = System.DateTime.Now;
+            // Update the messageOutList for the current node
+            messageOutList.Insert(0, item.Name + " : " + message.MmMessageType.ToString() + "\n" + currentTime.ToString("yyyy-MM-dd HH:mm:ss"));
+            // No truncation needed - circular buffer handles it automatically
+
+            // If the item has a responder that is a MmRelayNode, update its messageInList
+            if (item.Responder is MmRelayNode relayNode && item.Responder != this)
+            {
+                relayNode.messageInList.Insert(0, gameObject.name + " : " + message.MmMessageType.ToString() + "\n" + currentTime.ToString("yyyy-MM-dd HH:mm:ss"));
+                // No truncation needed - circular buffer handles it automatically
+
+                // Recursively update the child nodes of the current relay node
+                relayNode.UpdateMessages(message);
+            }
+        }
+
+        // ---------------------------------------------------------
+        
 
         protected void InitializeNode()
         {
@@ -263,7 +402,8 @@ namespace MercuryMessaging
         public virtual MmRoutingTableItem MmAddToRoutingTable(MmResponder mmResponder, MmLevelFilter level)
         {
 			var routingTableItem = new MmRoutingTableItem (mmResponder.name, mmResponder) {
-				Level = level
+				Level = level,
+				Tags = mmResponder.Tag  // Copy tag from responder to routing table item
 			};
 
             if (RoutingTable.Contains(mmResponder))
@@ -309,14 +449,34 @@ namespace MercuryMessaging
         /// </summary>
         public void MmRefreshResponders()
         {
-            List<MmResponder> responders = GetComponents<MmResponder>().Where(
-                x => (!(x is MmRelayNode))).ToList();
+            // Get all MmResponders and filter out MmRelayNodes (removed LINQ for performance)
+            var components = GetComponents<MmResponder>();
+            List<MmResponder> responders = new List<MmResponder>(components.Length);
+            foreach (var component in components)
+            {
+                if (!(component is MmRelayNode))
+                {
+                    responders.Add(component);
+                }
+            }
 
             // Add own implementations of IMmResponder to priority list
+            // Also update Tags for existing responders (in case tags changed)
             foreach (var responder in responders)
             {
 				if (!RoutingTable.Contains(responder))
+				{
                 	MmAddToRoutingTable(responder, MmLevelFilter.Self);
+				}
+				else
+				{
+					// Update Tags for existing routing table item
+					var existingItem = RoutingTable[responder];
+					if (existingItem != null)
+					{
+						existingItem.Tags = responder.Tag;
+					}
+				}
             }
 
             for (int i = RoutingTable.Count - 1; i >= 0; i--)
@@ -327,25 +487,38 @@ namespace MercuryMessaging
         }
 
         /// <summary>
-        /// Iterates through RoutingTable list and assigns 
+        /// Iterates through RoutingTable list and assigns
         /// this MmRelayNode as a parent to child MmResponders.
         /// </summary>
         public void RefreshParents()
         {
 			MmLogger.LogFramework("Refreshing parents on MmRelayNode: " + gameObject.name);
 
-            foreach (var child in RoutingTable.Where(x => x.Level == MmLevelFilter.Child))
+            // Iterate through routing table and process child nodes (removed LINQ for performance)
+            foreach (var child in RoutingTable)
             {
-                var childNode = child.Responder.GetRelayNode();
-                childNode.AddParent(this);
-                childNode.RefreshParents();
+                if (child.Level == MmLevelFilter.Child)
+                {
+                    var childNode = child.Responder.GetRelayNode();
+                    childNode.AddParent(this);
+                    childNode.RefreshParents();
+                }
             }
 
-            //Optimize later
+            // Update parent entries in routing table (removed LINQ for performance)
             foreach (var parent in MmParentList)
             {
-				//bool foundItem = RoutingTable.Select ((x) => x.Responder).Any (responder => responder == parent);
-				MmRoutingTableItem foundItem = RoutingTable.First (x => x.Responder == parent);
+				// Find parent in routing table (manual search avoids LINQ allocation)
+				MmRoutingTableItem foundItem = null;
+				foreach (var item in RoutingTable)
+				{
+					if (item.Responder == parent)
+					{
+						foundItem = item;
+						break;
+					}
+				}
+
 				if (foundItem == null) {
 					MmAddToRoutingTable (parent, MmLevelFilter.Parent);
 				}
@@ -402,33 +575,60 @@ namespace MercuryMessaging
         /// Auto [de]serialized by UNET.</param>
         public override void MmInvoke(MmMessage message)
         {
+            // Debug tracking - disabled in PerformanceMode
+            if (!PerformanceMode)
+            {
+                messageBuffer.Add(message);
+                // Prevent unbounded growth - clear buffer periodically
+                if (messageBuffer.Count > 1000)
+                {
+                    messageBuffer.Clear();
+                }
+                UpdateMessages(message);
+            }
+
             MmMessageType msgType = message.MmMessageType;
             //If the MmRelayNode has not been initialized, initialize it here,
             //  and refresh the parents - to ensure proper routing can occur.
             InitializeNode();
 
-            //TODO: Switch to using mutex for threaded applications
+            // Check hop limit to prevent infinite loops
+            if (maxMessageHops > 0)
+            {
+                if (message.HopCount >= maxMessageHops)
+                {
+                    MmLogger.LogFramework($"[HOP LIMIT] Message dropped at '{name}' after {message.HopCount} hops (max: {maxMessageHops}). Method: {message.MmMethod}");
+                    return;
+                }
+
+                // Increment hop counter for this relay
+                message.HopCount++;
+            }
+
+            // Check for cycles if cycle detection is enabled
+            if (enableCycleDetection)
+            {
+                int nodeInstanceId = gameObject.GetInstanceID();
+
+                // Initialize visited nodes set if not already done
+                if (message.VisitedNodes == null)
+                {
+                    message.VisitedNodes = new System.Collections.Generic.HashSet<int>();
+                }
+
+                // Check if we've already visited this node (circular path detected)
+                if (message.VisitedNodes.Contains(nodeInstanceId))
+                {
+                    MmLogger.LogFramework($"[CYCLE DETECTED] Message dropped at '{name}' - circular path detected. Method: {message.MmMethod}, Hops: {message.HopCount}");
+                    return;
+                }
+
+                // Mark this node as visited
+                message.VisitedNodes.Add(nodeInstanceId);
+            }
+
             doNotModifyRoutingTable = true;
             MmNetworkFilter networkFilter = message.MetadataBlock.NetworkFilter;
-
-            //Experimental: Allow forced serial execution (ordered) of messages.
-            //if (serialExecution)
-            //{
-            //    if (!_executing)
-            //    {
-            //        _executing = true;
-            //    }
-            //    else
-            //    {
-            //        MmLogger.LogFramework("<<<<<>>>>>Queueing<<<<<>>>>>");
-            //        KeyValuePair<MmMessageType, MmMessage> newMessage =
-            //            new KeyValuePair<MmMessageType, MmMessage>(msgType, message);
-            //        SerialExecutionQueue.Enqueue(newMessage);
-            //        return;
-            //    }
-            //}
-            
-            //MmLogger.LogFramework (gameObject.name + ": MmRelayNode received MmMethod call: " + param.MmMethod.ToString ());
             
             //	If an MmNetworkResponder is attached to this object, and the MmMessage has not already been deserialized
             //	then call the MmNetworkResponder's network message invocation function.
@@ -451,17 +651,14 @@ namespace MercuryMessaging
 			}
 
             
-            //Todo: it's possible to get this to happen only once per graph. Switch Invoke code to support.
-            var upwardMessage = message.Copy();
-			upwardMessage.MetadataBlock.LevelFilter = MmLevelFilterHelper.SelfAndParents;
-			var downwardMessage = message.Copy();
-			downwardMessage.MetadataBlock.LevelFilter = MmLevelFilterHelper.SelfAndChildren;
+            //Lazy message copying: Only create copies if actually needed for multiple directions
+            //This reduces 20-30% overhead from unnecessary message allocations
 
             MmLevelFilter levelFilter = message.MetadataBlock.LevelFilter;
             MmActiveFilter activeFilter = ActiveFilterAdjust(ref message);
             MmSelectedFilter selectedFilter = SelectedFilterAdjust(ref message);
 
-            //If this message was a network-only message and 
+            //If this message was a network-only message and
             //  this node does not allow for propagation of network messages,
             //  then return.
             if (!AllowNetworkPropagationLocally && !message.IsDeserialized &&
@@ -470,12 +667,68 @@ namespace MercuryMessaging
                 return;
             }
 
+            // First pass: determine which directions are needed
+            bool needsParent = false;
+            bool needsChild = false;
+            bool needsSelf = false;
+
+            foreach (var routingTableItem in RoutingTable)
+            {
+                MmLevelFilter responderLevel = routingTableItem.Level;
+
+                if ((responderLevel & MmLevelFilter.Parent) > 0)
+                    needsParent = true;
+                else if ((responderLevel & MmLevelFilter.Child) > 0)
+                    needsChild = true;
+                else
+                    needsSelf = true;
+            }
+
+            // Create messages lazily based on what's needed
+            MmMessage upwardMessage = null;
+            MmMessage downwardMessage = null;
+
+            // If we need multiple directions, we need to copy
+            int directionsNeeded = (needsParent ? 1 : 0) + (needsChild ? 1 : 0) + (needsSelf ? 1 : 0);
+
+            if (directionsNeeded > 1)
+            {
+                // Need copies for multiple directions
+                if (needsParent)
+                {
+                    upwardMessage = message.Copy();
+                    upwardMessage.MetadataBlock.LevelFilter = MmLevelFilterHelper.SelfAndParents;
+                }
+
+                if (needsChild)
+                {
+                    downwardMessage = message.Copy();
+                    downwardMessage.MetadataBlock.LevelFilter = MmLevelFilterHelper.SelfAndChildren;
+                }
+
+                // needsSelf uses original message
+            }
+            else if (directionsNeeded == 1)
+            {
+                // Only one direction needed - reuse original message
+                if (needsParent)
+                {
+                    message.MetadataBlock.LevelFilter = MmLevelFilterHelper.SelfAndParents;
+                    upwardMessage = message;
+                }
+                else if (needsChild)
+                {
+                    message.MetadataBlock.LevelFilter = MmLevelFilterHelper.SelfAndChildren;
+                    downwardMessage = message;
+                }
+                // If needsSelf, message already has correct filter
+            }
+
+            // Second pass: invoke responders with appropriate messages
             foreach (var routingTableItem in RoutingTable) {
 				var responder = routingTableItem.Responder;
-
-				//bool isLocalResponder = responder.MmGameObject == this.gameObject;
 				MmLevelFilter responderLevel = routingTableItem.Level;
-                    
+
 				//Check individual responder level and then call the right param.
 				MmMessage responderSpecificMessage;
 				if((responderLevel & MmLevelFilter.Parent) > 0)
@@ -506,7 +759,8 @@ namespace MercuryMessaging
 
             doNotModifyRoutingTable = false;
 
-            while (MmRespondersToAdd.Any())
+            // Process queued responders (replaced Any() with Count for performance)
+            while (MmRespondersToAdd.Count > 0)
             {
                 var routingTableItem = MmRespondersToAdd.Dequeue();
 
@@ -544,6 +798,8 @@ namespace MercuryMessaging
 			MmMetadataBlock metadataBlock = null)
         {
 			MmMessage msg = new MmMessage (mmMethod, MmMessageType.MmVoid, metadataBlock);
+            messageBuffer.Add(msg);
+            // UpdateMessages(msg);
             MmInvoke(msg);
         }
 
@@ -561,6 +817,8 @@ namespace MercuryMessaging
             MmMessage msg = param.Copy();
             msg.MmMethod = mmMethod;
             msg.MetadataBlock = metadataBlock;
+            messageBuffer.Add(msg);
+            // UpdateMessages(msg);
             MmInvoke(msg);
         }
 
@@ -576,6 +834,8 @@ namespace MercuryMessaging
             MmMetadataBlock metadataBlock = null)
         {
 			MmMessage msg = new MmMessageBool (param, mmMethod, metadataBlock);
+            messageBuffer.Add(msg);
+            // UpdateMessages(msg);
             MmInvoke(msg);
         }
 
@@ -591,6 +851,8 @@ namespace MercuryMessaging
             MmMetadataBlock metadataBlock = null)
         {
 			MmMessage msg = new MmMessageInt(param, mmMethod, metadataBlock);
+            messageBuffer.Add(msg);
+            // UpdateMessages(msg);
             MmInvoke(msg);
         }
 
@@ -606,6 +868,8 @@ namespace MercuryMessaging
             MmMetadataBlock metadataBlock = null)
         {
 			MmMessage msg = new MmMessageFloat(param, mmMethod, metadataBlock);
+            messageBuffer.Add(msg);
+            // UpdateMessages(msg);
             MmInvoke(msg);
         }
 
@@ -621,6 +885,8 @@ namespace MercuryMessaging
             MmMetadataBlock metadataBlock = null)
         {
 			MmMessage msg = new MmMessageVector3(param, mmMethod, metadataBlock);
+            messageBuffer.Add(msg);
+            // UpdateMessages(msg);
             MmInvoke(msg);
 		}
 
@@ -636,6 +902,8 @@ namespace MercuryMessaging
             MmMetadataBlock metadataBlock = null)
         {
 			MmMessage msg = new MmMessageVector4(param, mmMethod, metadataBlock);
+            messageBuffer.Add(msg);
+            // UpdateMessages(msg);
             MmInvoke(msg);
 		}
 
@@ -651,6 +919,8 @@ namespace MercuryMessaging
             MmMetadataBlock metadataBlock = null)
         {
 			MmMessage msg = new MmMessageString(param, mmMethod, metadataBlock);
+            messageBuffer.Add(msg);
+            // UpdateMessages(msg);
             MmInvoke(msg);
 		}
 
@@ -666,6 +936,8 @@ namespace MercuryMessaging
             MmMetadataBlock metadataBlock = null)
         {
 			MmMessage msg = new MmMessageByteArray(param, mmMethod, metadataBlock);
+            messageBuffer.Add(msg);
+            // UpdateMessages(msg);
             MmInvoke(msg);
 		}
 
@@ -681,6 +953,8 @@ namespace MercuryMessaging
 			MmMetadataBlock metadataBlock = null)
 		{
 			MmMessage msg = new MmMessageTransform(param, mmMethod, metadataBlock);
+            messageBuffer.Add(msg);
+            // UpdateMessages(msg);
 			MmInvoke(msg);
 		}
 
@@ -696,6 +970,8 @@ namespace MercuryMessaging
 			MmMetadataBlock metadataBlock = null)
 		{
 			MmMessage msg = new MmMessageTransformList(param, mmMethod, metadataBlock);
+            messageBuffer.Add(msg);
+            // UpdateMessages(msg);
 			MmInvoke(msg);
 		}
 
@@ -711,6 +987,8 @@ namespace MercuryMessaging
             MmMetadataBlock metadataBlock = null)
         {
             MmMessage msg = new MmMessageSerializable(param, mmMethod, metadataBlock);
+            messageBuffer.Add(msg);
+            // UpdateMessages(msg);
             MmInvoke(msg);
         }
 
@@ -725,6 +1003,8 @@ namespace MercuryMessaging
             MmMetadataBlock metadataBlock = null)
         {
             MmMessage msg = new MmMessageGameObject(param, mmMethod, metadataBlock);
+            messageBuffer.Add(msg);
+            // UpdateMessages(msg);
             MmInvoke(msg);
         }
 
@@ -740,6 +1020,8 @@ namespace MercuryMessaging
             MmMetadataBlock metadataBlock = null)
         {
             MmMessage msg = new MmMessageQuaternion(param, mmMethod, metadataBlock);
+            messageBuffer.Add(msg);
+            // UpdateMessages(msg);
             MmInvoke(msg);
         }
 

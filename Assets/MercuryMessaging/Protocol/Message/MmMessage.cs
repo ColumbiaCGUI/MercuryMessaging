@@ -77,6 +77,25 @@ namespace MercuryMessaging
         public string TimeStamp;
 
         /// <summary>
+        /// Hop counter for preventing infinite message loops.
+        /// Incremented each time the message passes through a relay node.
+        /// </summary>
+        public int HopCount = 0;
+
+        /// <summary>
+        /// Maximum number of hops allowed before message is dropped.
+        /// Prevents infinite loops in circular hierarchies.
+        /// Default: 50 (sufficient for most complex hierarchies)
+        /// </summary>
+        public const int MAX_HOPS_DEFAULT = 50;
+
+        /// <summary>
+        /// Set of visited relay node instance IDs for cycle detection.
+        /// Helps identify circular message paths in addition to hop counting.
+        /// </summary>
+        public System.Collections.Generic.HashSet<int> VisitedNodes;
+
+        /// <summary>
         /// Creates a basic MmMessage with a default control block
         /// </summary>
         public MmMessage()
@@ -155,15 +174,22 @@ namespace MercuryMessaging
         /// Duplicate an MmMessage
         /// </summary>
         /// <param name="message">Item to duplicate</param>
-        public MmMessage(MmMessage message) : 
-            this(message.MmMethod, 
-                message.MmMessageType, 
+        public MmMessage(MmMessage message) :
+            this(message.MmMethod,
+                message.MmMessageType,
                 message.MetadataBlock)
         {
             NetId = message.NetId;
             IsDeserialized = message.IsDeserialized;
             root = message.root;
             TimeStamp = message.TimeStamp;
+            HopCount = message.HopCount;
+
+            // Copy visited nodes set for cycle detection
+            if (message.VisitedNodes != null)
+            {
+                VisitedNodes = new System.Collections.Generic.HashSet<int>(message.VisitedNodes);
+            }
         }
 
         /// <summary>

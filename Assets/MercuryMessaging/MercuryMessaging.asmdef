@@ -1,0 +1,22 @@
+{
+    "name": "MercuryMessaging",
+    "rootNamespace": "MercuryMessaging",
+    "references": [
+        "Unity.XR.Interaction.Toolkit",
+        "Unity.InputSystem",
+        "Unity.Mathematics",
+        "NewGraph",
+        "NewGraph.Editor",
+        "ALINE",
+        "EPO"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
