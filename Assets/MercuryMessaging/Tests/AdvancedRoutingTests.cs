@@ -343,11 +343,21 @@ namespace MercuryMessaging.Tests
         private GameObject CreateNodeWithResponder(string name, Transform parent = null)
         {
             var obj = new GameObject(name);
-            obj.AddComponent<MmRelayNode>();
+            var relay = obj.AddComponent<MmRelayNode>();
             obj.AddComponent<MessageCounterResponder>();
 
             if (parent != null)
+            {
                 obj.transform.SetParent(parent);
+
+                // Explicitly register child in parent's routing table
+                var parentRelay = parent.GetComponent<MmRelayNode>();
+                if (parentRelay != null)
+                {
+                    parentRelay.MmAddToRoutingTable(relay, MmLevelFilter.Child);
+                    relay.AddParent(parentRelay);
+                }
+            }
 
             testObjects.Add(obj);
             return obj;
