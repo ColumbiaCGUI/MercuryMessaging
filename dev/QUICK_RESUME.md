@@ -1,195 +1,201 @@
-# Quick Resume - PathSpecification ActiveFilter Fix
+# Quick Resume - Routing Table Profiling Mini-Task
 
 **Date:** 2025-11-21
-**Status:** FIX APPLIED ✅ (Awaiting Test Verification)
+**Status:** IN PROGRESS (2h/6h complete)
 
 ---
 
 ## Immediate Next Action
 
-**RUN TESTS TO VERIFY FIX:**
-1. Open Unity Editor
-2. Window > General > Test Runner
-3. PlayMode tab → Run All
-4. Expected: **187/188 passing** (5 PathSpec tests should now pass)
+**CONTINUE IMPLEMENTATION:** Routing table profiling in Mm
+
+RelayNode.MmInvoke()
+
+**File:** `Assets/MercuryMessaging/Protocol/MmRelayNode.cs`
+**Location:** Lines 736-764 (routing table iteration loop)
+
+**Current State:**
+- ✅ Plan approved and documented
+- ✅ Todo list created (6 tasks)
+- ⏳ **NEXT:** Instrument MmInvoke() to measure routing table overhead
 
 ---
 
-## What Just Happened
+## What We're Implementing
 
-### Problem Discovered
-PathSpecificationTests were failing because `ResponderCheck()` returned FALSE even though level filter matched correctly.
+### Goal
+Measure routing table lookup overhead to validate if Phase 3.1 (276h of specialized routing tables) is needed.
 
-**Debug logs revealed:**
+### Hypothesis
+Routing table operations <15% of frame time → **NOT the bottleneck** → Skip Phase 3.1
+
+### Approach
+1. Instrument MmRelayNode.MmInvoke() hot path (routing table iteration)
+2. Add profiling to MmRoutingTable.GetMmRoutingTableItems()
+3. Integrate with PerformanceTestHarness (new CSV columns)
+4. Investigate 0% cache hit rate mystery
+5. Run Small/Medium/Large scale tests
+6. Analyze results and create decision report
+
+---
+
+## Code to Add
+
+### Location: MmRelayNode.cs line ~735 (before routing table iteration)
+
+```csharp
+// START ROUTING TABLE PROFILING
+Stopwatch routingTableTimer = null;
+int responderCheckCount = 0;
+
+if (EnableRoutingProfiler)
+{
+    routingTableTimer = Stopwatch.StartNew();
+}
+
+// Second pass: invoke responders with appropriate messages
+foreach (var routingTableItem in RoutingTable) {
+    var responder = routingTableItem.Responder;
+    MmLevelFilter responderLevel = routingTableItem.Level;
+
+    // ... existing responder selection logic ...
+
+    if (routingTableTimer != null) responderCheckCount++;
+
+    bool checkPassed = ResponderCheck(...);
+
+    if (checkPassed) {
+        responder.MmInvoke(responderSpecificMessage);
+    }
+}
+
+// END ROUTING TABLE PROFILING
+if (routingTableTimer != null)
+{
+    routingTableTimer.Stop();
+    double routingMs = routingTableTimer.Elapsed.TotalMilliseconds;
+
+    // Store metrics for PerformanceTestHarness
+    // TODO: Add static fields to collect metrics
+}
 ```
-[MmInvoke] Node 'Parent': RoutingTable has 2 items, levelFilter=Self
-[MmInvoke] Responder 'MessageCounterResponder' on 'Parent': level=Self, checkPassed=False
+
+### Metrics to Track
+- `routingTableLookupTimeMs` - Time spent in routing table iteration
+- `responderCheckCount` - Number of ResponderCheck() calls
+- `routingTablePercentage` - % of total MmInvoke time
+
+---
+
+## Todo List Status
+
+Current tasks:
+1. ⏳ **IN PROGRESS:** Instrument MmRelayNode.MmInvoke() with routing table profiling
+2. ⏸️ PENDING: Add profiling to MmRoutingTable.GetMmRoutingTableItems()
+3. ⏸️ PENDING: Integrate routing metrics with PerformanceTestHarness
+4. ⏸️ PENDING: Investigate 0% cache hit rate with debug logging
+5. ⏸️ PENDING: Run performance tests and analyze results
+6. ⏸️ PENDING: Create ROUTING_TABLE_PROFILE.md report
+
+---
+
+## Session Context
+
+### This Session Completed
+1. ✅ Performance profiling hooks (20h) - Commit e263768b
+   - HandleAdvancedRouting: 6 metrics
+   - ResolvePathTargets: 5 metrics
+   - Global flags + hybrid approach
+
+2. ✅ Strategic analysis of Phase 3.1 (276h)
+   - **KEY DECISION:** Skip specialized routing tables (premature optimization)
+   - Current performance acceptable (980 msg/sec @ 100 responders, 53 FPS)
+   - No evidence routing table is bottleneck
+
+3. ✅ Planned 6h profiling mini-task
+   - Validate routing table overhead <15% → confirms skip Phase 3.1
+   - Use existing Small/Medium/Large performance test scenes
+   - Leverage PerformanceTestHarness infrastructure
+
+### Previous Sessions
+- Path Specification implementation (40h) - Commit 1207a499
+- Fixed wildcard expansion + MessageCounterResponder bugs
+- Tests: 187/188 passing
+
+---
+
+## Performance Test Infrastructure
+
+**Test Scenes:**
+- `Assets/MercuryMessaging/Tests/Performance/Scenes/SmallScale.unity` (10 responders, 3 levels)
+- `Assets/MercuryMessaging/Tests/Performance/Scenes/MediumScale.unity` (50 responders, 5 levels)
+- `Assets/MercuryMessaging/Tests/Performance/Scenes/LargeScale.unity` (100+ responders, 7-10 levels)
+
+**How to Run:**
+1. Open scene in Unity
+2. Press Play (auto-starts if `autoStart = true`)
+3. Results export to: `Assets/Resources/performance-results/{scale}_results.csv`
+
+**Current CSV Format:**
+```
+timestamp, frame_time_ms, memory_bytes, memory_mb, throughput_msg_sec, cache_hit_rate, avg_hop_count, messages_sent
 ```
 
-**Root Cause:** `ActiveCheck` was failing!
-- Messages used `MmActiveFilter.Active` (default)
-- Required `GameObject.activeInHierarchy == true`
-- Test GameObjects may not be fully active during message delivery
+**New Columns to Add:**
+- `routing_table_time_ms` - Time in routing table iteration
+- `routing_table_calls` - GetMmRoutingTableItems() call count
+- `responder_checks` - ResponderCheck() call count
+- `routing_pct` - Percentage of frame time in routing table
 
-### Fix Applied
-Modified all 5 `MmInvokeWithPath()` overloads to use `MmActiveFilter.All` instead of default `Active`.
+---
 
-**Rationale:**
-- Path-based routing targets specific nodes by hierarchical path, NOT by active state
-- Active state filtering is orthogonal to path-based addressing
-- Target nodes found by path should receive messages regardless of temporary active state
+## Strategic Decision Point
+
+**After profiling mini-task completes:**
+
+**IF routing table >30% of frame time:**
+- Consider implementing Phase 3.1 specialized tables
+- Focus on validated bottleneck
+
+**IF routing table <30% of frame time (EXPECTED):**
+- ✅ Skip Phase 3.1 (save 256h)
+- Complete Phase 2.1 remaining tasks (58h):
+  - Integration Testing (18h)
+  - Performance Testing (20h)
+  - API Documentation (12h)
+  - Tutorial Scene (8h)
+- Move to higher-value work:
+  - Visual Composer (212h) - Novel research contribution
+  - User Study implementation - Empirical validation
 
 ---
 
 ## Files Modified This Session
 
-### MmRelayNode.cs (+Debug Logging +ActiveFilter Fix)
+**Commits:**
+1. `e263768b` - Performance profiling hooks (20h)
+   - MmRelayNode.cs: +127 lines (profiling instrumentation)
 
-**Lines 728-759:** Added debug logging to MmInvoke
-```csharp
-MmLogger.LogFramework($"[MmInvoke] Node '{gameObject.name}': RoutingTable has {RoutingTable.Count} items, levelFilter={levelFilter}");
-MmLogger.LogFramework($"[MmInvoke] Responder '{responder.GetType().Name}' on '{responder.MmGameObject.name}': level={responderLevel}, checkPassed={checkPassed}");
-```
-
-**Lines 1060-1073:** Added debug logging to MmInvokeWithPath
-```csharp
-MmLogger.LogFramework($"[MmInvokeWithPath] Forwarding message to {targetNodes.Count} target nodes");
-MmLogger.LogFramework($"[MmInvokeWithPath] Forwarding to target node '{targetNode.gameObject.name}', routing table size={targetNode.RoutingTable.Count}");
-```
-
-**Lines 1051-1062:** Fixed default metadata in MmInvokeWithPath(no params)
-```csharp
-metadataBlock = new MmMetadataBlock(
-    MmLevelFilter.Self,
-    MmActiveFilter.All,  // ← Changed from Active to All
-    MmSelectedFilter.All,
-    MmNetworkFilter.All,
-    MmTagHelper.Everything
-);
-```
-
-**Lines 1091-1100, 1121-1130, 1151-1160:** Same fix for bool/int/string overloads
-
-**Lines 1187-1189:** Fixed pre-created message overload
-```csharp
-forwardedMessage.MetadataBlock.ActiveFilter = MmActiveFilter.All;
-```
-
-### PathSpecificationTests.cs
-**Line 30:** Added debug logging enable
-```csharp
-MmLogger.LogFramework = UnityEngine.Debug.Log;
-```
+**Uncommitted Changes:**
+- routing-optimization-context.md (updated session summary)
+- routing-optimization-tasks.md (marked profiling complete, updated progress to 69.3%)
+- QUICK_RESUME.md (this file - created)
 
 ---
 
-## Next Steps After Tests Pass
+## Next Developer Instructions
 
-### 1. Remove Debug Logging (IMPORTANT!)
-Remove all `MmLogger.LogFramework` calls added for debugging:
-- Lines 728, 754 in MmInvoke
-- Lines 1060, 1066 in MmInvokeWithPath
-- Line 30 in PathSpecificationTests.cs SetUp
+1. **Resume at:** MmRelayNode.cs line 736 (routing table iteration)
+2. **Implement:** Stopwatch timing around RoutingTable foreach loop
+3. **Track:** routingTableTimeMs, responderCheckCount metrics
+4. **Integration:** Add static fields for PerformanceTestHarness to read
+5. **Test:** Run SmallScale scene, verify metrics appear in CSV
+6. **Continue:** Follow todo list through completion
 
-### 2. Commit Implementation
-```bash
-git add Assets/MercuryMessaging/Protocol/MmPathSpecification.cs
-git add Assets/MercuryMessaging/Tests/PathSpecificationTests.cs
-git add Assets/MercuryMessaging/Protocol/MmRelayNode.cs
-git add dev/
-
-git commit -m "feat: Implement path specification system with ActiveFilter fix
-
-Adds hierarchical path-based message routing with wildcards.
-Phase 2.1 progress: 156h/254h (61.4% complete)
-
-Implementation:
-- MmPathSpecification parser with validation and caching (290 lines)
-- ResolvePathTargets() for path resolution with wildcard expansion
-- 5 MmInvokeWithPath() overloads with ActiveFilter.All for path routing
-- 35 comprehensive tests covering all functionality
-
-Key Features:
-- Grammar: path := segment ('/' segment)*
-- Segments: parent, child, sibling, self, ancestor, descendant, *
-- Wildcard semantic: collection expansion (fan-out multiplier)
-- Level filter: Self (no re-propagation, exact targets)
-- Active filter: All (path routing independent of active state)
-- Circular path prevention via visited tracking
-
-Bug Fix:
-- PathSpecification tests were failing due to ActiveCheck
-- MmInvokeWithPath now uses ActiveFilter.All instead of Active
-- Allows messages to reach targets regardless of GameObject active state
-- Rationale: Path resolution already found exact targets"
-```
-
-### 3. Next Feature: Performance Profiling Hooks (20h)
-- Add timing to HandleAdvancedRouting()
-- Add timing to ResolvePathTargets()
-- Log when > 1ms threshold
-- See `dev/active/routing-optimization/routing-optimization-tasks.md`
+**Estimated Time Remaining:** 4 hours
 
 ---
 
-## Test Results Expected
-
-**Before fix:** 182/188 passing (6 failures)
-- PathSpecificationTests: 5 failures
-- MessageHistoryCacheTests: 1 failure (performance variance - acceptable)
-
-**After fix:** 187/188 passing (1 failure)
-- PathSpecificationTests: 0 failures ✅
-- MessageHistoryCacheTests: 1 failure (performance variance - acceptable)
-
----
-
-## Key Insights Discovered
-
-### ResponderCheck Filter Chain
-```csharp
-1. TagCheck - Checks message tag vs responder tag
-2. LevelCheck - Checks (levelFilter & responderLevel) > 0
-3. ActiveCheck - Checks activeFilter == All OR (Active && activeInHierarchy)  ← CULPRIT
-4. SelectedCheck - Always true in base MmRelayNode
-5. NetworkCheck - Checks network filter compatibility
-```
-
-### Why ActiveCheck Failed
-- Default metadata uses `ActiveFilter.Active`
-- Requires `GameObject.activeInHierarchy == true`
-- Test GameObjects created with `new GameObject(name)` may not be fully active
-- Parent inactive → child `activeInHierarchy` = false → check fails
-
-### Why AdvancedRoutingTests Pass
-- Direct `MmInvoke()` calls on sender node
-- Sender is always active (just created and hasn't been deactivated)
-- PathSpecificationTests forward to target nodes which may be inactive
-
----
-
-## FREQUENT_ERRORS Pattern to Add
-
-**Pattern: ActiveFilter for Path-Based Routing**
-
-When using `MmInvokeWithPath()`, always use `MmActiveFilter.All` if providing custom metadata:
-
-```csharp
-// GOOD - Messages reach targets regardless of active state
-relay.MmInvokeWithPath("parent/sibling", MmMethod.Initialize,
-    new MmMetadataBlock(MmLevelFilter.Self, MmActiveFilter.All));
-
-// BAD - Messages blocked if target GameObject inactive
-relay.MmInvokeWithPath("parent/sibling", MmMethod.Initialize,
-    new MmMetadataBlock(MmLevelFilter.Self, MmActiveFilter.Active));
-
-// GOOD - Default now uses ActiveFilter.All (after fix)
-relay.MmInvokeWithPath("parent/sibling", MmMethod.Initialize);
-```
-
-**Why:** Path resolution already found exact target nodes by hierarchical location. Active state should not block delivery to explicitly targeted nodes.
-
----
-
-**Phase 2.1 Status:** 156h/254h (61.4% complete)
-**Overall Status:** Fix applied → awaiting test verification → remove debug logging → commit
+**Last Updated:** 2025-11-21 (Context limit approaching)
+**Session Duration:** ~2 hours (profiling hooks + strategic planning + documentation)
+**Next Session:** Continue profiling implementation
