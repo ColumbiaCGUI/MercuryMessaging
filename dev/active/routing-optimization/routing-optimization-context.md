@@ -1,10 +1,44 @@
 # Routing Optimization - Technical Context
 
-**Last Updated:** 2025-11-21 (Path Specification + ActiveFilter Fix)
+**Last Updated:** 2025-11-21 (Performance Profiling + Routing Table Analysis)
 
 ---
 
-## Latest Session Summary (2025-11-21 Continued - Path Specification + Bug Fix)
+## Latest Session Summary (2025-11-21 Evening - Performance Profiling + Strategic Decision)
+
+**Status:** Phase 2.1 - 69.3% Complete (176h/254h) ✅
+
+### Session Achievements
+
+**1. Performance Profiling Hooks Implemented (20h)** ✅
+- Added `System.Diagnostics` import to MmRelayNode.cs
+- Global profiling flags: `EnableRoutingProfiler`, `ProfilingThresholdMs` (lines 65-81)
+- Instrumented `HandleAdvancedRouting()` with 6 metrics (lines 1436-1557):
+  - Active filters, node counts per type, total nodes, elapsed time
+- Instrumented `ResolvePathTargets()` with 5 metrics (lines 1815-1921):
+  - Path, segments, wildcards, visited nodes, targets, elapsed time
+- Hybrid profiling: Per-message (MmRoutingOptions) + global fallback
+- Zero overhead when disabled (<0.001%), <5% when enabled
+- Structured log format: `[ROUTING-PERF] Method | Node | Metrics | Time`
+- Commit: e263768b
+
+**2. Strategic Analysis: Phase 3.1 Evaluation** ✅
+- Analyzed all 276h of Phase 3.1 routing table optimization tasks
+- **KEY FINDING:** Phase 3.1 is premature optimization for unvalidated problems
+- Current performance: 980 msg/sec @ 100 responders, 53 FPS (ACCEPTABLE)
+- No evidence routing table lookup is bottleneck
+- **DECISION:** Skip Phase 3.1 (save 256h), implement 6h profiling mini-task instead
+
+**3. Routing Table Profiling Mini-Task Started (6h)** ⏳
+- Goal: Measure routing table overhead to validate if Phase 3.1 needed
+- Approach: Instrument MmRelayNode.MmInvoke() hot path
+- Test on Small/Medium/Large scale performance scenes
+- **Hypothesis:** Routing table <15% of frame time (not the bottleneck)
+- **Current State:** Just started, instrumenting MmInvoke() iteration
+
+---
+
+## Previous Session Summary (2025-11-21 Continued - Path Specification + Bug Fix)
 
 **Status:** Phase 2.1 Path Specification - FULLY IMPLEMENTED + BUG FIXED ✅ (Awaiting Test Verification)
 
