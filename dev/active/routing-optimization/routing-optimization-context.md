@@ -1,6 +1,89 @@
 # Routing Optimization - Technical Context
 
-**Last Updated:** 2025-11-18
+**Last Updated:** 2025-11-21
+
+---
+
+## Current Session Summary (2025-11-21)
+
+**Status:** Phase 2.1 Advanced Routing - IMPLEMENTED AND TESTED ✅
+
+### What Was Completed This Session
+
+1. **Foundation Classes (60h):**
+   - ✅ MmRoutingOptions configuration class (280 lines)
+   - ✅ MmMessageHistoryCache LRU implementation (320 lines)
+   - ✅ Extended MmLevelFilter enum (5 new modes: Siblings, Cousins, Descendants, Ancestors, Custom)
+   - ✅ Extended MmMetadataBlock with Options and ExplicitRoutePath fields
+   - ✅ MessageHistoryCacheTests (30+ test cases)
+
+2. **Routing Logic Implementation (56h):**
+   - ✅ HandleAdvancedRouting() - Main dispatcher for advanced filters
+   - ✅ CollectSiblings() - Find same-parent nodes
+   - ✅ CollectCousins() - Find parent's-sibling's-children
+   - ✅ CollectDescendants() - Recursive all children
+   - ✅ CollectAncestors() - Recursive all parents
+   - ✅ RouteLateral() - Route to siblings/cousins
+   - ✅ RouteRecursive() - Route to descendants/ancestors
+   - ✅ ApplyCustomFilter() - Predicate-based filtering
+   - ✅ AdvancedRoutingTests (9 test cases covering all modes)
+
+3. **Critical Fixes Applied:**
+   - ✅ Fixed MessageCounterResponder method signatures (compilation errors)
+   - ✅ Fixed test hierarchy creation (explicit routing table registration)
+   - ✅ **CRITICAL: Fixed level filter transformation in routing methods**
+
+### Key Technical Discoveries
+
+**MOST IMPORTANT - Level Filter Transformation Pattern:**
+```csharp
+// When forwarding messages to other relay nodes, MUST transform level filter:
+var forwardedMessage = message.Copy();
+forwardedMessage.MetadataBlock.LevelFilter = MmLevelFilterHelper.SelfAndChildren;
+node.MmInvoke(forwardedMessage);
+```
+
+**Why This Is Critical:**
+- Target nodes' responders are registered as `MmLevelFilter.Self` (done automatically)
+- LevelCheck uses bitwise AND: `(messageFilter & responderLevel) > 0`
+- Without transformation: `(Siblings & Self) = (0x08 & 0x01) = 0` → FALSE (rejected)
+- With transformation: `(SelfAndChildren & Self) = (0x03 & 0x01) = 1` → TRUE (accepted)
+- Standard routing code (lines 705-722) already does this for Parent/Child messages
+- Advanced routing MUST follow the same pattern
+
+**Programmatic Hierarchy Creation:**
+- Setting Unity Transform parent does NOT register children in routing tables
+- Must explicitly call: `parentRelay.MmAddToRoutingTable(child, MmLevelFilter.Child)`
+- Must establish bidirectional relationship: `childRelay.AddParent(parentRelay)`
+- Critical for tests creating GameObjects with `new GameObject()` at runtime
+- Scene hierarchies and prefabs work automatically via MmRelayNode.Awake()
+
+### Commits Made This Session
+
+1. `d64d81f6` - feat: Add Phase 2.1 Advanced Message Routing foundation
+2. `eb840ae9` - feat: Implement Phase 2.1 Advanced Routing logic
+3. `db8dc342` - fix: Correct method signatures in MessageCounterResponder
+4. `5cacfa45` - fix: Properly register child relay nodes in test hierarchy
+5. `7dd86891` - fix: Transform level filters in advanced routing methods
+
+### Files Modified
+
+**Created:**
+- Assets/MercuryMessaging/Protocol/MmRoutingOptions.cs
+- Assets/MercuryMessaging/Support/Data/MmMessageHistoryCache.cs
+- Assets/MercuryMessaging/Tests/MessageHistoryCacheTests.cs
+- Assets/MercuryMessaging/Tests/AdvancedRoutingTests.cs
+
+**Modified:**
+- Assets/MercuryMessaging/Protocol/MmLevelFilter.cs (extended enum, added helpers)
+- Assets/MercuryMessaging/Protocol/MmMetadataBlock.cs (added Options, ExplicitRoutePath)
+- Assets/MercuryMessaging/Protocol/MmRelayNode.cs (added ~300 lines of routing methods)
+
+### Test Status
+
+**All Tests Passing:** 159/159 (100%) ✅
+- MessageHistoryCacheTests: 30+ tests (O(1) operations, time-based eviction)
+- AdvancedRoutingTests: 9 tests (all routing modes validated)
 
 ---
 
