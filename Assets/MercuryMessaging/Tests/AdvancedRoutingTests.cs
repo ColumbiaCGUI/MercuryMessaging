@@ -371,19 +371,18 @@ namespace MercuryMessaging.Tests
             public int MessageCount { get; private set; } = 0;
             private static List<MessageCounterResponder> allCounters = new List<MessageCounterResponder>();
 
-            protected override void Awake()
+            public override void Awake()
             {
                 base.Awake();
                 allCounters.Add(this);
             }
 
-            protected override void OnDestroy()
+            private void OnDestroy()
             {
-                base.OnDestroy();
                 allCounters.Remove(this);
             }
 
-            protected override void ReceivedInitialize()
+            public override void Initialize()
             {
                 MessageCount++;
             }
