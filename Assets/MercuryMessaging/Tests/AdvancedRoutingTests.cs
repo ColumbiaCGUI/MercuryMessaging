@@ -53,7 +53,14 @@ namespace MercuryMessaging.Tests
             var child2 = CreateNodeWithResponder("Child2", parent.transform);
             var child3 = CreateNodeWithResponder("Child3", parent.transform);
 
+            // Explicitly refresh responders to ensure they're registered
+            parent.GetComponent<MmRelayNode>().MmRefreshResponders();
+            child1.GetComponent<MmRelayNode>().MmRefreshResponders();
+            child2.GetComponent<MmRelayNode>().MmRefreshResponders();
+            child3.GetComponent<MmRelayNode>().MmRefreshResponders();
+
             yield return null; // Let hierarchy settle
+            yield return null; // Extra frame for responder registration
 
             // Act - Send message from Child1 to siblings
             var child1Relay = child1.GetComponent<MmRelayNode>();
@@ -123,7 +130,17 @@ namespace MercuryMessaging.Tests
             var cousin1 = CreateNodeWithResponder("Cousin1", parent2.transform);
             var cousin2 = CreateNodeWithResponder("Cousin2", parent2.transform);
 
+            // Explicitly refresh responders to ensure they're registered
+            grandparent.GetComponent<MmRelayNode>().MmRefreshResponders();
+            parent1.GetComponent<MmRelayNode>().MmRefreshResponders();
+            parent2.GetComponent<MmRelayNode>().MmRefreshResponders();
+            child1.GetComponent<MmRelayNode>().MmRefreshResponders();
+            child2.GetComponent<MmRelayNode>().MmRefreshResponders();
+            cousin1.GetComponent<MmRelayNode>().MmRefreshResponders();
+            cousin2.GetComponent<MmRelayNode>().MmRefreshResponders();
+
             yield return null;
+            yield return null; // Extra frame for responder registration
 
             // Act - Send message from Child1 to cousins
             var child1Relay = child1.GetComponent<MmRelayNode>();
@@ -162,7 +179,14 @@ namespace MercuryMessaging.Tests
             var grandchild = CreateNodeWithResponder("Grandchild", child.transform);
             var greatGrandchild = CreateNodeWithResponder("GreatGrandchild", grandchild.transform);
 
+            // Explicitly refresh responders to ensure they're registered
+            root.GetComponent<MmRelayNode>().MmRefreshResponders();
+            child.GetComponent<MmRelayNode>().MmRefreshResponders();
+            grandchild.GetComponent<MmRelayNode>().MmRefreshResponders();
+            greatGrandchild.GetComponent<MmRelayNode>().MmRefreshResponders();
+
             yield return null;
+            yield return null; // Extra frame for responder registration
 
             // Act - Send message from Root to all descendants
             var rootRelay = root.GetComponent<MmRelayNode>();
@@ -188,7 +212,12 @@ namespace MercuryMessaging.Tests
             var root = CreateNodeWithResponder("Root");
             var child = CreateNodeWithResponder("Child", root.transform);
 
+            // Explicitly refresh responders to ensure they're registered
+            root.GetComponent<MmRelayNode>().MmRefreshResponders();
+            child.GetComponent<MmRelayNode>().MmRefreshResponders();
+
             yield return null;
+            yield return null; // Extra frame for responder registration
 
             // Act - Multiple sends should not cause issues
             var rootRelay = root.GetComponent<MmRelayNode>();
@@ -225,7 +254,14 @@ namespace MercuryMessaging.Tests
             var parent = CreateNodeWithResponder("Parent", grandparent.transform);
             var child = CreateNodeWithResponder("Child", parent.transform);
 
+            // Explicitly refresh responders to ensure they're registered
+            greatGrandparent.GetComponent<MmRelayNode>().MmRefreshResponders();
+            grandparent.GetComponent<MmRelayNode>().MmRefreshResponders();
+            parent.GetComponent<MmRelayNode>().MmRefreshResponders();
+            child.GetComponent<MmRelayNode>().MmRefreshResponders();
+
             yield return null;
+            yield return null; // Extra frame for responder registration
 
             // Act - Send message from Child to all ancestors
             var childRelay = child.GetComponent<MmRelayNode>();
@@ -259,7 +295,13 @@ namespace MercuryMessaging.Tests
             // Tag one child with "Player" tag
             taggedChild.tag = "Player";
 
+            // Explicitly refresh responders to ensure they're registered
+            root.GetComponent<MmRelayNode>().MmRefreshResponders();
+            taggedChild.GetComponent<MmRelayNode>().MmRefreshResponders();
+            untaggedChild.GetComponent<MmRelayNode>().MmRefreshResponders();
+
             yield return null;
+            yield return null; // Extra frame for responder registration
 
             // Act - Send message with custom filter (only Player tagged)
             var rootRelay = root.GetComponent<MmRelayNode>();
@@ -317,7 +359,13 @@ namespace MercuryMessaging.Tests
             var child1 = CreateNodeWithResponder("Child1", parent.transform);
             var child2 = CreateNodeWithResponder("Child2", parent.transform);
 
+            // Explicitly refresh responders to ensure they're registered
+            parent.GetComponent<MmRelayNode>().MmRefreshResponders();
+            child1.GetComponent<MmRelayNode>().MmRefreshResponders();
+            child2.GetComponent<MmRelayNode>().MmRefreshResponders();
+
             yield return null;
+            yield return null; // Extra frame for responder registration
 
             // Act - Use combined filter (Self + Siblings)
             var child1Relay = child1.GetComponent<MmRelayNode>();
@@ -393,6 +441,21 @@ namespace MercuryMessaging.Tests
             }
 
             public override void Initialize()
+            {
+                MessageCount++;
+            }
+
+            protected override void ReceivedMessage(MmMessageString message)
+            {
+                MessageCount++;
+            }
+
+            protected override void ReceivedMessage(MmMessageInt message)
+            {
+                MessageCount++;
+            }
+
+            protected override void ReceivedMessage(MmMessageBool message)
             {
                 MessageCount++;
             }

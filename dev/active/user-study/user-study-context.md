@@ -1,762 +1,648 @@
-# User Study Context - Traffic Simulation Scene
+# User Study Development Context
 
-**Last Updated:** 2025-11-18
-**Status:** 🔨 In Active Development
-**Branch:** `user_study`
-**Scene:** `Assets/UserStudy/Scenes/Scenario1.unity`
+**Last Updated:** 2025-11-21
 
----
-
-## Overview
-
-Development of a complex traffic simulation scene for comparing Unity's built-in event system against the MercuryMessaging framework. This scene serves as a **showcase and validation** of MercuryMessaging's hierarchical message routing capabilities.
-
-**IMPORTANT UPDATE (2025-11-18):** UIST 2025 paper pursuit has been **discontinued**. This is now a demonstration scene showcasing MercuryMessaging features without publication pressure.
-
-The scene simulates a multi-intersection urban environment with autonomous vehicles, pedestrians, traffic lights, and emergent behaviors to demonstrate the advantages of hierarchical message-based architectures over traditional Unity Events.
+This document captures key files, architectural decisions, dependencies, and important context for the user study development task.
 
 ---
 
-## Purpose and Goals
+## Key Files and Locations
 
-### Primary Goal
-Demonstrate that MercuryMessaging's hierarchical message routing provides superior:
-- **Decoupling** - Components don't need direct references
-- **Scalability** - Easy to add new intersections and behaviors
-- **Maintainability** - Message flow follows scene hierarchy
-- **Performance** - Efficient routing through hierarchical filtering
+### Planning Documentation (Current Location)
 
-### Future Study (Optional)
-Developers using MercuryMessaging *could* demonstrate:
-1. Faster implementation times
-2. Fewer errors/bugs
-3. Lower cognitive load
-4. More maintainable code
-
-**Note:** User study is no longer required for UIST. May be conducted as optional research in the future.
-
----
-
-## Current Implementation State
-
-### Scene Architecture
-
-**Hierarchy Structure:**
 ```
-Scenario1 (Scene)
-├── TrafficHub (Central coordinator)
-│   └── HubController.cs (MmBaseResponder)
-│
-├── Intersections/ (Container)
-│   ├── Intersection_01 (MmRelayNode)
-│   │   ├── TrafficLights/ (4-way lights)
-│   │   │   ├── North_Light (TrafficLightController.cs)
-│   │   │   ├── South_Light (TrafficLightController.cs)
-│   │   │   ├── East_Light (TrafficLightController.cs)
-│   │   │   └── West_Light (TrafficLightController.cs)
-│   │   ├── CrossingZones/ (Pedestrian crossings)
-│   │   └── VehicleSpawnPoints/
-│   │
-│   ├── Intersection_02 through Intersection_08 (Planned)
-│   └── Intersection_09 through Intersection_12 (Stretch goal)
-│
-├── Pedestrians/ (Container)
-│   └── PedestrianPool/ (Object pooling for performance)
-│       └── Pedestrian prefab instances (Pedestrian.cs)
-│
-├── Vehicles/ (Container)
-│   └── VehiclePool/ (Object pooling)
-│       └── Car prefab instances (CarController.cs)
-│
-├── Environment/
-│   ├── Roads
-│   ├── Buildings
-│   ├── Sidewalks
-│   └── Props
-│
-├── SentimentSystem/
-│   └── SentimentController.cs (Aggregate behavior tracking)
-│
-├── Managers/
-│   ├── SpawnManager.cs (Controls spawning rates)
-│   ├── TrafficEventManager.cs (System-wide events)
-│   └── CameraManager.cs (Camera controls)
-│
-└── UI/
-    ├── HUD (Traffic stats, sentiment display)
-    └── Controls (User input for simulation)
+dev/active/user-study/
+├── README.md                          # Overview and scene inventory
+├── user-study-plan.md                 # Comprehensive strategic plan (THIS TASK)
+├── user-study-context.md              # This file - key decisions and context
+├── user-study-tasks.md                # Checklist for tracking progress
+├── 01-smart-home-control.md           # ✅ Complete (1,200 lines, detailed)
+├── 02-music-mixing-board.md           # ✅ Complete (900 lines, detailed)
+├── 03-tower-defense-waves.md          # ❌ TODO (outline only)
+├── 04-modular-puzzle-room.md          # ❌ TODO (outline only)
+├── 05-factory-assembly-line.md        # ❌ TODO (outline only)
+├── comparison-matrix.md               # ❌ TODO (code comparisons)
+└── user-study-design.md               # ❌ TODO (methodology, IRB materials)
 ```
 
-### Implemented Features ✅
+### MercuryMessaging Framework (Core)
 
-#### 1. Traffic Light System
-**File:** `TrafficLightController.cs`
-**Status:** ✅ Implemented
+**Location:** `Assets/MercuryMessaging/`
 
-- 4-way intersection traffic light coordination
-- Timed state transitions (Green → Yellow → Red)
-- Synchronized opposite lights (North-South vs East-West)
-- Visual feedback (material color changes)
-- Message-based control via MercuryMessaging
+**Critical Files:**
+- `Protocol/MmRelayNode.cs` (1,422 lines) - Central message router, **MOST IMPORTANT**
+- `Protocol/MmBaseResponder.cs` (383 lines) - Base responder with method routing
+- `Protocol/MmRelaySwitchNode.cs` (188 lines) - FSM-enabled relay node
+- `Protocol/MmMessage.cs` - Message type definitions
+- `Protocol/IMmResponder.cs` - Core interface
+- `CLAUDE.md` - Comprehensive framework documentation
 
-**Key Methods:**
-- `ReceivedMessage(MmMessageString)` - Handles traffic light commands
-- State machine for light timing
-- Pedestrian crossing coordination
+**Key Concepts:**
+- Hierarchical message routing through Unity scene graph
+- Tag-based filtering (8-bit system: Tag0-Tag7)
+- FSM integration for state management
+- Zero external dependencies
+- Performance: 53-66 FPS in Editor, excellent scalability
 
-#### 2. Hub Controller
-**File:** `HubController.cs`
-**Status:** ✅ Implemented
-
-- Central coordinator for all intersections
-- Broadcasts system-wide events
-- Manages global traffic flow parameters
-- Coordinates cross-intersection dependencies
-
-**Responsibilities:**
-- Emergency vehicle priority
-- Rush hour simulation
-- Weather condition changes
-- Global sentiment monitoring
-
-#### 3. Pedestrian System
-**File:** `Pedestrian.cs`
-**Status:** ✅ Implemented
-
-- Autonomous pedestrian AI
-- Fear factor system (affects crossing behavior)
-- Waypoint-based pathfinding
-- Traffic light awareness
-- Crowd behavior (clustering, following)
-
-**Parameters:**
-- `fearFactor` (0-1) - How cautious the pedestrian is
-- `walkSpeed` - Movement speed
-- `crossingThreshold` - When to start crossing
-- Target crosswalk selection
-
-**Behaviors:**
-- Wait at crosswalk when light is red
-- Cross when safe (green light or gap in traffic)
-- React to nearby vehicles
-- Follow crowd when uncertain
-
-#### 4. Vehicle System
-**File:** `CarController.cs`
-**Status:** ✅ Implemented
-
-- Autonomous vehicle AI
-- Recklessness meter (affects driving behavior)
-- Lane following
-- Traffic light obedience (or not, if reckless)
-- Collision avoidance
-
-**Parameters:**
-- `recklessMeter` (0-1) - How much driver follows rules
-- `topSpeed` - Maximum speed
-- `accelerationRate` - How quickly speeds up
-- `brakingDistance` - When to start slowing for lights
-
-**Behaviors:**
-- Stop at red lights (unless reckless)
-- Slow at yellow lights
-- Accelerate at green lights
-- Avoid other vehicles
-- Yield to pedestrians (unless reckless)
-
-#### 5. Sentiment System
-**File:** `SentimentController.cs`
-**Status:** ✅ Implemented
-
-- Tracks aggregate crowd sentiment
-- Monitors traffic flow efficiency
-- Detects congestion and frustration
-- Provides feedback to hub for adjustments
-
-**Metrics Tracked:**
-- Average wait time at intersections
-- Pedestrian crossing delays
-- Vehicle congestion levels
-- Near-miss incidents
-- Overall satisfaction score
-
-#### 6. Event Management
-**File:** `TrafficEventManager.cs`
-**Status:** ✅ Implemented
-
-- System-wide event broadcasting
-- Event history tracking
-- Priority event handling
-- Cross-intersection coordination
-
-**Event Types:**
-- Emergency vehicle approaching
-- Pedestrian crossing request
-- Vehicle breakdown
-- Weather changes
-- Rush hour triggers
-
-#### 7. Spawning System
-**File:** `SpawnManager.cs`
-**Status:** ✅ Implemented
-
-- Controls pedestrian and vehicle spawn rates
-- Object pooling for performance
-- Spawn point management
-- Density-based spawning (prevents overcrowding)
-
-**Features:**
-- Time-of-day spawn patterns
-- Dynamic spawn rate adjustment
-- Pool preheating
-- Despawning when far from camera
-
-#### 8. Camera System
-**Files:** `CameraManager.cs`, `FollowCamera.cs`, `MaintainScale.cs`
-**Status:** ✅ Implemented
-
-- Free camera movement
-- Follow mode (track specific vehicle/pedestrian)
-- Top-down overview mode
-- Smooth transitions
-
-#### 9. Street Information
-**File:** `StreetInfo.cs`
-**Status:** ✅ Implemented
-
-- Metadata about street segments
-- Lane configuration
-- Speed limits
-- Intersection connections
+**Documentation:**
+- `CLAUDE.md` - Framework overview, architecture patterns, common workflows
+- `FILE_REFERENCE.md` - Important files with descriptions
+- `CONTRIBUTING.md` - Development standards, naming conventions
 
 ---
 
-## Recent Development Activity
+## Implementation Locations (Future)
 
-### Last 10 Commits (user_study branch)
+### Scene Files (To Be Created)
 
-1. **`235d134`** - "Major refactoring changes" (2025-11-18)
-   - Assets folder reorganization
-   - UserStudy scripts preserved in `Assets/UserStudy/Scripts/`
+```
+Assets/UserStudy/
+├── Scenes/
+│   ├── SmartHome_Mercury.unity        # Phase 2.1
+│   ├── SmartHome_Events.unity         # Phase 2.2
+│   ├── MusicMixer_Mercury.unity       # Phase 3.1
+│   ├── MusicMixer_Events.unity        # Phase 3.2
+│   ├── TowerDefense_Mercury.unity     # Phase 4.1
+│   ├── TowerDefense_Events.unity      # Phase 4.2
+│   ├── PuzzleRoom_Mercury.unity       # Phase 5.1
+│   ├── PuzzleRoom_Events.unity        # Phase 5.2
+│   ├── AssemblyLine_Mercury.unity     # Phase 5.2
+│   └── AssemblyLine_Events.unity      # Phase 5.2
+```
 
-2. **`0302b27`** - "Upgrade Unity version"
-   - Upgraded to newer Unity version
-   - Updated XR packages
+### Script Organization
 
-3. **`2e05717`** - "Fix hub interaction"
-   - Fixed HubController message routing
-   - Improved cross-intersection coordination
+```
+Assets/UserStudy/Scripts/
+├── Mercury/                           # MercuryMessaging implementations
+│   ├── SmartHome/
+│   │   ├── SmartHomeHub.cs           # MmRelaySwitchNode root
+│   │   ├── ControlPanel.cs           # MmBaseResponder UI
+│   │   ├── SmartLight.cs             # MmBaseResponder device
+│   │   ├── Thermostat.cs             # MmBaseResponder device
+│   │   ├── SmartBlinds.cs            # MmBaseResponder device
+│   │   └── MusicPlayer.cs            # MmBaseResponder device
+│   ├── MusicMixer/
+│   │   ├── MixerHub.cs               # MmRelaySwitchNode
+│   │   ├── AudioTrack.cs             # MmBaseResponder
+│   │   ├── AudioEffect.cs            # MmBaseResponder base
+│   │   ├── ReverbEffect.cs           # Inherits AudioEffect
+│   │   ├── DelayEffect.cs            # Inherits AudioEffect
+│   │   ├── EQEffect.cs               # Inherits AudioEffect
+│   │   └── UI_MixerPanel.cs          # MmBaseResponder
+│   ├── TowerDefense/ (8 scripts)
+│   ├── PuzzleRoom/ (6 scripts)
+│   └── AssemblyLine/ (7 scripts)
+│
+└── UnityEvents/                       # Unity Events implementations
+    ├── SmartHome/
+    │   ├── SmartHomeController.cs    # Central controller (large)
+    │   ├── SmartLightBehaviour.cs
+    │   ├── ThermostatBehaviour.cs
+    │   ├── SmartBlindsBehaviour.cs
+    │   ├── MusicPlayerBehaviour.cs
+    │   ├── RoomController.cs         # Optional grouping
+    │   └── ISmartDevice.cs           # Interface
+    ├── MusicMixer/ (8 scripts)
+    ├── TowerDefense/ (10 scripts)
+    ├── PuzzleRoom/ (8 scripts)
+    └── AssemblyLine/ (9 scripts)
+```
 
-4. **`2ba8bde`** - "refactor: add some more modification to scenes"
-   - Scene structure improvements
-   - Additional intersection setup
+### Study Infrastructure
 
-5. **`cb971cc`** - "refactor: modified scene"
-   - Further scene refinements
-
-6-10: Earlier commits focused on:
-   - Pedestrian fear factor implementation
-   - Vehicle recklessness system
-   - Multi-intersection dependencies
-   - Crowd sentiment tracking
-   - Performance optimization
-
----
-
-## Pending Features 🔨
-
-### High Priority (Required for User Study)
-
-#### 1. Multiple Intersections (Currently: 1, Target: 8-12)
-**Status:** ⚠️ Only 1 intersection implemented
-**Effort:** ~40 hours
-**Dependencies:** None
-
-**Tasks:**
-- [ ] Design intersection layouts (straight, T-junction, roundabout)
-- [ ] Create intersection prefabs
-- [ ] Implement 8 basic intersections
-- [ ] Add 4 advanced intersections (stretch goal)
-- [ ] Connect intersections with road network
-- [ ] Test traffic flow between intersections
-
-#### 2. Cross-Intersection Message Flow
-**Status:** ⚠️ Partially implemented in HubController
-**Effort:** ~30 hours
-**Dependencies:** Multiple intersections
-
-**Tasks:**
-- [ ] Emergency vehicle priority propagation
-- [ ] Traffic wave coordination (green wave timing)
-- [ ] Congestion detection and routing
-- [ ] Pedestrian crowd flow between intersections
-- [ ] Weather effects propagation
-
-#### 3. Performance Benchmarking
-**Status:** ❌ Not started
-**Effort:** ~60 hours
-**Dependencies:** Complete scene with 8+ intersections
-
-**Tasks:**
-- [ ] Implement performance metrics collection
-- [ ] Frame rate monitoring
-- [ ] Message throughput measurement
-- [ ] Memory profiling
-- [ ] Comparison with Unity Events implementation
-- [ ] Generate performance report
-
-#### 4. Unity Events Comparison Implementation
-**Status:** ❌ Not started (CRITICAL)
-**Effort:** ~100 hours
-**Dependencies:** Complete MercuryMessaging implementation
-
-**Tasks:**
-- [ ] Duplicate scene (Scenario1_UnityEvents.unity)
-- [ ] Reimplement all messaging using Unity Events
-- [ ] Ensure feature parity
-- [ ] Match visual appearance
-- [ ] Performance parity where possible
-- [ ] Document coupling differences
-
-#### 5. User Study Task Design
-**Status:** ❌ Not started (CRITICAL)
-**Effort:** ~40 hours
-**Dependencies:** Both implementations complete
-
-**Tasks:**
-- [ ] Design 5-7 implementation tasks for participants
-- [ ] Create task instruction documents
-- [ ] Develop task evaluation rubrics
-- [ ] Pilot test tasks with 2-3 volunteers
-- [ ] Refine based on pilot feedback
-
-#### 6. Data Collection Infrastructure
-**Status:** ❌ Not started
-**Effort:** ~30 hours
-**Dependencies:** Task design complete
-
-**Tasks:**
-- [ ] Implement automatic logging of user actions
-- [ ] Time tracking per task
-- [ ] Error/bug tracking
-- [ ] Code complexity metrics collection
-- [ ] NASA-TLX questionnaire integration
-- [ ] Data export to CSV/JSON
-
-### Medium Priority (Nice to Have)
-
-#### 7. Advanced AI Behaviors
-**Effort:** ~20 hours
-
-- [ ] Pedestrian social groups (families, friends)
-- [ ] Vehicle convoys (multiple cars traveling together)
-- [ ] Jaywalking behavior
-- [ ] Vehicle lane changing
-- [ ] Bicycle and motorcycle agents
-
-#### 8. Visual Polish
-**Effort:** ~15 hours
-
-- [ ] Better vehicle models
-- [ ] Animated pedestrians
-- [ ] Particle effects (exhaust, dust)
-- [ ] Day/night cycle visuals
-- [ ] Weather effects (rain, fog)
-
-#### 9. UI Improvements
-**Effort:** ~10 hours
-
-- [ ] Real-time traffic flow visualization
-- [ ] Sentiment heat map
-- [ ] Intersection efficiency graphs
-- [ ] User control panel
-- [ ] Debug visualization toggles
-
-### Low Priority (Future Work)
-
-#### 10. Networking Support
-**Effort:** ~50 hours
-
-- [ ] Multi-user observation mode
-- [ ] Collaborative control
-- [ ] Remote data collection
+```
+Assets/UserStudy/StudyInfrastructure/
+├── MetricsCollector.cs               # Automatic LOC counting, timing
+├── DataLogger.cs                     # CSV export
+├── NASATLXQuestionnaire.cs           # 6-dimension workload survey
+├── TaskInstructions/
+│   ├── SmartHome_Task1.md
+│   ├── SmartHome_Task2.md
+│   ├── ... (25 task files total)
+│   └── AssemblyLine_Task5.md
+├── TaskUI.cs                         # In-Unity task display
+└── RandomizationManager.cs           # Counterbalancing
+```
 
 ---
 
-## Technical Challenges
+## Architectural Decisions
 
-### 1. Performance with 8-12 Intersections
-**Challenge:** Maintaining 60+ FPS with hundreds of agents
-**Solutions:**
-- Object pooling (already implemented)
-- LOD for distant agents
-- Culling off-screen agents
-- Spatial partitioning for collision detection
-- Message filtering optimization
+### Decision 1: Within-Subject Design (Mercury vs Events)
 
-### 2. Realistic Traffic Flow
-**Challenge:** Avoiding deadlocks and unrealistic behaviors
-**Solutions:**
-- Traffic flow algorithms from literature
-- Pathfinding with A* or similar
-- Intersection priority rules
-- Deadlock detection and resolution
+**Date:** 2025-11-21
+**Status:** ✅ Confirmed
 
-### 3. Fair Comparison with Unity Events
-**Challenge:** Ensuring apples-to-apples comparison
-**Solutions:**
-- Identical visual appearance
-- Same AI behaviors
-- Similar performance characteristics
-- Document any implementation differences
-- Expert review of both implementations
+**Context:**
+User study needs to compare two approaches (MercuryMessaging vs Unity Events) on multiple metrics.
 
-### 4. User Study Recruitment
-**Challenge:** Finding 20-30 qualified participants
-**Solutions:**
-- Columbia CS department students
-- Unity developer communities
-- Game dev meetups
-- Compensate participants ($20-50/session)
-- Make study engaging and educational
+**Decision:**
+Use within-subject design where each participant tries BOTH approaches on different scenes.
 
----
-
-## Key Decisions Made
-
-### 1. Scene Complexity Level
-**Decision:** 8-12 intersections with hundreds of agents
 **Rationale:**
-- Complex enough to show MercuryMessaging advantages
-- Simple enough to implement in Unity Events
-- Realistic urban simulation
-- Challenging but achievable for participants
+- Reduces individual variability (each person is their own control)
+- Higher statistical power with fewer participants (15-20 vs 30-40)
+- Captures subjective preference directly
+- Standard for HCI comparison studies
 
-### 2. Agent AI Sophistication
-**Decision:** Simple but believable AI (fear factor, recklessness)
+**Alternatives Considered:**
+- Between-subjects (half use Mercury, half use Events) - requires more participants
+- Mixed design (some tasks within, some between) - too complex
+
+**Implications:**
+- Need counterbalancing (randomize order to avoid learning effects)
+- Each participant needs 2-3 hours (tries multiple scenes)
+- Must ensure scenes are comparable in difficulty
+
+---
+
+### Decision 2: Progressive Complexity (Simple → Medium)
+
+**Date:** 2025-11-21
+**Status:** ✅ Confirmed
+
+**Context:**
+5 scenes needed with varying complexity to avoid ceiling/floor effects.
+
+**Decision:**
+Order scenes by complexity:
+1. Smart Home (Simple, 30-45min)
+2. Music Mixer (Simple, 30-45min)
+3. Tower Defense (Medium, 45-90min)
+4. Puzzle Room (Simple-Medium, 30-60min)
+5. Assembly Line (Medium, 60-90min)
+
 **Rationale:**
-- Focus is on messaging architecture, not AI
-- Easy to understand for participants
-- Still demonstrates emergent behaviors
-- Reduces implementation time
+- Simple scenes establish baseline, show clear differences
+- Medium scenes show scalability and challenge
+- Avoid "too easy" (ceiling effect) or "too hard" (floor effect)
+- Progressive difficulty keeps participants engaged
 
-### 3. MercuryMessaging Usage Pattern
-**Decision:** Heavy use of hierarchical message routing
+**Implications:**
+- Participants start with simple scene (Smart Home recommended)
+- Can adjust which scenes used based on time constraints
+- Each scene should be piloted to validate difficulty
+
+---
+
+### Decision 3: Implement Mercury Version First
+
+**Date:** 2025-11-21
+**Status:** ✅ Confirmed
+
+**Context:**
+For each scene pair, need to decide implementation order.
+
+**Decision:**
+Always implement MercuryMessaging version first, then Unity Events version.
+
 **Rationale:**
-- Showcases framework's strengths
-- Natural fit for intersection hierarchy
-- Demonstrates decoupling benefits
-- Provides clear comparison point with Unity Events
+- Mercury version establishes feature requirements
+- Easier to ensure feature parity (Events matches Mercury)
+- Avoids accidentally adding Mercury-only features later
+- Documents "ground truth" for comparison
 
-### 4. Performance Target
-**Decision:** 60+ FPS on mid-range hardware
+**Alternatives Considered:**
+- Parallel implementation (both at once) - harder to ensure parity
+- Events first - risk Mercury version having extra features
+
+**Implications:**
+- Mercury scripts serve as specification for Events version
+- Must document all features clearly
+- Events version may take longer (intentional)
+
+---
+
+### Decision 4: Zero Inspector Connections for Mercury
+
+**Date:** 2025-11-21
+**Status:** ✅ Confirmed (Design Goal)
+
+**Context:**
+MercuryMessaging supports automatic registration, but could theoretically use some Inspector references.
+
+**Decision:**
+Mercury implementations will use ZERO manual Inspector connections (only hierarchy parenting).
+
 **Rationale:**
-- Professional game standard
-- Avoids performance confounding study results
-- Demonstrates practical viability
-- Requires optimization work
+- Demonstrates loose coupling advantage
+- Clear metric for comparison (0 vs 30-50)
+- Shows "pure" Mercury approach
+- Matches framework design philosophy
 
-### 5. Study Duration
-**Decision:** ~2 hours per participant
+**Exceptions:**
+- UI references (buttons, text fields) allowed - not messaging-related
+- Prefab references for instantiation allowed
+- Material/asset references allowed
+
+**Implications:**
+- All device discovery via hierarchy traversal
+- All communication via messages
+- Tag-based filtering for targeting
+- May require small refactors to eliminate references
+
+---
+
+### Decision 5: Feature Parity Over Performance
+
+**Date:** 2025-11-21
+**Status:** ✅ Confirmed
+
+**Context:**
+Unity Events version may be slower/less elegant, but must have same features.
+
+**Decision:**
+Prioritize feature parity over performance or elegance. Unity Events versions should be "reasonably well-written" but may be more verbose/complex.
+
 **Rationale:**
-- Long enough for meaningful data
-- Short enough to recruit participants
-- Avoids fatigue effects
-- Fits in one session
+- Fair comparison requires identical functionality
+- Differences in code complexity are part of findings
+- Avoid accusations of "straw man" Events implementation
+- Show realistic Unity Events usage
+
+**Guidelines:**
+- Use standard Unity Events patterns (not anti-patterns)
+- Don't artificially inflate LOC in Events version
+- Do show necessary complexity (controllers, lists, wiring)
+- Follow Unity best practices
+
+**Implications:**
+- Events implementations will naturally be longer
+- Some patterns (tag filtering) require workarounds
+- Inspector wiring is legitimate Events workflow
 
 ---
 
-## Integration with MercuryMessaging Framework
+### Decision 6: Tag Assignment Strategy
 
-### Message Flow Examples
+**Date:** 2025-11-21
+**Status:** ✅ Confirmed
 
-#### Example 1: Traffic Light Change
-```
-Hub (MmRelaySwitchNode)
-  └─> Intersection_01 (MmRelayNode)
-      └─> North_Light (TrafficLightController)
-          └─> Receives MmMessageString("SetGreen")
-              └─> Changes light to green
-              └─> Broadcasts MmMessageBool(true) to crossing zone
-```
+**Context:**
+MercuryMessaging has 8-bit tag system (Tag0-Tag7). Need consistent strategy.
 
-#### Example 2: Emergency Vehicle
-```
-Hub (broadcasts to all intersections)
-  └─> All Intersections (MmLevelFilter.Child)
-      └─> All Traffic Lights (MmLevelFilter.Child)
-          └─> Switch to red immediately
-          └─> Hold until emergency vehicle passes
-```
+**Decision:**
+Standard tag assignments across all scenes:
+- **Tag0** - Primary objects (Lights, Drums, Enemies, Switches)
+- **Tag1** - Secondary objects (Climate, Bass, Towers, Doors)
+- **Tag2** - Tertiary objects (Entertainment, Melody, Spawners, Lights)
+- **Tag3** - Quaternary objects (Effects, UI, Conveyors, Items)
+- **Tag4-7** - Scene-specific as needed
 
-#### Example 3: Pedestrian Crossing Request
-```
-Pedestrian (at crosswalk)
-  └─> Crossing Zone (MmLevelFilter.Parent)
-      └─> Traffic Light (MmLevelFilter.Parent)
-          └─> Prioritize pedestrian phase
-          └─> Notify Hub of crossing request
-```
+**Rationale:**
+- Consistency aids learning
+- Documents common usage pattern
+- Easy to explain to participants
+- Scalable (8 tags sufficient for all scenes)
 
-### Tags Used
-
-- **Tag0:** Traffic lights
-- **Tag1:** Pedestrians
-- **Tag2:** Vehicles
-- **Tag3:** Spawners
-- **Tag4:** UI elements
-- **Tag5:** Cameras
-- **Tag6-7:** Reserved for future use
-
-### Filter Patterns
-
-- **Hub → Intersections:** `MmLevelFilter.Child` with `MmActiveFilter.All`
-- **Intersection → Lights:** `MmLevelFilter.Child` with tag filtering
-- **Agent → Parent:** `MmLevelFilter.Parent` for upward notification
-- **System broadcasts:** `MmLevelFilter.SelfAndChildren` from Hub
+**Implications:**
+- Document tag meanings in each scene
+- Participants learn tag concept early
+- Events versions need equivalent grouping mechanism
 
 ---
 
-## Files Reference
+### Decision 7: Pilot Testing Required for Each Scene
 
-### Core Scripts (Assets/UserStudy/Scripts/)
+**Date:** 2025-11-21
+**Status:** ✅ Confirmed
 
-| File | Lines | Purpose | Status |
-|------|-------|---------|--------|
-| `TrafficLightController.cs` | ~200 | Traffic light state machine | ✅ Complete |
-| `HubController.cs` | ~300 | Central coordination | ✅ Complete |
-| `Pedestrian.cs` | ~400 | Pedestrian AI and behavior | ✅ Complete |
-| `CarController.cs` | ~450 | Vehicle AI and driving | ✅ Complete |
-| `SentimentController.cs` | ~250 | Aggregate sentiment tracking | ✅ Complete |
-| `TrafficEventManager.cs` | ~200 | Event broadcasting | ✅ Complete |
-| `SpawnManager.cs` | ~300 | Agent spawning and pooling | ✅ Complete |
-| `StreetInfo.cs` | ~100 | Street metadata | ✅ Complete |
-| `CameraManager.cs` | ~150 | Camera control | ✅ Complete |
-| `FollowCamera.cs` | ~100 | Follow mode camera | ✅ Complete |
-| `MaintainScale.cs` | ~50 | UI scale maintenance | ✅ Complete |
+**Context:**
+User study tasks must be validated for difficulty and clarity.
 
-**Total:** 11 scripts, ~2,500 lines of code
+**Decision:**
+Each scene must be pilot tested with 1-2 developers before inclusion in main study.
 
-### Scene Files
+**Pilot Testing Protocol:**
+1. Recruit 1-2 Unity developers (not final participants)
+2. Have them complete all 5 tasks for scene
+3. Collect completion times, errors, feedback
+4. Refine task instructions, difficulty, planted bugs
+5. Re-test if major changes made
 
-| File | Purpose | Status |
-|------|---------|--------|
-| `Assets/UserStudy/Scenes/Scenario1.unity` | Main traffic simulation | 🔨 In Progress |
-| `Assets/UserStudy/Scenes/Scenario1_UnityEvents.unity` | Comparison implementation | ❌ Not created |
+**Acceptance Criteria:**
+- Task completion times within ±30% of estimates
+- Clear instructions (no confusion)
+- Planted bugs appropriately challenging
+- Metrics collection works correctly
 
-### Prefabs (Planned)
-
-- `Pedestrian.prefab` - Base pedestrian with AI
-- `Car.prefab` - Base vehicle with AI
-- `Intersection_4Way.prefab` - 4-way intersection template
-- `Intersection_3Way.prefab` - T-junction template
-- `TrafficLight.prefab` - Individual traffic light
-- `CrossingZone.prefab` - Pedestrian crossing area
+**Implications:**
+- Add 2-4 hours pilot time per scene
+- Budget for pilot participant compensation
+- May need to redesign tasks based on feedback
 
 ---
 
-## Next Steps (Priority Order)
+## Dependencies
 
-### Immediate (Next Session)
+### Internal Dependencies (Within This Project)
 
-1. **Verify Unity Reorganization** ✅ COMPLETE
-   - Verified on 2025-11-18: Zero errors, zero broken references
-   - All UserStudy scripts compile
-   - Scenario1.unity loads and runs
+#### Phase Dependencies
+- Phase 2 (Smart Home) → Phase 3 (Music Mixer)
+  - Establishes implementation pattern
+  - Validates metrics collection
+  - Proves concept works
 
-2. **Create Additional Intersections** 🔨 IN PROGRESS
-   - Design 7 more intersection layouts
-   - Create intersection prefabs
-   - Place in scene with road connections
-   - Test traffic flow
-   - **Timeline:** No deadline pressure (UIST removed)
+- Phase 3 (Music Mixer) → Phase 4 (Tower Defense)
+  - Confidence in workflow
+  - Refined task design
 
-3. **Implement Cross-Intersection Coordination** 📋 PLANNED
-   - Emergency vehicle priority across intersections
-   - Green wave timing system
-   - Congestion-based routing
+- Phase 4 (Tower Defense) → Phase 5 (Puzzle + Assembly)
+  - All patterns established
+  - Can move faster
 
-### Short-Term (Next 2 Weeks)
+- Phases 1-5 → Phase 6 (Infrastructure)
+  - Need scenes to test metrics on
+  - Infrastructure must support all scenes
 
-4. **Performance Benchmarking** 📊
-   - Implement metrics collection
-   - Profile current implementation
-   - Optimize bottlenecks
-   - Document performance
+- Phase 6 (Infrastructure) → Phase 7 (Study Execution)
+  - Cannot run study without data collection
+  - Must have piloted at least one scene
 
-5. **Unity Events Implementation** 🔄
-   - Duplicate scene
-   - Reimplement with Unity Events
-   - Ensure feature parity
-   - Performance comparison
+#### Task Dependencies (Within Phases)
+- Mercury implementation → Events implementation (feature parity)
+- Both implementations → Task design (need working scenes)
+- Task design → Pilot testing (need tasks designed)
+- Pilot testing → Refinement (based on feedback)
 
-6. **User Study Task Design** 📝
-   - Design 5-7 implementation tasks
-   - Write task instructions
-   - Create evaluation rubrics
-   - Pilot test
-
-### Medium-Term (Next 1-2 Months)
-
-7. **Recruitment and IRB** 👥
-   - Prepare IRB application
-   - Submit for approval
-   - Create recruitment materials
-   - Start recruiting participants
-
-8. **Data Collection System** 📈
-   - Implement logging infrastructure
-   - NASA-TLX integration
-   - Metrics collection
-   - Data export
-
-9. **Pilot Study** 🧪
-   - Run with 2-3 participants
-   - Refine tasks and procedures
-   - Fix issues discovered
-   - Validate data collection
-
-### Long-Term (2-3 Months)
-
-10. **Full User Study** 👥
-    - Run 20-30 participants
-    - Collect all data
-    - Monitor for issues
-    - Debrief participants
-
-11. **Data Analysis** 📊
-    - Statistical analysis
-    - Qualitative feedback analysis
-    - Performance comparison
-    - Generate figures/tables
-
-12. **Paper Writing** 📄
-    - Write first draft
-    - Internal review
-    - Revisions
-    - Submit to UIST 2025 (April 9 deadline)
+#### File Dependencies
+- `user-study-plan.md` → All detailed planning docs (references plan structure)
+- `01-smart-home-control.md` → Task 2.1-2.3 (implementation guide)
+- `02-music-mixing-board.md` → Task 3.1-3.3 (implementation guide)
+- `comparison-matrix.md` → All planning docs (synthesizes comparisons)
+- `user-study-design.md` → Phase 6-7 (methodology for study execution)
 
 ---
 
-## Blockers and Risks
+### External Dependencies
 
-### Previous Blockers (Now Resolved) ✅
+#### MercuryMessaging Framework
+**Status:** ✅ Complete (Production-ready)
+**Version:** Based on latest (2025-11-21)
+**Location:** `Assets/MercuryMessaging/`
 
-1. **UIST Deadline** - REMOVED (no longer pursuing UIST 2025)
-2. **Unity Events Implementation** - OPTIONAL (not required for showcase)
-3. **Recruitment Uncertainty** - REMOVED (no user study required)
-4. **Unity Reorganization** - COMPLETE (verified Nov 18, zero errors)
+**Required Components:**
+- MmRelayNode (message routing)
+- MmBaseResponder (responder base class)
+- MmRelaySwitchNode (FSM support)
+- MmMessage types (MessageBool, MessageFloat, MessageString, etc.)
+- MmTag enum (8-bit tag system)
 
-### Medium Risks
-
-4. **Performance Issues with 8-12 Intersections**
-   - **Risk:** Can't maintain 60 FPS
-   - **Mitigation:** Aggressive optimization, reduce scene complexity if needed
-   - **Impact:** Performance becomes confounding variable
-
-5. **Fair Comparison Challenges**
-   - **Risk:** Implementations not truly equivalent
-   - **Mitigation:** Expert review, clear documentation of differences
-   - **Impact:** Reviewers question validity of comparison
-
-6. **Participant Task Difficulty**
-   - **Risk:** Tasks too hard or too easy
-   - **Mitigation:** Pilot testing, task refinement
-   - **Impact:** Ceiling/floor effects, no meaningful differences detected
+**Risk:** Low (framework stable and tested)
 
 ---
 
-## Resources Needed
+#### Unity Engine
+**Status:** ✅ Available
+**Version Required:** Unity 2021.3+ LTS
+**Current Version:** 2021.3+ (project uses this)
 
-### Personnel
-- 1 primary developer (scene implementation)
-- 1 assistant (Unity Events implementation)
-- 1 study coordinator (recruitment, administration)
-- 1 data analyst (statistical analysis)
+**Required Packages:**
+- TextMeshPro (built-in) - for UI text
+- Unity UI (built-in) - for buttons, sliders
+- Input System (optional) - for user input
 
-### Infrastructure
-- Unity Pro license (for performance profiling)
-- Participant computers (standardized hardware)
-- Data collection server
-- IRB approval
-
-### Budget Estimate
-- Participant compensation: $30/person × 30 = $900
-- Software licenses: $200
-- Equipment: $500
-- Contingency: $400
-- **Total:** ~$2,000
-
-### Time Estimate
-- Implementation: 300 hours
-- User study: 100 hours (incl recruitment, administration)
-- Data analysis: 80 hours
-- Paper writing: 120 hours
-- **Total:** ~600 hours (over 12 weeks with parallel work)
+**Risk:** Low (standard Unity, no exotic features)
 
 ---
 
-## Success Criteria
+#### Statistical Analysis Tools
+**Status:** ⚠️ TBD (Need to choose)
+**Options:**
+- R with tidyverse (free, powerful)
+- Python with pandas/scipy (free, familiar)
+- SPSS (paid, $99/month, university license?)
+- Excel (limited, but accessible)
 
-### Scene Implementation
-- [ ] 8-12 intersections functioning
-- [ ] Hundreds of agents (100+ pedestrians, 50+ vehicles)
-- [ ] 60+ FPS sustained
-- [ ] Realistic traffic flow (no deadlocks)
-- [ ] All messaging features working
+**Required Analyses:**
+- Paired t-tests (within-subject comparison)
+- Effect size calculation (Cohen's d)
+- Descriptive statistics (mean, SD)
+- Visualization (boxplots, bar charts)
 
-### Comparison Implementation
-- [ ] Unity Events version feature-complete
-- [ ] Visual parity with MercuryMessaging version
-- [ ] Same AI behaviors
-- [ ] Documented implementation differences
-
-### User Study
-- [ ] 20-30 participants recruited and completed
-- [ ] All data collected successfully
-- [ ] Statistically significant results
-- [ ] Clear winner or meaningful insights
-
-### Paper
-- [ ] Submitted to UIST 2025 by April 9
-- [ ] All sections complete (intro, related work, methods, results, discussion)
-- [ ] Figures and tables publication-ready
-- [ ] Reviewed by co-authors
+**Decision Needed:** Phase 6 (Week 15)
+**Risk:** Low (many options available)
 
 ---
 
-## Related Documentation
+#### Participant Recruitment Channels
+**Status:** ⚠️ TBD (Need to establish)
+**Options:**
+- University game dev program (local)
+- Unity forums (r/Unity3D, Discord servers)
+- Twitter/social media outreach
+- Paid platforms (Prolific, UserTesting)
 
-- **`dev/active/user-study/user-study-tasks.md`** - Detailed task breakdown
-- **`dev/archive/mercury-improvements-original/mercury-improvements-master-plan.md`** - Original master plan
-- **`CLAUDE.md`** - MercuryMessaging framework documentation
-- **`Assets/UserStudy/README.md`** - Scene usage instructions (to be created)
+**Requirements:**
+- 15-20 participants
+- Unity experience (6+ months)
+- C# scripting ability
+- 2-3 hour availability
 
-## Status Summary
-
-**Last Updated:** 2025-11-18
-
-**Current Status:** In Progress - Showcase scene development
-**UIST Paper:** Discontinued (no longer pursuing)
-**Reorganization:** Complete (verified working)
-**Next Action:** Complete Intersection_01, create prefabs, add 7 more intersections
-**Timeline:** Flexible (no hard deadline)
-
----
-
-## Questions for Stakeholders
-
-1. **UIST Pursuit Decision** - Are we committed to April 9 deadline?
-2. **Resource Allocation** - Can we get 1-2 additional developers?
-3. **IRB Timeline** - How long for approval? Do we need it?
-4. **Participant Recruitment** - Access to CS student email lists?
-5. **Budget** - Is $2,000 estimate acceptable?
-6. **Scope** - 8 intersections sufficient or need all 12?
-7. **Comparison Fairness** - Expert review available for Unity Events implementation?
+**Decision Needed:** Phase 1-2 (start early)
+**Risk:** Medium (recruitment can be challenging)
 
 ---
 
-**Status:** 🔨 In Active Development
-**Next Immediate Action:** Verify Unity project after reorganization, then add 7 more intersections
-**Critical Deadline:** UIST Abstract (April 2, 2025), Full Paper (April 9, 2025)
-**Last Updated:** 2025-11-18
+#### IRB Approval (If Required)
+**Status:** ⚠️ Unknown (Check with institution)
+**Timeline:** 2-6 weeks typical
+**Required Materials:**
+- Study protocol document
+- Informed consent form
+- Recruitment materials
+- Data management plan
+
+**Decision Needed:** Phase 1 (Week 1-2)
+**Risk:** Medium (delays possible, requirement unclear)
+
+---
+
+## Important Constraints
+
+### Technical Constraints
+
+**Unity Version:**
+- Must use Unity 2021.3+ LTS (MercuryMessaging requirement)
+- Cannot use features not in 2021.3 (for compatibility)
+
+**C# Version:**
+- C# 9.0 (Unity 2021.3 uses this)
+- No C# 10+ features
+
+**Platform:**
+- Development on Windows/Mac (Unity Editor)
+- No mobile-specific features (keep desktop-focused)
+
+**Performance:**
+- Target 60 FPS in Editor (realistic for user study)
+- Avoid performance-critical scenarios (not the focus)
+
+### Study Design Constraints
+
+**Time Per Participant:**
+- Maximum 3 hours (attention span, fatigue)
+- Minimum 1.5 hours (need sufficient data)
+- Target: 2-2.5 hours
+
+**Tasks Per Scene:**
+- Exactly 5 tasks per scene (consistency)
+- Task duration: 5-18 minutes each
+- Total per scene: 30-90 minutes
+
+**Scenes Per Participant:**
+- Minimum 2 scenes (one Mercury, one Events)
+- Recommended 3-4 scenes (more data per person)
+- Maximum 5 scenes (time constraint)
+
+**Counterbalancing:**
+- Half start with Mercury, half with Events
+- Randomize scene order
+- Ensure balanced exposure
+
+### Resource Constraints
+
+**Budget:**
+- Maximum $5,000 for full study
+- Participant compensation: $600-800 (priority)
+- Software licenses: $0-$500 (use free tools if possible)
+- Publication fees: $0-$3,000 (optional)
+
+**Personnel:**
+- Single developer (primary) - 12-17 weeks full-time
+- Study coordinator (part-time) - 4-5 weeks at 15h/week
+- Statistical analyst (consulting) - 30-45 hours
+
+**Timeline:**
+- Target: 16 weeks (realistic)
+- Maximum: 24 weeks (with buffer)
+- Minimum: 12 weeks (aggressive, high risk)
+
+---
+
+## Key Metrics Definitions
+
+### Lines of Code (LOC)
+**Definition:** Count of non-empty, non-comment lines in all C# scripts for a scene implementation.
+
+**Exclusions:**
+- Unity-generated code (e.g., Assembly definitions)
+- Third-party code (e.g., TextMeshPro scripts)
+- Framework code (MercuryMessaging itself)
+
+**Measurement:**
+- Automatic via `MetricsCollector.cs`
+- Manual verification possible
+- Count only scripts in scene-specific folders
+
+**Expected Range:**
+- Mercury: 300-450 LOC per scene
+- Events: 430-750 LOC per scene
+- Delta: 20-40% reduction
+
+---
+
+### Inspector Connections
+**Definition:** Count of manual connections in Unity Inspector including:
+1. Serialized field references (drag-and-drop)
+2. UnityEvent listener connections
+3. List/array element additions
+
+**Measurement:**
+- Manual count during implementation
+- Document in spreadsheet per scene
+- Verify during code review
+
+**Expected Range:**
+- Mercury: 0 connections (design goal)
+- Events: 30-50+ connections per scene
+- Delta: 100% reduction
+
+---
+
+### Development Time
+**Definition:** Total minutes from task start to task completion.
+
+**Measurement:**
+- Automatic timer in `TaskUI.cs`
+- Starts when task instruction displayed
+- Stops when participant marks task complete
+- Pauses for breaks (if needed)
+
+**Expected Range:**
+- Simple tasks: 5-12 minutes
+- Medium tasks: 8-15 minutes
+- Complex tasks: 12-18 minutes
+
+---
+
+### Code Coupling (Efferent Coupling, Ce)
+**Definition:** Number of external dependencies for a class, measured as:
+- `GetComponent<T>()` calls
+- `FindObjectOfType<T>()` calls
+- Serialized field references to other classes
+- Constructor/method parameters of other class types
+
+**Measurement:**
+- Static analysis via grep/regex
+- Count per class, average per scene
+- Document in coupling matrix
+
+**Expected Range:**
+- Mercury: 0-2 dependencies per class (mostly MmMessage types)
+- Events: 3-8 dependencies per class (controllers, device lists)
+- Delta: 40-60% reduction
+
+---
+
+### NASA-TLX Workload
+**Definition:** Subjective workload measurement across 6 dimensions (7-point scale):
+1. **Mental Demand** - How much mental effort required?
+2. **Physical Demand** - How much physical effort required?
+3. **Temporal Demand** - How much time pressure felt?
+4. **Performance** - How successful were you?
+5. **Effort** - How hard did you work?
+6. **Frustration** - How frustrated/stressed did you feel?
+
+**Measurement:**
+- Post-task questionnaire via `NASATLXQuestionnaire.cs`
+- 6 sliders, 0-7 scale
+- Average across dimensions for total workload
+
+**Expected Range:**
+- Mercury: 3-4 average (moderate workload)
+- Events: 4-5 average (higher workload)
+- Delta: 0.5-1.5 point reduction
+
+---
+
+## Contact Information
+
+**Project Lead:** TBD
+**Institution:** Columbia University CGUI Lab
+**Email:** TBD
+**Repository:** (This repository)
+
+**Key Personnel:**
+- Primary Developer: TBD
+- Study Coordinator: TBD
+- Statistical Analyst: TBD
+- Faculty Advisor: TBD
+
+**Study Materials Location:** `dev/active/user-study/`
+**Implementation Location:** `Assets/UserStudy/` (future)
+
+---
+
+## Version History
+
+**Version 1.0** (2025-11-21)
+- Initial context document created
+- Architectural decisions documented
+- Dependencies identified
+- Metrics definitions established
+
+---
+
+**Last Updated:** 2025-11-21

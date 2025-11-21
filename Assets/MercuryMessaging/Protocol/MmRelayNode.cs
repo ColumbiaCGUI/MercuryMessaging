@@ -64,8 +64,6 @@ namespace MercuryMessaging
         // The position of the graph node in the graph view.
         public Vector2 nodePosition = new Vector2(0, 0);
 
-        public bool testToggle = false;
-
         public int layer;
 
         /// <summary>
@@ -101,18 +99,12 @@ namespace MercuryMessaging
         [Tooltip("Track visited nodes to detect and prevent circular message paths")]
         public bool enableCycleDetection = true;
 
-        private float displayPeriod;
-
         public Transform positionOffset;
-
-        public List<MmRoutingTableItem> itemsToGo = new List<MmRoutingTableItem>();
 
         private Color colorA = new Color (93f/255f, 58f/255f, 155f/255f);
         private Color colorB = new Color (230f/255f, 97f/255f, 0f);
         private Color colorC = new Color (64f/255f, 176f/255f, 166f/255f);
         private Color colorD = new Color (230f/255f, 97f/255f, 0f);
-
-        public List<GameObject> lineObjects = new List<GameObject>();
 
         private List<MmMessage> messageBuffer = new List<MmMessage>();
 
@@ -307,8 +299,6 @@ namespace MercuryMessaging
             {
                 positionOffset = gameObject.transform;
             }
-
-            itemsToGo = this.RoutingTable.GetMmRoutingTableItems(MmRoutingTable.ListFilter.All, MmLevelFilter.Child);
         }
 
         public void UpdateMessages(MmMessage message)   
@@ -746,8 +736,10 @@ namespace MercuryMessaging
 
 				//MmLogger.LogFramework (gameObject.name + "observing " + responder.MmGameObject.name);
 
-                if (ResponderCheck (levelFilter, activeFilter, selectedFilter, networkFilter,
-                    routingTableItem, responderSpecificMessage)) {
+                bool checkPassed = ResponderCheck (levelFilter, activeFilter, selectedFilter, networkFilter,
+                    routingTableItem, responderSpecificMessage);
+
+                if (checkPassed) {
 					responder.MmInvoke (responderSpecificMessage);
 				}
 			}
@@ -1026,6 +1018,160 @@ namespace MercuryMessaging
             messageBuffer.Add(msg);
             // UpdateMessages(msg);
             MmInvoke(msg);
+        }
+
+        /// <summary>
+        /// Invokes a message using path specification for hierarchical routing.
+        /// Path format: "parent/sibling/child" with wildcard support (*).
+        /// Part of Phase 2.1: Advanced Message Routing.
+        /// </summary>
+        /// <param name="path">Path string like "parent/sibling/child"</param>
+        /// <param name="mmMethod">Method to invoke on target nodes</param>
+        /// <param name="metadataBlock">Optional metadata (levelFilter will be overridden)</param>
+        public virtual void MmInvokeWithPath(string path, MmMethod mmMethod, MmMetadataBlock metadataBlock = null)
+        {
+            // Resolve path to target nodes
+            List<MmRelayNode> targetNodes = ResolvePathTargets(path);
+
+            // Create metadata if not provided
+            if (metadataBlock == null)
+            {
+                // Use ActiveFilter.All for path-based routing
+                // (Path resolution already found exact targets, active state shouldn't block delivery)
+                metadataBlock = new MmMetadataBlock(
+                    MmTagHelper.Everything, // Tag comes FIRST when using tags!
+                    MmLevelFilter.Self,
+                    MmActiveFilter.All,
+                    MmSelectedFilter.All,
+                    MmNetworkFilter.All
+                );
+            }
+
+            // Create message
+            MmMessage message = new MmMessage(mmMethod, MmMessageType.MmVoid, metadataBlock);
+
+            // Forward to each target with transformed level filter
+            foreach (var targetNode in targetNodes)
+            {
+                if (targetNode != null)
+                {
+                    // Transform level filter to Self to prevent re-propagation
+                    // (Path resolution already found exact targets)
+                    var forwardedMessage = message.Copy();
+                    forwardedMessage.MetadataBlock.LevelFilter = MmLevelFilter.Self;
+                    targetNode.MmInvoke(forwardedMessage);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Invokes a message with boolean parameter using path specification.
+        /// </summary>
+        public virtual void MmInvokeWithPath(string path, MmMethod mmMethod, bool param, MmMetadataBlock metadataBlock = null)
+        {
+            List<MmRelayNode> targetNodes = ResolvePathTargets(path);
+            if (metadataBlock == null)
+            {
+                metadataBlock = new MmMetadataBlock(
+                    MmTagHelper.Everything, // Tag comes FIRST when using tags!
+                    MmLevelFilter.Self,
+                    MmActiveFilter.All,
+                    MmSelectedFilter.All,
+                    MmNetworkFilter.All
+                );
+            }
+
+            MmMessage message = new MmMessageBool(param, mmMethod, metadataBlock);
+
+            foreach (var targetNode in targetNodes)
+            {
+                if (targetNode != null)
+                {
+                    var forwardedMessage = message.Copy();
+                    forwardedMessage.MetadataBlock.LevelFilter = MmLevelFilter.Self;
+                    targetNode.MmInvoke(forwardedMessage);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Invokes a message with int parameter using path specification.
+        /// </summary>
+        public virtual void MmInvokeWithPath(string path, MmMethod mmMethod, int param, MmMetadataBlock metadataBlock = null)
+        {
+            List<MmRelayNode> targetNodes = ResolvePathTargets(path);
+            if (metadataBlock == null)
+            {
+                metadataBlock = new MmMetadataBlock(
+                    MmTagHelper.Everything, // Tag comes FIRST when using tags!
+                    MmLevelFilter.Self,
+                    MmActiveFilter.All,
+                    MmSelectedFilter.All,
+                    MmNetworkFilter.All
+                );
+            }
+
+            MmMessage message = new MmMessageInt(param, mmMethod, metadataBlock);
+
+            foreach (var targetNode in targetNodes)
+            {
+                if (targetNode != null)
+                {
+                    var forwardedMessage = message.Copy();
+                    forwardedMessage.MetadataBlock.LevelFilter = MmLevelFilter.Self;
+                    targetNode.MmInvoke(forwardedMessage);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Invokes a message with string parameter using path specification.
+        /// </summary>
+        public virtual void MmInvokeWithPath(string path, MmMethod mmMethod, string param, MmMetadataBlock metadataBlock = null)
+        {
+            List<MmRelayNode> targetNodes = ResolvePathTargets(path);
+            if (metadataBlock == null)
+            {
+                metadataBlock = new MmMetadataBlock(
+                    MmTagHelper.Everything, // Tag comes FIRST when using tags!
+                    MmLevelFilter.Self,
+                    MmActiveFilter.All,
+                    MmSelectedFilter.All,
+                    MmNetworkFilter.All
+                );
+            }
+
+            MmMessage message = new MmMessageString(param, mmMethod, metadataBlock);
+
+            foreach (var targetNode in targetNodes)
+            {
+                if (targetNode != null)
+                {
+                    var forwardedMessage = message.Copy();
+                    forwardedMessage.MetadataBlock.LevelFilter = MmLevelFilter.Self;
+                    targetNode.MmInvoke(forwardedMessage);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Invokes a pre-created message using path specification.
+        /// </summary>
+        public virtual void MmInvokeWithPath(string path, MmMessage message)
+        {
+            List<MmRelayNode> targetNodes = ResolvePathTargets(path);
+
+            foreach (var targetNode in targetNodes)
+            {
+                if (targetNode != null)
+                {
+                    var forwardedMessage = message.Copy();
+                    forwardedMessage.MetadataBlock.LevelFilter = MmLevelFilter.Self;
+                    // Use ActiveFilter.All for path-based routing (active state shouldn't block delivery)
+                    forwardedMessage.MetadataBlock.ActiveFilter = MmActiveFilter.All;
+                    targetNode.MmInvoke(forwardedMessage);
+                }
+            }
         }
 
         #endregion
@@ -1308,9 +1454,9 @@ namespace MercuryMessaging
                 {
                     if (node != null)
                     {
-                        // Transform level filter so target can process its Self responders
+                        // Transform level filter to Self only (custom filter explicitly selected targets)
                         var forwardedMessage = message.Copy();
-                        forwardedMessage.MetadataBlock.LevelFilter = MmLevelFilterHelper.SelfAndChildren;
+                        forwardedMessage.MetadataBlock.LevelFilter = MmLevelFilter.Self;
                         node.MmInvoke(forwardedMessage);
                     }
                 }
@@ -1522,9 +1668,10 @@ namespace MercuryMessaging
             {
                 if (node != null)
                 {
-                    // Transform level filter so target can process its Self responders
+                    // Transform level filter to Self only to prevent re-propagation
+                    // (CollectDescendants/Ancestors already found ALL targets recursively)
                     var forwardedMessage = message.Copy();
-                    forwardedMessage.MetadataBlock.LevelFilter = MmLevelFilterHelper.SelfAndChildren;
+                    forwardedMessage.MetadataBlock.LevelFilter = MmLevelFilter.Self;
                     node.MmInvoke(forwardedMessage);
                 }
             }
@@ -1555,6 +1702,182 @@ namespace MercuryMessaging
 
             return filteredNodes;
         }
+
+        #region Phase 2.1: Path Specification
+
+        /// <summary>
+        /// Resolves a path specification string to a list of target relay nodes.
+        /// Path format: "parent/sibling/child" with wildcard support (*).
+        /// Part of Phase 2.1: Advanced Message Routing.
+        /// </summary>
+        /// <param name="path">Path string like "parent/sibling/child"</param>
+        /// <returns>List of relay nodes matching the path</returns>
+        /// <exception cref="MmInvalidPathException">If path is invalid</exception>
+        public virtual List<MmRelayNode> ResolvePathTargets(string path)
+        {
+            // Parse the path
+            ParsedPath parsedPath = MmPathSpecification.Parse(path);
+
+            // Start with current node
+            List<MmRelayNode> currentNodes = new List<MmRelayNode> { this };
+
+            // Track visited nodes to prevent infinite loops
+            HashSet<int> visited = new HashSet<int>();
+            visited.Add(gameObject.GetInstanceID());
+
+            // Navigate through each segment
+            bool expandNext = false; // Wildcard flag
+
+            for (int i = 0; i < parsedPath.Segments.Length; i++)
+            {
+                PathSegment segment = parsedPath.Segments[i];
+
+                // Handle wildcard
+                if (segment == PathSegment.Wildcard)
+                {
+                    expandNext = true;
+                    continue;
+                }
+
+                // If previous segment was wildcard, expand current nodes to ALL their children
+                if (expandNext)
+                {
+                    List<MmRelayNode> expandedNodes = new List<MmRelayNode>();
+
+                    foreach (var node in currentNodes)
+                    {
+                        if (node == null) continue;
+
+                        // Get ALL children of this node
+                        foreach (var routingItem in node.RoutingTable)
+                        {
+                            if (routingItem.Level == MmLevelFilter.Child)
+                            {
+                                var childNode = routingItem.Responder.GetRelayNode();
+                                if (childNode != null)
+                                {
+                                    int childId = childNode.gameObject.GetInstanceID();
+                                    if (!visited.Contains(childId))
+                                    {
+                                        expandedNodes.Add(childNode);
+                                        visited.Add(childId);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    currentNodes = expandedNodes;
+                    expandNext = false;
+                }
+
+                // Navigate to next set of nodes
+                List<MmRelayNode> nextNodes = new List<MmRelayNode>();
+
+                foreach (var node in currentNodes)
+                {
+                    if (node == null) continue;
+
+                    // Get nodes for this segment
+                    List<MmRelayNode> segmentNodes = NavigateSegment(node, segment, visited);
+
+                    // Add to next nodes
+                    foreach (var targetNode in segmentNodes)
+                    {
+                        if (targetNode != null && !nextNodes.Contains(targetNode))
+                        {
+                            nextNodes.Add(targetNode);
+
+                            // Mark as visited
+                            int nodeId = targetNode.gameObject.GetInstanceID();
+                            visited.Add(nodeId);
+                        }
+                    }
+                }
+
+                currentNodes = nextNodes;
+            }
+
+            return currentNodes;
+        }
+
+        /// <summary>
+        /// Navigates from a node according to a path segment.
+        /// </summary>
+        private List<MmRelayNode> NavigateSegment(MmRelayNode node, PathSegment segment, HashSet<int> visited)
+        {
+            List<MmRelayNode> results = new List<MmRelayNode>();
+
+            switch (segment)
+            {
+                case PathSegment.Self:
+                    results.Add(node);
+                    break;
+
+                case PathSegment.Parent:
+                    // Get immediate parents
+                    if (node.MmParentList != null)
+                    {
+                        foreach (var parent in node.MmParentList)
+                        {
+                            if (parent != null)
+                            {
+                                int parentId = parent.gameObject.GetInstanceID();
+                                if (!visited.Contains(parentId))
+                                {
+                                    results.Add(parent);
+                                }
+                            }
+                        }
+                    }
+                    break;
+
+                case PathSegment.Child:
+                    // Get immediate children
+                    foreach (var routingItem in node.RoutingTable)
+                    {
+                        if (routingItem.Level == MmLevelFilter.Child)
+                        {
+                            var childNode = routingItem.Responder.GetRelayNode();
+                            if (childNode != null)
+                            {
+                                int childId = childNode.gameObject.GetInstanceID();
+                                if (!visited.Contains(childId))
+                                {
+                                    results.Add(childNode);
+                                }
+                            }
+                        }
+                    }
+                    break;
+
+                case PathSegment.Sibling:
+                    // Use existing CollectSiblings method
+                    node.CollectSiblings(results);
+                    // Filter out already visited
+                    results.RemoveAll(n => n == null || visited.Contains(n.gameObject.GetInstanceID()));
+                    break;
+
+                case PathSegment.Ancestor:
+                    // Use existing CollectAncestors method
+                    node.CollectAncestors(results, visited);
+                    break;
+
+                case PathSegment.Descendant:
+                    // Use existing CollectDescendants method
+                    node.CollectDescendants(results, visited);
+                    break;
+
+                case PathSegment.Wildcard:
+                    // This shouldn't happen (handled above), but include for completeness
+                    MmLogger.LogError("Wildcard segment should not reach NavigateSegment");
+                    break;
+            }
+
+            return results;
+        }
+
+        #endregion
 
         #endregion
 
