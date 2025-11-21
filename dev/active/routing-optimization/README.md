@@ -175,19 +175,6 @@ This initiative addresses fundamental architectural limitations in Mercury's mes
 
 ---
 
-## Resources
-
-### Team Requirements
-- **Lead Developer:** 6 weeks full-time (architecture, complex routing logic)
-- **Unity Developer:** 7 weeks full-time (implementation, testing)
-- **Total Effort:** ~420 hours
-
-### Budget Estimate
-- Personnel: $42,000 (at $100/hour blended rate)
-- Infrastructure: Minimal (existing Unity setup)
-
----
-
 ## Next Steps
 
 1. **Week 1 Actions:**
