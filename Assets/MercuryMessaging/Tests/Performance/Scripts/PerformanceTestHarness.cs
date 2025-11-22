@@ -139,10 +139,11 @@ namespace MercuryMessaging.Tests.Performance
             MmRelayNode.PerformanceMode = true;
             Debug.Log("[PerformanceTestHarness] Performance Mode enabled - debug tracking disabled");
 
-            // Enable routing table profiling to collect overhead metrics
-            MmRelayNode.EnableRoutingProfiler = true;
-            MmRelayNode.ProfilingThresholdMs = 0f; // Collect all invocations (no threshold)
-            Debug.Log("[PerformanceTestHarness] Routing profiler enabled - collecting overhead metrics");
+            // DISABLE routing table profiling - causes Observer Effect (97% overhead from Stopwatch!)
+            // Use Unity Profiler instead for accurate measurements
+            MmRelayNode.EnableRoutingProfiler = false;
+            // MmRelayNode.ProfilingThresholdMs = 0f; // Disabled
+            Debug.Log("[PerformanceTestHarness] Routing profiler DISABLED - use Unity Profiler for deep analysis");
 
             // Apply scenario defaults if needed
             ApplyScenarioDefaults();
