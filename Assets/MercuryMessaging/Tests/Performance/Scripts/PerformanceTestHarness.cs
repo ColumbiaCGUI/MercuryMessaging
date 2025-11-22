@@ -123,6 +123,10 @@ namespace MercuryMessaging.Tests.Performance
             public float cacheHitRate;
             public float avgHopCount;
             public int messagesSent;
+            public float routingTableMs;
+            public float mmInvokeMs;
+            public float routingTablePercent;
+            public int routingInvocations;
         }
 
         #endregion
@@ -134,6 +138,11 @@ namespace MercuryMessaging.Tests.Performance
             // Enable Performance Mode to disable debug overhead during testing
             MmRelayNode.PerformanceMode = true;
             Debug.Log("[PerformanceTestHarness] Performance Mode enabled - debug tracking disabled");
+
+            // Enable routing table profiling to collect overhead metrics
+            MmRelayNode.EnableRoutingProfiler = true;
+            MmRelayNode.ProfilingThresholdMs = 0f; // Collect all invocations (no threshold)
+            Debug.Log("[PerformanceTestHarness] Routing profiler enabled - collecting overhead metrics");
 
             // Apply scenario defaults if needed
             ApplyScenarioDefaults();
@@ -296,6 +305,13 @@ namespace MercuryMessaging.Tests.Performance
             // Average hop count (would need instrumentation in MmMessage)
             float avgHopCount = 0f; // Placeholder - requires message history inspection
 
+            // Routing table metrics (collect and reset for next frame)
+            float routingTableMs = MmRelayNode.RoutingTableTotalMs;
+            float mmInvokeMs = MmRelayNode.MmInvokeTotalMs;
+            float routingTablePercent = MmRelayNode.GetRoutingTableOverheadPercent();
+            int routingInvocations = MmRelayNode.RoutingTableInvocations;
+            MmRelayNode.ResetRoutingMetrics();
+
             // Store metrics
             _metricsHistory.Add(new FrameMetrics
             {
@@ -305,7 +321,11 @@ namespace MercuryMessaging.Tests.Performance
                 throughput = _currentThroughput,
                 cacheHitRate = _lastCacheHitRate,
                 avgHopCount = avgHopCount,
-                messagesSent = _messagesSent
+                messagesSent = _messagesSent,
+                routingTableMs = routingTableMs,
+                mmInvokeMs = mmInvokeMs,
+                routingTablePercent = routingTablePercent,
+                routingInvocations = routingInvocations
             });
         }
 
@@ -321,6 +341,19 @@ namespace MercuryMessaging.Tests.Performance
             float testDurationActual = Time.time - _startTime;
             long memoryGrowth = _currentMemory - _startMemory;
 
+            // Calculate average routing table overhead
+            float totalRoutingPercent = 0f;
+            int validSamples = 0;
+            foreach (var metric in _metricsHistory)
+            {
+                if (metric.mmInvokeMs > 0)
+                {
+                    totalRoutingPercent += metric.routingTablePercent;
+                    validSamples++;
+                }
+            }
+            float avgRoutingPercent = validSamples > 0 ? totalRoutingPercent / validSamples : 0f;
+
             Debug.Log("[PerformanceTestHarness] === FINAL STATISTICS ===");
             Debug.Log($"Test Duration: {testDurationActual:F2}s");
             Debug.Log($"Total Frames: {_frameCount}");
@@ -334,6 +367,8 @@ namespace MercuryMessaging.Tests.Performance
             {
                 Debug.Log($"Cache Hit Rate: {_lastCacheHitRate * 100f:F1}%");
             }
+
+            Debug.Log($"Routing Table Overhead: {avgRoutingPercent:F2}% of MmInvoke time (avg across {validSamples} frames)");
 
             Debug.Log("=============================");
         }
@@ -375,6 +410,18 @@ namespace MercuryMessaging.Tests.Performance
                 sb.AppendLine($"  Hit Rate: {_lastCacheHitRate * 100f:F1}%");
             }
 
+            // Routing table overhead (last frame)
+            if (_metricsHistory.Count > 0)
+            {
+                var lastMetric = _metricsHistory[_metricsHistory.Count - 1];
+                sb.AppendLine();
+                sb.AppendLine($"<b>Routing Table Overhead:</b>");
+                sb.AppendLine($"  Last Frame: {lastMetric.routingTablePercent:F2}%");
+                sb.AppendLine($"  MmInvoke: {lastMetric.mmInvokeMs:F3}ms");
+                sb.AppendLine($"  Routing: {lastMetric.routingTableMs:F3}ms");
+                sb.AppendLine($"  Invocations: {lastMetric.routingInvocations}");
+            }
+
             displayText.text = sb.ToString();
         }
 
@@ -394,7 +441,7 @@ namespace MercuryMessaging.Tests.Performance
             StringBuilder csv = new StringBuilder();
 
             // Header
-            csv.AppendLine("timestamp,frame_time_ms,memory_bytes,memory_mb,throughput_msg_sec,cache_hit_rate,avg_hop_count,messages_sent");
+            csv.AppendLine("timestamp,frame_time_ms,memory_bytes,memory_mb,throughput_msg_sec,cache_hit_rate,avg_hop_count,messages_sent,routing_table_ms,mminvoke_ms,routing_table_percent,routing_invocations");
 
             // Data rows
             foreach (var metrics in _metricsHistory)
@@ -406,7 +453,11 @@ namespace MercuryMessaging.Tests.Performance
                              $"{metrics.throughput:F2}," +
                              $"{metrics.cacheHitRate:F4}," +
                              $"{metrics.avgHopCount:F2}," +
-                             $"{metrics.messagesSent}");
+                             $"{metrics.messagesSent}," +
+                             $"{metrics.routingTableMs:F3}," +
+                             $"{metrics.mmInvokeMs:F3}," +
+                             $"{metrics.routingTablePercent:F2}," +
+                             $"{metrics.routingInvocations}");
             }
 
             // Export to Resources folder
