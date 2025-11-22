@@ -33,7 +33,6 @@
 //  
 using System.Collections.Generic;
 using System.Collections;
-using System.Diagnostics;
 using MercuryMessaging.Support.Extensions;
 using MercuryMessaging.Support.Data;
 using MercuryMessaging.Task;
@@ -61,52 +60,6 @@ namespace MercuryMessaging
         [Header("Performance Settings")]
         [Tooltip("Enable during performance tests to disable debug overhead (UpdateMessages tracking)")]
         public static bool PerformanceMode = false;
-
-        /// <summary>
-        /// Global toggle for routing performance profiling.
-        /// When enabled, routing methods (HandleAdvancedRouting, ResolvePathTargets) will log timing data.
-        /// Can be overridden per-message via MmRoutingOptions.EnableProfiling.
-        /// Default: false (zero overhead when disabled)
-        /// </summary>
-        [Tooltip("Enable to profile routing performance globally")]
-        public static bool EnableRoutingProfiler = false;
-
-        /// <summary>
-        /// Global threshold for routing profiling logs (milliseconds).
-        /// Routing operations slower than this threshold will be logged.
-        /// Can be overridden per-message via MmRoutingOptions.ProfilingThresholdMs.
-        /// Default: 1.0ms
-        /// </summary>
-        [Tooltip("Log routing operations that exceed this threshold (ms)")]
-        public static float ProfilingThresholdMs = 1.0f;
-
-        /// <summary>
-        /// Per-frame accumulators for routing table profiling metrics.
-        /// Used by PerformanceTestHarness to track routing overhead.
-        /// Reset via ResetRoutingMetrics() each frame.
-        /// </summary>
-        public static float RoutingTableTotalMs = 0f;
-        public static float MmInvokeTotalMs = 0f;
-        public static int RoutingTableInvocations = 0;
-
-        /// <summary>
-        /// Reset per-frame routing table metrics. Call this at the start of each frame during profiling.
-        /// </summary>
-        public static void ResetRoutingMetrics()
-        {
-            RoutingTableTotalMs = 0f;
-            MmInvokeTotalMs = 0f;
-            RoutingTableInvocations = 0;
-        }
-
-        /// <summary>
-        /// Get routing table overhead percentage.
-        /// Returns percentage of MmInvoke time spent in routing table iteration.
-        /// </summary>
-        public static float GetRoutingTableOverheadPercent()
-        {
-            return MmInvokeTotalMs > 0 ? (RoutingTableTotalMs / MmInvokeTotalMs) * 100f : 0f;
-        }
 
         // The position of the graph node in the graph view.
         public Vector2 nodePosition = new Vector2(0, 0);
@@ -612,14 +565,6 @@ namespace MercuryMessaging
         /// Auto [de]serialized by UNET.</param>
         public override void MmInvoke(MmMessage message)
         {
-            // Performance profiling for routing table analysis
-            Stopwatch totalStopwatch = null;
-            bool shouldProfile = EnableRoutingProfiler || (message.MetadataBlock.Options != null && message.MetadataBlock.Options.EnableProfiling);
-            if (shouldProfile)
-            {
-                totalStopwatch = Stopwatch.StartNew();
-            }
-
             // Debug tracking - disabled in PerformanceMode
             if (!PerformanceMode)
             {
@@ -770,13 +715,6 @@ namespace MercuryMessaging
             }
 
             // Second pass: invoke responders with appropriate messages
-            Stopwatch routingTableStopwatch = null;
-            int responderCheckCount = 0;
-            if (shouldProfile)
-            {
-                routingTableStopwatch = Stopwatch.StartNew();
-            }
-
             foreach (var routingTableItem in RoutingTable) {
 				var responder = routingTableItem.Responder;
 				MmLevelFilter responderLevel = routingTableItem.Level;
@@ -801,17 +739,10 @@ namespace MercuryMessaging
                 bool checkPassed = ResponderCheck (levelFilter, activeFilter, selectedFilter, networkFilter,
                     routingTableItem, responderSpecificMessage);
 
-                if (shouldProfile) responderCheckCount++;
-
                 if (checkPassed) {
 					responder.MmInvoke (responderSpecificMessage);
 				}
 			}
-
-            if (shouldProfile)
-            {
-                routingTableStopwatch.Stop();
-            }
 
             // Phase 2.1: Advanced Routing - Handle new level filters
             HandleAdvancedRouting(message, levelFilter);
@@ -834,26 +765,6 @@ namespace MercuryMessaging
                     routingTableItem, message))
                 {
                     routingTableItem.Responder.MmInvoke(message);
-                }
-            }
-
-            // Performance profiling output and accumulation
-            if (shouldProfile && totalStopwatch != null)
-            {
-                totalStopwatch.Stop();
-                float totalMs = (float)totalStopwatch.Elapsed.TotalMilliseconds;
-                float routingTableMs = routingTableStopwatch != null ? (float)routingTableStopwatch.Elapsed.TotalMilliseconds : 0f;
-                float routingTablePercent = totalMs > 0 ? (routingTableMs / totalMs) * 100f : 0f;
-
-                // Accumulate for per-frame metrics (used by PerformanceTestHarness)
-                RoutingTableTotalMs += routingTableMs;
-                MmInvokeTotalMs += totalMs;
-                RoutingTableInvocations++;
-
-                float threshold = message.MetadataBlock.Options != null ? message.MetadataBlock.Options.ProfilingThresholdMs : ProfilingThresholdMs;
-                if (totalMs >= threshold)
-                {
-                    UnityEngine.Debug.Log($"[ROUTING-TABLE-PERF] Node={name} | TotalMs={totalMs:F3} | RoutingTableMs={routingTableMs:F3} ({routingTablePercent:F1}%) | ResponderChecks={responderCheckCount} | Method={message.MmMethod}");
                 }
             }
 
