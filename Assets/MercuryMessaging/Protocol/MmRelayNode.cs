@@ -1414,16 +1414,6 @@ namespace MercuryMessaging
             // Validate MmRoutingOptions if needed
             MmRoutingOptions options = message.MetadataBlock.Options;
 
-            // START PROFILING (only for slow path with advanced filters)
-            Stopwatch profiler = null;
-            int siblingCount = 0, cousinCount = 0, descendantCount = 0, ancestorCount = 0, customCount = 0;
-
-            bool enableProfiling = (options != null && options.EnableProfiling) || EnableRoutingProfiler;
-            if (enableProfiling)
-            {
-                profiler = Stopwatch.StartNew();
-            }
-
             // Validate lateral routing (siblings/cousins) requires AllowLateralRouting
             if ((hasSiblings || hasCousins) && (options == null || !options.AllowLateralRouting))
             {
@@ -1438,60 +1428,28 @@ namespace MercuryMessaging
                 return;
             }
 
-            // Handle lateral routing (siblings/cousins) with counting
+            // Handle lateral routing (siblings/cousins)
             if (hasSiblings || hasCousins)
             {
-                if (enableProfiling)
-                {
-                    // Count nodes for profiling
-                    List<MmRelayNode> tempNodes = new List<MmRelayNode>();
-                    if (hasSiblings)
-                    {
-                        CollectSiblings(tempNodes);
-                        siblingCount = tempNodes.Count;
-                    }
-                    if (hasCousins)
-                    {
-                        List<MmRelayNode> cousins = new List<MmRelayNode>();
-                        CollectCousins(cousins);
-                        cousinCount = cousins.Count;
-                    }
-                }
                 RouteLateral(message, hasSiblings, hasCousins);
             }
 
-            // Handle recursive descendants with counting
+            // Handle recursive descendants
             if (hasDescendants)
             {
-                if (enableProfiling)
-                {
-                    List<MmRelayNode> tempDescendants = new List<MmRelayNode>();
-                    CollectDescendants(tempDescendants);
-                    descendantCount = tempDescendants.Count;
-                }
                 RouteRecursive(message, useDescendants: true);
             }
 
-            // Handle recursive ancestors with counting
+            // Handle recursive ancestors
             if (hasAncestors)
             {
-                if (enableProfiling)
-                {
-                    List<MmRelayNode> tempAncestors = new List<MmRelayNode>();
-                    CollectAncestors(tempAncestors);
-                    ancestorCount = tempAncestors.Count;
-                }
                 RouteRecursive(message, useDescendants: false);
             }
 
-            // Handle custom predicate filtering with counting
+            // Handle custom predicate filtering
             if (hasCustom && options != null && options.CustomFilter != null)
             {
                 var filteredNodes = ApplyCustomFilter(options.CustomFilter);
-                if (enableProfiling)
-                {
-                    customCount = filteredNodes.Count;
-                }
                 foreach (var node in filteredNodes)
                 {
                     if (node != null)
@@ -1501,39 +1459,6 @@ namespace MercuryMessaging
                         forwardedMessage.MetadataBlock.LevelFilter = MmLevelFilter.Self;
                         node.MmInvoke(forwardedMessage);
                     }
-                }
-            }
-
-            // END PROFILING
-            if (profiler != null)
-            {
-                profiler.Stop();
-                double elapsedMs = profiler.Elapsed.TotalMilliseconds;
-
-                float threshold = (options != null && options.EnableProfiling)
-                    ? options.ProfilingThresholdMs
-                    : ProfilingThresholdMs;
-
-                if (elapsedMs >= threshold)
-                {
-                    // Build filter list for log
-                    List<string> filters = new List<string>();
-                    if (hasSiblings) filters.Add("Siblings");
-                    if (hasCousins) filters.Add("Cousins");
-                    if (hasDescendants) filters.Add("Descendants");
-                    if (hasAncestors) filters.Add("Ancestors");
-                    if (hasCustom) filters.Add("Custom");
-
-                    int totalNodes = siblingCount + cousinCount + descendantCount + ancestorCount + customCount;
-
-                    MmLogger.LogFramework(
-                        $"[ROUTING-PERF] HandleAdvancedRouting | Node='{gameObject.name}' | " +
-                        $"Filters={string.Join("|", filters)}, " +
-                        $"Siblings={siblingCount}, Cousins={cousinCount}, " +
-                        $"Descendants={descendantCount}, Ancestors={ancestorCount}, " +
-                        $"Custom={customCount}, Total={totalNodes} | " +
-                        $"Time={elapsedMs:F3}ms"
-                    );
                 }
             }
         }
@@ -1793,15 +1718,6 @@ namespace MercuryMessaging
             // Parse the path
             ParsedPath parsedPath = MmPathSpecification.Parse(path);
 
-            // START PROFILING
-            Stopwatch profiler = null;
-            int wildcardCount = 0;
-
-            if (EnableRoutingProfiler)
-            {
-                profiler = Stopwatch.StartNew();
-            }
-
             // Start with current node
             List<MmRelayNode> currentNodes = new List<MmRelayNode> { this };
 
@@ -1820,7 +1736,6 @@ namespace MercuryMessaging
                 if (segment == PathSegment.Wildcard)
                 {
                     expandNext = true;
-                    if (profiler != null) wildcardCount++;
                     continue;
                 }
 
@@ -1881,24 +1796,6 @@ namespace MercuryMessaging
                 }
 
                 currentNodes = nextNodes;
-            }
-
-            // END PROFILING
-            if (profiler != null)
-            {
-                profiler.Stop();
-                double elapsedMs = profiler.Elapsed.TotalMilliseconds;
-
-                if (elapsedMs >= ProfilingThresholdMs)
-                {
-                    MmLogger.LogFramework(
-                        $"[ROUTING-PERF] ResolvePathTargets | Node='{gameObject.name}' | " +
-                        $"Path='{path}', Segments={parsedPath.Segments.Length}, " +
-                        $"Wildcards={wildcardCount}, Visited={visited.Count}, " +
-                        $"Targets={currentNodes.Count} | " +
-                        $"Time={elapsedMs:F3}ms"
-                    );
-                }
             }
 
             return currentNodes;
