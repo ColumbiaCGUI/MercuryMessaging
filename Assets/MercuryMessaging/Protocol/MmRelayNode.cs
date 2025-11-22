@@ -853,7 +853,7 @@ namespace MercuryMessaging
                 float threshold = message.MetadataBlock.Options != null ? message.MetadataBlock.Options.ProfilingThresholdMs : ProfilingThresholdMs;
                 if (totalMs >= threshold)
                 {
-                    Debug.Log($"[ROUTING-TABLE-PERF] Node={name} | TotalMs={totalMs:F3} | RoutingTableMs={routingTableMs:F3} ({routingTablePercent:F1}%) | ResponderChecks={responderCheckCount} | Method={message.MmMethod}");
+                    UnityEngine.Debug.Log($"[ROUTING-TABLE-PERF] Node={name} | TotalMs={totalMs:F3} | RoutingTableMs={routingTableMs:F3} ({routingTablePercent:F1}%) | ResponderChecks={responderCheckCount} | Method={message.MmMethod}");
                 }
             }
 
