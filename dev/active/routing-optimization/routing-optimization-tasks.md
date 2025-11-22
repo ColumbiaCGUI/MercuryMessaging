@@ -4,9 +4,24 @@
 
 ---
 
-## Phase 2.1 Progress: 176h / 254h (69.3% Complete) ✅
+## Phase 2.1 Progress: 180h / 254h (70.9% Complete) ✅
 
-**Latest Session Achievements (Performance Profiling - 20h + Routing Table Profiling Mini-Task - 6h):**
+**Latest Session Achievements (Routing Table Profiling Mini-Task - 6h):**
+- ✅ Implemented routing table profiling instrumentation (6h)
+  - Added per-frame metric accumulators in MmRelayNode (RoutingTableTotalMs, MmInvokeTotalMs, invocations)
+  - Instrumented MmInvoke() with Stopwatch timing around routing table iteration
+  - Integrated profiling with PerformanceTestHarness (auto-enable, collect, reset, export)
+  - Added 4 new CSV columns: routing_table_ms, mminvoke_ms, routing_table_percent, routing_invocations
+  - Real-time UI display of routing overhead percentage
+  - Final statistics report shows average routing overhead across test run
+  - **Commit:** cfae1199 - feat: Add routing table profiling instrumentation
+- ⏳ Testing and analysis NEXT (2h remaining)
+  - Run Small/Medium/Large scale performance tests
+  - Analyze routing table overhead percentages
+  - Create ROUTING_TABLE_PROFILE.md report with decision recommendation
+  - **Hypothesis:** Routing table <15% overhead → skip Phase 3.1 (256h saved)
+
+**Previous Session Achievements (Performance Profiling - 20h):**
 - ✅ Implemented performance profiling hooks (20h)
   - HandleAdvancedRouting: 6 metrics (filters, counts, time)
   - ResolvePathTargets: 5 metrics (path, segments, wildcards, visited, targets, time)
@@ -15,12 +30,8 @@
 - ✅ Strategic analysis: Phase 3.1 evaluation (256h of tasks analyzed)
   - **DECISION:** Skip Phase 3.1 specialized routing tables (premature optimization)
   - **ALTERNATIVE:** 6h profiling mini-task to validate actual bottlenecks
-- ⏳ Routing table profiling mini-task IN PROGRESS (2h/6h)
-  - Instrumenting MmRelayNode.MmInvoke() hot path
-  - Goal: Measure routing table overhead vs message processing
-  - Hypothesis: Routing table <15% of frame time (not the bottleneck)
 
-**Previous Session Achievements (Path Specification - 40h):**
+**Earlier Achievements (Path Specification - 40h):**
 - ✅ Created MmPathSpecification parser (12h)
 - ✅ Implemented path resolution in MmRelayNode (12h)
 - ✅ Added MmInvokeWithPath() API methods (8h)
@@ -28,7 +39,7 @@
 - ✅ Fixed wildcard expansion + MessageCounterResponder bugs
 - ✅ Tests: 187/188 passing (1 acceptable performance variance)
 
-**Next Priority:** Complete routing table profiling mini-task (4h remaining) → Decide on Phase 3.1
+**Next Priority:** Run performance tests and analyze routing table overhead (2h) → Make Phase 3.1 decision
 
 ---
 
