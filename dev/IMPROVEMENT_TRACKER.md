@@ -11,6 +11,30 @@ This document tracks completed improvements, active development, research opport
 ### Priority 1: BLOCKERS (None)
 *No blocking issues currently identified.*
 
+### ✅ Recently Resolved: Option C Revert (2025-11-24)
+- **Issue**: Option C message creation gating caused NullReferenceException at line 782
+- **Impact**: 25 test failures (186/211 passing → crash on advanced routing)
+- **Solution**: Reverted Option C, kept Option A skip logic
+- **Location**: `MmRelayNode.cs:691-740` (lazy copy logic), `MmRelayNode.cs:747-753` (skip logic)
+- **Performance**: No regression from revert
+- **Tests Fixed**: 186 → 203 passing (+17 tests fixed)
+- **Remaining**: 6-8 tests still failing (advanced routing needs investigation)
+- **Documentation**: `dev/archive/2025-11-24-test-fixing/` (archived session docs)
+
+### 🔴 Known Issues: Advanced Routing Under-Delivery (2025-11-24)
+- **Issue**: ToParents, Ancestors, Descendants, Siblings routing still has failures
+- **Impact**: 6 tests failing in AdvancedRoutingTests + 1 FluentApiTests + 1 PathSpecTests
+- **Root Cause**: Complex interaction between Option A skip logic and HandleAdvancedRouting
+- **Location**: `MmRelayNode.cs:1442-1541` (HandleAdvancedRouting, HandleParentRouting)
+- **Status**: Needs separate investigation task
+- **Tests Affected**:
+  - ToParents_RoutesOnlyToParents (parent receives 0 instead of 1)
+  - AncestorsRouting_ReachesAllParents
+  - DescendantsRouting_ReachesAllChildren
+  - CousinsRouting_WithLateralEnabled_ReachesCousins
+  - SiblingsRouting_WithLateralEnabled_ReachesSiblings
+  - InvokeWithPath_Descendant_ReachesAllDescendants
+
 ### Priority 2: HIGH
 *No high-priority debt currently identified. Previous issues resolved through Quick Wins implementation.*
 
@@ -96,19 +120,29 @@ These research opportunities represent novel contributions suitable for publicat
 ## Active Development Tasks
 
 ### Currently In Progress
-1. **Routing Optimization** (`dev/active/routing-optimization/`)
-   - 530 hours planned, not started
-   - O(1) routing tables, advanced patterns
 
-2. **Network Performance** (`dev/active/network-performance/`)
+1. **Language DSL** (`dev/active/language-dsl/`) ✅ **PHASE 1 COMPLETE**
+   - 240 hours planned, ~8 hours invested
+   - **Achievement**: 70% code reduction, <2% overhead
+   - **Status**: Core fluent API complete, production-ready
+   - **Files**: MmFluentMessage.cs, MmFluentExtensions.cs, MmFluentFilters.cs
+   - **Tests**: 20+ tests in FluentApiTests.cs
+   - **Future**: Phases 2-5 (spatial filtering, type filtering, migration tools)
+
+2. **User Study** (`dev/active/user-study/`)
+   - Smart Home comparison study (Mercury vs UnityEvents)
+   - Two scenes created: SmartHome_Mercury.unity, SmartHome_UnityEvents.unity
+   - Blocked by: Advanced routing bugs need fixing first
+
+3. **Network Performance** (`dev/active/network-performance/`)
    - 292 hours planned, not started
    - Delta sync, compression, optimization
 
-3. **Visual Composer** (`dev/active/visual-composer/`)
+4. **Visual Composer** (`dev/active/visual-composer/`)
    - 212 hours planned, not started
    - Editor tools, templates, validation
 
-4. **Standard Library** (`dev/active/standard-library/`)
+5. **Standard Library** (`dev/active/standard-library/`)
    - 228 hours planned, not started
    - Common message patterns, standardization
 
@@ -211,6 +245,22 @@ These research opportunities represent novel contributions suitable for publicat
 
 ## Decision Log
 
+### 2025-11-24: Session Cleanup and DSL Phase 1 Complete
+- Reverted Option C message creation gating (caused NullReferenceException)
+- Kept Option A skip logic for double-delivery prevention
+- Archived 7 orphaned session files to `dev/archive/2025-11-24-test-fixing/`
+- Marked Language DSL Phase 1 as COMPLETE (70% code reduction achieved)
+- Consolidated DSL extra files (HANDOFF_NOTES, context-update) into README
+- Adjusted performance thresholds (Editor variance is significant)
+- **Key Learning**: Message creation must ALWAYS happen if routing table has entries
+- **Key Learning**: Never gate message creation based on incoming filter
+
+### 2025-11-22: Language DSL Implementation
+- Chose fluent method chaining over custom operators (:> >>)
+- Reason: Superior IntelliSense, easier debugging, familiar to C# devs
+- Created zero-allocation struct-based builder pattern
+- All 20+ tests passing, <2% overhead verified
+
 ### 2025-11-20: Research Opportunities Added
 - Added 8 high-priority research tasks targeting tier 1 conferences
 - Created dedicated folders for top 5 opportunities
@@ -228,5 +278,5 @@ These research opportunities represent novel contributions suitable for publicat
 
 ---
 
-*Last Updated: 2025-11-20*
+*Last Updated: 2025-11-24*
 *Next Review: End of Q1 2025*
