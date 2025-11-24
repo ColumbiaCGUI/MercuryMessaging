@@ -4,6 +4,8 @@
 
 GPU-accelerated spatial indexing system for MercuryMessaging that combines 3D spatial data structures with scene graph hierarchies. This module enables efficient message routing based on spatial proximity and hierarchical relationships in large-scale environments.
 
+**For business context and use cases, see [`USE_CASE.md`](./USE_CASE.md)**
+
 ---
 
 ## Technical Architecture

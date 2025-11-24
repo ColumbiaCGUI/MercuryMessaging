@@ -13,6 +13,8 @@ Comprehensive library of 40+ standardized message types across UI, Application S
 
 **Core Problem:** Every developer creates custom message types, leading to incompatibility and reinventing the wheel. No standard patterns for common use cases.
 
+**For business context and use cases, see [`USE_CASE.md`](./USE_CASE.md)**
+
 **Solution:** Standardized message library with versioning, example responders, and backward compatibility layer.
 
 ---

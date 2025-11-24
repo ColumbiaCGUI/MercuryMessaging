@@ -4,6 +4,8 @@
 
 Implementation of client-side prediction and server reconciliation for hierarchical message routing in distributed systems. This module extends traditional client-side prediction techniques to work with MercuryMessaging's scene graph structure, enabling responsive multi-user experiences under network latency.
 
+**For business context and use cases, see [`USE_CASE.md`](./USE_CASE.md)**
+
 ---
 
 ## Technical Architecture

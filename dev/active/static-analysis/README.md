@@ -4,6 +4,8 @@
 
 This research contribution introduces a novel hybrid safety verification system for the MercuryMessaging framework that combines compile-time static analysis with runtime safety checks to prevent message routing failures, infinite loops, and type mismatches in hierarchical message-passing systems.
 
+**For business context and use cases, see [`USE_CASE.md`](./USE_CASE.md)**
+
 ## Research Contribution (UIST Major Contribution III)
 
 ### Problem Statement

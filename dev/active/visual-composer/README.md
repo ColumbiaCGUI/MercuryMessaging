@@ -254,6 +254,7 @@ public class MmIntrospectionHook {
 
 ## Quick Start
 
+See `USE_CASE.md` for business context, target scenarios, and expected benefits.
 See `visual-composer-context.md` for detailed UI mockups and GraphView architecture.
 See `visual-composer-tasks.md` for granular implementation tasks.
 
@@ -269,6 +270,7 @@ See `visual-composer-tasks.md` for granular implementation tasks.
 ---
 
 **See full details in:**
+- `USE_CASE.md` - Business context and use case analysis
 - `visual-composer-context.md` - Technical architecture and UI mockups
 - `visual-composer-tasks.md` - Implementation task breakdown
 

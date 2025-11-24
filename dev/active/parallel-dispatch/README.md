@@ -4,6 +4,8 @@
 
 Implementation of concurrent message processing for the MercuryMessaging framework using thread-safe data structures and work-stealing queues. This module enables parallel dispatch of messages across multiple threads while maintaining message ordering guarantees within sender-receiver pairs.
 
+**For business context and use cases, see [`USE_CASE.md`](./USE_CASE.md)**
+
 ---
 
 ## Technical Architecture

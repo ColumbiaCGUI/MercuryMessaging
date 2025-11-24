@@ -13,6 +13,8 @@ Improve thread safety of MmRelayNode's routing table modification to enable futu
 
 Currently uses a simple boolean flag (`doNotModifyRoutingTable`) that works for Unity's single-threaded main loop but is not thread-safe for async/await or Unity Jobs System integration.
 
+**For business context and use cases, see [`USE_CASE.md`](./USE_CASE.md)**
+
 ---
 
 ## Current State

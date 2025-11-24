@@ -1,5 +1,7 @@
 # Performance Analysis - Usage Guide
 
+> **⚠️ ARCHIVED:** This folder has been archived on 2025-11-21. The active performance documentation and analysis tools have been moved to `Documentation/Performance/`. This folder is preserved for historical reference only.
+
 This folder contains tools and results for comprehensive performance analysis of the MercuryMessaging framework's Quick Win optimizations.
 
 ---
