@@ -657,6 +657,13 @@ namespace MercuryMessaging
                 return;
             }
 
+            // CRITICAL: Check if advanced routing filters are present
+            // If yes, standard routing should only deliver to Self responders
+            // (Advanced routing will handle Parent/Child/Descendant/Ancestor/Sibling/Cousin deliveries)
+            bool hasAdvancedFilters = (levelFilter & (MmLevelFilter.Parent | MmLevelFilter.Descendants |
+                                                      MmLevelFilter.Ancestors | MmLevelFilter.Siblings |
+                                                      MmLevelFilter.Cousins | MmLevelFilter.Custom)) != 0;
+
             // First pass: determine which directions are needed
             bool needsParent = false;
             bool needsChild = false;
@@ -700,24 +707,50 @@ namespace MercuryMessaging
             }
             else if (directionsNeeded == 1)
             {
-                // Only one direction needed - reuse original message
-                if (needsParent)
+                if (hasAdvancedFilters)
                 {
-                    message.MetadataBlock.LevelFilter = MmLevelFilterHelper.SelfAndParents;
-                    upwardMessage = message;
+                    // Advanced routing active - create copies to preserve original message
+                    if (needsParent)
+                    {
+                        upwardMessage = message.Copy();
+                        upwardMessage.MetadataBlock.LevelFilter = MmLevelFilterHelper.SelfAndParents;
+                    }
+                    else if (needsChild)
+                    {
+                        downwardMessage = message.Copy();
+                        downwardMessage.MetadataBlock.LevelFilter = MmLevelFilterHelper.SelfAndChildren;
+                    }
+                    // needsSelf uses original message unchanged
                 }
-                else if (needsChild)
+                else
                 {
-                    message.MetadataBlock.LevelFilter = MmLevelFilterHelper.SelfAndChildren;
-                    downwardMessage = message;
+                    // No advanced routing - safe to reuse original message (lazy copy optimization)
+                    if (needsParent)
+                    {
+                        message.MetadataBlock.LevelFilter = MmLevelFilterHelper.SelfAndParents;
+                        upwardMessage = message;
+                    }
+                    else if (needsChild)
+                    {
+                        message.MetadataBlock.LevelFilter = MmLevelFilterHelper.SelfAndChildren;
+                        downwardMessage = message;
+                    }
+                    // If needsSelf, message already has correct filter
                 }
-                // If needsSelf, message already has correct filter
             }
 
             // Second pass: invoke responders with appropriate messages
             foreach (var routingTableItem in RoutingTable) {
 				var responder = routingTableItem.Responder;
 				MmLevelFilter responderLevel = routingTableItem.Level;
+
+				// CRITICAL FIX: When advanced routing is active, skip Parent/Child responders
+				// (Advanced routing via HandleAdvancedRouting will deliver to them)
+				// This prevents double/multi-delivery bugs
+				if (hasAdvancedFilters && (responderLevel & (MmLevelFilter.Parent | MmLevelFilter.Child)) != 0)
+				{
+					continue; // Skip - advanced routing will handle Parent/Child responders
+				}
 
 				//Check individual responder level and then call the right param.
 				MmMessage responderSpecificMessage;
@@ -736,7 +769,10 @@ namespace MercuryMessaging
 
 				//MmLogger.LogFramework (gameObject.name + "observing " + responder.MmGameObject.name);
 
-                bool checkPassed = ResponderCheck (levelFilter, activeFilter, selectedFilter, networkFilter,
+                // CRITICAL: Use transformed filter from responderSpecificMessage, not captured levelFilter
+                // (responderSpecificMessage may have transformed LevelFilter like SelfAndParents)
+                bool checkPassed = ResponderCheck (responderSpecificMessage.MetadataBlock.LevelFilter,
+                    activeFilter, selectedFilter, networkFilter,
                     routingTableItem, responderSpecificMessage);
 
                 if (checkPassed) {
@@ -1049,6 +1085,11 @@ namespace MercuryMessaging
 
             // Create message
             MmMessage message = new MmMessage(mmMethod, MmMessageType.MmVoid, metadataBlock);
+
+            // Mark sender as visited to prevent self-delivery in path-based routing
+            if (message.VisitedNodes == null)
+                message.VisitedNodes = new System.Collections.Generic.HashSet<int>();
+            message.VisitedNodes.Add(gameObject.GetInstanceID());
 
             // Forward to each target with transformed level filter
             foreach (var targetNode in targetNodes)
@@ -1401,6 +1442,7 @@ namespace MercuryMessaging
         protected virtual void HandleAdvancedRouting(MmMessage message, MmLevelFilter levelFilter)
         {
             // Check if any advanced filters are present
+            bool hasParent = (levelFilter & MmLevelFilter.Parent) != 0;
             bool hasSiblings = (levelFilter & MmLevelFilter.Siblings) != 0;
             bool hasCousins = (levelFilter & MmLevelFilter.Cousins) != 0;
             bool hasDescendants = (levelFilter & MmLevelFilter.Descendants) != 0;
@@ -1408,7 +1450,7 @@ namespace MercuryMessaging
             bool hasCustom = (levelFilter & MmLevelFilter.Custom) != 0;
 
             // If no advanced filters, skip (BEFORE profiling for zero overhead)
-            if (!hasSiblings && !hasCousins && !hasDescendants && !hasAncestors && !hasCustom)
+            if (!hasParent && !hasSiblings && !hasCousins && !hasDescendants && !hasAncestors && !hasCustom)
                 return;
 
             // Validate MmRoutingOptions if needed
@@ -1446,6 +1488,12 @@ namespace MercuryMessaging
                 RouteRecursive(message, useDescendants: false);
             }
 
+            // Handle direct parent routing
+            if (hasParent)
+            {
+                HandleParentRouting(message);
+            }
+
             // Handle custom predicate filtering
             if (hasCustom && options != null && options.CustomFilter != null)
             {
@@ -1460,6 +1508,35 @@ namespace MercuryMessaging
                         node.MmInvoke(forwardedMessage);
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Routes message to direct parent relay nodes only.
+        /// Part of Phase 2.1: Advanced Message Routing - handles MmLevelFilter.Parent.
+        /// </summary>
+        /// <param name="message">Message to route to parents</param>
+        protected virtual void HandleParentRouting(MmMessage message)
+        {
+            // Collect direct parents from routing table
+            List<MmRelayNode> parents = new List<MmRelayNode>();
+
+            foreach (var routingItem in RoutingTable)
+            {
+                if (routingItem.Level == MmLevelFilter.Parent)
+                {
+                    var parentNode = routingItem.Responder.GetRelayNode();
+                    if (parentNode != null)
+                        parents.Add(parentNode);
+                }
+            }
+
+            // Route to each parent with Self filter (prevents re-propagation)
+            foreach (var parentNode in parents)
+            {
+                var forwardedMessage = message.Copy();
+                forwardedMessage.MetadataBlock.LevelFilter = MmLevelFilter.Self;
+                parentNode.MmInvoke(forwardedMessage);
             }
         }
 
@@ -1739,7 +1816,7 @@ namespace MercuryMessaging
                     continue;
                 }
 
-                // If previous segment was wildcard, expand current nodes to ALL their children
+                // If previous segment was wildcard, expand current nodes to ALL siblings at that level
                 if (expandNext)
                 {
                     List<MmRelayNode> expandedNodes = new List<MmRelayNode>();
@@ -1748,20 +1825,22 @@ namespace MercuryMessaging
                     {
                         if (node == null) continue;
 
-                        // Get ALL children of this node
-                        foreach (var routingItem in node.RoutingTable)
+                        // Add self first
+                        expandedNodes.Add(node);
+
+                        // Get all siblings of this node
+                        List<MmRelayNode> siblings = new List<MmRelayNode>();
+                        node.CollectSiblings(siblings);
+
+                        foreach (var sibling in siblings)
                         {
-                            if (routingItem.Level == MmLevelFilter.Child)
+                            if (sibling != null)
                             {
-                                var childNode = routingItem.Responder.GetRelayNode();
-                                if (childNode != null)
+                                int siblingId = sibling.gameObject.GetInstanceID();
+                                if (!visited.Contains(siblingId))
                                 {
-                                    int childId = childNode.gameObject.GetInstanceID();
-                                    if (!visited.Contains(childId))
-                                    {
-                                        expandedNodes.Add(childNode);
-                                        visited.Add(childId);
-                                    }
+                                    expandedNodes.Add(sibling);
+                                    visited.Add(siblingId);
                                 }
                             }
                         }
