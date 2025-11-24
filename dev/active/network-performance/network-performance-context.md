@@ -18,11 +18,12 @@
 ## Quick Resume
 
 **Where to start if beginning this task:**
-1. Read this document completely
-2. Review `network-performance-tasks.md` for detailed checklist
-3. Study `Assets/MercuryMessaging/Protocol/MmNetworkResponder.cs` (current implementation)
-4. Review archived master plan Phase 2.2 and 3.2
-5. Set up network testing environment (2 Unity instances)
+1. Review `USE_CASE.md` for business context and target scenarios
+2. Read this document completely for technical architecture
+3. Review `network-performance-tasks.md` for detailed checklist
+4. Study `Assets/MercuryMessaging/Protocol/MmNetworkResponder.cs` (current implementation)
+5. Review archived master plan Phase 2.2 and 3.2
+6. Set up network testing environment (2 Unity instances)
 
 **First 3 steps to take:**
 1. Design state tracking architecture (8h)
@@ -38,7 +39,7 @@
 
 ## Technical Overview
 
-This initiative focuses on optimizing Mercury's network synchronization capabilities through four core improvements:
+This initiative focuses on optimizing Mercury's network synchronization capabilities to enable the distributed XR use cases detailed in `USE_CASE.md`. The optimization involves four core improvements:
 
 1. **Delta State Synchronization** - Only send changed properties
 2. **Priority-Based Message Queuing** - Critical messages first

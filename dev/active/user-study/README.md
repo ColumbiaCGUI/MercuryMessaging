@@ -11,6 +11,8 @@ This directory contains planning documentation for a user study comparing **Merc
 - **Maintainability** (ease of adding new objects/features)
 - **Developer experience** (NASA-TLX workload, subjective preference)
 
+**For business context and research objectives, see [`USE_CASE.md`](./USE_CASE.md)**
+
 ---
 
 ## Scene Selection Rationale

@@ -4,6 +4,8 @@
 
 Implementation of parallel hierarchical state machines for the MercuryMessaging framework, enabling multiple concurrent FSMs to operate within the same message routing system. This module supports complex multi-modal interactions through orthogonal state regions.
 
+**For business context and use cases, see [`USE_CASE.md`](./USE_CASE.md)**
+
 ---
 
 ## Technical Architecture

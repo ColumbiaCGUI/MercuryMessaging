@@ -75,20 +75,23 @@ This initiative enhances Mercury's network synchronization capabilities with sta
 
 ### For Developers
 
-1. **Read the context document first**
-   - `network-performance-context.md` - Technical architecture
+1. **Understand the business context**
+   - `USE_CASE.md` - Use cases, target scenarios, and expected benefits
 
-2. **Review the task checklist**
+2. **Read the technical architecture**
+   - `network-performance-context.md` - Detailed technical implementation
+
+3. **Review the task checklist**
    - `network-performance-tasks.md` - Specific tasks with acceptance criteria
 
-3. **Set up network test environment**
+4. **Set up network test environment**
    ```bash
    git checkout -b feature/network-performance
    # Set up packet loss/latency simulation
    # Create baseline bandwidth measurements
    ```
 
-4. **Start with Phase 2.2 Task 1: State tracking architecture**
+5. **Start with Phase 2.2 Task 1: State tracking architecture**
    - Design property change detection system
    - Reference Unity's NetworkBehaviour for similar patterns
 
@@ -213,5 +216,6 @@ This initiative enhances Mercury's network synchronization capabilities with sta
 **Last Updated:** 2025-11-18
 **Owner:** Network Performance Team
 **Related Docs:**
+- `USE_CASE.md` - Business context and use case analysis
 - `network-performance-context.md` - Technical details
 - `network-performance-tasks.md` - Task checklist
