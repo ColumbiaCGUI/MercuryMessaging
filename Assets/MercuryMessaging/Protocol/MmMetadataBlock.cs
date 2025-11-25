@@ -191,7 +191,7 @@ namespace MercuryMessaging
             get
             {
                 return new MmMetadataBlock(
-                    default(MmTag),
+                    MmTagHelper.Everything,  // Use Everything to bypass tag filtering (default(MmTag) = Nothing = 0 would fail all tag checks)
                     MmLevelFilterHelper.Default,
                     default(MmActiveFilter),
                     default(MmSelectedFilter),

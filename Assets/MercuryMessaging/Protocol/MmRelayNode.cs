@@ -328,14 +328,15 @@ namespace MercuryMessaging
         private void UpdateItemAndPropagate(MmRoutingTableItem item, MmMessage message)
         {
             System.DateTime currentTime = System.DateTime.Now;
-            // Update the messageOutList for the current node
-            messageOutList.Insert(0, item.Name + " : " + message.MmMessageType.ToString() + "\n" + currentTime.ToString("yyyy-MM-dd HH:mm:ss"));
+            // Update the messageOutList for the current node (null check for inactive GameObjects)
+            messageOutList?.Insert(0, item.Name + " : " + message.MmMessageType.ToString() + "\n" + currentTime.ToString("yyyy-MM-dd HH:mm:ss"));
             // No truncation needed - circular buffer handles it automatically
 
             // If the item has a responder that is a MmRelayNode, update its messageInList
             if (item.Responder is MmRelayNode relayNode && item.Responder != this)
             {
-                relayNode.messageInList.Insert(0, gameObject.name + " : " + message.MmMessageType.ToString() + "\n" + currentTime.ToString("yyyy-MM-dd HH:mm:ss"));
+                // Null check for messageInList - may be null if Awake() hasn't been called (inactive GameObject)
+                relayNode.messageInList?.Insert(0, gameObject.name + " : " + message.MmMessageType.ToString() + "\n" + currentTime.ToString("yyyy-MM-dd HH:mm:ss"));
                 // No truncation needed - circular buffer handles it automatically
 
                 // Recursively update the child nodes of the current relay node
@@ -743,6 +744,15 @@ namespace MercuryMessaging
             foreach (var routingTableItem in RoutingTable) {
 				var responder = routingTableItem.Responder;
 				MmLevelFilter responderLevel = routingTableItem.Level;
+
+				// FIX: Check if original levelFilter includes this responder's level
+				// This prevents unwanted cascading when advanced routing sends with Self-only filter
+				// Without this, lazy copy transforms Self → SelfAndParents/SelfAndChildren and causes
+				// cascading delivery to nodes that shouldn't receive the message
+				if ((levelFilter & responderLevel) == 0)
+				{
+					continue; // Original levelFilter doesn't want to route to this responder's level
+				}
 
 				// CRITICAL FIX: When advanced routing is active, skip Parent/Child responders
 				// (Advanced routing via HandleAdvancedRouting will deliver to them)
@@ -1518,22 +1528,17 @@ namespace MercuryMessaging
         /// <param name="message">Message to route to parents</param>
         protected virtual void HandleParentRouting(MmMessage message)
         {
-            // Collect direct parents from routing table
-            List<MmRelayNode> parents = new List<MmRelayNode>();
-
-            foreach (var routingItem in RoutingTable)
-            {
-                if (routingItem.Level == MmLevelFilter.Parent)
-                {
-                    var parentNode = routingItem.Responder.GetRelayNode();
-                    if (parentNode != null)
-                        parents.Add(parentNode);
-                }
-            }
+            // Parents are stored in MmParentList (via AddParent), NOT in RoutingTable
+            // RoutingTable stores responders by their relationship level to THIS node
+            // MmParentList stores parent MmRelayNodes that THIS node reports to
+            if (MmParentList == null || MmParentList.Count == 0)
+                return;
 
             // Route to each parent with Self filter (prevents re-propagation)
-            foreach (var parentNode in parents)
+            foreach (var parentNode in MmParentList)
             {
+                if (parentNode == null) continue;
+
                 var forwardedMessage = message.Copy();
                 forwardedMessage.MetadataBlock.LevelFilter = MmLevelFilter.Self;
                 parentNode.MmInvoke(forwardedMessage);
