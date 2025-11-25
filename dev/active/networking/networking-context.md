@@ -1,98 +1,171 @@
 # Networking Implementation Context
 
-**Last Updated:** 2025-11-25
+**Last Updated:** 2025-11-25 (Session 2 - Implementation)
 
 ---
 
-## Session Summary (2025-11-25)
+## Session Summary (2025-11-25 - Session 2)
 
-### Planning Completed
-- Explored current networking architecture (PUN 2 implementation)
-- Discovered all asmdef dependencies are dead code
-- Designed modular package architecture for zero-dep Core
-- Consolidated network-performance (292h) + network-prediction (400h) tasks
-- Created comprehensive plan: 596h across 6 phases
+### Implementation Completed
+- **Phase 0A Complete**: Removed all dead dependencies, created Examples.asmdef
+- **Phase 0B Complete**: Built entire provider-agnostic networking foundation
+- Created 8 new files totaling ~2,600 lines of networking infrastructure
+- Two commits made to `user_study` branch
 
-### Key Architectural Decisions
+### Commits This Session
+1. `745179ee` - `refactor(asmdef): Remove dead dependencies for zero-dep Core`
+2. `c3f69059` - `feat(network): Add networking foundation infrastructure`
 
-1. **Provider-Agnostic Backend**
-   - `IMmNetworkBackend` interface abstracts transport layer
-   - Each backend (FishNet, Fusion, PUN2) implements same interface
-   - `MmNetworkBridge` orchestrates backend selection
+---
 
-2. **Binary Serialization**
-   - Previous Fusion attempt failed with JSON serialization
-   - New `MmBinarySerializer` will use byte arrays
-   - Each backend resolves network IDs differently
+## Files Created This Session
 
-3. **MmMessageGameObject Fix**
-   - Current code uses `PhotonView.ViewID` directly
-   - Solution: Backend-agnostic `MmGameObjectResolver`
-   - Each backend maps its own network IDs to GameObjects
+### Protocol/Network/ (New Directory)
+| File | Lines | Purpose |
+|------|-------|---------|
+| `IMmNetworkBackend.cs` | 220 | Transport abstraction interface |
+| `IMmGameObjectResolver.cs` | 108 | Network ID ↔ GameObject mapping |
+| `MmBinarySerializer.cs` | 560 | Binary message format (15-byte header) |
+| `MmNetworkBridge.cs` | 436 | Central orchestrator singleton |
+| `MmLoopbackBackend.cs` | 308 | Testing backend with echo mode |
+| `MmRegistryResolver.cs` | 221 | Simple dictionary-based resolver |
+| `Backends/Pun2Backend.cs` | 373 | PUN2 wrapper implementing IMmNetworkBackend |
+
+### Tests/
+| File | Lines | Purpose |
+|------|-------|---------|
+| `MmBinarySerializerTests.cs` | 364 | Unit tests for all message types |
+
+### Files Modified
+- `MmLogger.cs` - Added `LogNetwork` and `LogWarning` methods
+- `MmMessageGameObject.cs` - Added `GameObjectNetId` field for network serialization
+- `MercuryMessaging.asmdef` - Removed all 7 dead dependencies (now zero-dep)
+- `MercuryMessaging.Examples.asmdef` - Created for XR tutorial files
+
+---
+
+## Key Architectural Decisions (Implemented)
+
+### 1. Provider-Agnostic Backend Pattern
+```
+IMmNetworkBackend (interface)
+    ├── Pun2Backend (implemented)
+    ├── FishNetBackend (TODO - Phase 1)
+    └── Fusion2Backend (TODO - Phase 2)
+```
+
+### 2. Binary Serialization Format
+```
+Header (15 bytes fixed):
+- Magic: 4 bytes "MMSG"
+- Version: 1 byte
+- MessageType: 2 bytes (short)
+- MmMethod: 2 bytes (short)
+- NetId: 4 bytes (uint)
+- Metadata: 2 bytes (packed filters + tag)
+
+Payload: Variable length, type-specific
+```
+
+### 3. Three-Layer Architecture
+- **Transport Layer** (`IMmNetworkBackend`): byte[] only, backend-specific
+- **Serialization Layer** (`MmBinarySerializer`): MmMessage ↔ byte[]
+- **Resolution Layer** (`IMmGameObjectResolver`): Network IDs ↔ GameObjects
+
+### 4. MmTransform API Discovery
+- Uses `Translation` and `Scale`, NOT `Position` and `LocalScale`
+- Constructor order: `(Vector3 translation, Vector3 scale, Quaternion rotation)`
+- MmMessageTransformList uses `transforms` (lowercase)
 
 ---
 
 ## Current Implementation State
 
-### Existing Code (Working)
-- `MmNetworkResponderPhoton.cs` - PUN 2 implementation (299 lines)
-- `MmNetworkResponder.cs` - Abstract base (234 lines)
-- `IMmNetworkResponder.cs` - Interface (114 lines)
-- `MmNetworkFilter.cs` - Local/Network/All enum
+### Working Code
+- All Phase 0A and 0B code compiles and is committed
+- MmBinarySerializer handles all 13 message types
+- MmLoopbackBackend ready for testing without network
+- Pun2Backend wraps existing PUN2 with new interface
 
-### Previous Fusion Attempt (Abandoned ~125 commits ago)
-- Used JSON serialization (failed)
-- `MmMessageGameObject` type conversion issues
-- RPC serialization problems
-- Files were removed from codebase
+### Known Limitations
+- `MmMessageSerializable` binary serialization is placeholder (uses Activator, not full deserialization)
+- MmBinarySerializerTests need to be run in PlayMode (not EditMode)
+- Some pre-existing StandardLibrary test errors unrelated to networking
 
-### Files Using XR (Tutorial Only)
-- `Examples/Tutorials/SimpleScene/Scripts/HandController.cs`
-- `Examples/Tutorials/SimpleScene/Scripts/BoxController.cs`
+### Namespace Pattern
+- New networking code uses `MercuryMessaging.Network` namespace
+- Must use `using MmLog = MercuryMessaging.MmLogger;` alias in Network namespace files
 
 ---
 
-## Dependencies Analysis
+## Dependencies Analysis (Updated)
 
-### Current MercuryMessaging.asmdef References
+### MercuryMessaging.asmdef (After Phase 0A)
+```json
+"references": []  // ZERO DEPENDENCIES!
+```
+
+### MercuryMessaging.Examples.asmdef (New)
 ```json
 "references": [
-    "Unity.XR.Interaction.Toolkit",  // Only 2 tutorial files
-    "Unity.InputSystem",              // Only 2 tutorial files
-    "Unity.Mathematics",              // NEVER USED
-    "NewGraph",                       // NEVER USED
-    "NewGraph.Editor",                // NEVER USED
-    "ALINE",                          // NEVER USED
-    "EPO"                             // NEVER USED
+    "MercuryMessaging",
+    "Unity.XR.Interaction.Toolkit",
+    "Unity.InputSystem"
 ]
 ```
 
-**Action:** Remove all, move tutorials to Examples package
-
 ---
 
-## Network Message Flow
+## Network Message Flow (Updated)
 
+### New Architecture
 ```
-Local:  MmRelayNode.MmInvoke() → MmNetworkResponder.MmInvoke() → Serialize → Network
-Remote: Network → Deserialize → MmRelayNode.MmInvoke() (IsDeserialized=true)
+Send Path:
+MmRelayNode.MmInvoke()
+  → MmNetworkBridge.Send()
+  → MmBinarySerializer.Serialize()
+  → IMmNetworkBackend.SendToAllClients()
+
+Receive Path:
+IMmNetworkBackend.OnMessageReceived
+  → MmBinarySerializer.Deserialize()
+  → IMmGameObjectResolver.TryGetRelayNode()
+  → MmRelayNode.MmInvoke()
 ```
 
-Key integration point: `MmRelayNode.cs:587-602`
-
----
-
-## Blockers & Issues
-
-1. **None currently** - Planning phase complete, ready for implementation
+### Legacy PUN2 Path (Still Supported)
+```
+MmRelayNode → MmNetworkResponderPhoton → PhotonNetwork.RaiseEvent
+```
 
 ---
 
 ## Next Session Start Point
 
-1. Run Phase 0A tasks (remove dead dependencies)
-2. Create `MercuryMessaging.Examples.asmdef`
-3. Begin `IMmNetworkBackend` interface design
+### Phase 1: FishNet Implementation (80h)
+1. **Task 1.1**: Install FishNet package via Package Manager
+2. **Task 1.2**: Create `FishNetBackend` implementing `IMmNetworkBackend`
+3. **Task 1.3**: Create `FishNetResolver` implementing `IMmGameObjectResolver`
+4. **Task 1.4**: Test with MmLoopbackBackend pattern first
+
+### Quick Start Commands
+```bash
+# Verify current state
+git log --oneline -3
+git status
+
+# Check for compilation errors
+# Open Unity, check Console for errors
+
+# Run tests (in Unity Test Runner, PlayMode)
+```
+
+---
+
+## Blockers & Issues
+
+1. **None for networking** - Phase 0A and 0B complete
+2. **Unrelated**: StandardLibrary tests have pre-existing errors (InputMessageTests, UIMessageTests)
 
 ---
 
