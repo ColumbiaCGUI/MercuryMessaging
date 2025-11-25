@@ -45,9 +45,15 @@ namespace MercuryMessaging
 	public class MmMessageGameObject : MmMessage
 	{
         /// <summary>
-        /// MmMessageGameObject GameObject payload
+        /// MmMessageGameObject GameObject payload (local reference)
         /// </summary>
 		public GameObject Value;
+
+        /// <summary>
+        /// Network ID for backend-agnostic serialization.
+        /// Set by MmBinarySerializer when serializing, resolved by IMmGameObjectResolver when deserializing.
+        /// </summary>
+        public uint GameObjectNetId;
 
         /// <summary>
         /// Creates a basic MmMessageGameObject

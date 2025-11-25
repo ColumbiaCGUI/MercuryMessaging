@@ -72,5 +72,17 @@ namespace MercuryMessaging
         /// </summary>
         //public static LogFunc LogError = delegate { };
         public static LogFunc LogError = Debug.LogError;
+
+        /// <summary>
+        /// Log Mercury XM warning messages.
+        /// </summary>
+        public static LogFunc LogWarning = Debug.LogWarning;
+
+        /// <summary>
+        /// Log Network-level messages.
+        /// Used by MmNetworkBridge and backend implementations.
+        /// </summary>
+        public static LogFunc LogNetwork = delegate { };
+        // public static LogFunc LogNetwork = Debug.Log;
     }
 }
