@@ -1,27 +1,25 @@
 # MercuryMessaging DSL Overhaul - Context
 
-**Last Updated:** 2025-11-25 (Session 2 - FINAL)
+**Last Updated:** 2025-11-25 (Session 3 - Phase 1 COMPLETE)
 **Full Plan:** `.claude/plans/compressed-wandering-fog.md`
 
 ---
 
-## HANDOFF NOTES (Context Limit Reached)
+## PHASE 1 COMPLETE! 🎉
 
-### Immediate Next Steps
-1. **Run tests manually**: Unity > Window > General > Test Runner > PlayMode > Run All
-2. **Update CLAUDE.md**: Add unified API examples to Fluent DSL section
-3. **Update DSL_API_GUIDE.md**: Document Tier 1/Tier 2 methods
-4. **Commit changes**: ~10 uncommitted files
+Commit: `ebf9f703` - feat(dsl): Complete DSL Overhaul Phase 1 - Unified Messaging API
 
-### Uncommitted Files
-- `Assets/MercuryMessaging/Protocol/DSL/MmMessagingExtensions.cs` (NEW - 250 lines)
-- `Assets/MercuryMessaging/Protocol/DSL/MmQuickExtensions.cs` (MODIFIED - [Obsolete] added)
-- `Assets/MercuryMessaging/Protocol/DSL/MmFluentExtensions.cs` (MODIFIED - [Obsolete] updated)
-- `Assets/MercuryMessaging/Protocol/MmRelayNode.cs` (MODIFIED - dead code removed)
-- `Assets/MercuryMessaging/Tests/MmMessagingExtensionsTests.cs` (NEW - 27 tests)
-- `Assets/MercuryMessaging/Tests/Performance/Scripts/MessageGenerator_DSL.cs` (MODIFIED)
-- `dev/active/dsl-overhaul/*` (documentation updates)
-- `dev/archive/2025-11-25-standard-library-merged/*` (archived task)
+### What Was Delivered
+- **MmMessagingExtensions.cs** - Unified Two-Tier API (~280 lines)
+- **MmMessagingExtensionsTests.cs** - 27 unit tests
+- **Documentation** - CLAUDE.md and DSL_API_GUIDE.md updated
+- **Dead code cleanup** - MmRelayNode cleaned (messageBuffer, colorA-D removed)
+- **Standard library merged** - Absorbed into phases 9-10
+
+### Breaking Changes
+- `BroadcastInitialize()` / `BroadcastRefresh()` removed from MmFluentExtensions
+- `BroadcastSetActive()` / `NotifyComplete()` removed from MmRelayNodeExtensions
+- Use `MmMessagingExtensions` equivalents instead (same API, no ambiguity)
 
 ---
 
