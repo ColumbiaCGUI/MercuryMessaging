@@ -24,6 +24,81 @@ relay.Send(MmMethod.MessageInt, 42).ToChildren().Active().Execute();
 
 ---
 
+## Unified Messaging API (NEW)
+
+The unified API provides **identical methods** for both `MmRelayNode` and `MmBaseResponder`, organized into two tiers:
+
+### Two-Tier Design
+
+| Tier | Description | When to Use |
+|------|-------------|-------------|
+| **Tier 1** | Auto-execute methods (`BroadcastInitialize()`, `NotifyComplete()`) | Quick, common operations |
+| **Tier 2** | Fluent chain with `.Execute()` (`Send().ToDescendants().Execute()`) | Full control over routing |
+
+### Tier 1: Auto-Execute Methods
+
+These methods execute immediately - no `.Execute()` needed:
+
+```csharp
+using MercuryMessaging.Protocol.DSL;
+
+// Broadcast DOWN to descendants (matches MmMethod enum names)
+relay.BroadcastInitialize();       // → MmMethod.Initialize
+relay.BroadcastRefresh();          // → MmMethod.Refresh
+relay.BroadcastSetActive(true);    // → MmMethod.SetActive
+relay.BroadcastSwitch("MenuState"); // → MmMethod.Switch
+relay.BroadcastValue(42);          // → MmMethod.MessageInt
+relay.BroadcastValue(3.14f);       // → MmMethod.MessageFloat
+relay.BroadcastValue("hello");     // → MmMethod.MessageString
+relay.BroadcastValue(true);        // → MmMethod.MessageBool
+
+// Notify UP to parents/ancestors
+relay.NotifyComplete();            // → MmMethod.Complete to parents
+relay.NotifyValue(100);            // → MmMethod.MessageInt to parents
+relay.NotifyValue("done");         // → MmMethod.MessageString to parents
+```
+
+### Works on Responders Too!
+
+The same API works on `MmBaseResponder` (null-safe):
+
+```csharp
+public class MyResponder : MmBaseResponder
+{
+    public void StartTask()
+    {
+        // Tier 1: Same methods, same behavior!
+        this.BroadcastInitialize();
+        this.BroadcastValue("task started");
+    }
+
+    public void FinishTask()
+    {
+        this.NotifyComplete();
+        this.NotifyValue(100);  // Report final score
+    }
+
+    // Tier 2: Fluent chain from responder
+    public void CustomBroadcast()
+    {
+        this.Send("alert").ToDescendants().WithTag(MmTag.Tag0).Execute();
+    }
+}
+```
+
+### Naming Convention
+
+| Direction | Prefix | Example | MmMethod |
+|-----------|--------|---------|----------|
+| **Down** (descendants) | `Broadcast*` | `BroadcastInitialize()` | Initialize |
+| **Up** (parents) | `Notify*` | `NotifyComplete()` | Complete |
+
+### File Location
+
+- `Assets/MercuryMessaging/Protocol/DSL/MmMessagingExtensions.cs`
+
+---
+
 ## Core APIs
 
 ### 1. MmFluentMessage - Chainable Message Builder
