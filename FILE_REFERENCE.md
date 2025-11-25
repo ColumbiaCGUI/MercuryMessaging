@@ -148,7 +148,8 @@ Project documentation files.
 | [CONTRIBUTING.md](CONTRIBUTING.md) | Development standards and guidelines. Dependency policy, naming conventions, testing standards. |
 | [FILE_REFERENCE.md](FILE_REFERENCE.md) | This file. Quick reference to important files. |
 | [dev/WORKFLOW.md](dev/WORKFLOW.md) | Development workflow documentation. Feature development, bug fixes, testing, releases. |
-| [dev/TECHNICAL_DEBT.md](dev/TECHNICAL_DEBT.md) | Known issues and future improvements. Prioritized list of technical debt items. |
+| [dev/IMPROVEMENT_TRACKER.md](dev/IMPROVEMENT_TRACKER.md) | Framework improvements tracker. Completed work, active development, research opportunities. |
+| [dev/FREQUENT_ERRORS.md](dev/FREQUENT_ERRORS.md) | **Frequent errors & bug reference.** Common mistakes, debugging checklists, code patterns. CONSULT BEFORE WRITING ROUTING CODE. |
 | [.claude/ASSISTANT_GUIDE.md](.claude/ASSISTANT_GUIDE.md) | AI assistant guidelines. Git commit policy, task management for AI assistants. |
 
 ---
@@ -176,7 +177,7 @@ Project documentation files.
 → Set `Tag` and `TagCheckEnabled` in responders
 
 ### "I want to understand performance"
-→ See `Assets/MercuryMessaging/Documentation/Performance/OPTIMIZATION_RESULTS.md`
+→ See `Documentation/Performance/OPTIMIZATION_RESULTS.md`
 → See CLAUDE.md "Performance Characteristics" section
 
 ### "I want to write tests"
@@ -213,7 +214,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for complete naming convention policy.
 - **General Documentation**: [CLAUDE.md](CLAUDE.md)
 - **Development Standards**: [CONTRIBUTING.md](CONTRIBUTING.md)
 - **Development Workflow**: [dev/WORKFLOW.md](dev/WORKFLOW.md)
-- **Technical Issues**: [dev/TECHNICAL_DEBT.md](dev/TECHNICAL_DEBT.md)
+- **Improvement Tracker**: [dev/IMPROVEMENT_TRACKER.md](dev/IMPROVEMENT_TRACKER.md)
 - **AI Assistant Guide**: [.claude/ASSISTANT_GUIDE.md](.claude/ASSISTANT_GUIDE.md)
 
 ---

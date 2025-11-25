@@ -69,8 +69,12 @@ namespace MercuryMessaging
                     SetActive(messageBool.value);
                     break;
                 case MmMethod.Refresh:
-                    var messageTransform = (MmMessageTransformList) msg;
-                    Refresh(messageTransform.transforms);
+                    // Handle both MmMessageTransformList and plain MmMessage
+                    // (DSL's Refresh() creates plain MmMessage, direct calls may use MmMessageTransformList)
+                    if (msg is MmMessageTransformList messageTransform)
+                        Refresh(messageTransform.transforms);
+                    else
+                        Refresh(new List<MmTransform>()); // Empty list for parameter-less Refresh
                     break;
                 case MmMethod.Initialize:
                     Initialize();

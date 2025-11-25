@@ -347,9 +347,14 @@ If the actual implementation differs from the plan, document why:
 ### Code Changes
 
 1. **Read Before Writing**: Always read existing code before making changes
-2. **Test After Changes**: Run tests after every significant change
-3. **Incremental Commits**: Make small, focused commits
-4. **Clear Descriptions**: Explain the "why" not just the "what"
+2. **Consult Error Reference**: Check [`dev/FREQUENT_ERRORS.md`](../dev/FREQUENT_ERRORS.md) for:
+   - Level filter transformation patterns
+   - Routing table registration requirements
+   - Runtime component addition patterns
+   - Common debugging approaches
+3. **Test After Changes**: Run tests after every significant change
+4. **Incremental Commits**: Make small, focused commits
+5. **Clear Descriptions**: Explain the "why" not just the "what"
 
 ### Documentation
 
@@ -449,30 +454,38 @@ public void TestSomething()
 
 When encountering errors:
 
-1. **Read Error Message Completely**
+1. **Check Frequent Errors Reference**
+   - **FIRST**, consult [`dev/FREQUENT_ERRORS.md`](../dev/FREQUENT_ERRORS.md)
+   - Check if error matches known bugs (5 documented patterns)
+   - Review debugging checklists for your error type
+   - Apply known fixes before investigating further
+
+2. **Read Error Message Completely**
    - Don't skim - read every line
    - Note file paths and line numbers
    - Identify error type (compilation, runtime, test failure)
 
-2. **Locate Relevant Code**
+3. **Locate Relevant Code**
    - Read the file at the error line
    - Read surrounding context (±10 lines)
    - Check recent changes to that area
 
-3. **Form Hypothesis**
+4. **Form Hypothesis**
    - What caused the error?
    - Why did it occur now?
    - What changed recently?
+   - Does it match a pattern in FREQUENT_ERRORS.md?
 
-4. **Test Hypothesis**
+5. **Test Hypothesis**
    - Make minimal change to test theory
    - Run tests or compile
    - Verify if hypothesis was correct
 
-5. **Document Fix**
+6. **Document Fix**
    - Explain what was wrong
    - Explain what fixed it
    - Note how to prevent similar issues
+   - **If new bug pattern**: Add to FREQUENT_ERRORS.md
 
 ---
 

@@ -117,13 +117,17 @@ These research opportunities represent novel contributions suitable for publicat
 
 ### Currently In Progress
 
-1. **Language DSL** (`dev/active/language-dsl/`) ✅ **PHASE 1 COMPLETE**
-   - 240 hours planned, ~8 hours invested
-   - **Achievement**: 70% code reduction, <2% overhead
-   - **Status**: Core fluent API complete, production-ready
-   - **Files**: MmFluentMessage.cs, MmFluentExtensions.cs, MmFluentFilters.cs
-   - **Tests**: 20+ tests in FluentApiTests.cs
-   - **Future**: Phases 2-5 (spatial filtering, type filtering, migration tools)
+1. **Language DSL** (`dev/archive/2025-11-25-language-dsl/`) ✅ **COMPLETE + OPTIMIZED**
+   - 240 hours planned, ~12 hours invested
+   - **Achievement**: 86% code reduction, optimized overhead
+   - **Status**: Core fluent API complete, optimizations applied, archived
+   - **Files**: MmFluentMessage.cs, MmFluentExtensions.cs, MmQuickExtensions.cs
+   - **Tests**: 93+ tests (FluentApiTests, Phase2/3, Integration, Performance)
+   - **Optimizations Applied (Session 4):**
+     - Opt 2.1: Cached `_needsTargetCollection` flag (~40% reduction)
+     - Opt 2.2: Fast path for simple messages (~20% reduction)
+     - Opt 2.3: Pre-allocated DefaultMetadata (~10% reduction)
+   - **API Consolidation:** 3 methods deprecated → use Quick API (Init, Done, Sync)
 
 2. **User Study** (`dev/active/user-study/`) ✅ **UNBLOCKED**
    - Smart Home comparison study (Mercury vs UnityEvents)
@@ -241,6 +245,20 @@ These research opportunities represent novel contributions suitable for publicat
 
 ## Decision Log
 
+### 2025-11-25: DSL Optimizations and API Consolidation
+- Implemented 3 performance optimizations for MmFluentMessage.Execute():
+  - Opt 2.1: Cached `_needsTargetCollection` in ToXxx() methods (~40% reduction)
+  - Opt 2.2: Fast path for simple messages (~20% reduction)
+  - Opt 2.3: Pre-allocated DefaultMetadata static instance (~10% reduction)
+- Added [Obsolete] warnings to 3 redundant methods:
+  - `BroadcastInitialize()` → use `relay.Init()`
+  - `BroadcastRefresh()` → use `relay.Sync()`
+  - `NotifyComplete()` → use `relay.Done()`
+- Added UI Canvas to DSL_Comparison.unity for real-time metrics
+- **Key Learning**: Fast path for common case (no predicates, no target collection) avoids branching overhead
+- **Key Learning**: Static readonly structs can be used for pre-allocation in C# (MmMetadataBlock)
+- **Key Learning**: Unity MCP cannot set object references via set_component_property (manual step needed)
+
 ### 2025-11-24: Session Cleanup and DSL Phase 1 Complete
 - Reverted Option C message creation gating (caused NullReferenceException)
 - Kept Option A skip logic for double-delivery prevention
@@ -274,5 +292,5 @@ These research opportunities represent novel contributions suitable for publicat
 
 ---
 
-*Last Updated: 2025-11-24*
+*Last Updated: 2025-11-25*
 *Next Review: End of Q1 2025*

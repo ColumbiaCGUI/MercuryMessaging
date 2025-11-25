@@ -34,6 +34,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 using UnityEngine;
@@ -71,6 +72,21 @@ public class InvocationComparison : MmBaseResponder, ICustomMessageTarget {
 	public int Repetitions = 1000;
 
 	/// <summary>
+	/// Run tests automatically on Start (instead of waiting for Space key)
+	/// </summary>
+	public bool autoRunTests = false;
+
+	/// <summary>
+	/// Export results to CSV file
+	/// </summary>
+	public bool exportToCSV = false;
+
+	/// <summary>
+	/// CSV export path (relative to Assets/Resources/)
+	/// </summary>
+	public string csvExportPath = "performance-results/invocation_comparison.csv";
+
+	/// <summary>
 	/// The stop watch.
 	/// </summary>
 	public System.Diagnostics.Stopwatch stopWatch;
@@ -95,6 +111,20 @@ public class InvocationComparison : MmBaseResponder, ICustomMessageTarget {
 
 	public StringBuilder Results;
 
+	/// <summary>
+	/// Test results for CSV export
+	/// </summary>
+	private struct TestResult
+	{
+		public TestingMode mode;
+		public int iterations;
+		public long totalMs;
+		public float avgMs;
+		public long totalTicks;
+		public float avgTicks;
+	}
+	private List<TestResult> testResults = new List<TestResult>();
+
 
 	/// <summary>
 	/// Start this instance.
@@ -113,10 +143,16 @@ public class InvocationComparison : MmBaseResponder, ICustomMessageTarget {
 		//Prepare the stopwatch we'll use across tests. It will be reset each time.
 		stopWatch = new System.Diagnostics.Stopwatch ();
 
-		//Prepare the total time stop watch. 
+		//Prepare the total time stop watch.
 		totalWatch = new System.Diagnostics.Stopwatch ();
 
 		OnEventTest += SimpleFunction;
+
+		// Auto-run tests if enabled
+		if (autoRunTests)
+		{
+			TimingTest();
+		}
 	}
 
 	/// <summary>
@@ -136,12 +172,20 @@ public class InvocationComparison : MmBaseResponder, ICustomMessageTarget {
 	/// </summary>
 	public void TimingTest()
 	{
+		testResults.Clear();
+
 		foreach (TestingMode mode in Enum.GetValues(typeof(TestingMode)))
 		{
 			TimingFunction (mode);
 		}
 
 		Debug.Log (Results.ToString ());
+
+		// Export to CSV if enabled
+		if (exportToCSV)
+		{
+			ExportToCSV();
+		}
 	}
 
 	/// <summary>
@@ -181,14 +225,25 @@ public class InvocationComparison : MmBaseResponder, ICustomMessageTarget {
 //		Debug.Log (state.ToString () + " Avg Time: " + 
 //			stopWatch.ElapsedMilliseconds/((float)Repetitions) + " milliseconds.");
 
-		Results.AppendLine (//state.ToString () + " Total Time: " + 
+		Results.AppendLine (//state.ToString () + " Total Time: " +
 			stopWatch.ElapsedMilliseconds.ToString ());// + " milliseconds.");
-		Results.AppendLine (//state.ToString () + " Avg Time: " + 
+		Results.AppendLine (//state.ToString () + " Avg Time: " +
 			(stopWatch.ElapsedMilliseconds / ((float)Repetitions)).ToString ());// + " milliseconds.");
-		Results.AppendLine (//state.ToString () + " Total Time: " + 
+		Results.AppendLine (//state.ToString () + " Total Time: " +
 			stopWatch.ElapsedTicks.ToString ());// + " ticks.");
-		Results.AppendLine (//state.ToString () + " Avg Time: " + 
+		Results.AppendLine (//state.ToString () + " Avg Time: " +
 			(stopWatch.ElapsedTicks / ((float)Repetitions)).ToString ());// + " ticks.");
+
+		// Store results for CSV export
+		testResults.Add(new TestResult
+		{
+			mode = state,
+			iterations = Repetitions,
+			totalMs = stopWatch.ElapsedMilliseconds,
+			avgMs = stopWatch.ElapsedMilliseconds / ((float)Repetitions),
+			totalTicks = stopWatch.ElapsedTicks,
+			avgTicks = stopWatch.ElapsedTicks / ((float)Repetitions)
+		});
 	}
 
 	/// <summary>
@@ -312,5 +367,73 @@ public class InvocationComparison : MmBaseResponder, ICustomMessageTarget {
 		stopWatch.Stop ();
 
 		simpleLock = false;
+	}
+
+	/// <summary>
+	/// Export test results to CSV file.
+	/// </summary>
+	private void ExportToCSV()
+	{
+		if (testResults.Count == 0)
+		{
+			Debug.LogWarning("[InvocationComparison] No results to export!");
+			return;
+		}
+
+		try
+		{
+			StringBuilder csv = new StringBuilder();
+
+			// Header
+			csv.AppendLine("test_type,iterations,total_ms,avg_ms,total_ticks,avg_ticks");
+
+			// Data rows
+			foreach (var result in testResults)
+			{
+				csv.AppendLine($"{result.mode}," +
+				              $"{result.iterations}," +
+				              $"{result.totalMs}," +
+				              $"{result.avgMs:F6}," +
+				              $"{result.totalTicks}," +
+				              $"{result.avgTicks:F2}");
+			}
+
+			// Export to Resources folder
+			string resourcesPath = Path.Combine(Application.dataPath, "Resources", csvExportPath);
+			string directory = Path.GetDirectoryName(resourcesPath);
+
+			if (!Directory.Exists(directory))
+			{
+				Directory.CreateDirectory(directory);
+			}
+
+			File.WriteAllText(resourcesPath, csv.ToString());
+			Debug.Log($"[InvocationComparison] Exported to: {resourcesPath}");
+
+			// Also export to dev folder
+			try
+			{
+				string projectRoot = Directory.GetParent(Application.dataPath).FullName;
+				string devPath = Path.Combine(projectRoot, "dev", "active", "performance-analysis",
+				                              Path.GetFileName(csvExportPath));
+				string devDirectory = Path.GetDirectoryName(devPath);
+
+				if (!Directory.Exists(devDirectory))
+				{
+					Directory.CreateDirectory(devDirectory);
+				}
+
+				File.WriteAllText(devPath, csv.ToString());
+				Debug.Log($"[InvocationComparison] Also exported to: {devPath}");
+			}
+			catch (Exception e)
+			{
+				Debug.LogWarning($"[InvocationComparison] Dev folder export failed: {e.Message}");
+			}
+		}
+		catch (Exception e)
+		{
+			Debug.LogError($"[InvocationComparison] CSV export failed: {e.Message}");
+		}
 	}
 }

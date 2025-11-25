@@ -32,14 +32,52 @@
 //  
 //  
 using System.Collections.Generic;
-using System.Linq;
 using MercuryMessaging.Support.Extensions;
 
 namespace MercuryMessaging
 {
     /// <summary>
+    /// Cache key for filter result caching (QW-3).
+    /// Combines ListFilter and MmLevelFilter for efficient lookup.
+    /// </summary>
+    internal struct MmFilterCacheKey : System.IEquatable<MmFilterCacheKey>
+    {
+        public readonly MmRoutingTable.ListFilter ListFilter;
+        public readonly MmLevelFilter LevelFilter;
+
+        public MmFilterCacheKey(MmRoutingTable.ListFilter listFilter, MmLevelFilter levelFilter)
+        {
+            ListFilter = listFilter;
+            LevelFilter = levelFilter;
+        }
+
+        public override int GetHashCode()
+        {
+            // Combine hash codes using prime multiplication
+            unchecked
+            {
+                int hash = 17;
+                hash = hash * 31 + (int)ListFilter;
+                hash = hash * 31 + (int)LevelFilter;
+                return hash;
+            }
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is MmFilterCacheKey && Equals((MmFilterCacheKey)obj);
+        }
+
+        public bool Equals(MmFilterCacheKey other)
+        {
+            return ListFilter == other.ListFilter && LevelFilter == other.LevelFilter;
+        }
+    }
+
+    /// <summary>
     /// A form of Reorderable List <see cref="ReorderableList{T}"/>
     ///     specifically for all derivations of MmResponder.
+    /// Includes LRU cache for filtered responder lists (QW-3 optimization).
     /// </summary>
     [System.Serializable]
     public class MmRoutingTable : ReorderableList<MmRoutingTableItem>
@@ -48,6 +86,104 @@ namespace MercuryMessaging
         /// Useful for extracting certain types of MmResponders from the list.
         /// </summary>
         public enum ListFilter { All = 0, RelayNodeOnly, ResponderOnly };
+
+        #region Filter Result Caching (QW-3)
+
+        /// <summary>
+        /// Maximum number of cached filter results.
+        /// Prevents unbounded memory growth while maintaining high hit rate.
+        /// </summary>
+        private const int MAX_CACHE_SIZE = 100;
+
+        /// <summary>
+        /// Cache for filtered responder lists.
+        /// Key: combination of ListFilter and MmLevelFilter
+        /// Value: pre-filtered list of routing table items
+        /// </summary>
+        [System.NonSerialized]
+        private Dictionary<MmFilterCacheKey, List<MmRoutingTableItem>> _filterCache;
+
+        /// <summary>
+        /// LRU tracking for cache eviction.
+        /// Most recently used keys are at the end of the list.
+        /// </summary>
+        [System.NonSerialized]
+        private LinkedList<MmFilterCacheKey> _lruOrder;
+
+        /// <summary>
+        /// Cache statistics for profiling (optional).
+        /// </summary>
+        [System.NonSerialized]
+        private int _cacheHits = 0;
+        [System.NonSerialized]
+        private int _cacheMisses = 0;
+
+        /// <summary>
+        /// Get cache hit rate (0.0 to 1.0).
+        /// Returns 0 if no cache operations yet.
+        /// </summary>
+        public float CacheHitRate
+        {
+            get
+            {
+                int total = _cacheHits + _cacheMisses;
+                return total > 0 ? (float)_cacheHits / total : 0f;
+            }
+        }
+
+        /// <summary>
+        /// Initialize cache structures if needed.
+        /// </summary>
+        private void EnsureCacheInitialized()
+        {
+            if (_filterCache == null)
+            {
+                _filterCache = new Dictionary<MmFilterCacheKey, List<MmRoutingTableItem>>(MAX_CACHE_SIZE);
+                _lruOrder = new LinkedList<MmFilterCacheKey>();
+            }
+        }
+
+        /// <summary>
+        /// Clear all cached filter results.
+        /// Called when routing table is modified (add/remove responder).
+        /// </summary>
+        private void InvalidateCache()
+        {
+            if (_filterCache != null)
+            {
+                _filterCache.Clear();
+                _lruOrder.Clear();
+            }
+        }
+
+        /// <summary>
+        /// Update LRU tracking for cache key.
+        /// Moves key to end of LRU list (most recently used position).
+        /// </summary>
+        /// <param name="key">Cache key that was accessed</param>
+        private void TouchCacheKey(MmFilterCacheKey key)
+        {
+            // Remove from current position (if present)
+            _lruOrder.Remove(key);
+            // Add to end (most recently used)
+            _lruOrder.AddLast(key);
+        }
+
+        /// <summary>
+        /// Evict least recently used cache entry if cache is full.
+        /// </summary>
+        private void EvictLRUIfNeeded()
+        {
+            if (_filterCache.Count >= MAX_CACHE_SIZE && _lruOrder.Count > 0)
+            {
+                // Remove least recently used (first in LRU list)
+                var lruKey = _lruOrder.First.Value;
+                _lruOrder.RemoveFirst();
+                _filterCache.Remove(lruKey);
+            }
+        }
+
+        #endregion
 
         /// <summary>
         /// Accessor for MmRoutingTableItems by name.
@@ -82,7 +218,7 @@ namespace MercuryMessaging
         }
 
         /// <summary>
-        /// Get a list of the names all MmRoutingTableItems that 
+        /// Get a list of the names all MmRoutingTableItems that
         /// match the provided filters.
         /// </summary>
         /// <param name="filter">ListFilter <see cref="ListFilter"/></param>
@@ -91,13 +227,20 @@ namespace MercuryMessaging
         public List<string> GetMmNames(ListFilter filter = default(ListFilter),
             MmLevelFilter levelFilter = MmLevelFilterHelper.Default)
         {
-            return GetMmRoutingTableItems(filter, levelFilter).
-                    Select(x => x.Name).ToList();
+            // Use cached filtered items and extract names (removed LINQ for consistency with QW-5)
+            var items = GetMmRoutingTableItems(filter, levelFilter);
+            var names = new List<string>(items.Count);
+            foreach (var item in items)
+            {
+                names.Add(item.Name);
+            }
+            return names;
         }
 
         /// <summary>
-        /// Get a list of all MmRoutingTableItems that 
+        /// Get a list of all MmRoutingTableItems that
         /// match the provided filters.
+        /// Uses LRU cache for performance (QW-3 optimization).
         /// </summary>
         /// <param name="filter">ListFilter <see cref="ListFilter"/></param>
         /// <param name="levelFilter">LevelFilter <see cref="MmLevelFilter"/></param>
@@ -106,15 +249,56 @@ namespace MercuryMessaging
             ListFilter filter = default(ListFilter),
             MmLevelFilter levelFilter = MmLevelFilterHelper.Default)
         {
-            return this.Where(x => CheckFilter(x, filter, levelFilter)).ToList();
+            // Initialize cache on first use
+            EnsureCacheInitialized();
+
+            // Create cache key from filter parameters
+            var cacheKey = new MmFilterCacheKey(filter, levelFilter);
+
+            // Check cache for existing result
+            if (_filterCache.TryGetValue(cacheKey, out var cachedResult))
+            {
+                // Cache hit - update LRU and return cached list
+                _cacheHits++;
+                TouchCacheKey(cacheKey);
+                return cachedResult;
+            }
+
+            // Cache miss - compute result by filtering routing table
+            _cacheMisses++;
+
+            // Manual filtering instead of LINQ (removed Where().ToList() for QW-5 consistency)
+            var result = new List<MmRoutingTableItem>();
+            foreach (var item in this)
+            {
+                if (CheckFilter(item, filter, levelFilter))
+                {
+                    result.Add(item);
+                }
+            }
+
+            // Store in cache
+            EvictLRUIfNeeded();
+            _filterCache[cacheKey] = result;
+            TouchCacheKey(cacheKey);
+
+            return result;
         }
 
         /// Get a list of all MmRoutingTableItems that reference MmRelayNodes.
         /// <returns>List of all MmRoutingTableItems that reference MmRelayNodes.</returns>
         public List<MmRelayNode> GetOnlyMmRelayNodes()
         {
-            return this.Where(x => x.Responder is MmRelayNode).
-                Select(x => (MmRelayNode)(x.Responder)).ToList();
+            // Manual filtering instead of LINQ (removed Where().Select().ToList() for QW-5 consistency)
+            var relayNodes = new List<MmRelayNode>();
+            foreach (var item in this)
+            {
+                if (item.Responder is MmRelayNode)
+                {
+                    relayNodes.Add((MmRelayNode)item.Responder);
+                }
+            }
+            return relayNodes;
         }
 
         /// <summary>
@@ -148,7 +332,7 @@ namespace MercuryMessaging
         /// <param name="listFilter">ListFilter <see cref="ListFilter"/></param>
         /// <param name="levelFilter">LevelFilter <see cref="MmLevelFilter"/></param>
         /// <returns>Whether MmRoutingTableItem passes filter check.</returns>
-        public bool CheckFilter(MmRoutingTableItem item, 
+        public bool CheckFilter(MmRoutingTableItem item,
             ListFilter listFilter, MmLevelFilter levelFilter)
         {
             //Level Check
@@ -164,5 +348,71 @@ namespace MercuryMessaging
             //All conditions passed, return true
             return true;
         }
+
+        #region Cache Invalidation Overrides (QW-3)
+
+        /// <summary>
+        /// Override Add to invalidate cache when routing table changes.
+        /// </summary>
+        public new void Add(MmRoutingTableItem item)
+        {
+            base.Add(item);
+            InvalidateCache();
+        }
+
+        /// <summary>
+        /// Override Remove to invalidate cache when routing table changes.
+        /// </summary>
+        public new bool Remove(MmRoutingTableItem item)
+        {
+            bool removed = base.Remove(item);
+            if (removed)
+            {
+                InvalidateCache();
+            }
+            return removed;
+        }
+
+        /// <summary>
+        /// Override RemoveAt to invalidate cache when routing table changes.
+        /// </summary>
+        public new void RemoveAt(int index)
+        {
+            base.RemoveAt(index);
+            InvalidateCache();
+        }
+
+        /// <summary>
+        /// Override Insert to invalidate cache when routing table changes.
+        /// </summary>
+        public new void Insert(int index, MmRoutingTableItem item)
+        {
+            base.Insert(index, item);
+            InvalidateCache();
+        }
+
+        /// <summary>
+        /// Override Clear to invalidate cache when routing table changes.
+        /// </summary>
+        public new void Clear()
+        {
+            base.Clear();
+            InvalidateCache();
+        }
+
+        /// <summary>
+        /// Override indexer setter to invalidate cache when routing table changes.
+        /// </summary>
+        public new MmRoutingTableItem this[int index]
+        {
+            get { return base[index]; }
+            set
+            {
+                base[index] = value;
+                InvalidateCache();
+            }
+        }
+
+        #endregion
     }
 }

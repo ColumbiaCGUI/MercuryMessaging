@@ -39,7 +39,7 @@ namespace MercuryMessaging.Task
     /// Defines interfaces for loading Task Info collections.
     /// </summary>
     /// <typeparam name="U">Must be of type IMmTaskInfo</typeparam>
-    public interface ITaskInfoCollectionLoader<U> where U : class, IMmTaskInfo
+    public interface IMmTaskInfoCollectionLoader<U> where U : class, IMmTaskInfo
     {
         /// <summary>
         /// Prepare task by loading or generating appropriate file.

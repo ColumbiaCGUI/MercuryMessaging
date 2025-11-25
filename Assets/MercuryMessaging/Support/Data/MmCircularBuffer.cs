@@ -12,7 +12,7 @@ namespace MercuryMessaging.Support.Data
     /// Used for message history tracking with bounded memory
     /// </summary>
     /// <typeparam name="T">Type of items to store</typeparam>
-    public class CircularBuffer<T> : IEnumerable<T>
+    public class MmCircularBuffer<T> : IEnumerable<T>
     {
         private readonly T[] _buffer;
         private int _head = 0;
@@ -33,7 +33,7 @@ namespace MercuryMessaging.Support.Data
         /// Creates circular buffer with specified capacity
         /// </summary>
         /// <param name="capacity">Maximum number of items to store</param>
-        public CircularBuffer(int capacity)
+        public MmCircularBuffer(int capacity)
         {
             if (capacity <= 0)
                 throw new System.ArgumentException("Capacity must be positive", nameof(capacity));
@@ -55,19 +55,35 @@ namespace MercuryMessaging.Support.Data
         }
 
         /// <summary>
-        /// Insert item at beginning (newest position)
+        /// Insert item at beginning (oldest position) for List.Insert(0, item) compatibility
         /// Maintains compatibility with List.Insert(0, item) pattern
         /// </summary>
         public void Insert(int index, T item)
         {
             if (index != 0)
-                throw new System.ArgumentException("CircularBuffer only supports Insert(0, item)", nameof(index));
+                throw new System.ArgumentException("MmCircularBuffer only supports Insert(0, item)", nameof(index));
 
-            Add(item);
+            if (_size == _capacity)
+            {
+                // When full: replace the oldest item in place (don't advance head)
+                int oldestPos = (_capacity + _head - _size) % _capacity;
+                _buffer[oldestPos] = item;
+                // _head and _size remain unchanged
+            }
+            else
+            {
+                // When not full: insert before current oldest without overwriting
+                int oldestPos = (_capacity + _head - _size) % _capacity;
+                int newOldestPos = (oldestPos - 1 + _capacity) % _capacity;
+                _buffer[newOldestPos] = item;
+                _size++;
+                // _head remains unchanged as it still points to next write position
+            }
         }
 
         /// <summary>
-        /// Get item at index (0 = newest, Count-1 = oldest)
+        /// Get item at index (0 = oldest, Count-1 = newest)
+        /// Standard list indexing order
         /// </summary>
         public T this[int index]
         {
@@ -76,9 +92,11 @@ namespace MercuryMessaging.Support.Data
                 if (index < 0 || index >= _size)
                     throw new System.IndexOutOfRangeException();
 
-                // Calculate actual position (newest first)
-                int actualIndex = (_head - 1 - index + _capacity) % _capacity;
-                if (actualIndex < 0) actualIndex += _capacity;
+                // Calculate position of oldest item
+                // oldest = (_capacity + _head - _size) % _capacity
+                // This works for both full and non-full buffers, including after Insert(0)
+                int oldestPos = (_capacity + _head - _size) % _capacity;
+                int actualIndex = (oldestPos + index) % _capacity;
 
                 return _buffer[actualIndex];
             }
@@ -95,7 +113,7 @@ namespace MercuryMessaging.Support.Data
         }
 
         /// <summary>
-        /// Get all items in order (newest to oldest)
+        /// Get all items in order (oldest to newest)
         /// </summary>
         public IEnumerator<T> GetEnumerator()
         {

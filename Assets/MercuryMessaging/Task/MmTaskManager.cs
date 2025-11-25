@@ -92,7 +92,7 @@ namespace MercuryMessaging.Task
         /// <summary>
         /// This should be an item placed on the same GameObject as the MmTaskManager itself
         /// </summary>
-	    private ITaskInfoCollectionLoader<U> taskInfoCollectionLoader;
+	    private IMmTaskInfoCollectionLoader<U> taskInfoCollectionLoader;
         
         /// <summary>
         /// Total number of task infos that have the same name.
@@ -111,7 +111,7 @@ namespace MercuryMessaging.Task
         /// Handle to the task info collection loader that is used to load the 
         /// task collection.
         /// </summary>
-	    public ITaskInfoCollectionLoader<U> TaskInfoCollectionLoader
+	    public IMmTaskInfoCollectionLoader<U> TaskInfoCollectionLoader
 	    {
 	        get { return taskInfoCollectionLoader; }
 	    }
@@ -126,7 +126,7 @@ namespace MercuryMessaging.Task
 	    {
             MmLogger.LogApplication("MmTaskManager Awake");
 
-            taskInfoCollectionLoader = GetComponent<ITaskInfoCollectionLoader<U>>();
+            taskInfoCollectionLoader = GetComponent<IMmTaskInfoCollectionLoader<U>>();
             MmTaskUserData = GetComponent<MmTaskUserConfigurator>();
         }
 

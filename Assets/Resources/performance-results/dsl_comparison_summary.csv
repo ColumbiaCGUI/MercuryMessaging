@@ -1,0 +1,13 @@
+metric,value
+test_duration_seconds,60.00
+total_frames,25447
+avg_frame_time_ms,2.36
+avg_fps,424.1
+traditional_total_messages,6002
+dsl_total_messages,6002
+traditional_avg_throughput,100.03
+dsl_avg_throughput,100.03
+avg_overhead_percent,-73.78
+memory_start_mb,846.75
+memory_end_mb,945.81
+memory_growth_mb,99.07
