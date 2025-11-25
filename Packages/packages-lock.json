@@ -7,7 +7,7 @@
       "dependencies": {
         "com.unity.nuget.newtonsoft-json": "3.0.2"
       },
-      "hash": "edd7817d4010032b47e6874c165c8d0b37680407"
+      "hash": "dbe5f33cb046a967131b8f42dd9e54dbd0e08b6e"
     },
     "com.gentlymad.graphviewbase": {
       "version": "https://github.com/Gentlymad-Studios/GraphViewBase.git",

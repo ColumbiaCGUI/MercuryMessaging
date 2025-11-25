@@ -159,77 +159,14 @@ RootNode (MmRelaySwitchNode)
 
 ## Important Files Reference
 
-### Core Protocol (Critical Files)
+For a complete list of important files with descriptions, see [FILE_REFERENCE.md](FILE_REFERENCE.md).
 
-| File | Lines | Purpose |
-|------|-------|---------|
-| `Protocol/MmRelayNode.cs` | 1422 | **Central message router** - manages routing table, filters, hierarchy |
-| `Protocol/MmBaseResponder.cs` | 383 | Base responder with method routing (SetActive, Initialize, Switch, etc.) |
-| `Protocol/MmResponder.cs` | 124 | Abstract base implementing IMmResponder with lifecycle management |
-| `Protocol/IMmResponder.cs` | 28 | Core interface defining the messaging contract |
-| `Protocol/MmRelaySwitchNode.cs` | 188 | Relay node with FSM capabilities for state management |
-| `Protocol/MmSwitchResponder.cs` | 148 | Controller for MmRelaySwitchNode with state transitions |
-
-### Message System
-
-| File | Purpose |
-|------|---------|
-| `Protocol/Message/MmMessage.cs` | Base message class with method, metadata, and network support |
-| `Protocol/Message/MmMessageBool.cs` | Boolean message type |
-| `Protocol/Message/MmMessageInt.cs` | Integer message type |
-| `Protocol/Message/MmMessageFloat.cs` | Float message type |
-| `Protocol/Message/MmMessageString.cs` | String message type |
-| `Protocol/Message/MmMessageVector3.cs` | Vector3 message type |
-| `Protocol/Message/MmMessageTransform.cs` | Transform message type |
-| `Protocol/Message/MmMessageGameObject.cs` | GameObject reference message |
-| `Protocol/Message/MmMessageByteArray.cs` | Byte array for custom serialization |
-| `Protocol/Message/MmMessageSerializable.cs` | Generic serializable message |
-
-### Filtering and Routing
-
-| File | Purpose |
-|------|---------|
-| `Protocol/MmMetadataBlock.cs` | Routing control parameters (contains all filters) |
-| `Protocol/MmRoutingTable.cs` | Collection of responders with filtering capabilities |
-| `Protocol/MmLevelFilter.cs` | Direction filter (Parent/Child/Self combinations) |
-| `Protocol/MmActiveFilter.cs` | Active GameObject filter |
-| `Protocol/MmSelectedFilter.cs` | FSM selection filter |
-| `Protocol/MmNetworkFilter.cs` | Network message filter |
-| `Protocol/MmTag.cs` | Multi-tag system (8 flags: Tag0-Tag7) |
-| `Protocol/MmMethod.cs` | Standard method enum (0-18 + custom 1000+) |
-
-### Task Management
-
-| File | Purpose |
-|------|---------|
-| `Task/MmTaskManager.cs` | Generic task management with progression tracking |
-| `Task/MmTaskInfo.cs` | Basic task information |
-| `Task/MmTaskResponder.cs` | Responder handling task-specific logic |
-| `Task/IMmTaskInfo.cs` | Task information interface |
-| `Task/Transformation/MmTransformationTaskInfo.cs` | Transform-specific tasks |
-| `Task/Transformation/MmTransformationTaskResponder.cs` | Transform task responder |
-
-### Support Systems
-
-| File | Purpose |
-|------|---------|
-| `Support/FiniteStateMachine/FiniteStateMachine.cs` | Generic FSM with Enter/Exit events |
-| `Support/FiniteStateMachine/StateEvents.cs` | State transition event handlers |
-| `Support/Data/MmDataCollector.cs` | Data collection management |
-| `Support/Data/MmDataHandlerCsv.cs` | CSV file handler |
-| `Support/Data/MmDataHandlerXml.cs` | XML file handler |
-| `Support/Extensions/GameObjectExtensions.cs` | GameObject helper methods |
-| `Support/Extensions/TransformExtensions.cs` | Transform helper methods |
-| `Support/Interpolators/Interpolator.cs` | Base interpolator for animations |
-| `Protocol/MmLogger.cs` | Logging system with category filters |
-
-### Network Support
-
-| File | Purpose |
-|------|---------|
-| `Protocol/IMmNetworkResponder.cs` | Network responder interface |
-| `Protocol/MmNetworkResponder.cs` | Base network responder |
-| `Protocol/MmNetworkResponderPhoton.cs` | Photon networking integration |
+**Key Files:**
+- `Protocol/MmRelayNode.cs` (1422 lines) - Central message router
+- `Protocol/MmBaseResponder.cs` (383 lines) - Base responder with method routing
+- `Protocol/MmExtendableResponder.cs` - Registration-based custom method handling
+- `Protocol/MmRelaySwitchNode.cs` (188 lines) - FSM-enabled relay node
+- See [FILE_REFERENCE.md](FILE_REFERENCE.md) for complete list
 
 ---
 
@@ -320,6 +257,53 @@ if (TagCheckEnabled && (message.MetadataBlock.Tag & Tag) == 0) {
 
 ---
 
+## Frequent Errors & Debugging Reference
+
+**⚠️ CRITICAL:** When working with message routing, ALWAYS consult [`dev/FREQUENT_ERRORS.md`](dev/FREQUENT_ERRORS.md) to avoid common mistakes.
+
+### Top 3 Critical Patterns (Must Follow)
+
+#### 1. Level Filter Transformation When Forwarding Messages
+When forwarding messages between relay nodes, **ALWAYS transform the level filter** to include the Self bit:
+```csharp
+var forwardedMessage = message.Copy();
+forwardedMessage.MetadataBlock.LevelFilter = MmLevelFilterHelper.SelfAndChildren;
+node.MmInvoke(forwardedMessage);
+```
+**Why:** Target responders register with `Self` (0x01). Without transformation, bitwise AND check fails: `(Siblings & Self) = 0` → rejected.
+
+**Exception:** Recursive routing (Descendants/Ancestors) uses `MmLevelFilter.Self` to prevent double-delivery.
+
+#### 2. Routing Table Registration for Runtime Hierarchies
+`transform.SetParent()` ONLY updates Unity's Transform hierarchy. MercuryMessaging requires **explicit routing table registration**:
+```csharp
+child.transform.SetParent(parent.transform);
+var parentRelay = parent.GetComponent<MmRelayNode>();
+var childRelay = child.GetComponent<MmRelayNode>();
+parentRelay.MmAddToRoutingTable(childRelay, MmLevelFilter.Child);
+childRelay.AddParent(parentRelay);
+```
+
+#### 3. Runtime Component Registration
+Adding responder components at runtime requires **explicit refresh**:
+```csharp
+var responder = gameObject.AddComponent<MyResponder>();
+gameObject.GetComponent<MmRelayNode>().MmRefreshResponders();
+yield return null; // Extra frame for safety
+```
+
+### Quick Debugging Checklist
+
+**Message not reaching responder?**
+- [ ] Routing table registered? (`MmAddToRoutingTable` called?)
+- [ ] Level filter includes Self bit? (Transformed to `SelfAndChildren`?)
+- [ ] Responder refreshed after runtime addition? (`MmRefreshResponders` called?)
+- [ ] Tag matching correct? (Check `TagCheckEnabled` and tag bits)
+
+**See [`dev/FREQUENT_ERRORS.md`](dev/FREQUENT_ERRORS.md) for complete bug reference, code patterns, and debugging guides.**
+
+---
+
 ## Common Workflows
 
 ### 1. Basic Message Sending
@@ -343,6 +327,8 @@ relay.MmInvoke(
 
 ### 2. Creating a Custom Responder
 
+**For Standard Methods (0-18) - Use MmBaseResponder:**
+
 ```csharp
 public class MyCustomResponder : MmBaseResponder
 {
@@ -360,6 +346,44 @@ public class MyCustomResponder : MmBaseResponder
     }
 }
 ```
+
+**For Custom Methods (>= 1000) - Use MmExtendableResponder (Recommended):**
+
+```csharp
+public class MyExtendableResponder : MmExtendableResponder
+{
+    protected override void Awake()
+    {
+        base.Awake();
+
+        // Register custom method handlers (clean, no switch statement!)
+        RegisterCustomHandler((MmMethod)1000, OnCustomColor);
+        RegisterCustomHandler((MmMethod)1001, OnCustomScale);
+    }
+
+    private void OnCustomColor(MmMessage message)
+    {
+        var colorMsg = (ColorMessage)message;
+        GetComponent<Renderer>().material.color = colorMsg.color;
+    }
+
+    private void OnCustomScale(MmMessage message)
+    {
+        var scaleMsg = (ScaleMessage)message;
+        transform.localScale = scaleMsg.scale;
+    }
+}
+```
+
+**MmExtendableResponder Benefits:**
+- ✅ No switch statement boilerplate (50% less code)
+- ✅ Can't forget `base.MmInvoke()` call (prevents silent failures)
+- ✅ Clearer intent and easier maintenance
+- ✅ Dynamic handler switching at runtime
+
+**Performance:** Fast path (standard methods) < 200ns, Slow path (custom methods) < 500ns
+
+**See also:** `Assets/_Project/Scripts/Tutorials/Tutorial4_ColorChanging/` for comparison examples
 
 ### 3. Setting Up FSM with MmRelaySwitchNode
 
@@ -438,6 +462,129 @@ relay.MmInvoke(
     )
 );
 ```
+
+---
+
+## Fluent DSL API (Recommended)
+
+The Fluent DSL provides a modern, chainable API that reduces code verbosity by **86%** while maintaining full type safety. It's the recommended approach for new development.
+
+**Full Documentation:** See [`Assets/MercuryMessaging/Protocol/DSL/DSL_API_GUIDE.md`](Assets/MercuryMessaging/Protocol/DSL/DSL_API_GUIDE.md)
+
+### Quick Comparison
+
+```csharp
+// Traditional API (7 lines)
+relay.MmInvoke(
+    MmMethod.MessageString,
+    "Hello",
+    new MmMetadataBlock(
+        MmLevelFilter.Child,
+        MmActiveFilter.Active,
+        MmSelectedFilter.All,
+        MmNetworkFilter.Local
+    )
+);
+
+// Fluent DSL (1 line)
+relay.Send("Hello").ToChildren().Active().Execute();
+```
+
+### Core Routing Methods
+
+```csharp
+// Direction targeting
+relay.Send(value).ToChildren().Execute();      // Direct children only
+relay.Send(value).ToParents().Execute();       // Direct parents only
+relay.Send(value).ToDescendants().Execute();   // All descendants recursively
+relay.Send(value).ToAncestors().Execute();     // All ancestors recursively
+relay.Send(value).ToSiblings().Execute();      // Same-level nodes
+relay.Send(value).ToAll().Execute();           // Bidirectional (parents + children)
+
+// Filter combinations
+relay.Send(value).ToChildren().Active().WithTag(MmTag.Tag0).Execute();
+```
+
+### Convenience Methods (Auto-Execute)
+
+These methods execute immediately without needing `.Execute()`:
+
+```csharp
+// Broadcast to descendants
+relay.Broadcast(MmMethod.Initialize);           // Send Initialize to all descendants
+relay.Broadcast(MmMethod.MessageInt, 42);       // Send int value to descendants
+relay.BroadcastInitialize();                    // Shorthand for Initialize broadcast
+relay.BroadcastRefresh();                       // Shorthand for Refresh broadcast
+
+// Notify parents (upward communication)
+relay.Notify(MmMethod.Complete);                // Notify parent of completion
+relay.Notify(MmMethod.MessageString, "status"); // Send status to parent
+relay.NotifyComplete();                         // Shorthand for Complete notification
+
+// Send to named target
+relay.SendTo("TargetName", MmMethod.Initialize);        // Find and send to named node
+relay.SendTo("TargetName", MmMethod.MessageFloat, 3.14f); // With value
+```
+
+### Advanced Filtering
+
+```csharp
+// Spatial filtering (requires position)
+relay.Send(value).ToDescendants().Within(10f).Execute();          // Within radius
+relay.Send(value).ToDescendants().InCone(forward, 45f, 20f).Execute(); // Cone detection
+
+// Type filtering
+relay.Send(value).ToDescendants().OfType<Enemy>().Execute();      // By component type
+relay.Send(value).ToDescendants().Implementing<IDamageable>().Execute(); // By interface
+
+// Custom predicates
+relay.Send(value).ToDescendants().Where(go => go.layer == 8).Execute();
+relay.Send(value).ToDescendants().Named("Player*").Execute();     // Wildcard matching
+```
+
+### Temporal Extensions
+
+```csharp
+// Delayed execution
+relay.After(2f, MmMethod.Initialize);           // Execute after 2 seconds
+
+// Repeating messages
+relay.Every(1f, MmMethod.Refresh, repeatCount: 5); // Every second, 5 times
+
+// Conditional execution
+relay.When(() => isReady, MmMethod.Initialize); // Execute when condition becomes true
+
+// Fluent temporal builder
+relay.Schedule(MmMethod.Initialize)
+    .ToDescendants()
+    .After(2f)
+    .Execute();
+```
+
+### Query/Response Pattern
+
+```csharp
+// Request with callback
+int queryId = relay.Query(MmMethod.MessageInt, response => {
+    var value = ((MmMessageInt)response).value;
+    Debug.Log($"Received: {value}");
+});
+
+// Respond to query (in responder)
+relay.Respond(queryId, 42);
+```
+
+### Migration from Traditional API
+
+| Traditional | Fluent DSL |
+|-------------|------------|
+| `relay.MmInvoke(method, value, metadata)` | `relay.Send(method, value).To...().Execute()` |
+| Custom MmMetadataBlock | Chain `.Active()`, `.WithTag()`, etc. |
+| MmLevelFilter.Child | `.ToChildren()` |
+| MmLevelFilter.Parent | `.ToParents()` |
+| MmLevelFilter.SelfAndChildren | `.ToDescendants()` or default |
+
+**Note:** Traditional and Fluent APIs can be used together - they're fully compatible.
 
 ---
 
@@ -643,8 +790,8 @@ Unity.exe -runTests -batchmode -projectPath . \
 MercuryMessaging has been comprehensively tested and optimized across three scales (Small, Medium, Large) with validated Quick Win optimizations (QW-1 through QW-6). Performance optimizations achieved **2-2.2x frame time improvement** and **3-35x throughput improvement**, with excellent memory stability and scalability.
 
 **Full Reports:**
-- Initial analysis: `Assets/MercuryMessaging/Documentation/Performance/PERFORMANCE_REPORT.md`
-- Optimization results: `Assets/MercuryMessaging/Documentation/Performance/OPTIMIZATION_RESULTS.md`
+- Initial analysis: `Documentation/Performance/PERFORMANCE_REPORT.md`
+- Optimization results: `Documentation/Performance/OPTIMIZATION_RESULTS.md`
 
 ### Measured Performance
 
@@ -893,13 +1040,6 @@ void Start() {
 
 **IMPORTANT:** The core MercuryMessaging framework (AppState, Protocol, Support/Data, Task) has **ZERO** third-party dependencies as of 2025-11-19.
 
-### Removed Dependencies
-- ❌ **ALINE (Drawing)** - Removed from MmRelayNode.cs (visual debugging not essential)
-- ❌ **EPOOutline** - Removed from MmRelayNode.cs (visual debugging not essential)
-- ❌ **Unity XR Interaction Toolkit** - Removed from MmRelayNode.cs (moved to user code if needed)
-- ❌ **Unity Input System** - Removed from MmRelayNode.cs (not core framework dependency)
-- ❌ **NewGraph** - Removed from MmRelayNode.cs (editor visualization not essential)
-
 ### Optional Dependencies (Properly Isolated)
 - ✅ **Photon Unity Networking** (optional) - Wrapped in `#if PHOTON_AVAILABLE` for network features
 
@@ -907,272 +1047,39 @@ void Start() {
 
 ---
 
-## Development Standards & Best Practices
+## Development Standards
 
-### External Dependency Policy
+For complete development standards, guidelines, and contribution process, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
-**CRITICAL:** The MercuryMessaging core framework MUST minimize external dependencies.
-
-**Allowed Dependencies (ONLY):**
-- ✅ **UnityEngine** - Core Unity runtime
-- ✅ **UnityEditor** - Unity Editor APIs (editor scripts only)
-- ✅ **System.*** - .NET Standard libraries (Collections, Linq, IO, etc.)
-
-**Optional Dependencies (outside core, with conditional compilation):**
-- ✅ **Photon Unity Networking** - Wrapped in `#if PHOTON_AVAILABLE`
-
-**Adding New Dependencies:**
-1. Must be justified as essential to core functionality
-2. Must be wrapped in conditional compilation directives
-3. Must include auto-detection script in `MmThirdPartyUtils.cs`
-4. Framework must gracefully degrade when dependency is missing
+**Key Standards:**
+- Core framework files must use "Mm" prefix (MmRelayNode, MmMessage, etc.)
+- Minimize external dependencies (Unity, System.* only)
+- All tests must be fully automated (no manual scenes or prefabs)
+- Use Conventional Commits format (`feat:`, `fix:`, `docs:`, etc.)
 
 ---
 
-### Naming Convention Policy
+## Guidelines for AI Assistants
 
-**CRITICAL:** Core framework files MUST follow the "Mm" prefix convention.
+For AI assistants working on this project, see [.claude/ASSISTANT_GUIDE.md](.claude/ASSISTANT_GUIDE.md).
 
-**Folders requiring "Mm" prefix:**
-- ✅ `Assets/MercuryMessaging/AppState/` - All files must start with "Mm"
-- ✅ `Assets/MercuryMessaging/Protocol/` - All files must start with "Mm"
-- ✅ `Assets/MercuryMessaging/Support/Data/` - All files must start with "Mm"
-- ✅ `Assets/MercuryMessaging/Task/` - All files must start with "Mm" or "IMm"
-
-**Folders EXEMPT from "Mm" prefix:**
-- `Support/Extensions/` - Generic C# extension methods
-- `Support/FiniteStateMachine/` - Generic FSM implementation
-- `Support/Interpolators/` - Generic animation utilities
-- `Support/Input/` - Generic input handling
-- `Support/GUI/` - GUI utilities
-- `Support/Editor/` - Editor utilities
-- `Support/ThirdParty/` - Third-party integrations
-- `Examples/` - Tutorial and demo code
-- `Tests/` - Test files
-
-**Rules:**
-- ✅ All classes in core folders: `MmClassName.cs`
-- ✅ All interfaces in core folders: `IMmInterfaceName.cs`
-- ✅ All structs in core folders: `MmStructName.cs`
-- ✅ All enums in core folders: `MmEnumName.cs`
-
-**Examples:**
-- ✅ `Protocol/MmRelayNode.cs`, `Protocol/Message/MmMessage.cs`
-- ✅ `Support/Data/MmCircularBuffer.cs`, `Support/Data/MmDataCollector.cs`
-- ✅ `Task/MmTaskManager.cs`, `Task/IMmTaskInfoCollectionLoader.cs`
-- ❌ `Support/Data/CircularBuffer.cs` (must be MmCircularBuffer.cs)
-- ✅ `Support/Extensions/GameObjectExtensions.cs` (exempt folder - no prefix needed)
+**Critical Policy:**
+- ❌ NEVER add AI co-authorship to git commits (`Co-Authored-By: Claude`)
+- ✅ Use Conventional Commits format (`feat:`, `fix:`, `docs:`, etc.)
+- ✅ Create task folders in `dev/active/` for large tasks (README, context, tasks)
+- ✅ See [dev/WORKFLOW.md](dev/WORKFLOW.md) for development workflow
 
 ---
 
-### Testing Standards Policy
-
-**CRITICAL:** All tests MUST be fully automated without manual scene setup or UI creation.
-
-**Required Patterns:**
-
-1. **Use Unity Test Framework**
-   - PlayMode tests for runtime behavior
-   - EditMode tests for editor-only code
-
-2. **Programmatic GameObject Creation**
-   ```csharp
-   [SetUp]
-   public void Setup() {
-       testRoot = new GameObject("TestRoot");
-       relay = testRoot.AddComponent<MmRelayNode>();
-       relay.MmRefreshResponders(); // Explicit registration for dynamic components
-   }
-   ```
-
-3. **No Manual Assets**
-   - ❌ NO scene files in test folders
-   - ❌ NO prefab dependencies
-   - ❌ NO manual UI element creation
-   - ✅ Create all objects via `new GameObject()` and `AddComponent<T>()`
-
-4. **Proper Cleanup**
-   ```csharp
-   [TearDown]
-   public void Teardown() {
-       if (testRoot != null) {
-           Object.DestroyImmediate(testRoot);
-       }
-   }
-   ```
-
-5. **Test Isolation**
-   - Each test creates its own hierarchy
-   - No shared state between tests
-   - Clean up all created objects
-
-**Examples:**
-- ✅ `MmCircularBufferTests.cs` - 30 tests, all programmatic
-- ✅ `MmHopLimitValidationTests.cs` - Creates 50-node chain programmatically
-- ✅ `MmLazyCopyValidationTests.cs` - Complex hierarchies created in code
-- ❌ Tests that require loading "TestScene.unity"
-- ❌ Tests that reference prefabs from Resources folder
-
-**Pattern: Dynamic GameObject Setup in Tests**
-```csharp
-[Test]
-public void TestMessageRouting()
-{
-    // Arrange - create hierarchy programmatically
-    GameObject root = new GameObject("TestRoot");
-    MmRelayNode relay = root.AddComponent<MmRelayNode>();
-    relay.MmRefreshResponders(); // CRITICAL: Explicit registration required
-
-    // Act - perform test
-    relay.MmInvoke(MmMethod.Initialize);
-
-    // Assert - verify behavior
-    Assert.IsTrue(relay.IsInitialized);
-
-    // Cleanup
-    Object.DestroyImmediate(root);
-}
-```
-
----
-
-## Development Guidelines for AI Assistants
-
-### CRITICAL: Git Commit Authorship Policy
-
-**❌ DO NOT include AI co-authorship in git commits:**
-
-- **NEVER** add `Co-Authored-By: Claude <noreply@anthropic.com>`
-- **NEVER** add `🤖 Generated with [Claude Code]` attribution
-- **NEVER** add any AI attribution or footer in commit messages
-
-**Rationale:**
-- Git commits must reflect human authorship only
-- GitHub displays co-authors as repository contributors (incorrect for AI assistance)
-- User preference is for clean commit history without AI attribution
-- AI assistance should be invisible in version control history
-
-**✅ Correct Commit Format:**
-
-```bash
-git commit -m "feat: Add feature description
-
-Detailed explanation of changes made.
-
-Technical details:
-- Implementation notes
-- Performance impact
-- Testing approach"
-```
-
-**❌ INCORRECT Format (NEVER use):**
-
-```bash
-git commit -m "feat: Add feature
-
-Details...
-
-🤖 Generated with [Claude Code](https://claude.com/claude-code)
-
-Co-Authored-By: Claude <noreply@anthropic.com>"
-```
-
-### Commit Message Guidelines
-
-When creating git commits:
-
-1. **Use Conventional Commits format**: `type(scope): description`
-   - Types: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`
-   - Example: `feat(relay): Add hop limit protection`
-
-2. **Write clear, descriptive messages**
-   - First line: concise summary (50-72 characters)
-   - Body: detailed technical explanation
-   - Include what changed and why
-
-3. **Include technical details**
-   - Implementation approach
-   - Performance implications
-   - Breaking changes (if any)
-   - Related files/line numbers
-
-4. **Do NOT add**:
-   - AI attribution or co-authorship
-   - Marketing-style language
-   - Emoji in commit title (body is ok if contextually appropriate)
-
-### Example Good Commits
-
-```bash
-# Feature addition
-git commit -m "feat: Implement lazy message copying optimization
-
-Reduces message allocation overhead by 20-30% through intelligent
-copy-on-demand algorithm. Only creates message copies when routing
-in multiple directions.
-
-Changes:
-- Added direction scanning in MmRelayNode.MmInvoke()
-- Single-direction routing reuses original message (0 copies)
-- Multi-direction creates only necessary copies (1-2 instead of 2)
-
-Performance: 20-30% fewer allocations in typical scenarios."
-
-# Bug fix
-git commit -m "fix: Prevent infinite loops with hop limit checking
-
-Added hop counter and cycle detection to MmMessage to prevent
-infinite message propagation in circular hierarchies.
-
-Implementation:
-- HopCount field tracks relay depth
-- VisitedNodes HashSet detects cycles
-- Both configurable via MmRelayNode inspector
-
-Fixes potential Unity crashes in complex message graphs."
-
-# Documentation
-git commit -m "docs: Update framework analysis context
-
-Captured implementation details for QW-4, QW-1, QW-2.
-Added code patterns, design decisions, and continuation notes
-for seamless context handoff."
-```
-
----
-
-## Support and Resources
-
-**Developer**: Columbia University CGUI Lab
-
-**Repository**: This codebase is part of a research project focused on VR interaction and messaging frameworks.
-
-**Key Contacts**: Check project documentation for research lab contact information.
-
----
-
-# Starting Large Tasks
-
-When exiting plan mode with an accepted plan: 
-
-1.**Create Task Directory**:
-mkdir -p ~/git/project/dev/active/[task-name]/
-
-2.**Create Documents**:
-
-- `[task-name]-plan.md` - The accepted plan
-- `[task-name]-context.md` - Key files, decisions
-- `[task-name]-tasks.md` - Checklist of work
-
-3.**Update Regularly**: Mark tasks complete immediately
-
-### Continuing Tasks
-
-- Check `/dev/active/` for existing tasks
-- Read all three files before proceeding
-- Update "Last Updated" timestamps
-
----
-
-*Last Updated: 2025-11-18*
+*Last Updated: 2025-11-20*
 *Framework Version: Based on Unity 2021.3+ with VR/XR support*
+
+---
+
+## Additional Documentation
+
+- [CONTRIBUTING.md](CONTRIBUTING.md) - Development standards, naming conventions, testing guidelines
+- [FILE_REFERENCE.md](FILE_REFERENCE.md) - Complete list of important files with descriptions
+- [dev/WORKFLOW.md](dev/WORKFLOW.md) - Feature development, bug fixes, testing, release workflows
+- [dev/IMPROVEMENT_TRACKER.md](dev/IMPROVEMENT_TRACKER.md) - Completed improvements, active development, and research opportunities
+- [.claude/ASSISTANT_GUIDE.md](.claude/ASSISTANT_GUIDE.md) - Guidelines for AI assistants

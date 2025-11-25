@@ -260,23 +260,47 @@ namespace MercuryMessaging.Protocol.DSL
         }
 
         /// <summary>
-        /// Broadcast an Initialize command to all connected nodes.
+        /// Broadcast an Initialize command to self and all connected nodes.
         /// Auto-executes immediately for convenience.
+        /// Uses SelfAndChildren routing so responders on the same GameObject also receive the message.
         /// </summary>
+        /// <remarks>
+        /// DEPRECATED: Use relay.Init() from MmQuickExtensions instead.
+        /// Init() broadcasts to Descendants (more common) and is shorter to type.
+        /// </remarks>
+        [Obsolete("Use relay.Init() instead for shorter syntax and descendant-focused routing.")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void BroadcastInitialize(this MmRelayNode relay)
         {
-            Initialize(relay).ToAll().Execute();
+            // Use direct MmInvoke with SelfAndChildren so responders on the same object receive the message
+            relay.MmInvoke(MmMethod.Initialize, new MmMetadataBlock(
+                MmLevelFilterHelper.SelfAndChildren,
+                MmActiveFilter.All,
+                MmSelectedFilter.All,
+                MmNetworkFilter.Local
+            ));
         }
 
         /// <summary>
-        /// Broadcast a Refresh command to all connected nodes.
+        /// Broadcast a Refresh command to self and all connected nodes.
         /// Auto-executes immediately for convenience.
+        /// Uses SelfAndChildren routing so responders on the same GameObject also receive the message.
         /// </summary>
+        /// <remarks>
+        /// DEPRECATED: Use relay.Sync() from MmQuickExtensions instead.
+        /// Sync() broadcasts to Descendants (more common) and is shorter to type.
+        /// </remarks>
+        [Obsolete("Use relay.Sync() instead for shorter syntax and descendant-focused routing.")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void BroadcastRefresh(this MmRelayNode relay)
         {
-            Refresh(relay).ToAll().Execute();
+            // Use direct MmInvoke with SelfAndChildren so responders on the same object receive the message
+            relay.MmInvoke(MmMethod.Refresh, new MmMetadataBlock(
+                MmLevelFilterHelper.SelfAndChildren,
+                MmActiveFilter.All,
+                MmSelectedFilter.All,
+                MmNetworkFilter.Local
+            ));
         }
 
         #endregion

@@ -47,13 +47,13 @@ using StreamReader = System.IO.StreamReader;
 namespace MercuryMessaging.Task
 {
     /// <summary>
-    /// Base implementation of ITaskInfoCollectionLoader, specifically for
+    /// Base implementation of IMmTaskInfoCollectionLoader, specifically for
     /// use in loading from file.
     /// </summary>
     /// <typeparam name="U">Must implement IMmTaskInfo, which contains 
     /// properties for basic data needed by Mercury Task Managers</typeparam>
     [RequireComponent(typeof(MmTaskUserConfigurator))]
-	public class MmTaskInfoCollectionFileLoader<U> : MonoBehaviour, ITaskInfoCollectionLoader<U>
+	public class MmTaskInfoCollectionFileLoader<U> : MonoBehaviour, IMmTaskInfoCollectionLoader<U>
         where U : class, IMmTaskInfo, new()
     {
         /// <summary>

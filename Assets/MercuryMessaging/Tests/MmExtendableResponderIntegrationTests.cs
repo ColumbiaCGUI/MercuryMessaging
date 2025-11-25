@@ -163,9 +163,10 @@ namespace MercuryMessaging.Tests
             // Act - Send from child with Parent filter
             childRelay.MmInvoke(message);
 
-            // Assert
-            Assert.AreEqual(1, rootResponder.CustomMethodCalls, "Root should receive (is ancestor)");
-            Assert.AreEqual(1, parentResponder.CustomMethodCalls, "Parent should receive (is parent)");
+            // Assert - Parent filter reaches DIRECT parent only, not all ancestors
+            // Use MmLevelFilter.Ancestors to reach all ancestors (grandparents, etc.)
+            Assert.AreEqual(0, rootResponder.CustomMethodCalls, "Root should NOT receive (Parent != Ancestors)");
+            Assert.AreEqual(1, parentResponder.CustomMethodCalls, "Parent should receive (is direct parent)");
             Assert.AreEqual(0, childResponder.CustomMethodCalls, "Child should not receive (Parent filter)");
         }
 

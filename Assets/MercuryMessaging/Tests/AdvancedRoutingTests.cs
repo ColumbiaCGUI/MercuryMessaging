@@ -394,6 +394,9 @@ namespace MercuryMessaging.Tests
             var relay = obj.AddComponent<MmRelayNode>();
             obj.AddComponent<MessageCounterResponder>();
 
+            // CRITICAL: Refresh responders so MessageCounterResponder is registered with Level=Self
+            relay.MmRefreshResponders();
+
             if (parent != null)
             {
                 obj.transform.SetParent(parent);

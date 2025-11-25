@@ -25,6 +25,10 @@ namespace MercuryMessaging.Protocol.DSL
         private MmTag _tag;
         private bool _hasCustomFilters;
 
+        // Optimization 2.1: Cache whether target collection is needed
+        // This avoids 4 bitwise ANDs + 3 ORs on every Execute() call
+        private bool _needsTargetCollection;
+
         // Phase 2: Predicate support for advanced filtering
         private MmPredicateList _predicates;
 
@@ -45,6 +49,7 @@ namespace MercuryMessaging.Protocol.DSL
             _networkFilter = MmNetworkFilter.Local;
             _tag = MmTagHelper.Everything;
             _hasCustomFilters = false;
+            _needsTargetCollection = false; // SelfAndChildren doesn't need target collection
             _predicates = null;
         }
 
@@ -70,7 +75,22 @@ namespace MercuryMessaging.Protocol.DSL
         {
             _levelFilter = filter;
             _hasCustomFilters = true;
+            // Compute target collection requirement for custom filters
+            _needsTargetCollection = ComputeNeedsTargetCollection(filter);
             return this;
+        }
+
+        /// <summary>
+        /// Helper to compute whether a level filter requires target collection.
+        /// Extracted to avoid duplicating this logic.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static bool ComputeNeedsTargetCollection(MmLevelFilter filter)
+        {
+            return (filter & MmLevelFilter.Descendants) != 0 ||
+                   (filter & MmLevelFilter.Ancestors) != 0 ||
+                   (filter & MmLevelFilter.Siblings) != 0 ||
+                   ((filter & MmLevelFilter.Parent) != 0 && (filter & MmLevelFilter.Self) == 0);
         }
 
         /// <summary>
@@ -81,17 +101,20 @@ namespace MercuryMessaging.Protocol.DSL
         {
             _levelFilter = MmLevelFilter.Child;
             _hasCustomFilters = true;
+            _needsTargetCollection = false; // Direct routing
             return this;
         }
 
         /// <summary>
         /// Target only parent nodes.
+        /// Uses direct MmInvoke routing (Parent filter) which the framework handles natively.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public MmFluentMessage ToParents()
         {
             _levelFilter = MmLevelFilter.Parent;
             _hasCustomFilters = true;
+            _needsTargetCollection = false; // Parent routing is handled natively by MmInvoke
             return this;
         }
 
@@ -103,6 +126,7 @@ namespace MercuryMessaging.Protocol.DSL
         {
             _levelFilter = MmLevelFilter.Siblings;
             _hasCustomFilters = true;
+            _needsTargetCollection = true; // Siblings require collection
             return this;
         }
 
@@ -114,6 +138,7 @@ namespace MercuryMessaging.Protocol.DSL
         {
             _levelFilter = MmLevelFilter.Descendants;
             _hasCustomFilters = true;
+            _needsTargetCollection = true; // Descendants require collection
             return this;
         }
 
@@ -125,6 +150,7 @@ namespace MercuryMessaging.Protocol.DSL
         {
             _levelFilter = MmLevelFilter.Ancestors;
             _hasCustomFilters = true;
+            _needsTargetCollection = true; // Ancestors require collection
             return this;
         }
 
@@ -136,6 +162,7 @@ namespace MercuryMessaging.Protocol.DSL
         {
             _levelFilter = MmLevelFilterHelper.SelfAndBidirectional;
             _hasCustomFilters = true;
+            _needsTargetCollection = false; // Direct routing (includes Self)
             return this;
         }
 
@@ -578,60 +605,86 @@ namespace MercuryMessaging.Protocol.DSL
                 return;
             }
 
-            // Build metadata block
-            MmMetadataBlock metadata;
-            if (_tag != MmTagHelper.Everything)
+            // Optimization 2.2: Fast path for simple messages (no predicates, no target collection)
+            // This is the most common case - avoids branching for predicates/collection checks
+            if (_predicates == null && !_needsTargetCollection)
             {
-                metadata = new MmMetadataBlock(_tag, _levelFilter, _activeFilter, _selectedFilter, _networkFilter);
+                // Optimization 2.3: Use pre-allocated metadata for common cases
+                MmMetadataBlock metadata = _hasCustomFilters
+                    ? CreateMetadata()
+                    : DefaultMetadata;
+                ExecuteStandard(metadata);
+                return;
             }
-            else
-            {
-                metadata = new MmMetadataBlock(_levelFilter, _activeFilter, _selectedFilter, _networkFilter);
-            }
+
+            // Build metadata block for non-fast-path cases
+            MmMetadataBlock fullMetadata = CreateMetadata();
 
             // If predicates exist, use predicate-based routing
             if (_predicates != null && _predicates.Count > 0)
             {
-                ExecuteWithPredicates(metadata);
+                ExecuteWithPredicates(fullMetadata);
                 return;
             }
 
-            // Check if level filter requires explicit target collection
-            // Descendants, Ancestors, Parent (without Self), and Siblings need special handling
-            // because MmRelayNode.MmInvoke doesn't handle these level filters directly
-            bool needsTargetCollection =
-                (_levelFilter & MmLevelFilter.Descendants) != 0 ||
-                (_levelFilter & MmLevelFilter.Ancestors) != 0 ||
-                (_levelFilter & MmLevelFilter.Siblings) != 0 ||
-                // Parent without Self needs special handling
-                ((_levelFilter & MmLevelFilter.Parent) != 0 && (_levelFilter & MmLevelFilter.Self) == 0);
-
-            if (needsTargetCollection)
+            // Optimization 2.1: Use cached flag instead of computing 4 bitwise ANDs + 3 ORs
+            // The flag is set in ToXxx() methods when the level filter changes
+            if (_needsTargetCollection)
             {
                 ExecuteWithTargetCollection();
                 return;
             }
 
             // Standard routing path (SelfAndChildren, Child, Self)
-            ExecuteStandard(metadata);
+            ExecuteStandard(fullMetadata);
+        }
+
+        /// <summary>
+        /// Optimization 2.3: Pre-allocated default metadata block for simple messages.
+        /// Avoids allocating a new struct every time.
+        /// </summary>
+        private static readonly MmMetadataBlock DefaultMetadata = new MmMetadataBlock(
+            MmLevelFilterHelper.SelfAndChildren,
+            MmActiveFilter.All,
+            MmSelectedFilter.All,
+            MmNetworkFilter.Local
+        );
+
+        /// <summary>
+        /// Creates a metadata block from current filter settings.
+        /// Extracted to avoid code duplication.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private MmMetadataBlock CreateMetadata()
+        {
+            if (_tag != MmTagHelper.Everything)
+            {
+                return new MmMetadataBlock(_tag, _levelFilter, _activeFilter, _selectedFilter, _networkFilter);
+            }
+            return new MmMetadataBlock(_levelFilter, _activeFilter, _selectedFilter, _networkFilter);
         }
 
         /// <summary>
         /// Execute by collecting targets and sending to each with MmLevelFilter.Self.
-        /// Used for Descendants, Ancestors, Parent, and Siblings level filters.
+        /// Used for Descendants, Ancestors, and Siblings level filters.
+        /// Uses Self filter to prevent double-delivery when iterating through collected targets.
         /// </summary>
         private void ExecuteWithTargetCollection()
         {
             // Collect all potential targets based on level filter
             var targets = CollectTargets();
 
-            // Send to each target with Self-targeted metadata
+            // Send to each target with Self metadata
+            // Using Self (not SelfAndChildren) prevents double-delivery:
+            // - We explicitly send to each collected target
+            // - Self reaches responders registered with Level=Self on the target
+            // - SelfAndChildren would cause messages to propagate down, hitting children twice
             foreach (var targetRelay in targets)
             {
                 if (targetRelay == null || targetRelay.gameObject == null)
                     continue;
 
-                // Create a Self-targeted metadata for this specific target
+                // Create Self metadata - responders are registered with Level=Self so this works
                 MmMetadataBlock targetMetadata;
                 if (_tag != MmTagHelper.Everything)
                 {
@@ -754,6 +807,7 @@ namespace MercuryMessaging.Protocol.DSL
         /// <summary>
         /// Execute with predicate filtering.
         /// Collects matching relay nodes and sends messages individually.
+        /// Uses Self filter to prevent double-delivery.
         /// </summary>
         private void ExecuteWithPredicates(MmMetadataBlock metadata)
         {
@@ -770,7 +824,8 @@ namespace MercuryMessaging.Protocol.DSL
                 if (!_predicates.EvaluateAll(_relay, targetRelay.gameObject))
                     continue;
 
-                // Create a Self-targeted metadata for this specific target
+                // Create Self metadata - responders are registered with Level=Self so this works
+                // Using Self (not SelfAndChildren) prevents double-delivery
                 MmMetadataBlock targetMetadata;
                 if (_tag != MmTagHelper.Everything)
                 {
