@@ -54,7 +54,7 @@ namespace MercuryMessaging
         /// <summary>
         /// Performance Mode - disables debug message tracking overhead.
         /// Enable this during performance testing to remove UpdateMessages() overhead.
-        /// When true: messageBuffer and message history tracking are disabled.
+        /// When true: message history tracking (UpdateMessages) is disabled for performance.
         /// When false: Full debug visualization and message tracking enabled.
         /// </summary>
         [Header("Performance Settings")]
@@ -101,12 +101,6 @@ namespace MercuryMessaging
 
         public Transform positionOffset;
 
-        private Color colorA = new Color (93f/255f, 58f/255f, 155f/255f);
-        private Color colorB = new Color (230f/255f, 97f/255f, 0f);
-        private Color colorC = new Color (64f/255f, 176f/255f, 166f/255f);
-        private Color colorD = new Color (230f/255f, 97f/255f, 0f);
-
-        private List<MmMessage> messageBuffer = new List<MmMessage>();
 
         /// <summary>
         ///  Queue of MmResponders to add once list is no longer in use
@@ -160,11 +154,6 @@ namespace MercuryMessaging
         /// </summary>
         public IMmNetworkResponder MmNetworkResponder { get; private set; }
 
-        /// <summary>
-        /// Experimental: Timestamp of last message.
-        /// Can be serialized.
-        /// </summary>
-        private string _prevMessageTime;
 
         /// <summary>
         /// Indicates whether MmInvoke is currently executing a call.
@@ -178,10 +167,6 @@ namespace MercuryMessaging
         /// </summary>
         public bool Initialized;
 
-        /// <summary>
-        /// Indicates whether the message was adjusted.
-        /// </summary>
-        private bool dirty;
 
         /// <summary>
         /// Experimental - Allows forced order on 
@@ -276,24 +261,6 @@ namespace MercuryMessaging
 			base.Start ();
 
             MmLogger.LogFramework(gameObject.name + " MmRelayNode Start called.");
-
-            int colorIndex = layer % 4;
-            Color currentColor;
-            if(colorIndex == 0)
-            {
-                currentColor = colorA;
-            }
-            else if(colorIndex == 1)
-            {
-                currentColor = colorB;
-            }
-            else if(colorIndex == 2)
-            {
-                currentColor = colorC;
-            }
-            else {
-                currentColor = colorD;
-            }
 
             if(positionOffset == null)
             {
@@ -569,12 +536,6 @@ namespace MercuryMessaging
             // Debug tracking - disabled in PerformanceMode
             if (!PerformanceMode)
             {
-                messageBuffer.Add(message);
-                // Prevent unbounded growth - clear buffer periodically
-                if (messageBuffer.Count > 1000)
-                {
-                    messageBuffer.Clear();
-                }
                 UpdateMessages(message);
             }
 
@@ -839,8 +800,6 @@ namespace MercuryMessaging
 			MmMetadataBlock metadataBlock = null)
         {
 			MmMessage msg = new MmMessage (mmMethod, MmMessageType.MmVoid, metadataBlock);
-            messageBuffer.Add(msg);
-            // UpdateMessages(msg);
             MmInvoke(msg);
         }
 
@@ -858,8 +817,6 @@ namespace MercuryMessaging
             MmMessage msg = param.Copy();
             msg.MmMethod = mmMethod;
             msg.MetadataBlock = metadataBlock;
-            messageBuffer.Add(msg);
-            // UpdateMessages(msg);
             MmInvoke(msg);
         }
 
@@ -875,8 +832,6 @@ namespace MercuryMessaging
             MmMetadataBlock metadataBlock = null)
         {
 			MmMessage msg = new MmMessageBool (param, mmMethod, metadataBlock);
-            messageBuffer.Add(msg);
-            // UpdateMessages(msg);
             MmInvoke(msg);
         }
 
@@ -892,8 +847,6 @@ namespace MercuryMessaging
             MmMetadataBlock metadataBlock = null)
         {
 			MmMessage msg = new MmMessageInt(param, mmMethod, metadataBlock);
-            messageBuffer.Add(msg);
-            // UpdateMessages(msg);
             MmInvoke(msg);
         }
 
@@ -909,8 +862,6 @@ namespace MercuryMessaging
             MmMetadataBlock metadataBlock = null)
         {
 			MmMessage msg = new MmMessageFloat(param, mmMethod, metadataBlock);
-            messageBuffer.Add(msg);
-            // UpdateMessages(msg);
             MmInvoke(msg);
         }
 
@@ -926,8 +877,6 @@ namespace MercuryMessaging
             MmMetadataBlock metadataBlock = null)
         {
 			MmMessage msg = new MmMessageVector3(param, mmMethod, metadataBlock);
-            messageBuffer.Add(msg);
-            // UpdateMessages(msg);
             MmInvoke(msg);
 		}
 
@@ -943,8 +892,6 @@ namespace MercuryMessaging
             MmMetadataBlock metadataBlock = null)
         {
 			MmMessage msg = new MmMessageVector4(param, mmMethod, metadataBlock);
-            messageBuffer.Add(msg);
-            // UpdateMessages(msg);
             MmInvoke(msg);
 		}
 
@@ -960,8 +907,6 @@ namespace MercuryMessaging
             MmMetadataBlock metadataBlock = null)
         {
 			MmMessage msg = new MmMessageString(param, mmMethod, metadataBlock);
-            messageBuffer.Add(msg);
-            // UpdateMessages(msg);
             MmInvoke(msg);
 		}
 
@@ -977,8 +922,6 @@ namespace MercuryMessaging
             MmMetadataBlock metadataBlock = null)
         {
 			MmMessage msg = new MmMessageByteArray(param, mmMethod, metadataBlock);
-            messageBuffer.Add(msg);
-            // UpdateMessages(msg);
             MmInvoke(msg);
 		}
 
@@ -994,8 +937,6 @@ namespace MercuryMessaging
 			MmMetadataBlock metadataBlock = null)
 		{
 			MmMessage msg = new MmMessageTransform(param, mmMethod, metadataBlock);
-            messageBuffer.Add(msg);
-            // UpdateMessages(msg);
 			MmInvoke(msg);
 		}
 
@@ -1011,8 +952,6 @@ namespace MercuryMessaging
 			MmMetadataBlock metadataBlock = null)
 		{
 			MmMessage msg = new MmMessageTransformList(param, mmMethod, metadataBlock);
-            messageBuffer.Add(msg);
-            // UpdateMessages(msg);
 			MmInvoke(msg);
 		}
 
@@ -1028,8 +967,6 @@ namespace MercuryMessaging
             MmMetadataBlock metadataBlock = null)
         {
             MmMessage msg = new MmMessageSerializable(param, mmMethod, metadataBlock);
-            messageBuffer.Add(msg);
-            // UpdateMessages(msg);
             MmInvoke(msg);
         }
 
@@ -1044,8 +981,6 @@ namespace MercuryMessaging
             MmMetadataBlock metadataBlock = null)
         {
             MmMessage msg = new MmMessageGameObject(param, mmMethod, metadataBlock);
-            messageBuffer.Add(msg);
-            // UpdateMessages(msg);
             MmInvoke(msg);
         }
 
@@ -1061,8 +996,6 @@ namespace MercuryMessaging
             MmMetadataBlock metadataBlock = null)
         {
             MmMessage msg = new MmMessageQuaternion(param, mmMethod, metadataBlock);
-            messageBuffer.Add(msg);
-            // UpdateMessages(msg);
             MmInvoke(msg);
         }
 

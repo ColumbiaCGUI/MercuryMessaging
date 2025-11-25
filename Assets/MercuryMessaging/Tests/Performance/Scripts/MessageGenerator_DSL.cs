@@ -242,8 +242,8 @@ namespace MercuryMessaging.Tests.Performance
                     break;
 
                 default:
-                    // For other methods, use NoOp
-                    relayNode.Broadcast(MmMethod.NoOp);
+                    // For other methods, use NoOp via fluent API
+                    relayNode.Send(MmMethod.NoOp).ToDescendants().Execute();
                     break;
             }
 
@@ -281,8 +281,8 @@ namespace MercuryMessaging.Tests.Performance
                     relayNode.Send(value).ToParents().Execute();
                     break;
                 default:
-                    // SelfAndChildren, Descendants, etc. - use Broadcast
-                    relayNode.Broadcast(MmMethod.MessageString, value);
+                    // SelfAndChildren, Descendants, etc. - use fluent API fast path
+                    relayNode.Send(value).ToDescendants().Execute();
                     break;
             }
         }
@@ -298,7 +298,7 @@ namespace MercuryMessaging.Tests.Performance
                     relayNode.Send(value).ToParents().Execute();
                     break;
                 default:
-                    relayNode.Broadcast(MmMethod.MessageInt, value);
+                    relayNode.Send(value).ToDescendants().Execute();
                     break;
             }
         }
@@ -314,7 +314,7 @@ namespace MercuryMessaging.Tests.Performance
                     relayNode.Send(value).ToParents().Execute();
                     break;
                 default:
-                    relayNode.Broadcast(MmMethod.MessageFloat, value);
+                    relayNode.Send(value).ToDescendants().Execute();
                     break;
             }
         }
@@ -330,7 +330,7 @@ namespace MercuryMessaging.Tests.Performance
                     relayNode.Send(value).ToParents().Execute();
                     break;
                 default:
-                    relayNode.Broadcast(MmMethod.MessageBool, value);
+                    relayNode.Send(value).ToDescendants().Execute();
                     break;
             }
         }

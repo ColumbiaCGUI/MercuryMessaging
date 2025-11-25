@@ -124,15 +124,8 @@ namespace MercuryMessaging.Protocol.DSL
             relay.MmInvoke(message);
         }
 
-        /// <summary>
-        /// Broadcast a SetActive command to all descendants.
-        /// Common pattern for enabling/disabling entire subtrees.
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void BroadcastSetActive(this MmRelayNode relay, bool active)
-        {
-            relay.Broadcast(MmMethod.SetActive, active);
-        }
+        // NOTE: BroadcastSetActive() has been moved to MmMessagingExtensions.cs
+        // as part of the DSL Overhaul. Use the unified API from MmMessagingExtensions instead.
 
         #endregion
 
@@ -202,20 +195,8 @@ namespace MercuryMessaging.Protocol.DSL
             new MmFluentMessage(relay, method, null).ToAncestors().Execute();
         }
 
-        /// <summary>
-        /// Notify completion to parent nodes.
-        /// Common pattern for task completion signaling.
-        /// </summary>
-        /// <remarks>
-        /// DEPRECATED: Use relay.Done() from MmQuickExtensions instead.
-        /// Done() is shorter to type (14 chars vs 22 chars).
-        /// </remarks>
-        [Obsolete("Use relay.Done() instead for shorter syntax.")]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void NotifyComplete(this MmRelayNode relay)
-        {
-            relay.Notify(MmMethod.Complete);
-        }
+        // NOTE: NotifyComplete() has been moved to MmMessagingExtensions.cs
+        // as part of the DSL Overhaul. Use the unified API from MmMessagingExtensions instead.
 
         #endregion
 

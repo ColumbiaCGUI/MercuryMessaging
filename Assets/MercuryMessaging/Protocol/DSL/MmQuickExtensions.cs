@@ -6,6 +6,7 @@
 //
 // Part of Language DSL Phase 4: Quick Extensions
 
+using System;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
@@ -30,6 +31,7 @@ namespace MercuryMessaging.Protocol.DSL
         /// Equivalent to: relay.Broadcast(MmMethod.Initialize)
         /// </summary>
         /// <example>relay.Init(); // 14 chars vs 38 for Broadcast</example>
+        [Obsolete("Use BroadcastInitialize() from MmMessagingExtensions instead.")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Init(this MmRelayNode relay)
         {
@@ -41,6 +43,7 @@ namespace MercuryMessaging.Protocol.DSL
         /// Equivalent to: relay.Notify(MmMethod.Complete)
         /// </summary>
         /// <example>relay.Done(); // 14 chars vs 22 for NotifyComplete</example>
+        [Obsolete("Use NotifyComplete() from MmMessagingExtensions instead.")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Done(this MmRelayNode relay)
         {
@@ -52,6 +55,7 @@ namespace MercuryMessaging.Protocol.DSL
         /// Equivalent to: relay.Broadcast(MmMethod.Refresh)
         /// </summary>
         /// <example>relay.Sync(); // 14 chars</example>
+        [Obsolete("Use BroadcastRefresh() from MmMessagingExtensions instead.")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Sync(this MmRelayNode relay)
         {
@@ -67,6 +71,7 @@ namespace MercuryMessaging.Protocol.DSL
         /// Equivalent to: relay.Broadcast(MmMethod.MessageBool, value)
         /// </summary>
         /// <example>relay.Tell(true); // 19 chars vs 40 for Broadcast</example>
+        [Obsolete("Use BroadcastValue(bool) from MmMessagingExtensions instead.")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Tell(this MmRelayNode relay, bool value)
         {
@@ -77,6 +82,7 @@ namespace MercuryMessaging.Protocol.DSL
         /// Send an integer value to all descendants.
         /// </summary>
         /// <example>relay.Tell(42); // 17 chars</example>
+        [Obsolete("Use BroadcastValue(int) from MmMessagingExtensions instead.")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Tell(this MmRelayNode relay, int value)
         {
@@ -87,6 +93,7 @@ namespace MercuryMessaging.Protocol.DSL
         /// Send a float value to all descendants.
         /// </summary>
         /// <example>relay.Tell(3.14f); // 21 chars</example>
+        [Obsolete("Use BroadcastValue(float) from MmMessagingExtensions instead.")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Tell(this MmRelayNode relay, float value)
         {
@@ -97,6 +104,7 @@ namespace MercuryMessaging.Protocol.DSL
         /// Send a string value to all descendants.
         /// </summary>
         /// <example>relay.Tell("hello"); // 22 chars</example>
+        [Obsolete("Use BroadcastValue(string) from MmMessagingExtensions instead.")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Tell(this MmRelayNode relay, string value)
         {
@@ -106,6 +114,7 @@ namespace MercuryMessaging.Protocol.DSL
         /// <summary>
         /// Send a Vector3 value to all descendants.
         /// </summary>
+        [Obsolete("Use relay.Send(value).ToDescendants().Execute() instead.")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Tell(this MmRelayNode relay, Vector3 value)
         {
@@ -121,6 +130,7 @@ namespace MercuryMessaging.Protocol.DSL
         /// Equivalent to: relay.Notify(MmMethod.MessageBool, value)
         /// </summary>
         /// <example>relay.Report(true); // 21 chars vs 35 for Notify</example>
+        [Obsolete("Use NotifyValue(bool) from MmMessagingExtensions instead.")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Report(this MmRelayNode relay, bool value)
         {
@@ -131,6 +141,7 @@ namespace MercuryMessaging.Protocol.DSL
         /// Report an integer value to parent(s).
         /// </summary>
         /// <example>relay.Report(100); // 19 chars</example>
+        [Obsolete("Use NotifyValue(int) from MmMessagingExtensions instead.")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Report(this MmRelayNode relay, int value)
         {
@@ -140,6 +151,7 @@ namespace MercuryMessaging.Protocol.DSL
         /// <summary>
         /// Report a float value to parent(s).
         /// </summary>
+        [Obsolete("Use NotifyValue(float) from MmMessagingExtensions instead.")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Report(this MmRelayNode relay, float value)
         {
@@ -150,6 +162,7 @@ namespace MercuryMessaging.Protocol.DSL
         /// Report a string value to parent(s).
         /// </summary>
         /// <example>relay.Report("done"); // 22 chars</example>
+        [Obsolete("Use NotifyValue(string) from MmMessagingExtensions instead.")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Report(this MmRelayNode relay, string value)
         {
@@ -164,6 +177,7 @@ namespace MercuryMessaging.Protocol.DSL
         /// Send SetActive to all descendants. Common pattern for enabling/disabling subtrees.
         /// </summary>
         /// <example>relay.Activate(true); // 23 chars vs 31 for BroadcastSetActive</example>
+        [Obsolete("Use BroadcastSetActive(bool) from MmMessagingExtensions instead.")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Activate(this MmRelayNode relay, bool active)
         {
@@ -174,6 +188,7 @@ namespace MercuryMessaging.Protocol.DSL
         /// Send a state switch command to descendants.
         /// </summary>
         /// <example>relay.State("Playing"); // 25 chars</example>
+        [Obsolete("Use BroadcastSwitch(string) from MmMessagingExtensions instead.")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void State(this MmRelayNode relay, string stateName)
         {
