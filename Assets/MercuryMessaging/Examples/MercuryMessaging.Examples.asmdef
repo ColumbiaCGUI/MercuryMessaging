@@ -1,7 +1,11 @@
 {
-    "name": "MercuryMessaging",
-    "rootNamespace": "MercuryMessaging",
-    "references": [],
+    "name": "MercuryMessaging.Examples",
+    "rootNamespace": "MercuryMessaging.Examples",
+    "references": [
+        "MercuryMessaging",
+        "Unity.XR.Interaction.Toolkit",
+        "Unity.InputSystem"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
