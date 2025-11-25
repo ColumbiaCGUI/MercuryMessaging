@@ -190,9 +190,51 @@ Scene setup and configuration for Quick Win performance optimizations.
 
 ---
 
+### `2025-11-25-language-dsl/` - Fluent DSL for MercuryMessaging (Complete)
+
+**Completed:** 2025-11-25
+**Archived:** 2025-11-25
+**Status:** ✅ Phases 1-4 complete, Phase 5 partial (migration tooling deferred)
+
+Domain-specific language implementation providing fluent, chainable API for message routing with **86% code reduction** compared to traditional API.
+
+**Key Documents:**
+- `README.md` - Implementation status (Phases 1-4 complete)
+- `language-dsl-tasks.md` - Task tracking and milestone schedule
+- `language-dsl-context.md` - Technical design rationale
+- `USE_CASE.md` - Business context and use case analysis
+
+**Deliverables:**
+- `MmFluentMessage.cs` - Zero-allocation struct builder (~950 lines)
+- `MmFluentExtensions.cs` - Extension methods on MmRelayNode (~300 lines)
+- `MmFluentFilters.cs` - Static helpers and route builder (~380 lines)
+- `MmFluentPredicates.cs` - Predicate infrastructure (~230 lines)
+- `MmMessageFactory.cs` - Centralized message creation (~420 lines)
+- `MmRelayNodeExtensions.cs` - Convenience methods (~500 lines)
+- `MmTemporalExtensions.cs` - Time-based messaging (~580 lines)
+- `DSL_API_GUIDE.md` - Complete API reference with examples
+- 93 comprehensive tests (FluentApiTests, Phase2Tests, Phase3Tests, IntegrationTests, PerformanceTests)
+
+**Completed Phases:**
+- Phase 1: Core Fluent API (Send, routing methods, filters) ✅
+- Phase 2: Advanced Filtering (spatial, type, custom predicates) ✅
+- Phase 3: Type Inference & Temporal Extensions (factory, convenience, async) ✅
+- Phase 4: Testing & Performance (benchmarks, integration tests) ✅
+- Phase 5: Documentation - PARTIAL (API guide complete, Roslyn migration tool deferred)
+
+**Code Metrics:**
+- Line count reduction: 86% (7 lines → 1 line)
+- Performance overhead: <400% Editor, ~2% Production (acceptable for abstraction)
+- Memory allocation: Zero for common paths
+- Test coverage: 93 tests, all passing
+
+**Result:** Production-ready fluent DSL. Documentation added to CLAUDE.md. Core implementation complete and committed.
+
+---
+
 ## Archive Statistics
 
-**Total Archived Tasks:** 7
+**Total Archived Tasks:** 8
 **Total Documentation:** 70+ files, ~150,000 words
 **Completed Effort:** ~84-102 hours (framework-analysis + custom-method-extensibility + performance-analysis)
 **Archive Size:** ~2.5 MB (including performance data)
@@ -234,6 +276,6 @@ Active tasks remain in `dev/active/` until completion.
 
 ---
 
-**Last Updated:** 2025-11-20
-**Archive Status:** 7 tasks documented and preserved
+**Last Updated:** 2025-11-25
+**Archive Status:** 8 tasks documented and preserved
 **Maintained By:** Mercury Development Team
