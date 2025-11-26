@@ -224,10 +224,40 @@ MmAppState.Configure(switchNode)
 
 ## Tutorial Files
 
-1. **UnifiedMessagingTutorial.cs** - Tier 1/2 messaging API
-2. **StandardLibraryTutorial.cs** - UI + Input messages
-3. **FSMConfigurationTutorial.cs** - State machine configuration
+### Reference Tutorials (Read/Study)
+1. **UnifiedMessagingTutorial.cs** - Tier 1/2 messaging API reference
+2. **StandardLibraryTutorial.cs** - UI + Input messages reference
+3. **FSMConfigurationTutorial.cs** - State machine configuration reference
 4. **FluentDslExample.cs** - Side-by-side comparison (parent folder)
+
+### Interactive Tutorials (Run/Play)
+Located in `Scripts/` folder. Add to a GameObject and press Play:
+
+5. **DSLSceneSetup.cs** - Auto-creates tutorial scene hierarchy
+6. **DSLBasicDemo.cs** - Press 1-5 for messaging pattern demos
+7. **DSLTemporalDemo.cs** - Press T/Y/U for time-based pattern demos
+8. **ColorResponder.cs** - Visual feedback responder for tutorials
+
+**Quick Start for Interactive Tutorials:**
+```
+1. Create empty scene
+2. Create empty GameObject named "DSLTutorial"
+3. Add DSLSceneSetup component
+4. Press Play
+5. Use keyboard to test patterns (1-5, T, Y, U)
+```
+
+**Keyboard Controls:**
+| Key | Demo |
+|-----|------|
+| 1 | Traditional vs Fluent API comparison |
+| 2 | Routing targets (Children/Descendants/Parents/All) |
+| 3 | Typed values (int/float/string/bool/Vector3) |
+| 4 | Combined filters (Active + Tag) |
+| 5 | Auto-execute convenience methods |
+| T | Delayed execution (2 second delay) |
+| Y | Repeating messages (color cycling) |
+| U | Conditional trigger (press SPACE to activate) |
 
 ---
 
