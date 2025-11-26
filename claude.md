@@ -9,19 +9,19 @@
 
 ## Documentation
 
-@./documentation/OVERVIEW.md
+@./Documentation/OVERVIEW.md
 
-@./documentation/ARCHITECTURE.md
+@./Documentation/ARCHITECTURE.md
 
-@./documentation/API_REFERENCE.md
+@./Documentation/API_REFERENCE.md
 
-@./documentation/WORKFLOWS.md
+@./Documentation/WORKFLOWS.md
 
-@./documentation/STANDARD_LIBRARY.md
+@./Documentation/STANDARD_LIBRARY.md
 
-@./documentation/TESTING.md
+@./Documentation/TESTING.md
 
-@./documentation/PERFORMANCE.md
+@./Documentation/PERFORMANCE.md
 
 ---
 
