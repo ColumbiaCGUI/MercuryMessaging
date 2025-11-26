@@ -94,8 +94,9 @@ public class ColorResponder : MmBaseResponder
         Debug.Log("[ColorResponder " + gameObject.name + "] String: " + message.value);
     }
 
-    protected override void ReceivedSetActive(bool active)
+    public override void SetActive(bool active)
     {
+        base.SetActive(active);
         if (material == null) return;
 
         // Flash effect for SetActive
@@ -103,16 +104,18 @@ public class ColorResponder : MmBaseResponder
         Debug.Log("[ColorResponder " + gameObject.name + "] SetActive: " + active);
     }
 
-    protected override void ReceivedInitialize()
+    public override void Initialize()
     {
+        base.Initialize();
         if (material == null) return;
 
         material.color = originalColor;
         Debug.Log("[ColorResponder " + gameObject.name + "] Initialize - Reset to original color");
     }
 
-    protected override void ReceivedRefresh()
+    public override void Refresh(System.Collections.Generic.List<MmTransform> transformList)
     {
+        base.Refresh(transformList);
         Debug.Log("[ColorResponder " + gameObject.name + "] Refresh received");
     }
 }
