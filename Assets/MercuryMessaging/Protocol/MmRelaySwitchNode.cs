@@ -109,6 +109,24 @@ namespace MercuryMessaging
 	    }
 
         /// <summary>
+        /// Rebuild the FSM from the current routing table.
+        /// Use this after manually adding items to the routing table at runtime.
+        /// </summary>
+        public virtual void RebuildFSM()
+        {
+            try
+            {
+                RespondersFSM =
+                    new FiniteStateMachine<MmRoutingTableItem>("RespondersFSM",
+                        RoutingTable.Where(x => x.Responder is MmRelayNode && x.Level == MmLevelFilter.Child).ToList());
+            }
+            catch
+            {
+                MmLogger.LogError(gameObject.name + ": Failed rebuilding FSM. Missing Node?");
+            }
+        }
+
+        /// <summary>
         /// FSM control method: Jump to State, using MmRoutingTableItem name.
         /// </summary>
         /// <param name="newState">Name of target state.</param>

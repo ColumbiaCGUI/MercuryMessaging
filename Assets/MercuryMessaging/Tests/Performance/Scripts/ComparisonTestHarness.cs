@@ -40,7 +40,7 @@ namespace MercuryMessaging.Tests.Performance
         public MessageGenerator_DSL dslGenerator;
 
         [Header("Export Settings")]
-        [Tooltip("CSV export path (relative to Assets/Resources/)")]
+        [Tooltip("CSV export path (relative to project dev/ folder)")]
         public string exportPath = "performance-results/dsl_comparison_results.csv";
 
         [Tooltip("Also export to dev folder")]
@@ -503,10 +503,11 @@ namespace MercuryMessaging.Tests.Performance
                              $"{metrics.overheadPercent:F2}");
             }
 
-            // Export to Resources folder
+            // Export to dev folder (moved out of Assets for build size optimization)
             try
             {
-                string resourcesPath = Path.Combine(Application.dataPath, "Resources", exportPath);
+                string projectRoot = Directory.GetParent(Application.dataPath).FullName;
+                string resourcesPath = Path.Combine(projectRoot, "dev", exportPath);
                 string directory = Path.GetDirectoryName(resourcesPath);
 
                 if (!Directory.Exists(directory))
@@ -587,7 +588,8 @@ namespace MercuryMessaging.Tests.Performance
 
             try
             {
-                string summaryPath = Path.Combine(Application.dataPath, "Resources",
+                string projectRoot = Directory.GetParent(Application.dataPath).FullName;
+                string summaryPath = Path.Combine(projectRoot, "dev",
                     Path.GetDirectoryName(exportPath),
                     "dsl_comparison_summary.csv");
                 File.WriteAllText(summaryPath, summary.ToString());

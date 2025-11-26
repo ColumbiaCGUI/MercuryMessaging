@@ -40,7 +40,7 @@ namespace MercuryMessaging.Tests
         {
             // Arrange
             var original = new MmMessageInt(12345, MmMethod.MessageInt,
-                new MmMetadataBlock(MmLevelFilter.SelfAndChildren));
+                new MmMetadataBlock(MmLevelFilterHelper.SelfAndChildren));
             original.NetId = 100;
 
             // Act
@@ -235,10 +235,10 @@ namespace MercuryMessaging.Tests
             var result = (MmMessageByteArray)MmBinarySerializer.Deserialize(data);
 
             // Assert
-            Assert.AreEqual(payload.Length, result.value.Length);
+            Assert.AreEqual(payload.Length, result.byteArr.Length);
             for (int i = 0; i < payload.Length; i++)
             {
-                Assert.AreEqual(payload[i], result.value[i]);
+                Assert.AreEqual(payload[i], result.byteArr[i]);
             }
         }
 
@@ -253,8 +253,8 @@ namespace MercuryMessaging.Tests
             var result = (MmMessageByteArray)MmBinarySerializer.Deserialize(data);
 
             // Assert
-            Assert.IsNotNull(result.value);
-            Assert.AreEqual(0, result.value.Length);
+            Assert.IsNotNull(result.byteArr);
+            Assert.AreEqual(0, result.byteArr.Length);
         }
 
         #endregion
@@ -266,11 +266,11 @@ namespace MercuryMessaging.Tests
         {
             // Arrange
             var metadata = new MmMetadataBlock(
+                MmTag.Tag3,
                 MmLevelFilter.Parent,
                 MmActiveFilter.All,
                 MmSelectedFilter.Selected,
-                MmNetworkFilter.Network,
-                MmTag.Tag3);
+                MmNetworkFilter.Network);
 
             var original = new MmMessage(MmMethod.Refresh, MmMessageType.MmVoid, metadata);
             original.NetId = 999;

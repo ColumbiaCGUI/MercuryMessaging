@@ -42,7 +42,7 @@ namespace MercuryMessaging.Tests.Performance
         public bool autoStart = false;
 
         [Header("Export Settings")]
-        [Tooltip("CSV export path (relative to Assets/Resources/)")]
+        [Tooltip("CSV export path (relative to project dev/ folder)")]
         public string exportPath = "performance-results/test_results.csv";
 
         [Tooltip("Also export to dev/active/performance-analysis/")]
@@ -409,10 +409,11 @@ namespace MercuryMessaging.Tests.Performance
                              $"{metrics.messagesSent}");
             }
 
-            // Export to Resources folder
+            // Export to dev folder (moved out of Assets for build size optimization)
             try
             {
-                string resourcesPath = Path.Combine(Application.dataPath, "Resources", exportPath);
+                string projectRoot = Directory.GetParent(Application.dataPath).FullName;
+                string resourcesPath = Path.Combine(projectRoot, "dev", exportPath);
                 string directory = Path.GetDirectoryName(resourcesPath);
 
                 if (!Directory.Exists(directory))

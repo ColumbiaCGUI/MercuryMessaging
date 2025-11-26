@@ -18,7 +18,7 @@ For each task in `/dev/active/`:
   - Last Updated timestamp
 
 - Update `[task-name]-tasks.md` with:
-  - Mark completed tasks as ✅ 
+  - Mark completed tasks as ✅
   - Add any new tasks discovered
   - Update in-progress tasks with current status
   - Reorder priorities if needed

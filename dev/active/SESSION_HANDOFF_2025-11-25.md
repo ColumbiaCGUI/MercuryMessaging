@@ -404,3 +404,217 @@ Execute() flow:
 **Last Updated:** 2025-11-25 04:30 PST
 **Session Branch:** user_study
 **Uncommitted Changes:** Yes (DSL optimizations need commit)
+
+---
+
+## Session 5: Test Fixes & Documentation Update ✅ COMPLETE
+
+### Session Summary
+**Focus:** Fix 20 failing tests from Phases 1-8, update documentation
+**Outcome:** All 418 tests passing, documentation fully updated
+
+---
+
+### ✅ Completed This Session (Session 5)
+
+#### 1. Fixed 20 Failing Tests (3 Root Causes Identified)
+
+**Root Cause 1: FSM Built With Empty Routing Table (19 tests)**
+- **Problem:** `MmRelaySwitchNode.Awake()` builds FSM from routing table
+- **Issue:** In unit tests, routing table is empty when `AddComponent<MmRelaySwitchNode>()` runs
+- **Fix:** Added `RebuildFSM()` method to MmRelaySwitchNode (lines 115-127)
+- **Tests Fixed:** 10 AppStateBuilderTests + 9 FsmConfigBuilderTests
+
+**Root Cause 2: ToDescendants() Excludes Self (1 test)**
+- **Problem:** `BroadcastInitialize()` used `.ToDescendants()` which sets `MmLevelFilter.Descendants`
+- **Issue:** `Descendants` flag excludes self; test with no children had no receivers
+- **Fix:** Removed `.ToDescendants()` from all 16 Broadcast methods in MmMessagingExtensions.cs
+- **Tests Fixed:** FluentApiTests.BroadcastInitialize_SendsToAll
+
+#### 2. Files Modified
+
+| File | Change |
+|------|--------|
+| `MmMessagingExtensions.cs` | Removed `.ToDescendants()` from 16 Broadcast methods |
+| `MmRelaySwitchNode.cs` | Added `RebuildFSM()` method (lines 115-127) |
+| `FsmConfigBuilderTests.cs` | Added `_switchNode.RebuildFSM()` in SetUp (line 53) |
+| `AppStateBuilderTests.cs` | Added routing registration + `RebuildFSM()` (lines 45-53) |
+
+#### 3. Updated Documentation
+
+- `dev/active/dsl-overhaul/dsl-overhaul-tasks.md` - Updated all phases to reflect actual completion
+- `dev/active/dsl-overhaul/dsl-overhaul-context.md` - Updated with session 5 details
+
+---
+
+### Key Technical Decisions Made
+
+**1. BroadcastInitialize Semantics:**
+```csharp
+// CORRECT: Uses default SelfAndChildren (includes self)
+public static void BroadcastInitialize(this MmRelayNode relay)
+    => relay.Send(MmMethod.Initialize).Execute();
+
+// WRONG: ToDescendants() excludes self
+public static void BroadcastInitialize(this MmRelayNode relay)
+    => relay.Send(MmMethod.Initialize).ToDescendants().Execute(); // REMOVED
+```
+
+**2. RebuildFSM Pattern for Tests:**
+```csharp
+// In test SetUp
+_switchNode = obj.AddComponent<MmRelaySwitchNode>();
+_switchNode.MmAddToRoutingTable(state1, MmLevelFilter.Child);
+_switchNode.MmAddToRoutingTable(state2, MmLevelFilter.Child);
+_switchNode.RebuildFSM(); // CRITICAL: Must call after populating routing table
+```
+
+**3. Standard Library Method Ranges (Phase 9-10):**
+- Standard MmMethod: 0-18 (existing)
+- UI Messages: 100-199 (Phase 9)
+- Input Messages: 200-299 (Phase 10)
+- Custom Application: 1000+ (unchanged)
+
+---
+
+### Next Actions (Phase 9: UI Messages)
+
+**1. Create StandardLibrary folder structure:**
+```
+Assets/MercuryMessaging/StandardLibrary/
+  UI/
+    MmUIMessages.cs (~200 lines)
+    MmUIResponder.cs (~150 lines)
+  Input/
+    MmInputMessages.cs (~250 lines)
+    MmInputResponder.cs (~150 lines)
+Tests/StandardLibrary/
+  UIMessageTests.cs (~100 lines)
+  InputMessageTests.cs (~100 lines)
+```
+
+**2. Implement MmUIMessages.cs:**
+```csharp
+public enum MmUIMethod
+{
+    Click = 100, Hover = 101, Drag = 102, Scroll = 103, Focus = 104, Select = 105
+}
+
+public class MmUIClickMessage : MmMessage { Vector2 Position; int ClickCount; }
+public class MmUIHoverMessage : MmMessage { Vector2 Position; bool IsEnter; }
+// etc.
+```
+
+**3. Implement MmUIResponder.cs:**
+```csharp
+public class MmUIResponder : MmExtendableResponder
+{
+    protected virtual void ReceivedClick(MmUIClickMessage msg) { }
+    protected virtual void ReceivedHover(MmUIHoverMessage msg) { }
+    // etc.
+}
+```
+
+---
+
+### Progress Summary
+
+| Phase | Status |
+|-------|--------|
+| Phase 1-8 | ✅ Complete (100%) |
+| Test Fixes | ✅ Complete |
+| Phase 9: UI Messages | ⏳ **Next** |
+| Phase 10: Input Messages | ⏳ Pending |
+| Phase 11: Tutorials | ⏳ Pending |
+
+**Overall: 73% complete (8/11 phases)**
+
+---
+
+**Last Updated:** 2025-11-25 (Session 5)
+**Session Branch:** user_study
+**Tests:** 418+ passing (new StandardLibrary tests added)
+**Uncommitted Changes:** Yes (test fixes + StandardLibrary)
+
+---
+
+## Session 5 Continued: Standard Library Implementation ✅ COMPLETE
+
+### Phase 9: UI Messages (COMPLETE)
+
+**Files Created:**
+| File | Size | Description |
+|------|------|-------------|
+| `StandardLibrary/UI/MmUIMessages.cs` | ~420 lines | 8 UI message types with serialization |
+| `StandardLibrary/UI/MmUIResponder.cs` | ~130 lines | Base responder for UI events |
+| `Tests/StandardLibrary/UIMessageTests.cs` | ~280 lines | 15+ tests |
+| `StandardLibrary/MercuryMessaging.StandardLibrary.asmdef` | - | Assembly definition |
+
+**Message Types Implemented:**
+- `MmUIClickMessage` - Position, ClickCount, Button (IsDoubleClick, IsRightClick helpers)
+- `MmUIHoverMessage` - Position, IsEnter
+- `MmUIDragMessage` - Position, Delta, Phase (Begin/Move/End)
+- `MmUIScrollMessage` - Position, ScrollDelta
+- `MmUIFocusMessage` - IsFocused, ElementId
+- `MmUISelectMessage` - SelectedIndex, SelectedValue, PreviousIndex
+- `MmUISubmitMessage` - Data
+- `MmUICancelMessage` - Reason
+
+**Method Range:** 100-199 (MmUIMethod enum)
+**MessageType Range:** 2001-2008 (MmUIMessageType enum)
+
+### Phase 10: Input Messages (COMPLETE)
+
+**Files Created:**
+| File | Size | Description |
+|------|------|-------------|
+| `StandardLibrary/Input/MmInputMessages.cs` | ~580 lines | 8 Input message types |
+| `StandardLibrary/Input/MmInputResponder.cs` | ~180 lines | Base responder for VR/XR input |
+| `Tests/StandardLibrary/InputMessageTests.cs` | ~270 lines | 15+ tests |
+
+**Message Types Implemented:**
+- `MmInput6DOFMessage` - Hand, Position, Rotation, Velocity, AngularVelocity, IsTracked
+- `MmInputGestureMessage` - Hand, GestureType, Confidence, Progress, CustomName
+- `MmInputHapticMessage` - Hand, Intensity, Duration, Frequency
+- `MmInputButtonMessage` - Hand, ButtonId, ButtonName, State, Value
+- `MmInputAxisMessage` - Hand, AxisId, AxisName, Value2D, Value1D
+- `MmInputTouchMessage` - Hand, TouchId, Position, Delta, Phase
+- `MmInputControllerStateMessage` - Hand, IsConnected, ControllerType, BatteryLevel
+- `MmInputGazeMessage` - Origin, Direction, HitPoint, IsHitting, Confidence
+
+**Method Range:** 200-299 (MmInputMethod enum)
+**MessageType Range:** 2101-2108 (MmInputMessageType enum)
+
+**Supporting Enums:**
+- `MmHandedness` - Unknown, Left, Right, Both
+- `MmGestureType` - Pinch, Point, Fist, OpenHand, ThumbsUp, etc.
+- `MmButtonState` - Released, Pressed, Held
+- `MmTouchPhase` - Began, Moved, Stationary, Ended, Canceled
+
+---
+
+### Progress Summary (End of Session 5)
+
+| Phase | Status |
+|-------|--------|
+| Phase 1-8 | ✅ Complete |
+| Test Fixes | ✅ Complete |
+| Phase 9: UI Messages | ✅ Complete |
+| Phase 10: Input Messages | ✅ Complete |
+| Phase 11: Tutorials | ⏳ Pending |
+
+**Overall: 91% complete (10/11 phases)**
+
+---
+
+### Next Actions (Phase 11: Tutorials & Documentation)
+
+1. Create tutorial scenes demonstrating DSL usage
+2. Update CLAUDE.md with StandardLibrary documentation
+3. Create quick start guide
+
+---
+
+**Last Updated:** 2025-11-25 (Session 5 final)
+**Branch:** user_study
+**Status:** Phases 1-10 complete, Phase 11 pending
