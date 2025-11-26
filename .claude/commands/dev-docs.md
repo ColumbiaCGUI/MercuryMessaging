@@ -20,7 +20,7 @@ You are an elite strategic planning specialist. Create a comprehensive, actionab
    - Required Resources and Dependencies
    - Timeline Estimates
 
-4. **Task Breakdown Structure**: 
+4. **Task Breakdown Structure**:
    - Each major section represents a phase or component
    - Number and prioritize tasks within sections
    - Include clear acceptance criteria for each task

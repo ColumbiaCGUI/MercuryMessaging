@@ -43,58 +43,58 @@ namespace MercuryMessaging.Protocol.DSL
         #region Tier 1: Broadcast (Down) - Relay Node
 
         /// <summary>
-        /// Broadcast Initialize to all descendants.
-        /// Equivalent to: relay.Send(MmMethod.Initialize).ToDescendants().Execute()
+        /// Broadcast Initialize to self and all children.
+        /// Uses default SelfAndChildren routing (includes self).
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void BroadcastInitialize(this MmRelayNode relay)
-            => relay.Send(MmMethod.Initialize).ToDescendants().Execute();
+            => relay.Send(MmMethod.Initialize).Execute();
 
         /// <summary>
-        /// Broadcast Refresh to all descendants.
-        /// Equivalent to: relay.Send(MmMethod.Refresh).ToDescendants().Execute()
+        /// Broadcast Refresh to self and all children.
+        /// Uses default SelfAndChildren routing (includes self).
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void BroadcastRefresh(this MmRelayNode relay)
-            => relay.Send(MmMethod.Refresh).ToDescendants().Execute();
+            => relay.Send(MmMethod.Refresh).Execute();
 
         /// <summary>
-        /// Broadcast SetActive to all descendants.
+        /// Broadcast SetActive to self and all children.
         /// </summary>
         /// <param name="relay">The relay node to broadcast from.</param>
         /// <param name="active">The active state to set.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void BroadcastSetActive(this MmRelayNode relay, bool active)
-            => relay.Send(MmMethod.SetActive, active).ToDescendants().Execute();
+            => relay.Send(MmMethod.SetActive, active).Execute();
 
         /// <summary>
-        /// Broadcast Switch to all descendants.
+        /// Broadcast Switch to self and all children.
         /// </summary>
         /// <param name="relay">The relay node to broadcast from.</param>
         /// <param name="state">The state name to switch to.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void BroadcastSwitch(this MmRelayNode relay, string state)
-            => relay.Send(MmMethod.Switch, state).ToDescendants().Execute();
+            => relay.Send(MmMethod.Switch, state).Execute();
 
-        /// <summary>Broadcast bool value to all descendants.</summary>
+        /// <summary>Broadcast bool value to self and all children.</summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void BroadcastValue(this MmRelayNode relay, bool value)
-            => relay.Send(value).ToDescendants().Execute();
+            => relay.Send(value).Execute();
 
-        /// <summary>Broadcast int value to all descendants.</summary>
+        /// <summary>Broadcast int value to self and all children.</summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void BroadcastValue(this MmRelayNode relay, int value)
-            => relay.Send(value).ToDescendants().Execute();
+            => relay.Send(value).Execute();
 
-        /// <summary>Broadcast float value to all descendants.</summary>
+        /// <summary>Broadcast float value to self and all children.</summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void BroadcastValue(this MmRelayNode relay, float value)
-            => relay.Send(value).ToDescendants().Execute();
+            => relay.Send(value).Execute();
 
-        /// <summary>Broadcast string value to all descendants.</summary>
+        /// <summary>Broadcast string value to self and all children.</summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void BroadcastValue(this MmRelayNode relay, string value)
-            => relay.Send(value).ToDescendants().Execute();
+            => relay.Send(value).Execute();
 
         #endregion
 
@@ -133,73 +133,73 @@ namespace MercuryMessaging.Protocol.DSL
         #region Tier 1: Broadcast (Down) - Responder
 
         /// <summary>
-        /// Broadcast Initialize to all descendants (from responder).
+        /// Broadcast Initialize to self and all children (from responder).
         /// Null-safe: does nothing if responder has no relay node.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void BroadcastInitialize(this MmBaseResponder responder)
         {
             var relay = responder.GetRelayNode();
-            if (relay != null) relay.Send(MmMethod.Initialize).ToDescendants().Execute();
+            if (relay != null) relay.Send(MmMethod.Initialize).Execute();
         }
 
         /// <summary>
-        /// Broadcast Refresh to all descendants (from responder).
+        /// Broadcast Refresh to self and all children (from responder).
         /// Null-safe: does nothing if responder has no relay node.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void BroadcastRefresh(this MmBaseResponder responder)
         {
             var relay = responder.GetRelayNode();
-            if (relay != null) relay.Send(MmMethod.Refresh).ToDescendants().Execute();
+            if (relay != null) relay.Send(MmMethod.Refresh).Execute();
         }
 
-        /// <summary>Broadcast SetActive to all descendants (from responder).</summary>
+        /// <summary>Broadcast SetActive to self and all children (from responder).</summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void BroadcastSetActive(this MmBaseResponder responder, bool active)
         {
             var relay = responder.GetRelayNode();
-            if (relay != null) relay.Send(MmMethod.SetActive, active).ToDescendants().Execute();
+            if (relay != null) relay.Send(MmMethod.SetActive, active).Execute();
         }
 
-        /// <summary>Broadcast Switch to all descendants (from responder).</summary>
+        /// <summary>Broadcast Switch to self and all children (from responder).</summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void BroadcastSwitch(this MmBaseResponder responder, string state)
         {
             var relay = responder.GetRelayNode();
-            if (relay != null) relay.Send(MmMethod.Switch, state).ToDescendants().Execute();
+            if (relay != null) relay.Send(MmMethod.Switch, state).Execute();
         }
 
-        /// <summary>Broadcast bool value to all descendants (from responder).</summary>
+        /// <summary>Broadcast bool value to self and all children (from responder).</summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void BroadcastValue(this MmBaseResponder responder, bool value)
         {
             var relay = responder.GetRelayNode();
-            if (relay != null) relay.Send(value).ToDescendants().Execute();
+            if (relay != null) relay.Send(value).Execute();
         }
 
-        /// <summary>Broadcast int value to all descendants (from responder).</summary>
+        /// <summary>Broadcast int value to self and all children (from responder).</summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void BroadcastValue(this MmBaseResponder responder, int value)
         {
             var relay = responder.GetRelayNode();
-            if (relay != null) relay.Send(value).ToDescendants().Execute();
+            if (relay != null) relay.Send(value).Execute();
         }
 
-        /// <summary>Broadcast float value to all descendants (from responder).</summary>
+        /// <summary>Broadcast float value to self and all children (from responder).</summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void BroadcastValue(this MmBaseResponder responder, float value)
         {
             var relay = responder.GetRelayNode();
-            if (relay != null) relay.Send(value).ToDescendants().Execute();
+            if (relay != null) relay.Send(value).Execute();
         }
 
-        /// <summary>Broadcast string value to all descendants (from responder).</summary>
+        /// <summary>Broadcast string value to self and all children (from responder).</summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void BroadcastValue(this MmBaseResponder responder, string value)
         {
             var relay = responder.GetRelayNode();
-            if (relay != null) relay.Send(value).ToDescendants().Execute();
+            if (relay != null) relay.Send(value).Execute();
         }
 
         #endregion

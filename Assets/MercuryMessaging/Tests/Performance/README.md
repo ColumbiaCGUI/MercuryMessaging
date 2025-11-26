@@ -29,7 +29,7 @@ This folder contains automated performance testing infrastructure for the Mercur
 4. Watch the real-time metrics display on screen
 
 5. Results automatically export to:
-   - `Assets/Resources/performance-results/*.csv`
+   - `dev/performance-results/*.csv`
    - `dev/active/performance-analysis/*.csv`
 
 ---
@@ -48,7 +48,7 @@ Main test orchestration component.
 - `Test Duration`: How long to run test (seconds)
 - `Auto Start`: Start test automatically on scene load
 - `Export To CSV`: Enable CSV export
-- `Export Path`: CSV file path (relative to Assets/Resources/)
+- `Export Path`: CSV file path (relative to project dev/ folder)
 - `Export To Dev Folder`: Also export to dev/active/performance-analysis/
 
 **Metrics Tracked:**
@@ -247,7 +247,7 @@ To get additional metrics:
 - Enable `logMessages` on TestResponder to see message flow
 
 ### CSV export failed
-- Check `Assets/Resources/performance-results/` folder exists
+- Check `dev/performance-results/` folder exists
 - Verify write permissions
 - Check Unity Console for error messages
 

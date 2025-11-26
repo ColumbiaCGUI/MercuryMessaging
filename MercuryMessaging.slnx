@@ -4,6 +4,7 @@
   <Project Path="Meta.XR.MultiplayerBlocks.Shared.csproj" />
   <Project Path="Unity.PlasticSCM.Editor.csproj" />
   <Project Path="Unity.Services.Core.Internal.csproj" />
+  <Project Path="MercuryMessaging.Tests.csproj" />
   <Project Path="Unity.ShaderGraph.Editor.csproj" />
   <Project Path="ALINE.csproj" />
   <Project Path="Meta.XR.BuildingBlocks.csproj" />
@@ -47,7 +48,6 @@
   <Project Path="Unity.XR.Interaction.Toolkit.Samples.StarterAssets.csproj" />
   <Project Path="UnityEditor.TestRunner.csproj" />
   <Project Path="Unity.XR.MetaOpenXR.csproj" />
-  <Project Path="MercuryMessaging.Tests.csproj" />
   <Project Path="Oculus.Interaction.Editor.csproj" />
   <Project Path="Oculus.Interaction.OVR.csproj" />
   <Project Path="Unity.AI.Navigation.Editor.ConversionSystem.csproj" />
@@ -120,6 +120,7 @@
   <Project Path="Unity.XR.Management.csproj" />
   <Project Path="Meta.XR.Editor.Guide.About.csproj" />
   <Project Path="Unity.Mathematics.Editor.csproj" />
+  <Project Path="MercuryMessaging.Examples.csproj" />
   <Project Path="Meta.XR.MultiplayerBlocks.NGO.Editor.csproj" />
   <Project Path="Unity.XR.Hands.Editor.csproj" />
   <Project Path="Meta.XR.EnvironmentDepth.csproj" />
@@ -135,6 +136,7 @@
   <Project Path="UnityEditor.XR.LegacyInputHelpers.csproj" />
   <Project Path="Unity.ShaderGraph.Utilities.csproj" />
   <Project Path="Meta.XR.BuildingBlocks.DepthAPI.csproj" />
+  <Project Path="MercuryMessaging.StandardLibrary.csproj" />
   <Project Path="Meta.XR.EnvironmentDepth.Editor.csproj" />
   <Project Path="EPOURP.csproj" />
   <Project Path="Unity.Services.Core.Device.csproj" />

@@ -255,6 +255,30 @@ namespace MercuryMessaging.Protocol.DSL
             return this;
         }
 
+        /// <summary>
+        /// Send message over network (alias for AllDestinations).
+        /// More intuitive naming for network-enabled messaging.
+        /// Host double-receive is automatically handled by the framework.
+        /// </summary>
+        /// <example>
+        /// relay.Send("PlayerMoved").ToDescendants().OverNetwork().Execute();
+        /// </example>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public MmFluentMessage OverNetwork()
+        {
+            return AllDestinations();
+        }
+
+        /// <summary>
+        /// Shorthand for NetworkOnly() - send only over network, not locally.
+        /// Use when local handling is done separately.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public MmFluentMessage RemoteOnly()
+        {
+            return NetworkOnly();
+        }
+
         #endregion
 
         #region Tag Methods
