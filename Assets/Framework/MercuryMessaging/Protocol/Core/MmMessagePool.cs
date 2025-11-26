@@ -218,7 +218,14 @@ namespace MercuryMessaging
             msg.root = true;
             msg.TimeStamp = null;
             msg.HopCount = 0;
-            msg.VisitedNodes?.Clear();
+            msg._isPooled = true; // Mark as pooled for return tracking
+
+            // Return VisitedNodes HashSet to pool if it exists
+            if (msg.VisitedNodes != null)
+            {
+                MmHashSetPool.Return(msg.VisitedNodes);
+                msg.VisitedNodes = null;
+            }
         }
 
         #endregion

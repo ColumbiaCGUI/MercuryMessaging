@@ -96,6 +96,12 @@ namespace MercuryMessaging
         public System.Collections.Generic.HashSet<int> VisitedNodes;
 
         /// <summary>
+        /// Indicates whether this message was obtained from the MmMessagePool.
+        /// Used internally to determine if the message should be returned to pool after routing.
+        /// </summary>
+        internal bool _isPooled;
+
+        /// <summary>
         /// Creates a basic MmMessage with a default control block
         /// </summary>
         public MmMessage()
