@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using MercuryMessaging.Protocol.Core;
 using UnityEngine;
 
 namespace MercuryMessaging.Protocol.DSL
@@ -382,19 +383,16 @@ namespace MercuryMessaging.Protocol.DSL
             int queryId = _nextQueryId++;
             _pendingQueries[queryId] = onResponse;
 
-            var queryMessage = new MmMessageInt
-            {
-                MmMethod = method,
-                value = queryId,
-                MetadataBlock = new MmMetadataBlock(
-                    MmLevelFilterHelper.SelfAndChildren,
-                    MmActiveFilter.All,
-                    MmSelectedFilter.All,
-                    MmNetworkFilter.Local
-                )
-            };
+            var metadata = new MmMetadataBlock(
+                MmLevelFilterHelper.SelfAndChildren,
+                MmActiveFilter.All,
+                MmSelectedFilter.All,
+                MmNetworkFilter.Local
+            );
+            var queryMessage = MmMessagePool.GetInt(queryId, method, metadata);
 
             relay.MmInvoke(queryMessage);
+            MmMessagePool.Return(queryMessage);
             return queryId;
         }
 
