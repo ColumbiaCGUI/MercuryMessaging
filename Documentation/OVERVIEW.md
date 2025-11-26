@@ -24,84 +24,68 @@
 
 ## Directory Structure
 
-### Project Root Structure (Assets/)
+### Project Root Structure (Assets/) - 6 Folders
+
+The project was reorganized on 2025-11-25 from 14 folders to 6 clean top-level folders.
 
 ```
 Assets/
-├── _Project/                    # Custom project-specific assets (NEW - organized)
-│   ├── Scenes/                  # Production scenes
-│   ├── Scripts/                 # All custom scripts (organized by category)
+├── Framework/                   # MercuryMessaging framework (portable, zero dependencies)
+│   └── MercuryMessaging/        # Core messaging framework
+│       ├── AppState/            # Application state management with FSM
+│       ├── Protocol/            # Core messaging protocol (MOST IMPORTANT)
+│       │   ├── Core/            # Hot-path optimized code (pooling, dispatch)
+│       │   ├── DSL/             # Fluent API (MmFluentMessage, extensions)
+│       │   ├── Message/         # Message type definitions
+│       │   └── Network/         # Networking backends (IMmNetworkBackend)
+│       ├── StandardLibrary/     # Typed message handlers
+│       │   ├── UI/              # UI messages (Click, Hover, Drag, etc.)
+│       │   └── Input/           # VR input messages (6DOF, Gesture, Button)
+│       ├── Support/             # Supporting utilities and systems
+│       ├── Task/                # Task management system for experiments
+│       ├── Tests/               # Unit and integration tests
+│       └── Examples/            # Demo and tutorial content
+│
+├── Project/                     # Project-specific code (feature-based organization)
+│   ├── Scripts/                 # All custom scripts
 │   │   ├── Core/                # Core application logic
-│   │   ├── UI/                  # UI-related scripts
-│   │   ├── VR/                  # VR/XR initialization scripts
-│   │   ├── Utilities/           # General utility scripts
 │   │   ├── Responders/          # Custom MercuryMessaging responders
 │   │   ├── TrafficLights/       # Traffic light system scripts
-│   │   └── Tutorials/           # Tutorial scripts (from original Script/)
+│   │   ├── Tutorials/           # Tutorial scripts
+│   │   ├── UI/                  # UI-related scripts
+│   │   └── VR/                  # VR/XR initialization scripts
 │   ├── Prefabs/                 # Reusable prefab assets
-│   │   ├── UI/                  # UI prefabs
-│   │   └── Environment/         # Environment prefabs
 │   ├── Materials/               # Project-specific materials
-│   ├── Resources/               # Runtime-loadable assets
 │   └── Settings/                # Project configuration files
 │
-├── MercuryMessaging/            # Core messaging framework (109 C# scripts)
-│   ├── AppState/                # Application state management with FSM
-│   ├── Protocol/                # Core messaging protocol (MOST IMPORTANT)
-│   │   └── Message/             # Message type definitions
-│   ├── Support/                 # Supporting utilities and systems
-│   │   ├── Data/                # Data collection and CSV/XML handling
-│   │   ├── Editor/              # Custom Unity editor utilities
-│   │   ├── Extensions/          # C# extension methods
-│   │   ├── FiniteStateMachine/  # Generic FSM implementation
-│   │   ├── GUI/                 # GUI utilities and responders
-│   │   ├── Input/               # Input handling (keyboard)
-│   │   ├── Interpolators/       # Animation/interpolation utilities
-│   │   └── ThirdParty/          # Third-party integration utilities
-│   ├── Task/                    # Task management system for experiments
-│   │   └── Transformation/      # Transform-specific task implementations
-│   └── Examples/                # Demo and tutorial content (REORGANIZED)
-│       ├── Demo/                # Demo scenes (TrafficLights.unity)
-│       └── Tutorials/           # Tutorial scenes and examples
-│           ├── SimpleScene/     # Basic light switch example
-│           ├── SimpleTutorial_Alternative/
-│           └── Tutorial1-5/     # Progressive tutorial series
+├── Research/                    # User studies & experiments
+│   └── UserStudy/               # User study scenes, scripts, and assets
 │
-├── UserStudy/                   # User study scenes, scripts, and assets
-│
-├── ThirdParty/                  # All third-party assets (NEW - consolidated)
-│   ├── Plugins/                 # Third-party plugins and libraries
-│   │   ├── ALINE/               # Debug drawing library
-│   │   ├── EasyPerformantOutline/  # Outline effect system
-│   │   ├── QuickOutline/        # Quick outline effect
-│   │   ├── MKGlowFree/          # Glow effect system (formerly _MK/)
-│   │   ├── Photon/              # Photon Fusion networking
-│   │   ├── Android/             # Android-specific plugins
-│   │   └── Vuplex/              # WebView plugin
+├── Plugins/                     # Third-party dependencies
 │   ├── AssetStore/              # Unity Asset Store packages
-│   │   ├── ModularCityProps/    # City building props (formerly MCP/)
-│   │   ├── PBR_TrafficLightsEU/  # PBR traffic lights
-│   │   ├── TrafficLightsSystem/  # Traffic light system with tools
-│   │   └── Skybox/              # Skybox assets
-│   └── GraphSystem/             # Graph visualization systems
-│       ├── NewGraph/            # Base graph framework (formerly NewGraph-master/)
-│       └── MercuryGraph/        # Mercury-specific graph implementation
+│   ├── GraphSystem/             # Graph visualization systems
+│   └── Plugins/                 # Third-party plugins (ALINE, Photon, etc.)
 │
-├── XRConfiguration/             # VR/XR platform configuration (NEW - consolidated)
-│   ├── Oculus/                  # Oculus/Meta platform config
-│   ├── MetaXR/                  # Meta XR SDK configuration
-│   ├── XR/                      # Unity XR Plugin Management
-│   ├── XRI/                     # XR Interaction Toolkit settings
-│   └── CompositionLayers/       # Composition layers config
+├── Platform/                    # XR/VR configuration (consolidated)
+│   └── XR/                      # All XR-related configuration
+│       ├── Settings/            # XR settings (MetaXR, Oculus, XRI, etc.)
+│       ├── Oculus/              # Oculus-specific assets
+│       │   └── ControllerArt/   # Controller models (~494MB, OUT of Resources)
+│       └── Samples/             # XR samples
 │
-├── Editor/                      # Unity editor scripts
-├── Resources/                   # Unity Resources folder
-├── Settings/                    # Project settings
-├── Samples/                     # Unity Package Manager samples
-└── TextMesh Pro/                # TextMesh Pro package
+└── Unity/                       # Unity-managed folders
+    ├── Editor/                  # Unity editor scripts
+    ├── Resources/               # Runtime-loadable assets (minimal, ~6KB)
+    ├── Settings/                # Project settings
+    ├── StreamingAssets/         # Streaming assets
+    └── TextMesh Pro/            # TextMesh Pro package
 ```
 
-**Note**: The project structure was reorganized on 2025-11-18 to improve organization and follow Unity best practices. See `dev/ASSETS_REORGANIZATION_PLAN.md` for historical context.
+**Key Improvements (2025-11-25 Reorganization):**
+- **57% folder reduction**: From 14 to 6 top-level folders
+- **~500MB build size reduction**: Controller art moved out of Resources
+- **Framework isolation**: MercuryMessaging now portable as a package
+- **XR consolidation**: 4 XR locations merged into Platform/XR/
 
 ---
 
