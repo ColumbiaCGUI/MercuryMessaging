@@ -198,6 +198,17 @@ namespace MercuryMessaging
         [ReorderableList]
         public MmRoutingTable RoutingTable;
 
+        /// <summary>
+        /// DSL Phase 2.1: Listener registry for external message subscriptions.
+        /// Stores active listener subscriptions that receive notifications when messages arrive.
+        /// </summary>
+        private List<Protocol.DSL.IMmListenerSubscription> _listeners;
+
+        /// <summary>
+        /// Gets the number of active listeners on this relay node.
+        /// </summary>
+        public int ListenerCount => _listeners?.Count ?? 0;
+
         #endregion
 
         #region Properties
@@ -517,14 +528,102 @@ namespace MercuryMessaging
 
         #endregion
 
+        #region DSL Phase 2.1 - Listener Methods
+
+        /// <summary>
+        /// Adds a typed listener subscription to this relay node.
+        /// Called internally by MmListenerBuilder.Execute().
+        /// </summary>
+        /// <typeparam name="T">The message type the listener handles.</typeparam>
+        /// <param name="subscription">The subscription to add.</param>
+        internal void AddListener<T>(Protocol.DSL.MmListenerSubscription<T> subscription) where T : MmMessage
+        {
+            if (subscription == null) return;
+
+            if (_listeners == null)
+            {
+                _listeners = new List<Protocol.DSL.IMmListenerSubscription>();
+            }
+
+            // Wrap in implementation for storage
+            var wrapper = new Protocol.DSL.MmListenerSubscriptionImpl<T>(subscription);
+            _listeners.Add(wrapper);
+        }
+
+        /// <summary>
+        /// Removes a typed listener subscription from this relay node.
+        /// Called internally by MmListenerSubscription.Dispose().
+        /// </summary>
+        /// <typeparam name="T">The message type the listener handles.</typeparam>
+        /// <param name="subscription">The subscription to remove.</param>
+        internal void RemoveListener<T>(Protocol.DSL.MmListenerSubscription<T> subscription) where T : MmMessage
+        {
+            if (_listeners == null || subscription == null) return;
+
+            // Find and remove the wrapper
+            for (int i = _listeners.Count - 1; i >= 0; i--)
+            {
+                if (_listeners[i] is Protocol.DSL.MmListenerSubscriptionImpl<T> wrapper &&
+                    wrapper.GetInner() == subscription)
+                {
+                    _listeners.RemoveAt(i);
+                    break;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Removes all listeners from this relay node.
+        /// </summary>
+        public void ClearListeners()
+        {
+            if (_listeners == null) return;
+
+            // Dispose all listeners
+            for (int i = _listeners.Count - 1; i >= 0; i--)
+            {
+                _listeners[i].Dispose();
+            }
+            _listeners.Clear();
+        }
+
+        /// <summary>
+        /// Notifies all registered listeners about a received message.
+        /// Called from MmInvoke to dispatch to listeners.
+        /// </summary>
+        /// <param name="message">The message to notify listeners about.</param>
+        private void NotifyListeners(MmMessage message)
+        {
+            if (_listeners == null || _listeners.Count == 0) return;
+
+            // Iterate backwards to allow removal during iteration
+            for (int i = _listeners.Count - 1; i >= 0; i--)
+            {
+                var listener = _listeners[i];
+                if (listener.IsDisposed)
+                {
+                    _listeners.RemoveAt(i);
+                    continue;
+                }
+
+                // TryInvoke returns false if the listener should be removed (e.g., one-time listeners)
+                if (!listener.TryInvoke(message))
+                {
+                    _listeners.RemoveAt(i);
+                }
+            }
+        }
+
+        #endregion
+
         #region MmInvoke methods
 
         /// <summary>
-        /// Invoke an MmMethod. 
+        /// Invoke an MmMethod.
         /// </summary>
         /// <param name="msgType">Type of message. This specifies
-        /// the type of the payload. This is important in 
-        /// networked scenarios, when proper deseriaization into 
+        /// the type of the payload. This is important in
+        /// networked scenarios, when proper deseriaization into
         /// the correct type requires knowing what was 
         /// used to serialize the object originally.
         /// </param>
@@ -538,6 +637,10 @@ namespace MercuryMessaging
             {
                 UpdateMessages(message);
             }
+
+            // DSL Phase 2.1: Notify listeners before responder dispatch
+            // This allows external components to subscribe to messages without creating responders
+            NotifyListeners(message);
 
             MmMessageType msgType = message.MmMessageType;
             //If the MmRelayNode has not been initialized, initialize it here,
