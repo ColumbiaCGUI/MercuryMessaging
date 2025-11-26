@@ -118,6 +118,126 @@ namespace MercuryMessaging
         [System.NonSerialized]
         private int _cacheMisses = 0;
 
+        #endregion
+
+        #region O(1) Lookup Indices (Phase 2 Optimization)
+
+        /// <summary>
+        /// Dictionary index for O(1) lookup by name.
+        /// Note: Names are not guaranteed unique - stores first occurrence.
+        /// </summary>
+        [System.NonSerialized]
+        private Dictionary<string, MmRoutingTableItem> _nameIndex;
+
+        /// <summary>
+        /// Dictionary index for O(1) lookup by responder reference.
+        /// Responder references ARE unique in the routing table.
+        /// </summary>
+        [System.NonSerialized]
+        private Dictionary<MmResponder, MmRoutingTableItem> _responderIndex;
+
+        /// <summary>
+        /// Initialize index structures if needed.
+        /// </summary>
+        private void EnsureIndicesInitialized()
+        {
+            if (_nameIndex == null)
+            {
+                _nameIndex = new Dictionary<string, MmRoutingTableItem>();
+                _responderIndex = new Dictionary<MmResponder, MmRoutingTableItem>();
+                RebuildIndices();
+            }
+        }
+
+        /// <summary>
+        /// Rebuild indices from current list contents.
+        /// Called after deserialization or when indices are null.
+        /// </summary>
+        private void RebuildIndices()
+        {
+            _nameIndex.Clear();
+            _responderIndex.Clear();
+
+            foreach (var item in _list)
+            {
+                if (item == null) continue;
+
+                // Name index: only store first occurrence (names may not be unique)
+                if (!string.IsNullOrEmpty(item.Name) && !_nameIndex.ContainsKey(item.Name))
+                {
+                    _nameIndex[item.Name] = item;
+                }
+
+                // Responder index: responders should be unique
+                if (item.Responder != null && !_responderIndex.ContainsKey(item.Responder))
+                {
+                    _responderIndex[item.Responder] = item;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Add item to indices.
+        /// </summary>
+        private void AddToIndices(MmRoutingTableItem item)
+        {
+            if (item == null) return;
+
+            EnsureIndicesInitialized();
+
+            // Name index: only add if not already present (first occurrence wins)
+            if (!string.IsNullOrEmpty(item.Name) && !_nameIndex.ContainsKey(item.Name))
+            {
+                _nameIndex[item.Name] = item;
+            }
+
+            // Responder index: should always succeed (responders are unique)
+            if (item.Responder != null)
+            {
+                _responderIndex[item.Responder] = item;
+            }
+        }
+
+        /// <summary>
+        /// Remove item from indices.
+        /// </summary>
+        private void RemoveFromIndices(MmRoutingTableItem item)
+        {
+            if (item == null || _nameIndex == null) return;
+
+            // Name index: only remove if this item is the indexed one
+            if (!string.IsNullOrEmpty(item.Name) &&
+                _nameIndex.TryGetValue(item.Name, out var indexedItem) &&
+                indexedItem == item)
+            {
+                _nameIndex.Remove(item.Name);
+                // Find next item with same name (if any) to re-index
+                foreach (var otherItem in _list)
+                {
+                    if (otherItem != null && otherItem != item && otherItem.Name == item.Name)
+                    {
+                        _nameIndex[item.Name] = otherItem;
+                        break;
+                    }
+                }
+            }
+
+            // Responder index: simple removal
+            if (item.Responder != null)
+            {
+                _responderIndex.Remove(item.Responder);
+            }
+        }
+
+        /// <summary>
+        /// Invalidate indices (set to null, will rebuild on next access).
+        /// </summary>
+        private void InvalidateIndices()
+        {
+            _nameIndex = null;
+            _responderIndex = null;
+        }
+
         /// <summary>
         /// Get cache hit rate (0.0 to 1.0).
         /// Returns 0 if no cache operations yet.
@@ -187,13 +307,20 @@ namespace MercuryMessaging
 
         /// <summary>
         /// Accessor for MmRoutingTableItems by name.
+        /// Uses O(1) dictionary lookup (Phase 2 optimization).
         /// Will throw KeyNotFoundException if not found.
         /// </summary>
         /// <param name="name">Name of MmRoutingTableItem.</param>
-        /// <returns>First item with the name.</returns>
+        /// <returns>First item with the name, or null if not found.</returns>
         public MmRoutingTableItem this[string name]
         {
-            get { return _list.Find(item => item.Name == name); }
+            get
+            {
+                if (string.IsNullOrEmpty(name)) return null;
+                EnsureIndicesInitialized();
+                _nameIndex.TryGetValue(name, out var item);
+                return item;
+            }
             set
             {
                 MmRoutingTableItem refVal = this[name];
@@ -203,18 +330,30 @@ namespace MercuryMessaging
                     throw new KeyNotFoundException();
                 }
                 int itemIndex = _list.IndexOf(refVal);
+
+                // Update indices
+                RemoveFromIndices(refVal);
                 _list[itemIndex] = value;
+                AddToIndices(value);
+                InvalidateCache();
             }
         }
 
         /// <summary>
         /// Accessor for MmRoutingTableItems by MmResponder reference.
+        /// Uses O(1) dictionary lookup (Phase 2 optimization).
         /// </summary>
         /// <param name="responder">MmResponder for which to search.</param>
         /// <returns>MmRoutingTableItem with reference or NULL.</returns>
         public MmRoutingTableItem this[MmResponder responder]
         {
-            get { return _list.Find(item => item.Responder == responder); }
+            get
+            {
+                if (responder == null) return null;
+                EnsureIndicesInitialized();
+                _responderIndex.TryGetValue(responder, out var item);
+                return item;
+            }
         }
 
         /// <summary>
@@ -349,66 +488,81 @@ namespace MercuryMessaging
             return true;
         }
 
-        #region Cache Invalidation Overrides (QW-3)
+        #region Cache & Index Maintenance Overrides (QW-3 + Phase 2)
 
         /// <summary>
-        /// Override Add to invalidate cache when routing table changes.
+        /// Override Add to maintain cache and indices.
         /// </summary>
         public new void Add(MmRoutingTableItem item)
         {
             base.Add(item);
+            AddToIndices(item);
             InvalidateCache();
         }
 
         /// <summary>
-        /// Override Remove to invalidate cache when routing table changes.
+        /// Override Remove to maintain cache and indices.
         /// </summary>
         public new bool Remove(MmRoutingTableItem item)
         {
             bool removed = base.Remove(item);
             if (removed)
             {
+                RemoveFromIndices(item);
                 InvalidateCache();
             }
             return removed;
         }
 
         /// <summary>
-        /// Override RemoveAt to invalidate cache when routing table changes.
+        /// Override RemoveAt to maintain cache and indices.
         /// </summary>
         public new void RemoveAt(int index)
         {
-            base.RemoveAt(index);
-            InvalidateCache();
+            if (index >= 0 && index < _list.Count)
+            {
+                var item = _list[index];
+                base.RemoveAt(index);
+                RemoveFromIndices(item);
+                InvalidateCache();
+            }
         }
 
         /// <summary>
-        /// Override Insert to invalidate cache when routing table changes.
+        /// Override Insert to maintain cache and indices.
         /// </summary>
         public new void Insert(int index, MmRoutingTableItem item)
         {
             base.Insert(index, item);
+            AddToIndices(item);
             InvalidateCache();
         }
 
         /// <summary>
-        /// Override Clear to invalidate cache when routing table changes.
+        /// Override Clear to maintain cache and indices.
         /// </summary>
         public new void Clear()
         {
             base.Clear();
+            InvalidateIndices();
             InvalidateCache();
         }
 
         /// <summary>
-        /// Override indexer setter to invalidate cache when routing table changes.
+        /// Override indexer setter to maintain cache and indices.
         /// </summary>
         public new MmRoutingTableItem this[int index]
         {
             get { return base[index]; }
             set
             {
+                if (index >= 0 && index < _list.Count)
+                {
+                    var oldItem = _list[index];
+                    RemoveFromIndices(oldItem);
+                }
                 base[index] = value;
+                AddToIndices(value);
                 InvalidateCache();
             }
         }

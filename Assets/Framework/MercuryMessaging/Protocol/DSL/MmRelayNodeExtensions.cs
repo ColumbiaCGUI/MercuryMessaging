@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using MercuryMessaging.Protocol.Core;
 using UnityEngine;
 
 namespace MercuryMessaging.Protocol.DSL
