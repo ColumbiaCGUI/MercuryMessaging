@@ -1,243 +1,164 @@
 # Performance Optimization Context
 
-**Last Updated:** 2025-11-25
+**Last Updated:** 2025-11-25 (Evening Session)
+**Status:** Phase 1 COMPLETE, Ready for Phase 2 or 3
 **Full Plan:** `C:\Users\yangb\.claude\plans\typed-popping-puffin.md`
 
 ---
 
-## Analysis Summary
+## Session Summary (2025-11-25)
 
-This document captures the comprehensive performance analysis of MercuryMessaging compared to 10+ competing Unity frameworks, identifying specific bottlenecks and optimization strategies.
+### Completed This Session
 
----
+1. **Assets Reorganization (All 7 Phases)** - Reduced 14 folders to 6:
+   - Framework/, Platform/, Plugins/, Project/, Research/, Unity/
+   - ~500MB controller art moved out of Resources
+   - Commits: c5969e0e through d84b7297
 
-## Competitive Landscape
-
-### Framework Comparison
-
-| Framework | Stars | Zero Alloc | Hierarchy Routing | Network | FSM |
-|-----------|-------|------------|-------------------|---------|-----|
-| **MessagePipe** | 1.7k | ✅ | ❌ | IPC only | ❌ |
-| **R3** | 3.4k | ✅ | ❌ | ❌ | ❌ |
-| **VitalRouter** | 319 | ✅ | ❌ | ❌ | ❌ |
-| **UniTask** | 10.2k | ✅ | ❌ | ❌ | ❌ |
-| **VContainer** | 2.6k | ✅ | ❌ | ❌ | ❌ |
-| **MercuryMessaging** | N/A | ❌ | ✅ | ✅ | ✅ |
-
-**Key Finding:** Mercury is the ONLY framework with hierarchy-aware routing. No competitor offers scene-graph-based message propagation with multi-level filtering.
+2. **Performance Optimization Phase 1 (ObjectPool Integration)** - COMPLETE:
+   - Created MmMessagePool.cs with ObjectPool<T> for all 13 message types
+   - Created MmHashSetPool.cs for VisitedNodes pooling
+   - Integrated pooling with MmRelayNode (all 13 typed MmInvoke overloads)
+   - Added `_isPooled` flag to MmMessage for tracking
+   - Created unit tests (MmMessagePoolTests.cs)
+   - Commits: 902eab91, 2b2bc324
 
 ---
 
-## Current Performance Bottlenecks
+## Current Implementation State
 
-### Bottleneck 1: Serialize().Concat().ToArray() (HIGH)
-**Location:** All 13 message type files
-**Impact:** LINQ allocation on every network send
+### Phase 1: ObjectPool Integration ✅ COMPLETE
 
-```csharp
-// Current (allocates):
-return baseSerialized.Concat(thisSerialized).ToArray();
+**What Was Implemented:**
 
-// Fixed (pre-sized):
-object[] combined = new object[baseSerialized.Length + 1];
-Array.Copy(baseSerialized, combined, baseSerialized.Length);
-combined[baseSerialized.Length] = value;
-return combined;
-```
+1. **MmMessagePool** (`Protocol/Core/MmMessagePool.cs`):
+   - 13 ObjectPool<T> instances (one per message type)
+   - Type-safe getters: `GetInt()`, `GetString()`, `GetBool()`, etc.
+   - `Return(MmMessage)` with type switch for proper routing
+   - Reset on get: clears HopCount, VisitedNodes, NetId, _isPooled flag
+   - Pool config: default 50, max 500 per type
+   - Editor-only statistics method
 
-### Bottleneck 2: RoutingTable.Find() (HIGH)
-**Location:** `MmRoutingTable.cs` lines 196, 217, 322
-**Impact:** O(n) linear search in hot path
+2. **MmHashSetPool** (`Protocol/Core/MmHashSetPool.cs`):
+   - Pool for `HashSet<int>` used by VisitedNodes
+   - `Get()`, `Return()`, `GetCopy()` methods
+   - Auto-clear on get
+   - Pool config: default 100, max 1000
 
-```csharp
-// Current (O(n)):
-return _list.Find(item => item.Name == name);
+3. **MmMessage Changes** (`Protocol/Message/MmMessage.cs`):
+   - Added `internal bool _isPooled` field (line ~102)
+   - Used to track if message should be returned to pool
 
-// Fixed (O(1)):
-return _nameIndex.TryGetValue(name, out var item) ? item : null;
-```
+4. **MmRelayNode Changes** (`Protocol/MmRelayNode.cs`):
+   - Line 568: `MmHashSetPool.Get()` instead of `new HashSet<int>()`
+   - Lines 799-1012: All 13 typed MmInvoke overloads use pool:
+     ```csharp
+     // Example pattern (repeated for all types):
+     public virtual void MmInvoke(MmMethod mmMethod, int param, MmMetadataBlock metadataBlock = null)
+     {
+         MmMessage msg = MmMessagePool.GetInt(param, mmMethod, metadataBlock);
+         MmInvoke(msg);
+         MmMessagePool.Return(msg);
+     }
+     ```
 
-### Bottleneck 3: Message.Copy() HashSet duplication (MEDIUM)
-**Location:** `MmMessage.cs` lines 189-191
-**Impact:** Cascading allocations through hierarchy
-
-```csharp
-// Current:
-VisitedNodes = new HashSet<int>(message.VisitedNodes);
-
-// Fixed (pool):
-VisitedNodes = MmHashSetPool.Get();
-foreach (var id in message.VisitedNodes) VisitedNodes.Add(id);
-```
-
-### Bottleneck 4: VisitedNodes allocation (MEDIUM)
-**Location:** `MmRelayNode.cs` line 568
-**Impact:** New HashSet per message
-
-### Bottleneck 5: Advanced routing collections (MEDIUM)
-**Location:** `MmRelayNode.cs` lines 1641-1692
-**Impact:** Temporary List allocations for routing targets
+5. **Unit Tests** (`Tests/MmMessagePoolTests.cs`):
+   - 20+ tests covering pool operations, reuse, reset behavior
+   - Tests for both MmMessagePool and MmHashSetPool
 
 ---
 
-## Optimization Strategies
+## Key Decisions Made
 
-### Strategy 1: Unity ObjectPool<T>
-**Requirement:** Unity 2021.1+ (built-in)
-**Expected:** 80-90% allocation reduction
+1. **Pool Return Strategy**: Return messages immediately after typed MmInvoke completes
+   - Simple and safe - no need for depth tracking
+   - Works because typed overloads are the entry points
 
-Unity's built-in `UnityEngine.Pool.ObjectPool<T>` provides:
-- Stack-based storage
-- Lifecycle callbacks (create, get, release, destroy)
-- Capacity management
+2. **_isPooled Flag**: Added to MmMessage for future use
+   - Currently set by pool but not checked on return
+   - Can be used for validation or conditional return
 
-### Strategy 2: Dictionary Indices for O(1) Lookup
-**Expected:** Eliminates O(n) routing table scans
+3. **No DSL Changes Needed**: MmFluentMessage delegates to MmRelayNode.MmInvoke
+   - Pool integration automatic via the typed overloads
 
-Add secondary indices alongside existing List:
-- `Dictionary<string, MmRoutingTableItem>` for name lookup
-- `Dictionary<MmResponder, MmRoutingTableItem>` for responder lookup
-
-### Strategy 3: Delegate-Based Dispatch
-**Expected:** 2-4x faster dispatch (eliminates virtual + switch)
-
-Add optional `Action<MmMessage>` handler to `MmRoutingTableItem`:
-- Fast path: Direct delegate invocation (~1-4 ticks)
-- Slow path: Virtual MmInvoke fallback (~8-10 ticks)
-
-### Strategy 4: Compiler Optimizations
-**Expected:** 10-20% improvement on hot methods
-
-- `[MethodImpl(AggressiveInlining)]` on small hot methods
-- `readonly struct` for MmMetadataBlock
-- Hot/cold path separation
-
-### Strategy 5: Source Generators (Optional)
-**Requirement:** Unity 2021.3+
-**Expected:** 3-6x improvement in dispatch
-
-Generate optimized switch statements at compile time, eliminating runtime type checking.
+4. **Secondary Files Deferred**: MmMessageFactory.cs, MmRelayNodeExtensions.cs still use `new`
+   - Lower priority - not in main hot path
+   - Can be optimized later
 
 ---
 
-## Performance Ceiling Analysis
+## Files Modified This Session
 
-### Theoretical Minimum Operations (Mercury)
-1. Pool lookup (get message)
-2. Metadata assignment
-3. Routing table lookup
-4. Level filter check
-5. Tag filter check
-6. Virtual dispatch
-7. Hop tracking
-8. Pool return
+### New Files Created:
+- `Assets/Framework/MercuryMessaging/Protocol/Core/MmMessagePool.cs`
+- `Assets/Framework/MercuryMessaging/Protocol/Core/MmHashSetPool.cs`
+- `Assets/Framework/MercuryMessaging/Tests/MmMessagePoolTests.cs`
 
-**Result:** ~8 operations minimum = ~3x slower than direct calls is the theoretical floor
-
-### Why Mercury Can't Beat Direct Calls
-Direct calls: `responder.Method(value)` = 1 virtual method call
-
-Mercury adds: routing table iteration + filtering + dispatch. This is the **feature**, not a bug—you're paying for loose coupling and hierarchical routing.
+### Modified Files:
+- `Assets/Framework/MercuryMessaging/Protocol/Message/MmMessage.cs` (added _isPooled)
+- `Assets/Framework/MercuryMessaging/Protocol/MmRelayNode.cs` (pool integration)
+- `dev/active/performance-optimization/performance-optimization-tasks.md`
+- `documentation/OVERVIEW.md` (new folder structure)
+- `dev/ASSETS_REORGANIZATION_PLAN.md` (marked complete)
 
 ---
 
-## DSL Integration
+## Known Issues / Blockers
 
-The Fluent DSL and performance optimizations are **synergistic**:
+1. **Unity Not Connected**: Could not verify compilation via MCP
+   - Changes should compile but need Unity verification
+   - Run tests: Window > General > Test Runner > PlayMode > Run All
 
-1. `MmFluentMessage` is already a **struct** (no heap allocation)
-2. DSL already uses **pooling** for predicates
-3. DSL provides **single integration point** (`Execute()`) for message pooling
-
-```csharp
-// Integration in MmFluentMessage.Execute():
-var message = MmMessagePool.Get(_method, _payload);  // Use pool
-_relay.MmInvoke(message, BuildMetadata());
-// Pool.Return() called automatically at end of routing
-```
+2. **Secondary Files Not Updated**: These still use `new MmMessage*`:
+   - `Protocol/DSL/MmMessageFactory.cs` (19 occurrences)
+   - `Protocol/DSL/MmRelayNodeExtensions.cs` (6 occurrences)
+   - `Protocol/DSL/MmTemporalExtensions.cs` (1 occurrence)
 
 ---
 
-## Networking Coordination
+## Next Steps (Priority Order)
 
-The networking task (`dev/active/networking/`) shares serialization paths:
+### Option A: Phase 3 - Serialize LINQ Removal (8-16h) - QUICK WIN
+- Remove `.Concat().ToArray()` pattern from all 13 message types
+- Use `Array.Copy()` with pre-sized arrays
+- Key files: `Protocol/Message/MmMessage*.cs`
+- Low risk, immediate impact on network serialization
 
-- **Phase 0B Complete:** MmBinarySerializer already implemented
-- **Coordination Point:** Phase 3 (Serialize() fix) affects both local and network paths
-- **Key File:** `Protocol/Network/MmBinarySerializer.cs`
+### Option B: Phase 2 - O(1) Routing Tables (20-30h)
+- Add Dictionary indices to MmRoutingTable
+- Replace `List.Find()` with dictionary lookup
+- Key file: `Protocol/MmRoutingTable.cs`
 
-Note: MmBinarySerializer uses different serialization (binary) than MmMessage.Serialize() (object[]). Phase 3 affects the legacy object[] serialization.
-
----
-
-## Assets Reorganization Coordination
-
-The assets reorganization plan (`dev/ASSETS_REORGANIZATION_PLAN.md`) includes Phase 3.5:
-
-**New folders for performance code:**
-```
-Assets/Framework/MercuryMessaging/Runtime/
-├── Protocol/
-│   └── Core/              # NEW: MmMessagePool, MmHashSetPool
-├── StandardLibrary/       # NEW: For DSL Phase 9-11
-│   ├── UI/
-│   └── Input/
-```
-
-**Recommendation:** Execute reorganization Phases 1-3.5 BEFORE implementing performance optimizations for clean paths.
+### Required Before Either:
+1. Open Unity and verify compilation
+2. Run existing tests to ensure no regressions
+3. Run performance benchmark to establish baseline
 
 ---
 
-## Benchmark References
+## Competitive Context
 
-### Unity Built-ins (Jackson Dunstan benchmarks)
-- C# Event: ~178 ticks (baseline)
-- UnityEvent: ~1,482 ticks (8x slower)
-- SendMessage: ~42,248 ticks (237x slower)
+Mercury is the ONLY framework with hierarchy-aware routing. Competitors (MessagePipe, R3, VitalRouter) focus on pub/sub but don't support scene-graph routing.
 
-### MessagePipe (Cysharp benchmarks)
-- 78x faster than Prism EventAggregator
-- Zero allocation per publish
-
-### Mercury (Current)
-- ~4,984 ticks (~28x slower than C# events)
-- 3-5 allocations per message
-
-### Mercury (Target after Phase 1-5)
-- ~1,000-1,500 ticks (~5-8x slower than C# events)
-- 0-1 allocations per message
-- FASTER than SendMessage by 2-5x
-
----
-
-## Research Opportunities
-
-The performance optimization work supports several research initiatives:
-
-| Initiative | Relevance | Publication Target |
-|------------|-----------|-------------------|
-| **User Study** | Validates usability + performance | CHI 2025 |
-| **Parallel Dispatch** | Builds on delegate-based dispatch | UIST 2025 |
-| **Visual Composer** | Performance is table stakes | UIST 2025 |
+Current benchmarks:
+- Mercury vs Direct Calls: 28x slower (target: ~3x after all phases)
+- Mercury vs SendMessage: 2.6x slower (competitive)
+- Mercury throughput: 98-980 msg/sec
 
 ---
 
 ## References
 
-### External
-- [MessagePipe GitHub](https://github.com/Cysharp/MessagePipe)
-- [R3 GitHub](https://github.com/Cysharp/R3)
-- [Unity ObjectPool API](https://docs.unity3d.com/ScriptReference/Pool.ObjectPool_1.html)
-- [Jackson Dunstan Event Benchmarks](https://www.jacksondunstan.com/articles/3335)
+### Internal:
+- `dev/active/networking/` - Network backend (Phase 0A/0B complete)
+- `dev/active/dsl-overhaul/` - DSL improvements
+- `dev/ASSETS_REORGANIZATION_PLAN.md` - Completed reorganization
 
-### Internal
-- `dev/active/networking/` - Network backend integration
-- `dev/active/dsl-overhaul/` - DSL Execute() integration
-- `dev/ASSETS_REORGANIZATION_PLAN.md` - Folder structure (Phase 3.5)
-- `Documentation/Performance/PERFORMANCE_REPORT.md` - Initial analysis
-- `Documentation/Performance/OPTIMIZATION_RESULTS.md` - QW-1 through QW-6 results
+### External:
+- [MessagePipe](https://github.com/Cysharp/MessagePipe) - Zero-alloc pub/sub
+- [Unity ObjectPool API](https://docs.unity3d.com/ScriptReference/Pool.ObjectPool_1.html)
 
 ---
 
 *Context document for performance optimization initiative*
-*Created: 2025-11-25*
+*Last Updated: 2025-11-25 (Evening Session)*

@@ -618,3 +618,201 @@ public class MmUIResponder : MmExtendableResponder
 **Last Updated:** 2025-11-25 (Session 5 final)
 **Branch:** user_study
 **Status:** Phases 1-10 complete, Phase 11 pending
+
+---
+
+## Session 6: Assets Reorganization + Performance Optimization Phase 1 ✅ COMPLETE
+
+### Session Summary
+**Focus:** Complete Assets Reorganization (7 phases), then Performance Optimization Phase 1 (ObjectPool Integration)
+**Outcome:** Assets reduced from 14 to 6 folders, ObjectPool integration complete for all 13 message types
+
+---
+
+### Part A: Assets Reorganization (All 7 Phases) ✅ COMPLETE
+
+**Commits:** c5969e0e through d84b7297
+
+**Before:** 14 top-level folders in Assets/
+**After:** 6 top-level folders:
+- `Framework/` - MercuryMessaging core (portable, zero dependencies)
+- `Platform/` - XR/VR configuration (consolidated from 4 locations)
+- `Plugins/` - Third-party dependencies
+- `Project/` - Project-specific code
+- `Research/` - User studies & experiments
+- `Unity/` - Unity-managed folders
+
+**Key Improvements:**
+- **57% folder reduction** (14 → 6 folders)
+- **~500MB build size reduction** - Controller art moved out of Resources folder
+- **Framework isolation** - MercuryMessaging now portable as a package
+- **XR consolidation** - 4 XR locations merged into Platform/XR/
+
+**Phase Breakdown:**
+| Phase | Description | Status |
+|-------|-------------|--------|
+| 1 | Critical Fixes (delete backups, move test results) | ✅ |
+| 2 | XR Consolidation (~494MB moved out of Resources) | ✅ |
+| 3 | Framework Isolation (MercuryMessaging → Framework/) | ✅ |
+| 3.5 | Performance-Optimized Structure (Core folder) | ✅ |
+| 4 | Project Reorganization (_Project → Project/) | ✅ |
+| 5 | Research & Plugins organization | ✅ |
+| 6 | Unity-Managed Consolidation | ✅ |
+| 7 | Documentation & Cleanup | ✅ |
+
+---
+
+### Part B: Performance Optimization Phase 1 (ObjectPool Integration) ✅ COMPLETE
+
+**Commits:** 902eab91, 2b2bc324
+
+**Goal:** Reduce per-message allocations by 80-90% using Unity's built-in ObjectPool<T>
+
+#### Files Created
+
+| File | Purpose |
+|------|---------|
+| `Protocol/Core/MmMessagePool.cs` | 13 type-safe message pools with getters and Return() |
+| `Protocol/Core/MmHashSetPool.cs` | Pool for VisitedNodes HashSet<int> in cycle detection |
+| `Tests/MmMessagePoolTests.cs` | 20+ unit tests for pool operations |
+
+#### Files Modified
+
+| File | Change |
+|------|--------|
+| `Protocol/Message/MmMessage.cs` | Added `internal bool _isPooled` flag (line ~102) |
+| `Protocol/MmRelayNode.cs` | All 13 typed MmInvoke overloads now use pools |
+
+#### Key Implementation Details
+
+**MmMessagePool Pattern:**
+```csharp
+// Type-safe getter with reset on acquire
+public static MmMessageInt GetInt(int value, MmMethod method, MmMetadataBlock metadataBlock)
+{
+    var msg = _intPool.Get();
+    msg.value = value;
+    msg.MmMethod = method;
+    // ... setup
+    return msg;
+}
+
+// Return with type routing
+public static void Return(MmMessage message)
+{
+    switch (message.MmMessageType)
+    {
+        case MmMessageType.MmInt: _intPool.Release((MmMessageInt)message); break;
+        // ... 12 more types
+    }
+}
+```
+
+**MmRelayNode Integration:**
+```csharp
+// All 13 typed MmInvoke overloads updated (lines 799-1012)
+public virtual void MmInvoke(MmMethod mmMethod, int param, MmMetadataBlock metadataBlock = null)
+{
+    MmMessage msg = MmMessagePool.GetInt(param, mmMethod, metadataBlock);
+    MmInvoke(msg);
+    MmMessagePool.Return(msg);  // Return immediately after routing complete
+}
+```
+
+**Pool Configuration:**
+- Message pools: default 50, max 500 per type
+- HashSet pools: default 100, max 1000
+- Auto-reset on Get() (clears HopCount, VisitedNodes, NetId, _isPooled)
+
+#### Key Decisions Made
+
+1. **Return Strategy:** Messages returned immediately after typed MmInvoke completes
+   - Simple and safe - no depth tracking needed
+   - Works because typed overloads are entry points
+
+2. **_isPooled Flag:** Added to MmMessage for future validation
+   - Currently set by pool but not checked on return
+   - Can be used for conditional return or validation later
+
+3. **DSL Integration:** Automatic - MmFluentMessage delegates to MmRelayNode.MmInvoke
+   - No changes needed in DSL code
+   - Pool integration inherited through typed overloads
+
+4. **Secondary Files Deferred:** Lower priority (not in hot path)
+   - MmMessageFactory.cs (19 occurrences still use `new`)
+   - MmRelayNodeExtensions.cs (6 occurrences)
+   - MmTemporalExtensions.cs (1 occurrence)
+
+---
+
+### Known Issues / Blockers
+
+1. **Unity Not Connected:** Changes should compile but need Unity verification
+   - Run: Window > General > Test Runner > PlayMode > Run All
+
+2. **Secondary Files Not Updated:** Still use `new MmMessage*`:
+   - `Protocol/DSL/MmMessageFactory.cs` (19 occurrences)
+   - `Protocol/DSL/MmRelayNodeExtensions.cs` (6 occurrences)
+   - `Protocol/DSL/MmTemporalExtensions.cs` (1 occurrence)
+
+---
+
+### Next Steps (Priority Order)
+
+**Option A: Phase 3 - Serialize LINQ Removal (8-16h) - QUICK WIN**
+- Remove `.Concat().ToArray()` pattern from all 13 message types
+- Use `Array.Copy()` with pre-sized arrays
+- Key files: `Protocol/Message/MmMessage*.cs`
+- Low risk, immediate impact on network serialization
+
+**Option B: Phase 2 - O(1) Routing Tables (20-30h)**
+- Add Dictionary indices to MmRoutingTable
+- Replace `List.Find()` with dictionary lookup
+- Key file: `Protocol/MmRoutingTable.cs`
+
+**Required Before Either:**
+1. Open Unity and verify compilation
+2. Run existing tests to ensure no regressions
+3. Run performance benchmark to establish baseline
+
+---
+
+### Performance Context (Reference)
+
+**Current Benchmarks (from PERFORMANCE_REPORT.md):**
+- Frame time: 15-19ms (53-66 FPS with PerformanceMode)
+- Memory: Bounded (QW-4 CircularBuffer validated)
+- Mercury vs Direct Calls: 28x slower (acceptable for decoupling)
+- Mercury vs SendMessage: 2.6x slower (competitive)
+
+**Expected Impact from Phase 1:**
+- 80-90% reduction in per-message allocations
+- Reduced GC pressure in high-throughput scenarios
+- Better frame time consistency
+
+---
+
+### Commands for Next Session
+
+```bash
+# Verify compilation in Unity
+# Open Unity Editor, check Console for errors
+
+# Run tests
+Unity > Window > General > Test Runner > PlayMode > Run All
+
+# Check git status
+git status
+
+# If implementing Phase 3 (LINQ removal):
+# 1. Read MmMessage.cs Serialize() method
+# 2. Update to use Array.Copy() pattern
+# 3. Repeat for all 13 MmMessage*.cs files
+```
+
+---
+
+**Last Updated:** 2025-11-25 (Session 6 - Evening)
+**Branch:** user_study
+**Latest Commits:** Assets reorg (c5969e0e-d84b7297), ObjectPool (902eab91, 2b2bc324)
+**Status:** Assets Reorganization ✅, Performance Phase 1 ✅, Phase 2/3 pending
