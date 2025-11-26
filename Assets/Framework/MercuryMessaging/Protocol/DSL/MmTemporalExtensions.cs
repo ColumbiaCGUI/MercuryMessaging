@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using MercuryMessaging.Protocol.Core;
 using UnityEngine;
 
 namespace MercuryMessaging.Protocol.DSL
@@ -332,14 +333,10 @@ namespace MercuryMessaging.Protocol.DSL
                 tcs.TrySetCanceled();
             });
 
-            // Send the query
-            var queryMessage = new MmMessageInt
-            {
-                MmMethod = method,
-                value = queryId,
-                MetadataBlock = metadata
-            };
+            // Send the query (using pool for efficiency)
+            var queryMessage = MmMessagePool.GetInt(queryId, method, metadata);
             relay.MmInvoke(queryMessage);
+            MmMessagePool.Return(queryMessage);
 
             try
             {
