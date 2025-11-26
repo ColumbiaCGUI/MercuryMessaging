@@ -562,10 +562,10 @@ namespace MercuryMessaging
             {
                 int nodeInstanceId = gameObject.GetInstanceID();
 
-                // Initialize visited nodes set if not already done
+                // Initialize visited nodes set if not already done (use pool for performance)
                 if (message.VisitedNodes == null)
                 {
-                    message.VisitedNodes = new System.Collections.Generic.HashSet<int>();
+                    message.VisitedNodes = MmHashSetPool.Get();
                 }
 
                 // Check if we've already visited this node (circular path detected)
@@ -799,8 +799,9 @@ namespace MercuryMessaging
         public virtual void MmInvoke(MmMethod mmMethod,
 			MmMetadataBlock metadataBlock = null)
         {
-			MmMessage msg = new MmMessage (mmMethod, MmMessageType.MmVoid, metadataBlock);
+			MmMessage msg = MmMessagePool.Get(mmMethod, metadataBlock);
             MmInvoke(msg);
+            MmMessagePool.Return(msg);
         }
 
         /// Invoke a general MmMethod with parameter: MmMessage. 
@@ -827,12 +828,13 @@ namespace MercuryMessaging
         /// <param name="param">MmMethod parameter: bool.</param>
         /// <param name="metadataBlock">Object defining the routing of 
         /// Mmessages through MercuryMessaging Hierarchies. <see cref="MmMetadataBlock"/></param>
-        public virtual void MmInvoke(MmMethod mmMethod, 
+        public virtual void MmInvoke(MmMethod mmMethod,
             bool param,
             MmMetadataBlock metadataBlock = null)
         {
-			MmMessage msg = new MmMessageBool (param, mmMethod, metadataBlock);
+			MmMessage msg = MmMessagePool.GetBool(param, mmMethod, metadataBlock);
             MmInvoke(msg);
+            MmMessagePool.Return(msg);
         }
 
         /// <summary>
@@ -842,12 +844,13 @@ namespace MercuryMessaging
         /// <param name="param">MmMethod parameter: int.</param>
         /// <param name="metadataBlock">Object defining the routing of 
         /// Mmessages through MercuryMessaging Hierarchies. <see cref="MmMetadataBlock"/></param>
-        public virtual void MmInvoke(MmMethod mmMethod, 
+        public virtual void MmInvoke(MmMethod mmMethod,
             int param,
             MmMetadataBlock metadataBlock = null)
         {
-			MmMessage msg = new MmMessageInt(param, mmMethod, metadataBlock);
+			MmMessage msg = MmMessagePool.GetInt(param, mmMethod, metadataBlock);
             MmInvoke(msg);
+            MmMessagePool.Return(msg);
         }
 
         /// <summary>
@@ -857,12 +860,13 @@ namespace MercuryMessaging
         /// <param name="param">MmMethod parameter: float.</param>
         /// <param name="metadataBlock">Object defining the routing of 
         /// Mmessages through MercuryMessaging Hierarchies. <see cref="MmMetadataBlock"/></param>
-        public virtual void MmInvoke(MmMethod mmMethod, 
+        public virtual void MmInvoke(MmMethod mmMethod,
             float param,
             MmMetadataBlock metadataBlock = null)
         {
-			MmMessage msg = new MmMessageFloat(param, mmMethod, metadataBlock);
+			MmMessage msg = MmMessagePool.GetFloat(param, mmMethod, metadataBlock);
             MmInvoke(msg);
+            MmMessagePool.Return(msg);
         }
 
         /// <summary>
@@ -872,12 +876,13 @@ namespace MercuryMessaging
         /// <param name="param">MmMethod parameter: Vector3.</param>
         /// <param name="metadataBlock">Object defining the routing of 
         /// Mmessages through MercuryMessaging Hierarchies. <see cref="MmMetadataBlock"/></param>
-        public virtual void MmInvoke(MmMethod mmMethod, 
+        public virtual void MmInvoke(MmMethod mmMethod,
 			Vector3 param,
             MmMetadataBlock metadataBlock = null)
         {
-			MmMessage msg = new MmMessageVector3(param, mmMethod, metadataBlock);
+			MmMessage msg = MmMessagePool.GetVector3(param, mmMethod, metadataBlock);
             MmInvoke(msg);
+            MmMessagePool.Return(msg);
 		}
 
         /// <summary>
@@ -887,12 +892,13 @@ namespace MercuryMessaging
         /// <param name="param">MmMethod parameter: Vector4.</param>
         /// <param name="metadataBlock">Object defining the routing of 
         /// Mmessages through MercuryMessaging Hierarchies. <see cref="MmMetadataBlock"/></param>
-        public virtual void MmInvoke(MmMethod mmMethod, 
+        public virtual void MmInvoke(MmMethod mmMethod,
 			Vector4 param,
             MmMetadataBlock metadataBlock = null)
         {
-			MmMessage msg = new MmMessageVector4(param, mmMethod, metadataBlock);
+			MmMessage msg = MmMessagePool.GetVector4(param, mmMethod, metadataBlock);
             MmInvoke(msg);
+            MmMessagePool.Return(msg);
 		}
 
         /// <summary>
@@ -902,12 +908,13 @@ namespace MercuryMessaging
         /// <param name="param">MmMethod parameter: string.</param>
         /// <param name="metadataBlock">Object defining the routing of 
         /// Mmessages through MercuryMessaging Hierarchies. <see cref="MmMetadataBlock"/></param>
-        public virtual void MmInvoke(MmMethod mmMethod, 
+        public virtual void MmInvoke(MmMethod mmMethod,
 			string param,
             MmMetadataBlock metadataBlock = null)
         {
-			MmMessage msg = new MmMessageString(param, mmMethod, metadataBlock);
+			MmMessage msg = MmMessagePool.GetString(param, mmMethod, metadataBlock);
             MmInvoke(msg);
+            MmMessagePool.Return(msg);
 		}
 
         /// <summary>
@@ -917,12 +924,13 @@ namespace MercuryMessaging
         /// <param name="param">MmMethod parameter: byte array.</param>
         /// <param name="metadataBlock">Object defining the routing of 
         /// Mmessages through MercuryMessaging Hierarchies. <see cref="MmMetadataBlock"/></param>
-        public virtual void MmInvoke(MmMethod mmMethod, 
+        public virtual void MmInvoke(MmMethod mmMethod,
 			byte[] param,
             MmMetadataBlock metadataBlock = null)
         {
-			MmMessage msg = new MmMessageByteArray(param, mmMethod, metadataBlock);
+			MmMessage msg = MmMessagePool.GetByteArray(param, mmMethod, metadataBlock);
             MmInvoke(msg);
+            MmMessagePool.Return(msg);
 		}
 
         /// <summary>
@@ -932,12 +940,13 @@ namespace MercuryMessaging
         /// <param name="param">MmMethod parameter: MmTransform. <see cref="MmTransform"/></param>
         /// <param name="metadataBlock">Object defining the routing of 
         /// Mmessages through MercuryMessaging Hierarchies. <see cref="MmMetadataBlock"/></param>
-        public virtual void MmInvoke(MmMethod mmMethod, 
+        public virtual void MmInvoke(MmMethod mmMethod,
 			MmTransform param,
 			MmMetadataBlock metadataBlock = null)
 		{
-			MmMessage msg = new MmMessageTransform(param, mmMethod, metadataBlock);
+			MmMessage msg = MmMessagePool.GetTransform(param, mmMethod, metadataBlock);
 			MmInvoke(msg);
+			MmMessagePool.Return(msg);
 		}
 
         /// <summary>
@@ -947,12 +956,13 @@ namespace MercuryMessaging
         /// <param name="param">MmMethod parameter: List<MmTransform>.</param>
         /// <param name="metadataBlock">Object defining the routing of 
         /// Mmessages through MercuryMessaging Hierarchies. <see cref="MmMetadataBlock"/></param>
-        public virtual void MmInvoke(MmMethod mmMethod, 
+        public virtual void MmInvoke(MmMethod mmMethod,
 			List<MmTransform> param,
 			MmMetadataBlock metadataBlock = null)
 		{
-			MmMessage msg = new MmMessageTransformList(param, mmMethod, metadataBlock);
+			MmMessage msg = MmMessagePool.GetTransformList(param, mmMethod, metadataBlock);
 			MmInvoke(msg);
+			MmMessagePool.Return(msg);
 		}
 
         /// <summary>
@@ -966,8 +976,9 @@ namespace MercuryMessaging
             IMmSerializable param,
             MmMetadataBlock metadataBlock = null)
         {
-            MmMessage msg = new MmMessageSerializable(param, mmMethod, metadataBlock);
+            MmMessage msg = MmMessagePool.GetSerializable(param, mmMethod, metadataBlock);
             MmInvoke(msg);
+            MmMessagePool.Return(msg);
         }
 
         /// Invoke an MmMethod with parameter: GameObject. 
@@ -980,8 +991,9 @@ namespace MercuryMessaging
             GameObject param,
             MmMetadataBlock metadataBlock = null)
         {
-            MmMessage msg = new MmMessageGameObject(param, mmMethod, metadataBlock);
+            MmMessage msg = MmMessagePool.GetGameObject(param, mmMethod, metadataBlock);
             MmInvoke(msg);
+            MmMessagePool.Return(msg);
         }
 
         /// <summary>
@@ -995,8 +1007,9 @@ namespace MercuryMessaging
             Quaternion param,
             MmMetadataBlock metadataBlock = null)
         {
-            MmMessage msg = new MmMessageQuaternion(param, mmMethod, metadataBlock);
+            MmMessage msg = MmMessagePool.GetQuaternion(param, mmMethod, metadataBlock);
             MmInvoke(msg);
+            MmMessagePool.Return(msg);
         }
 
         /// <summary>
