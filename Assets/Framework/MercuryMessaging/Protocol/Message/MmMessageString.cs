@@ -31,7 +31,7 @@
 // =============================================================
 //  
 //  
-using System.Linq;
+using System;
 
 namespace MercuryMessaging
 {
@@ -112,9 +112,17 @@ namespace MercuryMessaging
         public override object[] Serialize()
         {
             object[] baseSerialized = base.Serialize();
-            object[] thisSerialized = new object[] { value };
-            object[] combinedSerialized = baseSerialized.Concat(thisSerialized).ToArray();
-            return combinedSerialized;
+
+            // Pre-allocate combined array: base + 1 payload
+            object[] result = new object[baseSerialized.Length + 1];
+
+            // Copy base data using Array.Copy (no LINQ)
+            Array.Copy(baseSerialized, 0, result, 0, baseSerialized.Length);
+
+            // Fill payload directly
+            result[baseSerialized.Length] = value;
+
+            return result;
         }
     }
 }

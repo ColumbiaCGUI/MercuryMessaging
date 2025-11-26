@@ -30,6 +30,7 @@
 // Carmine Elvezio, Mengu Sukan, Samuel Silverman, Steven Feiner
 // =============================================================
 
+using MercuryMessaging.Task;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -213,7 +214,7 @@ namespace MercuryMessaging
         private static void ResetMessage(MmMessage msg)
         {
             msg.MmMethod = default;
-            msg.MetadataBlock = MmMetadataBlock.Default;
+            msg.MetadataBlock = new MmMetadataBlock();
             msg.NetId = 0;
             msg.root = true;
             msg.TimeStamp = null;
@@ -363,7 +364,7 @@ namespace MercuryMessaging
         public static MmMessageTransformList GetTransformList(System.Collections.Generic.List<MmTransform> value, MmMethod method = MmMethod.MessageTransformList, MmMetadataBlock metadataBlock = null)
         {
             var msg = _transformListPool.Get();
-            msg.MmTransformList = value;
+            msg.transforms = value;
             msg.MmMethod = method;
             msg.MmMessageType = MmMessageType.MmTransformList;
             if (metadataBlock != null)
@@ -405,7 +406,7 @@ namespace MercuryMessaging
         public static MmMessageGameObject GetGameObject(GameObject value, MmMethod method = MmMethod.MessageGameObject, MmMetadataBlock metadataBlock = null)
         {
             var msg = _gameObjectPool.Get();
-            msg.value = value;
+            msg.Value = value;
             msg.MmMethod = method;
             msg.MmMessageType = MmMessageType.MmGameObject;
             if (metadataBlock != null)

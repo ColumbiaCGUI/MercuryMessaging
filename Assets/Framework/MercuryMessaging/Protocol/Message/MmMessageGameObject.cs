@@ -31,8 +31,8 @@
 // =============================================================
 // 
 // 
+using System;
 using UnityEngine;
-using System.Linq;
 #if PHOTON_AVAILABLE
 using Photon.Pun;
 #endif
@@ -142,25 +142,37 @@ namespace MercuryMessaging
         public override object[] Serialize()
         {
             object[] baseSerialized = base.Serialize();
-            object[] thisSerialized; 
 
             #if PHOTON_AVAILABLE
+            // With Photon: base + 2 (bool + id)
+            object[] result = new object[baseSerialized.Length + 2];
+
+            // Copy base data using Array.Copy (no LINQ)
+            Array.Copy(baseSerialized, 0, result, 0, baseSerialized.Length);
+
             if (Value.GetComponent<PhotonView>() != null)
             {
                 PhotonView photonView = Value.GetComponent<PhotonView>();
-                thisSerialized = new object[] { true, photonView.ViewID };
+                result[baseSerialized.Length] = true;
+                result[baseSerialized.Length + 1] = photonView.ViewID;
             }
-            else 
+            else
             {
-                thisSerialized = new object[] { false, Value.GetInstanceID() };
+                result[baseSerialized.Length] = false;
+                result[baseSerialized.Length + 1] = Value.GetInstanceID();
             }
             #else
-            thisSerialized = new object[] { Value.GetInstanceID() };
+            // Without Photon: base + 1 (id only)
+            object[] result = new object[baseSerialized.Length + 1];
+
+            // Copy base data using Array.Copy (no LINQ)
+            Array.Copy(baseSerialized, 0, result, 0, baseSerialized.Length);
+
+            // Fill instance ID directly
+            result[baseSerialized.Length] = Value.GetInstanceID();
             #endif
 
-            
-            object[] combinedSerialized = baseSerialized.Concat(thisSerialized).ToArray();
-            return combinedSerialized;
+            return result;
         }
 	}
 }

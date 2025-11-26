@@ -31,8 +31,8 @@
 // =============================================================
 //  
 //  
+using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace MercuryMessaging
 {
@@ -122,16 +122,38 @@ namespace MercuryMessaging
         /// Serialize the MmMessageTransformList
         /// </summary>
         /// <returns>Object array representation of a MmMessageTransformList</returns>
+        /// <remarks>
+        /// Optimized from O(n²) to O(n) by pre-allocating exact size instead of
+        /// repeatedly calling Concat().ToArray() in a loop.
+        /// MmTransform.Serialize() returns 6 elements per transform.
+        /// </remarks>
         public override object[] Serialize()
         {
             object[] baseSerialized = base.Serialize();
-            object[] thisSerialized = new object[] { transforms.Count };
+
+            // MmTransform serializes to 6 elements: Translation(1) + Rotation(4) + Scale(1)
+            const int TRANSFORM_SIZE = 6;
+
+            // Pre-allocate combined array: base + 1 (count) + transforms * TRANSFORM_SIZE
+            // This fixes O(n²) complexity from the foreach + Concat pattern
+            object[] result = new object[baseSerialized.Length + 1 + transforms.Count * TRANSFORM_SIZE];
+
+            // Copy base data using Array.Copy (no LINQ)
+            Array.Copy(baseSerialized, 0, result, 0, baseSerialized.Length);
+
+            // Fill count
+            result[baseSerialized.Length] = transforms.Count;
+
+            // Fill transforms directly (no loop concatenation)
+            int idx = baseSerialized.Length + 1;
             foreach (MmTransform transform in transforms)
             {
-                thisSerialized = thisSerialized.Concat(transform.Serialize()).ToArray();
+                object[] transformSerialized = transform.Serialize();
+                Array.Copy(transformSerialized, 0, result, idx, transformSerialized.Length);
+                idx += transformSerialized.Length;
             }
-            object[] combinedSerialized = baseSerialized.Concat(thisSerialized).ToArray();
-            return combinedSerialized;
+
+            return result;
         }
 	}
 }
