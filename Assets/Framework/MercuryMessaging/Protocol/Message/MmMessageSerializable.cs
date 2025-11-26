@@ -32,7 +32,6 @@
 //  
 //  
 using System;
-using System.Linq;
 using MercuryMessaging.Task;
 using UnityEngine;
 
@@ -127,10 +126,21 @@ namespace MercuryMessaging
         public override object[] Serialize()
         {
             object[] baseSerialized = base.Serialize();
-            object[] thisSerialized = new object[] { value.GetType().ToString() };
-            thisSerialized = thisSerialized.Concat(value.Serialize()).ToArray();
-            object[] combinedSerialized = baseSerialized.Concat(thisSerialized).ToArray();
-            return combinedSerialized;
+            object[] valueSerialized = value.Serialize();
+
+            // Pre-allocate combined array: base + 1 (type name) + value serialized length
+            object[] result = new object[baseSerialized.Length + 1 + valueSerialized.Length];
+
+            // Copy base data using Array.Copy (no LINQ)
+            Array.Copy(baseSerialized, 0, result, 0, baseSerialized.Length);
+
+            // Fill type name
+            result[baseSerialized.Length] = value.GetType().ToString();
+
+            // Copy value serialized data
+            Array.Copy(valueSerialized, 0, result, baseSerialized.Length + 1, valueSerialized.Length);
+
+            return result;
         }
     }
 }

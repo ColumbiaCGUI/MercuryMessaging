@@ -31,7 +31,7 @@
 // =============================================================
 //  
 //
-using System.Linq;
+using System;
 
 namespace MercuryMessaging
 {
@@ -225,17 +225,32 @@ namespace MercuryMessaging
         }
 
         /// <summary>
+        /// Number of elements serialized by the base MmMessage class.
+        /// Used by derived classes for efficient array pre-allocation.
+        /// Base: 3 (MmMethod, MmMessageType, NetId) + Metadata: 5 = 8 total
+        /// </summary>
+        public const int BASE_SERIALIZED_SIZE = 8;
+
+        /// <summary>
         /// Serialize the MmMessage
         /// </summary>
         /// <returns>Object array representation of a MmMessage</returns>
         public virtual object[] Serialize()
         {
-            object[] thisSerialized = new object[] { 
-                (short)MmMethod, 
-                (short)MmMessageType,
-                (int)NetId};
-            thisSerialized = thisSerialized.Concat(MetadataBlock.Serialize()).ToArray();
-            return thisSerialized;
+            object[] metadataSerialized = MetadataBlock.Serialize();
+
+            // Pre-allocate combined array: 3 base + metadata length
+            object[] result = new object[3 + metadataSerialized.Length];
+
+            // Fill base data directly
+            result[0] = (short)MmMethod;
+            result[1] = (short)MmMessageType;
+            result[2] = (int)NetId;
+
+            // Copy metadata using Array.Copy (no LINQ)
+            Array.Copy(metadataSerialized, 0, result, 3, metadataSerialized.Length);
+
+            return result;
         }
     }
 }

@@ -816,3 +816,171 @@ git status
 **Branch:** user_study
 **Latest Commits:** Assets reorg (c5969e0e-d84b7297), ObjectPool (902eab91, 2b2bc324)
 **Status:** Assets Reorganization ✅, Performance Phase 1 ✅, Phase 2/3 pending
+
+---
+
+## Session 7: Performance Phase 3 - LINQ Removal ✅ COMPLETE
+
+### Session Summary
+**Focus:** Remove `.Concat().ToArray()` LINQ pattern from all message Serialize() methods
+**Outcome:** All 13 message types optimized, O(n²) → O(n) for variable-length messages
+
+---
+
+### ✅ Completed This Session
+
+#### 1. LINQ Removal from 13 Message Types
+
+**Pattern Replaced:**
+```csharp
+// BEFORE (creates 4 allocations: concat iterator, intermediate array, result)
+public override object[] Serialize()
+{
+    object[] baseSerialized = base.Serialize();
+    object[] thisSerialized = new object[] { value };
+    object[] combinedSerialized = baseSerialized.Concat(thisSerialized).ToArray();
+    return combinedSerialized;
+}
+
+// AFTER (creates 1 allocation: pre-sized result array)
+public override object[] Serialize()
+{
+    object[] baseSerialized = base.Serialize();
+    object[] result = new object[baseSerialized.Length + 1];
+    Array.Copy(baseSerialized, 0, result, 0, baseSerialized.Length);
+    result[baseSerialized.Length] = value;
+    return result;
+}
+```
+
+**Files Modified:**
+
+| File | Change | Complexity Fix |
+|------|--------|----------------|
+| `MmMessage.cs` | Base class, added `BASE_SERIALIZED_SIZE` constant | - |
+| `MmMessageBool.cs` | Replaced Concat().ToArray() with Array.Copy() | O(1) |
+| `MmMessageInt.cs` | Replaced Concat().ToArray() with Array.Copy() | O(1) |
+| `MmMessageFloat.cs` | Replaced Concat().ToArray() with Array.Copy() | O(1) |
+| `MmMessageString.cs` | Replaced Concat().ToArray() with Array.Copy() | O(1) |
+| `MmMessageVector3.cs` | Replaced Concat().ToArray() with Array.Copy() | O(1) |
+| `MmMessageVector4.cs` | Replaced Concat().ToArray() with Array.Copy() | O(1) |
+| `MmMessageQuaternion.cs` | Replaced Concat().ToArray() with Array.Copy() | O(1) |
+| `MmMessageTransform.cs` | Replaced 2x Concat().ToArray() with Array.Copy() | O(1) |
+| `MmMessageGameObject.cs` | Replaced Concat().ToArray() with conditional sizing | O(1) |
+| `MmMessageByteArray.cs` | **CRITICAL FIX** - foreach loop O(n²) → O(n) | **O(n²) → O(n)** |
+| `MmMessageTransformList.cs` | **CRITICAL FIX** - foreach loop O(n²) → O(n) | **O(n²) → O(n)** |
+| `MmMessageSerializable.cs` | Replaced 2x Concat().ToArray() with Array.Copy() | O(1) |
+
+#### 2. Removed `using System.Linq` from All Message Files
+
+All 13 message files now use `using System` instead of `using System.Linq`, eliminating LINQ dependency in the hot serialization path.
+
+#### 3. Fixed Pre-existing Bugs in MmMessagePool.cs
+
+| Line | Bug | Fix |
+|------|-----|-----|
+| 217 | `MmMetadataBlock.Default` doesn't exist | `new MmMetadataBlock()` |
+| 367 | `msg.MmTransformList` wrong property | `msg.transforms` |
+| 409 | `msg.value` wrong casing | `msg.Value` |
+| 33 | Missing `using MercuryMessaging.Task;` | Added import |
+
+---
+
+### Key Technical Insights
+
+**Why `.Concat().ToArray()` Was Bad:**
+1. Creates LINQ iterator (1 allocation)
+2. Creates intermediate enumerable
+3. `.ToArray()` walks iterator, allocates array
+4. For loops: Creates NEW array each iteration = O(n²)
+
+**Why `Array.Copy()` Is Better:**
+1. Pre-allocate exact size (1 allocation)
+2. Native memory copy (optimized by runtime)
+3. No iterator overhead
+4. Fixed O(n) for variable-length data
+
+**Most Critical Fixes (O(n²) → O(n)):**
+
+```csharp
+// MmMessageByteArray BEFORE (O(n²) - extremely bad for large arrays!)
+foreach (byte b in byteArr)
+{
+    thisSerialized = thisSerialized.Concat(new object[] { b }).ToArray(); // NEW ARRAY EACH ITERATION!
+}
+
+// MmMessageByteArray AFTER (O(n))
+object[] result = new object[baseSerialized.Length + 1 + byteArr.Length];
+Array.Copy(baseSerialized, 0, result, 0, baseSerialized.Length);
+result[baseSerialized.Length] = byteArr.Length;
+for (int i = 0; i < byteArr.Length; i++)
+{
+    result[baseSerialized.Length + 1 + i] = byteArr[i];
+}
+```
+
+---
+
+### Expected Performance Impact
+
+**Allocation Reduction:**
+- Simple messages: 75% fewer allocations (4 → 1)
+- Transform messages: 83% fewer allocations (6 → 1)
+- ByteArray/TransformList: **Quadratic → Linear time complexity**
+
+**Serialization Speedup:**
+- Simple messages: ~30-50% faster (no LINQ overhead)
+- Variable-length messages: **Orders of magnitude faster for large payloads**
+
+---
+
+### Validation Status
+
+| Check | Status |
+|-------|--------|
+| All files compile | ✅ Verified via Unity console |
+| `using System.Linq` removed | ✅ 13/13 files |
+| Pre-existing bugs fixed | ✅ MmMessagePool.cs |
+| XR warnings only | ✅ No new errors |
+
+---
+
+### Files Summary
+
+**Message Files Modified (13):**
+- `Assets/Framework/MercuryMessaging/Protocol/Message/MmMessage.cs`
+- `Assets/Framework/MercuryMessaging/Protocol/Message/MmMessageBool.cs`
+- `Assets/Framework/MercuryMessaging/Protocol/Message/MmMessageInt.cs`
+- `Assets/Framework/MercuryMessaging/Protocol/Message/MmMessageFloat.cs`
+- `Assets/Framework/MercuryMessaging/Protocol/Message/MmMessageString.cs`
+- `Assets/Framework/MercuryMessaging/Protocol/Message/MmMessageVector3.cs`
+- `Assets/Framework/MercuryMessaging/Protocol/Message/MmMessageVector4.cs`
+- `Assets/Framework/MercuryMessaging/Protocol/Message/MmMessageQuaternion.cs`
+- `Assets/Framework/MercuryMessaging/Protocol/Message/MmMessageTransform.cs`
+- `Assets/Framework/MercuryMessaging/Protocol/Message/MmMessageGameObject.cs`
+- `Assets/Framework/MercuryMessaging/Protocol/Message/MmMessageByteArray.cs`
+- `Assets/Framework/MercuryMessaging/Protocol/Message/MmMessageTransformList.cs`
+- `Assets/Framework/MercuryMessaging/Protocol/Message/MmMessageSerializable.cs`
+
+**Supporting Files Modified (1):**
+- `Assets/Framework/MercuryMessaging/Protocol/Core/MmMessagePool.cs` (bug fixes)
+
+---
+
+### Next Steps
+
+**Option A: Phase 2 - O(1) Routing Tables (20-30h)**
+- Add Dictionary indices to MmRoutingTable
+- Replace `List.Find()` with dictionary lookup
+- Key file: `Protocol/MmRoutingTable.cs`
+
+**Option B: Commit and Test**
+- Commit Phase 3 changes
+- Run full PlayMode test suite
+- Verify serialization still works correctly
+
+---
+
+**Last Updated:** 2025-11-26 (Session 7)
+**Branch:** user_study
+**Status:** Performance Phase 3 ✅ COMPLETE (LINQ removal from all 13 message types)
