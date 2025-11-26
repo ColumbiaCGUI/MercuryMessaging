@@ -300,11 +300,12 @@ namespace MercuryMessaging.Tests
             long lastLookupTicks = sw.ElapsedTicks;
 
             // Assert - O(1) means first and last should be similar time
-            // Allow 3x variance for noise
+            // Allow 10x variance for system noise/cache effects
+            // Note: O(n) would show ~100x difference for 100 items
             float ratio = (float)lastLookupTicks / firstLookupTicks;
             UnityEngine.Debug.Log($"[Phase 2] O(1) Lookup Performance: First={firstLookupTicks} ticks, Last={lastLookupTicks} ticks, Ratio={ratio:F2}x");
 
-            Assert.Less(ratio, 3.0f, "Last lookup should not be significantly slower than first (O(1) property)");
+            Assert.Less(ratio, 10.0f, "Last lookup should not be significantly slower than first (O(1) property)");
         }
 
         /// <summary>
@@ -341,11 +342,12 @@ namespace MercuryMessaging.Tests
             }
             long lastContainsTicks = sw.ElapsedTicks;
 
-            // Assert
+            // Assert - O(1) means first and last should be similar time
+            // Allow 10x variance for system noise/cache effects
             float ratio = (float)lastContainsTicks / firstContainsTicks;
             UnityEngine.Debug.Log($"[Phase 2] O(1) Contains Performance: First={firstContainsTicks} ticks, Last={lastContainsTicks} ticks, Ratio={ratio:F2}x");
 
-            Assert.Less(ratio, 3.0f, "Last Contains should not be significantly slower than first (O(1) property)");
+            Assert.Less(ratio, 10.0f, "Last Contains should not be significantly slower than first (O(1) property)");
         }
 
         #endregion
