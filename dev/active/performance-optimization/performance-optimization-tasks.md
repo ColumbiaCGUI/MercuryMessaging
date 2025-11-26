@@ -5,20 +5,20 @@
 
 ---
 
-## Phase 1: ObjectPool Integration (40-60h) ⬜ NOT STARTED
+## Phase 1: ObjectPool Integration (40-60h) 🔄 IN PROGRESS
 
-### Task 1.1: Create MmMessagePool (16h) [ ]
-- [ ] Create `Protocol/MmMessagePool.cs`
-- [ ] Implement `ObjectPool<T>` for each of 13 message types
-- [ ] Add typed getters: `GetInt()`, `GetString()`, `GetBool()`, etc.
-- [ ] Add `Return(MmMessage)` with type switch
-- [ ] Configure pool sizes (default: 50, max: 500)
+### Task 1.1: Create MmMessagePool (16h) [x] COMPLETE
+- [x] Create `Protocol/Core/MmMessagePool.cs`
+- [x] Implement `ObjectPool<T>` for each of 13 message types
+- [x] Add typed getters: `GetInt()`, `GetString()`, `GetBool()`, etc.
+- [x] Add `Return(MmMessage)` with type switch
+- [x] Configure pool sizes (default: 50, max: 500)
 
-### Task 1.2: Create MmHashSetPool (4h) [ ]
-- [ ] Create `Protocol/MmHashSetPool.cs`
-- [ ] Pool `HashSet<int>` for VisitedNodes
-- [ ] Add `Get()` and `Return()` methods
-- [ ] Add `Clear()` on get
+### Task 1.2: Create MmHashSetPool (4h) [x] COMPLETE
+- [x] Create `Protocol/Core/MmHashSetPool.cs`
+- [x] Pool `HashSet<int>` for VisitedNodes
+- [x] Add `Get()` and `Return()` methods
+- [x] Add `Clear()` on get
 
 ### Task 1.3: Integrate with MmRelayNode (16h) [ ]
 - [ ] Modify `MmInvoke()` to use pooled messages

@@ -1859,7 +1859,7 @@ MonoBehaviour:
 
         =================================================================
 
-        
+
 
 '
       stacktrace: 
@@ -1904,7 +1904,7 @@ MonoBehaviour:
 
         =================================================================
 
-        
+
 
 '
       stacktrace: 
@@ -6375,7 +6375,7 @@ MonoBehaviour:
 
         =================================================================
 
-        
+
 
 '
       stacktrace: 
@@ -9401,7 +9401,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/MercuryMessaging/Tests/Performance/Scenes
+    - Assets/MercuryMessaging
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
@@ -9420,7 +9420,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 180}
     m_SelectedIDs: b0000100
     m_LastClickedID: 65712
-    m_ExpandedIDs: 00000000ace1000044000100b2000100b400010000ca9a3bffffff7f
+    m_ExpandedIDs: 000000007a190100
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -9449,7 +9449,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000ace10000
+    m_ExpandedIDs: 000000007a190100
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -9529,8 +9529,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Inspector\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 1124
-    y: 79.200005
+    x: 1125
+    y: 24
     width: 411
     height: 690.8
   m_SerializedDataModeController:
@@ -9580,7 +9580,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 79.200005
+    y: 24
     width: 231.8
     height: 288.4
   m_SerializedDataModeController:
@@ -9646,8 +9646,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Scene\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 232.8
-    y: 79.200005
+    x: 233.8
+    y: 24
     width: 889.2
     height: 288.4
   m_SerializedDataModeController:
@@ -10290,7 +10290,7 @@ MonoBehaviour:
     m_FarClip: 10000
     m_DynamicClip: 1
     m_OcclusionCulling: 0
-  m_LastSceneViewRotation: {x: -0.30887493, y: 0.11009417, z: -0.03602202, w: -0.9440284}
+  m_LastSceneViewRotation: {x: -0.08717229, y: 0.89959055, z: -0.21045254, w: -0.3726226}
   m_LastSceneViewOrtho: 0
   m_Viewpoint:
     m_SceneView: {fileID: 17}
@@ -10431,7 +10431,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 393.6
+    y: 338.4
     width: 1123
     height: 376.4
   m_SerializedDataModeController:
