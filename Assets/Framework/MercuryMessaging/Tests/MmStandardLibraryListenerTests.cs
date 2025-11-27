@@ -488,7 +488,7 @@ namespace MercuryMessaging.Tests
             yield return null;
 
             int clickCount = 0;
-            var sub = _relay.OnClick(msg => clickCount++);
+            var sub = _relay.OnClick((MmUIClickMessage msg) => clickCount++);
             yield return null;
 
             // First click - should receive
@@ -513,8 +513,8 @@ namespace MercuryMessaging.Tests
             int handler1Count = 0;
             int handler2Count = 0;
 
-            var sub1 = _relay.OnClick(msg => handler1Count++);
-            var sub2 = _relay.OnClick(msg => handler2Count++);
+            var sub1 = _relay.OnClick((MmUIClickMessage msg) => handler1Count++);
+            var sub2 = _relay.OnClick((MmUIClickMessage msg) => handler2Count++);
             yield return null;
 
             _relay.MmInvoke(new MmUIClickMessage(Vector2.zero));
