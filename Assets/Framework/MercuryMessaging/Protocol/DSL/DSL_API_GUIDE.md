@@ -704,8 +704,133 @@ relay.Broadcast(MmMethod.NewFeature);           // Use DSL for new code
 | `MmQuery<T>` | LINQ-like hierarchy query builder (Phase 2.2) |
 | `MmQueryBuilder` | Non-generic query entry point (Phase 2.2) |
 | `MmQueryExtensions` | `Query()` extension methods (Phase 2.2) |
+| `MmStandardLibraryListenerExtensions` | UI/Input message shortcuts (Phase 2.4) |
+| `MmRoutingExtensions` | Runtime hierarchy registration (Phase 2.5) |
+| `MmTagExtensions` | Fluent tag configuration (Phase 2.6) |
+| `MmTagConfigBuilder` | Bulk tag configuration builder (Phase 2.6) |
+
+---
+
+### 10. Standard Library Listeners (Phase 2.4)
+
+Convenience methods for listening to Standard Library messages:
+
+#### UI Message Shortcuts
+
+```csharp
+using MercuryMessaging.Protocol.DSL;
+
+// Click handling
+relay.OnClick(msg => {
+    if (msg.IsDoubleClick) OpenItem();
+    if (msg.IsRightClick) ShowContextMenu();
+});
+
+// Hover with bool handler
+relay.OnHover(isEnter => {
+    if (isEnter) ShowTooltip();
+    else HideTooltip();
+});
+
+// Drag handling
+relay.OnDrag(msg => {
+    if (msg.Phase == MmDragPhase.Move)
+        transform.position += (Vector3)msg.Delta;
+});
+
+// Selection handling
+relay.OnSelect((int index) => selectedIndex = index);
+relay.OnSelect((string value) => selectedItem = value);
+```
+
+#### Input Message Shortcuts (VR/XR)
+
+```csharp
+// 6DOF tracking
+relay.On6DOF(msg => {
+    if (msg.Hand == MmHandedness.Right && msg.IsTracked)
+        rightHand.SetPositionAndRotation(msg.Position, msg.Rotation);
+});
+
+// Filter by hand
+relay.On6DOF(MmHandedness.Left, msg => UpdateLeftHand(msg));
+
+// Gesture with confidence threshold
+relay.OnGesture(MmGestureType.Pinch, 0.9f, msg => SelectObject());
+
+// Button press only
+relay.OnButtonPressed(msg => Fire());
+
+// Specific button
+relay.OnButton("Trigger", msg => HandleTrigger(msg.State));
+
+// Gaze hit only (looking at something)
+relay.OnGazeHit(msg => HighlightObject(msg.HitPoint));
+```
+
+---
+
+### 11. Runtime Registration (Phase 2.5)
+
+Simplified runtime hierarchy setup:
+
+```csharp
+using MercuryMessaging.Protocol.DSL;
+
+// Traditional (2 lines)
+parentRelay.MmAddToRoutingTable(childRelay, MmLevelFilter.Child);
+childRelay.AddParent(parentRelay);
+
+// Fluent DSL (1 line)
+childRelay.RegisterWith(parentRelay);
+
+// Bulk registration
+parentRelay.RegisterChildren(child1, child2, child3);
+
+// Unregistration
+childRelay.UnregisterFrom(parentRelay);
+parentRelay.UnregisterChildren(child1, child2);
+
+// Hierarchy queries
+bool hasParents = childRelay.HasParents();
+var parent = childRelay.GetFirstParent();
+bool isRoot = parentRelay.IsRoot();
+```
+
+---
+
+### 12. Tag Configuration (Phase 2.6)
+
+Fluent tag manipulation:
+
+```csharp
+using MercuryMessaging.Protocol.DSL;
+
+// Single responder
+responder.WithTag(MmTag.Tag0).EnableTagChecking();
+
+// Multiple tags
+responder.WithTags(MmTag.Tag0, MmTag.Tag1);
+
+// Tag manipulation
+responder.AddTag(MmTag.Tag2);
+responder.RemoveTag(MmTag.Tag0);
+responder.ClearTags();
+
+// Tag queries
+bool hasTag = responder.HasTag(MmTag.Tag0);
+bool hasAll = responder.HasAllTags(MmTag.Tag0, MmTag.Tag1);
+bool hasAny = responder.HasAnyTag(MmTag.Tag0, MmTag.Tag1);
+
+// Bulk configuration from relay
+relay.ConfigureTags()
+    .ApplyToSelf(MmTag.Tag0)
+    .ApplyToChildren(MmTag.Tag1, enableChecking: true)
+    .ApplyToDescendants(MmTag.Tag2)
+    .Build();
+```
 
 ---
 
 *Last Updated: 2025-11-26*
-*DSL Version: Phase 2.2 (Hierarchy Query) Complete*
+*DSL Version: Phase 2.6 (Tag Configuration) Complete*
