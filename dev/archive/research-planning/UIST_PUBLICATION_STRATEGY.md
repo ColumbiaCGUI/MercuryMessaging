@@ -1,19 +1,33 @@
 # UIST Publication Strategy for MercuryMessaging
 
-**Date:** 2025-11-21
+**Date:** 2025-11-27 (Updated from 2025-11-21)
 **Author:** Research Planning Analysis
-**Target Venues:** UIST 2025/2026, CHI 2026
+**Target Venues:** UIST 2026, CHI 2026, ICSE 2026
+
+---
+
+## Update Notice (2025-11-27)
+
+**Priority Order Changed:** Production Engineering + Networking tasks now come BEFORE research publications. See `dev/IMPROVEMENT_TRACKER.md` for current roadmap.
+
+**Timeline Adjusted:** All targets moved to 2026 venues (UIST 2026 deadline ~April 2026).
+
+**New Task Added:** DSL/DX Improvements (120h) - potential CHI LBW 2025 publication on developer productivity.
 
 ---
 
 ## Executive Summary
 
-After analyzing the MercuryMessaging framework architecture, UIST evaluation criteria, and the 8 planned research opportunities, this document recommends **3 strong UIST contributions** that align with UIST's systems focus, can be implemented within 6-12 weeks, and offer novel technical contributions to the UI software community.
+After analyzing the MercuryMessaging framework architecture, UIST evaluation criteria, and competitive landscape (MessagePipe, UniRx, Zenject, DOTS), this document recommends **3 strong UIST contributions** that align with UIST's systems focus, can be implemented within 6-12 weeks, and offer novel technical contributions to the UI software community.
 
-**Top 3 Recommendations:**
-1. **Spatial Indexing** - Hybrid spatial-hierarchical routing for metaverse-scale XR (9 weeks, 360h)
-2. **Parallel FSMs** - Multi-modal XR interaction via parallel state machines (7 weeks, 280h)
-3. **Network Prediction** - Hierarchical client-side prediction for distributed XR (10 weeks, 400h)
+**Mercury's Unique Differentiation:** ONLY framework combining hierarchical + spatial + networked routing.
+
+**Top 3 Recommendations (Updated for 2026):**
+1. **Spatial Indexing** - Hybrid spatial-hierarchical routing for metaverse-scale XR (9 weeks, 360h) - UIST 2026
+2. **Parallel FSMs** - Multi-modal XR interaction via parallel state machines (7 weeks, 280h) - UIST 2026
+3. **Network Prediction** - Hierarchical client-side prediction for distributed XR (10 weeks, 400h) - CHI 2026
+
+**Bonus:** DSL Developer Productivity Study - CHI LBW 2025 (40h)
 
 ---
 
@@ -337,48 +351,43 @@ Client reconciles differences with smooth interpolation
 
 ---
 
-## Publication Timeline
+## Publication Timeline (Updated 2025-11-27)
 
-### Strategy A: Aggressive (UIST 2025)
+### Current Priority: Production Engineering First
 
-**December 2024 - January 2025:** Choose ONE project (recommend Spatial Indexing)
-**January - March 2025:** Implementation + benchmarking
-**March 2025:** User study / case studies
-**April 2025:** Paper writing + submission (UIST deadline ~April 20)
-**May - July 2025:** Revisions (if invited)
-**October 2025:** UIST presentation
-
-### Strategy B: Comfortable (UIST 2026)
-
-**Q1 2025:** Spatial Indexing implementation
-**Q2 2025:** Parallel FSMs implementation
-**Q3 2025:** Network Prediction implementation
-**Q4 2025:** Submit 2 papers to UIST 2026
-**Early 2026:** Submit 1 paper to CHI 2026 (as backup)
-
-### Recommended: Hybrid Strategy
+Per user-approved roadmap (see `dev/IMPROVEMENT_TRACKER.md`):
 
 **Q1 2025 (Now - March):**
-- Spatial Indexing prototype (3 weeks)
-- Validation studies (3 weeks)
-- Paper draft (3 weeks)
+- **P1:** Performance Optimization (300h) - MessagePipe parity
+- **P2:** FishNet Networking (200h) - Production multiplayer
+- **P3:** DSL/DX Improvements (120h) - Tutorials, shorter syntax
 
 **Q2 2025 (April - June):**
-- Submit Spatial Indexing to UIST 2025 (April)
-- **Quick Wins while waiting:**
-  - Routing Optimization subset (100h)
-  - Standard Library basics (50h)
-  - Network Performance foundation (100h)
+- **P4:** Fusion 2 Networking (200h) - Alternative backend
+- **P5:** User Study (40h) - Submit to CHI LBW 2025 (April deadline)
+- Begin Spatial Indexing prototype (100h)
 
-**Q3 2025 (July - September):**
-- Parallel FSMs implementation (280h)
-- Network Prediction prototype (200h)
+**Q3-Q4 2025 (July - December):**
+- **P6:** Spatial Indexing (360h) - Core implementation
+- **P7:** Parallel FSMs (280h) - Core implementation
+- Paper drafts for both
 
-**Q4 2025 (October - December):**
-- Finalize both papers
-- Submit to UIST 2026 / CHI 2026
+**Q1 2026 (January - March):**
+- Finalize evaluations and user studies
+- Submit to UIST 2026 (deadline ~April 2026)
 
-**Result:** 3 papers over 18 months, with infrastructure improvements between publications
+**Q2-Q3 2026:**
+- **P8:** Network Prediction (400h) - Implementation
+- **P9:** Visual Composer (360h) - Implementation
+- Submit to CHI 2027 / UIST 2027
+
+### Result: 4+ papers over 24 months
+
+1. **CHI LBW 2025:** User Study (Mercury vs UnityEvents)
+2. **UIST 2026:** Spatial Indexing
+3. **UIST 2026:** Parallel FSMs
+4. **CHI 2027:** Network Prediction
+5. **UIST 2027:** Visual Composer (or combine with another)
 
 ---
 
@@ -705,6 +714,25 @@ Begin Spatial Indexing prototype THIS WEEK. Build proof-of-concept octree + scen
 
 ---
 
-*Last Updated: 2025-11-21*
-*Next Review: Start of implementation (Week 1)*
-*Status: Planning Phase - Awaiting Approval to Begin*
+*Last Updated: 2025-11-27*
+*Next Review: End of Q1 2025*
+*Status: Production Engineering Phase - Research begins Q3 2025*
+
+---
+
+## Competitive Analysis (Added 2025-11-27)
+
+| Framework | Performance | Hierarchical | Spatial | Network | Mercury Advantage |
+|-----------|-------------|--------------|---------|---------|-------------------|
+| **MessagePipe** | 78x faster | No | No | No | Mercury adds hierarchy + network |
+| **UniRx/R3** | Good | No | No | No | Mercury adds structure |
+| **Zenject** | Moderate | No | No | No | Mercury adds routing |
+| **Unity DOTS** | Best | No | Via queries | No | Mercury easier adoption |
+| **SendMessage** | 10x slower | Via hierarchy | No | No | Mercury adds filtering |
+
+**Key Research Differentiation:** No existing framework combines all three:
+1. Hierarchical routing through scene graph
+2. Spatial routing via 3D proximity
+3. Network-aware message synchronization
+
+This unique combination is the core publication narrative.

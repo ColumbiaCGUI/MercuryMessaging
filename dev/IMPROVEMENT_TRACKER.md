@@ -1,296 +1,191 @@
 # MercuryMessaging Improvement Tracker
 
-## Overview
+## Priority Order (Approved 2025-11-27)
 
-This document tracks completed improvements, active development, research opportunities, and future enhancements for the MercuryMessaging framework. Items are organized by status and potential impact.
-
----
-
-## Current Technical Debt
-
-### Priority 1: BLOCKERS (None)
-*No blocking issues currently identified.*
-
-### ✅ Recently Resolved: Option C Revert (2025-11-24)
-- **Issue**: Option C message creation gating caused NullReferenceException at line 782
-- **Impact**: 25 test failures (186/211 passing → crash on advanced routing)
-- **Solution**: Reverted Option C, kept Option A skip logic
-- **Location**: `MmRelayNode.cs:691-740` (lazy copy logic), `MmRelayNode.cs:747-753` (skip logic)
-- **Performance**: No regression from revert
-- **Tests Fixed**: 186 → 203 passing (+17 tests fixed)
-- **Remaining**: 6-8 tests still failing (advanced routing needs investigation)
-- **Documentation**: `dev/archive/2025-11-24-test-fixing/` (archived session docs)
-
-### ✅ Resolved: Advanced Routing Under-Delivery (2025-11-24)
-- **Issue**: ToParents, Ancestors, Descendants, Siblings routing had failures
-- **Resolution**: Fixed test bugs, NOT framework bugs
-- **Fixes Applied**:
-  - `FluentApiTests.ToParents_RoutesOnlyToParents`: Fixed test setup order (establish relationship before RefreshParents)
-  - `MmExtendableResponderIntegrationTests.MmInvoke_ParentFilter_OnlyReachesParents`: Fixed assertion (Parent ≠ Ancestors)
-  - `FluentApiTests.FluentApi_HasMinimalOverhead`: Increased threshold for Editor overhead
-- **Status**: ✅ **ALL 211 TESTS PASSING**
-- **Documentation**: `dev/active/SESSION_HANDOFF_2025-11-24.md`
-
-### Priority 2: HIGH
-*No high-priority debt currently identified. Previous issues resolved through Quick Wins implementation.*
-
-### Priority 3: MEDIUM
-
-#### Thread Safety Improvements
-- **Status**: Deferred (Low Priority)
-- **Effort**: 4-6 hours
-- **Location**: Documented in `dev/active/thread-safety/`
-- **Description**: MercuryMessaging currently follows Unity's single-threaded model. Thread safety improvements would be needed only if implementing async/await message processing.
-- **Impact**: Low - Unity's main thread model makes this unnecessary for most use cases
-- **Decision**: Maintain documentation, implement only when needed
-
-### Priority 4: LOW
-*Items tracked in improvement documents but not critical.*
+**Track 1: Production Engineering → Track 2: User Study → Track 3: Research Publications**
 
 ---
 
-## Research Opportunities 🌟
+## Track 1: Production Engineering (IMMEDIATE)
 
-### Tier 1 Conference Targets (HIGH Priority)
+### P1: Performance Optimization (300h) - CRITICAL
+- **Target:** MessagePipe parity (zero-allocation, 5x faster than SendMessage)
+- **Status:** APPROVED - Ready to start
+- **Location:** `dev/active/performance-optimization/`
+- **Key Phases:**
+  - Phase 1: ObjectPool integration (80-90% allocation reduction)
+  - Phase 2: O(1) routing tables (Dictionary lookup)
+  - Phase 3-4: Source generators + delegate dispatch
+  - Phase 5-6: Compiler optimizations + memory tuning
+  - Phase 7-9: Burst compilation (requires NativeContainer migration)
+- **Current Performance:**
+  - vs Direct Calls: 28x slower
+  - vs SendMessage: 2.6x slower
+  - vs MessagePipe: ~15x slower
+- **Target Performance:**
+  - vs SendMessage: 5x FASTER
+  - vs MessagePipe: 2x slower (acceptable)
 
-These research opportunities represent novel contributions suitable for publication at top-tier HCI conferences (CHI, UIST, SIGGRAPH, CSCW).
+### P2: FishNet Networking (200h)
+- **Target:** Production-ready multiplayer
+- **Status:** APPROVED - Phase 0B network foundation complete
+- **Location:** `dev/active/networking/`
+- **Dependency:** Network infrastructure in Protocol/Network/
+- **Deliverable:** Working multiplayer demo scene with FishNet backend
 
-#### 1. Parallel Message Dispatch
-- **Status**: Planning (`dev/active/parallel-dispatch/`)
-- **Effort**: 480 hours (12 weeks)
-- **Target**: UIST 2025 / CHI 2026
-- **Innovation**: First concurrent message routing for hierarchical scene graphs
-- **Impact**: 10-50x throughput improvement for XR applications
+### P3: DSL/DX Improvements (120h)
+- **Target:** Even shorter syntax, tutorials, better IntelliSense
+- **Status:** Planning
+- **Location:** `dev/active/dsl-dx-improvements/` (to be created)
+- **Key Phases:**
+  - Phase 1: Shorter syntax (operator overloads) - 40h
+  - Phase 2: Source generators for handlers - 40h
+  - Phase 3: Roslyn analyzers - 20h
+  - Phase 4: IntelliSense enhancements - 20h
+- **Current:** 86% verbosity reduction achieved
+- **Target:** 95% verbosity reduction
 
-#### 2. Network Prediction & Reconciliation
-- **Status**: Planning (`dev/active/network-prediction/`)
-- **Effort**: 400 hours (10 weeks)
-- **Target**: CHI 2025 / UIST 2025
-- **Innovation**: Hierarchical state prediction for distributed XR
-- **Impact**: 100-200ms perceived latency reduction
-
-#### 3. Spatial Indexing for Message Routing
-- **Status**: Planning (`dev/active/spatial-indexing/`)
-- **Effort**: 360 hours (9 weeks)
-- **Target**: SIGGRAPH 2025 / UIST 2025
-- **Innovation**: Hybrid spatial-hierarchical message routing
-- **Impact**: Enables metaverse-scale applications (10,000+ users)
-
-#### 4. Error Recovery & Graceful Degradation
-- **Status**: Planning (`dev/active/error-recovery/`)
-- **Effort**: 320 hours (8 weeks)
-- **Target**: CHI 2025 (safety-critical HCI)
-- **Innovation**: Self-healing message routing systems
-- **Impact**: 99.99% uptime for safety-critical XR
-
-#### 5. Parallel Hierarchical State Machines
-- **Status**: Planning (`dev/active/parallel-fsm/`)
-- **Effort**: 280 hours (7 weeks)
-- **Target**: UIST 2025 / CHI 2026
-- **Innovation**: Multi-modal XR interaction via parallel FSMs
-- **Impact**: Enables complex gesture+voice+gaze interactions
-
-#### 6. Visual Programming Interface
-- **Status**: Active (`dev/active/visual-composer/`)
-- **Effort**: 212 hours (5-6 weeks)
-- **Target**: UIST 2025 / CHI 2026
-- **Innovation**: Visual composition for message routing
-- **Impact**: Democratizes development for non-programmers
-
-#### 7. AI-Assisted Routing Optimization
-- **Status**: Documented (not started)
-- **Effort**: 400+ hours (10+ weeks)
-- **Target**: CHI 2026 / IUI 2026
-- **Innovation**: ML-based architecture optimization
-- **Impact**: Automatic performance optimization
-
-#### 8. Formal Verification System
-- **Status**: Documented (not started)
-- **Effort**: 500+ hours (12+ weeks)
-- **Target**: ICSE 2026 / FSE 2026
-- **Innovation**: Correctness proofs for message routing
-- **Impact**: Safety-critical certification
+### P4: Fusion 2 Networking (200h)
+- **Target:** Alternative backend, hot-swappable with FishNet
+- **Status:** Planning
+- **Location:** `dev/active/networking/`
+- **Dependency:** FishNet implementation complete
 
 ---
 
-## Active Development Tasks
+## Track 2: User Study (Q2 2025)
 
-### Currently In Progress
+### P5: Mercury vs UnityEvents Comparison (40h)
+- **Target:** CHI LBW 2025 submission
+- **Status:** ACTIVE - Smart Home scenes created, ready to run study
+- **Location:** `dev/active/user-study/`
+- **Deliverable:** Empirical comparison paper (N=15-20 participants)
+- **Metrics:** LOC, development time, coupling, debugging efficiency
 
-1. **Language DSL** (`dev/archive/2025-11-25-language-dsl/`) ✅ **COMPLETE + OPTIMIZED**
-   - 240 hours planned, ~12 hours invested
-   - **Achievement**: 86% code reduction, optimized overhead
-   - **Status**: Core fluent API complete, optimizations applied, archived
-   - **Files**: MmFluentMessage.cs, MmFluentExtensions.cs, MmQuickExtensions.cs
-   - **Tests**: 93+ tests (FluentApiTests, Phase2/3, Integration, Performance)
-   - **Optimizations Applied (Session 4):**
-     - Opt 2.1: Cached `_needsTargetCollection` flag (~40% reduction)
-     - Opt 2.2: Fast path for simple messages (~20% reduction)
-     - Opt 2.3: Pre-allocated DefaultMetadata (~10% reduction)
-   - **API Consolidation:** 3 methods deprecated → use Quick API (Init, Done, Sync)
+---
 
-2. **User Study** (`dev/active/user-study/`) ✅ **UNBLOCKED**
-   - Smart Home comparison study (Mercury vs UnityEvents)
-   - Two scenes created: SmartHome_Mercury.unity, SmartHome_UnityEvents.unity
-   - **Status**: Ready to continue - all routing bugs fixed!
+## Track 3: Research Publications (Q2-Q4 2025)
 
-3. **Network Performance** (`dev/active/network-performance/`)
-   - 292 hours planned, not started
-   - Delta sync, compression, optimization
+### P6: Spatial Indexing (360h) - UIST 2026
+- **Novel:** Hybrid spatial-hierarchical O(log n) routing
+- **Status:** Planning
+- **Location:** `dev/active/spatial-indexing/`
+- **Impact:** 10,000+ user metaverse-scale applications
+- **Research Question:** Can hybrid indices achieve O(log n) for spatial-hierarchical queries?
 
-4. **Visual Composer** (`dev/active/visual-composer/`)
-   - 212 hours planned, not started
-   - Editor tools, templates, validation
+### P7: Parallel FSMs (280h) - UIST 2026
+- **Novel:** Multi-modal XR via message-based FSM coordination
+- **Status:** Planning
+- **Location:** `dev/active/parallel-fsm/`
+- **Impact:** Gesture + voice + gaze simultaneous input handling
+- **Research Question:** Can message-passing prevent race conditions in multi-modal input?
 
-5. **Standard Library** (`dev/active/standard-library/`)
-   - 228 hours planned, not started
-   - Common message patterns, standardization
+### P8: Network Prediction (400h) - CHI 2026
+- **Novel:** Hierarchical client-side prediction
+- **Status:** Planning
+- **Location:** `dev/active/networking/` (network prediction component)
+- **Impact:** 100-200ms perceived latency reduction in distributed XR
+- **Research Question:** Can route prediction reduce perceived latency by 100-200ms?
+
+### P9: Visual Composer (360h) - UIST 2026
+- **Novel:** Live visual debugging for message systems
+- **Status:** Planning
+- **Location:** `dev/active/visual-composer/`
+- **Impact:** 50% reduction in debugging time (user study hypothesis)
+- **Research Question:** Does live introspection reduce debugging time by 50%?
+
+### P10: Static Analysis (280h) - ICSE 2026
+- **Novel:** Hybrid static-runtime verification for message systems
+- **Status:** Planning
+- **Location:** `dev/active/static-analysis/`
+- **Impact:** Formal safety guarantees with <200ns overhead
+- **Research Question:** Can we guarantee no infinite loops with <200ns overhead?
+
+---
+
+## Deferred Tasks
+
+### Thread Safety (4-8h)
+- **Trigger:** When async/await messaging is needed
+- **Approach:** Lock-based (Option A) is simplest
+- **Location:** Merged into performance-optimization Phase 10
+
+### Parallel Dispatch (360h)
+- **Trigger:** After Performance Optimization complete
+- **Target:** SIGGRAPH 2026 (Job System + Burst parallel routing)
+- **Location:** `dev/active/parallel-dispatch/`
+
+---
+
+## Competitive Landscape (2025-11-27 Analysis)
+
+| Framework | Performance | Hierarchical | Spatial | Network |
+|-----------|-------------|--------------|---------|---------|
+| **MessagePipe** | 78x faster | No | No | No |
+| **UniRx/R3** | Good | No | No | No |
+| **Zenject Signals** | Moderate | No | No | No |
+| **Unity DOTS** | Best | No | Via queries | No |
+| **SendMessage** | 10x slower | Via hierarchy | No | No |
+| **Mercury (current)** | 28x slower | Yes | No | Yes |
+| **Mercury (target)** | ~3x slower | Yes | Yes | Yes |
+
+**Key Differentiation:** Mercury is the ONLY framework combining hierarchical + spatial + networked routing.
 
 ---
 
 ## Completed Improvements
 
-### Quick Wins (QW-1 through QW-6) ✅
+### Quick Wins (QW-1 through QW-6)
 1. **QW-1**: Hop limits and cycle detection
 2. **QW-2**: Lazy message copying
-3. **QW-3**: Filter result caching (infrastructure only)
+3. **QW-3**: Filter result caching (infrastructure)
 4. **QW-4**: CircularBuffer for bounded memory
 5. **QW-5**: LINQ removal for performance
 6. **QW-6**: Code cleanup (179 lines removed)
 
-### Performance Optimizations ✅
-- 2-2.2x frame time improvement
-- 3-35x throughput improvement
+### Performance Optimizations (2025-11-20)
+- 2-2.2x frame time improvement (32ms → 15-19ms)
+- 3-35x throughput improvement (28 → 98-980 msg/sec)
 - Memory stability validated
 - See `Documentation/Performance/` for details
 
----
+### Language DSL (2025-11-25)
+- 86% code reduction (210 chars → 48 chars)
+- Two-tier API (Auto-Execute + Fluent Chain)
+- Works on both MmRelayNode and MmBaseResponder
+- 93+ tests passing
+- See `Assets/Framework/MercuryMessaging/Protocol/DSL/`
 
-## Future Enhancements (Not Yet Prioritized)
-
-### Developer Experience
-- Convert Unity Events Tool
-- Smart Defaults system
-- Message Breakpoints
-- C# Source Generators
-- Runtime Assertions
-- Video Tutorial Library (8 videos)
-- Migration Guide from Unity Events
-
-### Integration & Ecosystem
-- UI Toolkit integration
-- New Input System integration
-- Timeline integration
-- Cinemachine integration
-- Addressables integration
-- DOTween integration
-- UniRx integration
-- YAML serialization support
-
-### Advanced Features
-- Repeating Messages (MmInvokeRepeating)
-- Message Chaining with delays
-- Layer Mask Filtering
-- State History & Undo
-- Built-in Analytics
-- Custom Event Tracking
-
----
-
-## Risk Assessment
-
-### Technical Risks
-1. **Complexity Growth**: Framework becoming too complex
-   - Mitigation: Modular architecture, optional features
-
-2. **Performance Regression**: New features impacting performance
-   - Mitigation: Continuous benchmarking, feature flags
-
-3. **Breaking Changes**: Updates breaking existing code
-   - Mitigation: Semantic versioning, migration guides
-
-### Research Risks
-1. **Publication Rejection**: Papers not accepted
-   - Mitigation: Multiple venue strategy, strong evaluation
-
-2. **Lack of Novelty**: Incremental improvements only
-   - Mitigation: Focus on unique hybrid approaches
-
-3. **Implementation Difficulty**: Research ideas too complex
-   - Mitigation: Phased implementation, proof-of-concepts
-
----
-
-## Maintenance Notes
-
-### Code Quality
-- Maintain "Mm" prefix for all framework classes
-- Keep core framework dependency-free
-- Ensure automated test coverage >80%
-- Document all public APIs
-
-### Performance Standards
-- Frame time: <16.67ms (60 FPS target)
-- Memory: <100MB for typical scenes
-- Message throughput: >1000 msg/sec
-- Startup time: <100ms
-
-### Documentation Requirements
-- Update CLAUDE.md for major changes
-- Maintain FILE_REFERENCE.md accuracy
-- Keep tutorial scenes functional
-- Update performance benchmarks
+### Project Reorganization (2025-11-25)
+- 14 → 6 top-level folders
+- ~500MB build size reduction
+- Framework isolation achieved
+- XR consolidation complete
 
 ---
 
 ## Decision Log
 
+### 2025-11-27: Task Consolidation and Research Roadmap
+- Consolidated 11 active dev tasks into prioritized roadmap
+- Added competitive analysis (MessagePipe, UniRx, Zenject, DOTS)
+- Identified Mercury's unique differentiation: hierarchical + spatial + networked routing
+- Moved session handoffs to archive
+- Created DSL/DX improvements task
+- Updated publication targets to 2026 venues (UIST, CHI, ICSE)
+
 ### 2025-11-25: DSL Optimizations and API Consolidation
-- Implemented 3 performance optimizations for MmFluentMessage.Execute():
-  - Opt 2.1: Cached `_needsTargetCollection` in ToXxx() methods (~40% reduction)
-  - Opt 2.2: Fast path for simple messages (~20% reduction)
-  - Opt 2.3: Pre-allocated DefaultMetadata static instance (~10% reduction)
-- Added [Obsolete] warnings to 3 redundant methods:
-  - `BroadcastInitialize()` → use `relay.Init()`
-  - `BroadcastRefresh()` → use `relay.Sync()`
-  - `NotifyComplete()` → use `relay.Done()`
-- Added UI Canvas to DSL_Comparison.unity for real-time metrics
-- **Key Learning**: Fast path for common case (no predicates, no target collection) avoids branching overhead
-- **Key Learning**: Static readonly structs can be used for pre-allocation in C# (MmMetadataBlock)
-- **Key Learning**: Unity MCP cannot set object references via set_component_property (manual step needed)
+- Implemented 3 performance optimizations for MmFluentMessage.Execute()
+- Added unified API for both relay nodes and responders
+- Archived language-dsl task as complete
 
-### 2025-11-24: Session Cleanup and DSL Phase 1 Complete
-- Reverted Option C message creation gating (caused NullReferenceException)
-- Kept Option A skip logic for double-delivery prevention
-- Archived 7 orphaned session files to `dev/archive/2025-11-24-test-fixing/`
-- Marked Language DSL Phase 1 as COMPLETE (70% code reduction achieved)
-- Consolidated DSL extra files (HANDOFF_NOTES, context-update) into README
-- Adjusted performance thresholds (Editor variance is significant)
-- **Key Learning**: Message creation must ALWAYS happen if routing table has entries
-- **Key Learning**: Never gate message creation based on incoming filter
-
-### 2025-11-22: Language DSL Implementation
-- Chose fluent method chaining over custom operators (:> >>)
-- Reason: Superior IntelliSense, easier debugging, familiar to C# devs
-- Created zero-allocation struct-based builder pattern
-- All 20+ tests passing, <2% overhead verified
-
-### 2025-11-20: Research Opportunities Added
-- Added 8 high-priority research tasks targeting tier 1 conferences
-- Created dedicated folders for top 5 opportunities
-- Aligned with UIST/CHI submission deadlines
-
-### 2025-11-19: Quick Wins Completed
-- All 6 Quick Win optimizations implemented and tested
-- Performance improvements validated
-- Memory stability confirmed
-
-### 2025-11-18: Project Reorganization
-- Restructured directory layout for better organization
-- Consolidated third-party assets
-- Created _Project folder for custom code
+### 2025-11-24: Test Fixing and DSL Phase 1 Complete
+- Reverted Option C message creation gating
+- Fixed 17+ test failures (advanced routing)
+- All 211 tests passing
 
 ---
 
-*Last Updated: 2025-11-25*
+*Last Updated: 2025-11-27*
 *Next Review: End of Q1 2025*
+*Plan File: `.claude/plans/immutable-puzzling-pinwheel.md`*

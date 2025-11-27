@@ -32,6 +32,10 @@
 | 7 | 16-24h | 3.5x slower | Memory optimizations |
 | 8 | 16-24h | 3x slower | Algorithm optimizations |
 | 9 | 80-120h | ~2x slower | Burst compilation |
+| 10 | 4-8h | ~2x slower | Thread safety (async/await support) |
+
+**Note:** Phase 10 (Thread Safety) merged from `dev/active/thread-safety/` on 2025-11-27.
+Only implement when async/await messaging is needed.
 
 ---
 
