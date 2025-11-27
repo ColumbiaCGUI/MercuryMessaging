@@ -233,21 +233,43 @@ No need to explain what you were doing - it's all documented!
 
 ```
 dev/
-├── README.md              # This file
-├── active/                # Current work
-│   ├── task-1/
-│   │   ├── task-1-plan.md
-│   │   ├── task-1-context.md
-│   │   └── task-1-tasks.md
-│   └── task-2/
-│       └── ...
-└── archive/               # Completed work (optional)
-    └── old-task/
-        └── ...
+├── README.md                  # This file
+├── IMPROVEMENT_TRACKER.md     # Master priority list and roadmap
+├── WORKFLOW.md                # Development workflow guidelines
+├── FREQUENT_ERRORS.md         # Common bugs & debugging patterns
+├── active/                    # Current work (prioritized P1-P10)
+│   ├── performance-optimization/  # P1 - MessagePipe parity
+│   ├── networking/                # P2/P4 - FishNet + Fusion 2
+│   ├── dsl-dx-improvements/       # P3 - Shorter syntax, tutorials
+│   ├── user-study/                # P5 - CHI LBW 2025
+│   ├── spatial-indexing/          # P6 - UIST 2026
+│   ├── parallel-fsm/              # P7 - UIST 2026
+│   ├── visual-composer/           # P9 - UIST 2026
+│   ├── static-analysis/           # P10 - ICSE 2026
+│   └── parallel-dispatch/         # Deferred - SIGGRAPH 2026
+└── archive/                   # Completed work
+    ├── session-handoffs/          # All session handoff files
+    ├── 2025-11-25-language-dsl/   # Completed DSL implementation
+    ├── performance-analysis/       # Performance baseline data
+    ├── framework-analysis/         # Architecture analysis
+    └── ...
 ```
 
-**active/**: Work in progress
+**active/**: Work in progress (see IMPROVEMENT_TRACKER.md for priorities)
 **archive/**: Completed tasks (for reference)
+
+## Current Active Tasks (2025-11-27)
+
+See **IMPROVEMENT_TRACKER.md** for the full prioritized roadmap.
+
+| Priority | Task | Hours | Status |
+|----------|------|-------|--------|
+| P1 | Performance Optimization | 300h | APPROVED |
+| P2 | FishNet Networking | 200h | APPROVED |
+| P3 | DSL/DX Improvements | 120h | Planning |
+| P4 | Fusion 2 Networking | 200h | Planning |
+| P5 | User Study | 40h | ACTIVE |
+| P6+ | Research Publications | 1600h+ | Planning |
 
 ---
 
