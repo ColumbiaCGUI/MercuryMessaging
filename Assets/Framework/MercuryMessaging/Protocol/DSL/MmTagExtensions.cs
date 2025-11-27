@@ -67,7 +67,7 @@ namespace MercuryMessaging.Protocol.DSL
         {
             if (responder != null && tags != null)
             {
-                MmTag combined = MmTag.Nothing;
+                MmTag combined = MmTagHelper.Nothing;
                 foreach (var tag in tags)
                 {
                     combined |= tag;
@@ -202,7 +202,7 @@ namespace MercuryMessaging.Protocol.DSL
         {
             if (responder != null)
             {
-                responder.Tag = MmTag.Nothing;
+                responder.Tag = MmTagHelper.Nothing;
             }
             return responder;
         }

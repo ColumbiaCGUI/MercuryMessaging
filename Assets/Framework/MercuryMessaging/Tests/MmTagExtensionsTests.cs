@@ -130,7 +130,7 @@ namespace MercuryMessaging.Tests
         {
             _responder.Tag = MmTag.Tag0 | MmTag.Tag1 | MmTag.Tag2;
             _responder.ClearTags();
-            Assert.AreEqual(MmTag.Nothing, _responder.Tag);
+            Assert.AreEqual(MmTagHelper.Nothing, _responder.Tag);
         }
 
         #endregion
