@@ -40,7 +40,7 @@ namespace MercuryMessaging.Tests
             public int ReceivedCount { get; private set; }
             public MmTag TestTag { get; set; } = MmTag.Tag0;
 
-            protected override void Awake()
+            public override void Awake()
             {
                 base.Awake();
                 Tag = TestTag;
