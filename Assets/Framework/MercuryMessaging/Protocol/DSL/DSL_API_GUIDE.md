@@ -421,6 +421,198 @@ catch (OperationCanceledException)
 
 ---
 
+### 8. Listener Pattern (Phase 2.1)
+
+Subscribe to incoming messages with a fluent API:
+
+#### Basic Subscription
+
+```csharp
+using MercuryMessaging.Protocol.DSL;
+
+// Subscribe to typed messages
+var subscription = relay.Listen<MmMessageFloat>()
+    .OnReceived(msg => brightness = msg.value)
+    .Execute();
+
+// Later, unsubscribe
+subscription.Dispose();
+```
+
+#### Filtering Incoming Messages
+
+```csharp
+// Filter by value
+relay.Listen<MmMessageInt>()
+    .When(msg => msg.value > 50)
+    .OnReceived(msg => TriggerAlert(msg.value))
+    .Execute();
+
+// Filter by tag
+relay.Listen<MmMessageString>()
+    .WithTag(MmTag.Tag0)
+    .OnReceived(msg => HandleTaggedMessage(msg))
+    .Execute();
+```
+
+#### One-Time Listeners
+
+```csharp
+// Auto-disposes after first message
+relay.ListenOnce<MmMessageString>()
+    .OnReceived(msg => ProcessResult(msg.value))
+    .Execute();
+```
+
+#### Convenience Methods
+
+```csharp
+// Quick subscriptions (no builder needed)
+var sub1 = relay.OnFloat(value => slider.value = value);
+var sub2 = relay.OnInt(value => score = value);
+var sub3 = relay.OnString(value => label.text = value);
+var sub4 = relay.OnBool(value => gameObject.SetActive(value));
+
+// Method-based listeners
+relay.OnInitialize(() => Setup());
+relay.OnRefresh(() => UpdateUI());
+relay.OnComplete(() => FinishTask());
+relay.OnSwitch(stateName => HandleState(stateName));
+```
+
+#### Works on Responders
+
+```csharp
+// Same API from responder (null-safe)
+myResponder.Listen<MmMessageFloat>()
+    .OnReceived(msg => HandleFloat(msg.value))
+    .Execute();
+```
+
+---
+
+### 9. Hierarchy Query DSL (Phase 2.2)
+
+Query and traverse responder hierarchies with LINQ-like syntax:
+
+#### Basic Queries
+
+```csharp
+using MercuryMessaging.Protocol.DSL;
+
+// Get query builder
+var builder = relay.Query();
+
+// Query children
+var children = relay.Query<MmResponder>().Children().ToList();
+
+// Query all descendants
+var descendants = relay.Query<MmResponder>().Descendants().ToList();
+```
+
+#### Direction Methods
+
+| Method | Description |
+|--------|-------------|
+| `.Children()` | Direct children only |
+| `.Parents()` | Direct parents only |
+| `.Descendants()` | All descendants (recursive) |
+| `.Ancestors()` | All ancestors (recursive) |
+| `.Siblings()` | Same-level nodes |
+| `.SelfAndChildren()` | Self + direct children |
+| `.All()` | All connected nodes (bidirectional) |
+
+#### Filter Methods
+
+```csharp
+// Filter by type
+var enemies = relay.Query<EnemyResponder>()
+    .Descendants()
+    .ToList();
+
+// Filter by tag
+var tagged = relay.Query<MmResponder>()
+    .Children()
+    .WithTag(MmTag.Tag0)
+    .ToList();
+
+// Active GameObjects only
+var active = relay.Query<MmResponder>()
+    .Descendants()
+    .Active()
+    .ToList();
+
+// Custom predicate
+var filtered = relay.Query<MmResponder>()
+    .Descendants()
+    .Where(r => r.gameObject.name.Contains("Enemy"))
+    .ToList();
+
+// By name (exact match)
+var named = relay.Query<MmResponder>()
+    .Descendants()
+    .Named("Player")
+    .FirstOrDefault();
+
+// By name pattern (wildcard)
+var pattern = relay.Query<MmResponder>()
+    .Descendants()
+    .NamedLike("Enemy*")
+    .ToList();
+```
+
+#### Execution Methods
+
+| Method | Description |
+|--------|-------------|
+| `.Execute(action)` | Call action on each match |
+| `.ToList()` | Get all matches as List |
+| `.FirstOrDefault()` | Get first match or null |
+| `.First()` | Get first match (throws if none) |
+| `.Count()` | Count matching items |
+| `.Any()` | Check if any match |
+| `.Any(predicate)` | Check if any match predicate |
+
+#### Convenience Extensions
+
+```csharp
+// Quick searches
+var enemy = relay.FindDescendant<EnemyResponder>();
+var parent = relay.FindAncestor<GameManager>();
+var all = relay.FindAllDescendants<MmResponder>();
+
+// By name
+var player = relay.FindByName("Player");
+var enemies = relay.FindByPattern("Enemy*");
+
+// Counts and checks
+int children = relay.ChildCount();
+int descendants = relay.DescendantCount();
+bool hasChildren = relay.HasChildren();
+bool hasEnemy = relay.HasDescendant<EnemyResponder>();
+```
+
+#### Execute Actions
+
+```csharp
+// Execute action on all matches
+relay.Query<EnemyResponder>()
+    .Descendants()
+    .Active()
+    .Execute(enemy => enemy.TakeDamage(10));
+```
+
+#### Works on Responders
+
+```csharp
+// Same API from responder (null-safe)
+var siblings = myResponder.Query<UIResponder>().Siblings().ToList();
+int siblingCount = myResponder.SiblingCount();
+bool hasSiblings = myResponder.HasSiblings();
+```
+
+---
+
 ## Best Practices
 
 ### 1. Choose the Right Method
@@ -506,8 +698,14 @@ relay.Broadcast(MmMethod.NewFeature);           // Use DSL for new code
 | `MmMessageFactory` | Centralized message creation |
 | `MmRelayNodeExtensions` | Convenience methods (Broadcast, Notify, etc.) |
 | `MmTemporalExtensions` | Time-based messaging (After, Every, When) |
+| `MmListenerBuilder<T>` | Fluent listener subscription builder (Phase 2.1) |
+| `MmListenerSubscription<T>` | Disposable subscription handle (Phase 2.1) |
+| `MmListenerExtensions` | `Listen()` extension methods (Phase 2.1) |
+| `MmQuery<T>` | LINQ-like hierarchy query builder (Phase 2.2) |
+| `MmQueryBuilder` | Non-generic query entry point (Phase 2.2) |
+| `MmQueryExtensions` | `Query()` extension methods (Phase 2.2) |
 
 ---
 
-*Last Updated: 2025-11-24*
-*DSL Version: Phase 3 Complete*
+*Last Updated: 2025-11-26*
+*DSL Version: Phase 2.2 (Hierarchy Query) Complete*
