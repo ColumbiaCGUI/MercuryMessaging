@@ -984,3 +984,293 @@ for (int i = 0; i < byteArr.Length; i++)
 **Last Updated:** 2025-11-26 (Session 7)
 **Branch:** user_study
 **Status:** Performance Phase 3 ✅ COMPLETE (LINQ removal from all 13 message types)
+
+---
+
+## Session 8: ObjectPool Extension & Phase 1 Completion ✅ COMPLETE
+
+### Session Summary
+**Focus:** Complete Phase 1 ObjectPool integration by analyzing secondary files
+**Outcome:** Phase 1 fully complete - only 2 additional methods needed pooling
+
+---
+
+### ✅ Completed This Session
+
+#### 1. Analysis of "Secondary Files"
+
+The session handoff mentioned 26 `new` occurrences across 3 files. After careful analysis:
+
+| File | Claimed | Actual Poolable | Reason |
+|------|---------|-----------------|--------|
+| MmMessageFactory.cs | 19 | **0** | User-owned lifecycle - messages may be stored/modified |
+| MmRelayNodeExtensions.cs | 6 | **1** (Query) | Broadcast/Notify already use pooling via typed MmInvoke |
+| MmTemporalExtensions.cs | 1 | **1** (RequestAsync) | Local message with clear lifecycle |
+
+**Key Insight:** Most methods either:
+1. Already use pooling indirectly (Broadcast calls typed MmInvoke)
+2. Can't use pooling due to message ownership semantics (Factory, Respond callbacks)
+
+#### 2. Files Modified
+
+| File | Method | Change |
+|------|--------|--------|
+| `MmRelayNodeExtensions.cs` | Query() | Added `MmMessagePool.GetInt/Return` |
+| `MmTemporalExtensions.cs` | RequestAsync() | Added `MmMessagePool.GetInt/Return` |
+
+#### 3. Commits
+
+| Commit | Description |
+|--------|-------------|
+| `0b4d0e5f` | Phase 3: LINQ removal from all 13 message types |
+| `03610cce` | Phase 1 completion: ObjectPool in Query/RequestAsync |
+
+---
+
+### Performance Optimization Summary
+
+| Phase | Status | Impact |
+|-------|--------|--------|
+| **Phase 1: ObjectPool** | ✅ COMPLETE | 80-90% allocation reduction in hot path |
+| **Phase 3: LINQ Removal** | ✅ COMPLETE | 75% fewer allocations, O(n²)→O(n) for ByteArray/TransformList |
+| **Phase 2: O(1) Routing** | ⏳ Optional (20-30h) | Would improve routing lookup |
+
+---
+
+### Why MmMessageFactory Should NOT Use Pooling
+
+MmMessageFactory creates messages with **user-owned lifecycle**:
+
+```csharp
+// Pattern 1: User stores message
+var msg = MmMessageFactory.Int(42);
+savedMessages.Add(msg);  // User stores it!
+
+// Pattern 2: User modifies message
+var msg = MmMessageFactory.Int(42);
+msg.MetadataBlock = customMetadata;
+relay.MmInvoke(msg);
+
+// Pattern 3: User passes to callback
+callback(MmMessageFactory.Int(42));  // Callback may store it
+```
+
+None of these patterns have a clear "return to pool" point. The factory is designed for **convenience** (creating messages to inspect, modify, pass around), while the typed `MmInvoke` overloads are designed for **performance** (create-route-return in single call).
+
+---
+
+### Next Steps (Optional)
+
+1. **Phase 2: O(1) Routing Tables (20-30h)**
+   - Add Dictionary indices to MmRoutingTable
+   - Replace `List.Find()` with dictionary lookup
+
+2. **DSL Phase 11: Tutorials**
+   - Create tutorial scenes demonstrating DSL usage
+
+---
+
+**Last Updated:** 2025-11-26 (Session 8)
+**Branch:** user_study
+**Commits:** 0b4d0e5f (Phase 3), 03610cce (Phase 1 completion)
+**Status:** Performance Phases 1 & 3 ✅ COMPLETE
+
+---
+
+## Session 9: DSL Phase 2 Completion (Medium Priority Tasks) ✅ COMPLETE
+
+### Session Summary
+**Focus:** Complete remaining DSL Phase 2 tasks (2.3-2.6) - receiving extensions and configuration DSL
+**Outcome:** All Phase 2 tasks complete, 4 new extension classes with tests, assembly reference issue resolved
+
+---
+
+### ✅ Completed This Session (Session 9)
+
+#### 1. DSL Phase 2.5: Runtime Registration Extensions
+
+**File Created:** `Assets/Framework/MercuryMessaging/Protocol/DSL/MmRoutingExtensions.cs` (~335 lines)
+
+**Features:**
+- `RegisterWith()` - Single-line child registration (was 2 lines)
+- `RegisterChildren()` - Bulk registration with params array
+- `RegisterResponders()` - Register multiple responders at once
+- `UnregisterFrom()` / `UnregisterChildren()` - Clean unregistration
+- `HasParents()` / `GetFirstParent()` / `IsRoot()` - Hierarchy queries
+- Automatic FSM rebuild on `MmRelaySwitchNode` registration
+
+**Key Decision:** Used `RoutingTable` iteration instead of private `MmParentList` for hierarchy queries.
+
+#### 2. DSL Phase 2.6: Tag Configuration DSL
+
+**File Created:** `Assets/Framework/MercuryMessaging/Protocol/DSL/MmTagExtensions.cs` (~380 lines)
+
+**Features:**
+- `WithTag()` / `WithTags()` - Fluent tag assignment
+- `AddTag()` / `RemoveTag()` / `ClearTags()` - Tag manipulation
+- `HasTag()` / `HasAllTags()` / `HasAnyTag()` - Tag queries
+- `EnableTagChecking()` / `DisableTagChecking()` - Filter control
+- `ConfigureTags()` builder for bulk tag operations on hierarchies
+- `MmTagConfigBuilder` struct for `ApplyToSelf()`, `ApplyToChildren()`, `ApplyToDescendants()`
+
+**Bug Fixed:** `MmTag.Nothing` → `MmTagHelper.Nothing` (enum value doesn't exist)
+
+#### 3. DSL Phase 2.4: Standard Library Listener Extensions
+
+**File Created:** `Assets/Framework/MercuryMessaging/StandardLibrary/MmStandardLibraryListenerExtensions.cs` (~690 lines)
+
+**UI Message Shortcuts:**
+- `OnClick()`, `OnHover()`, `OnDrag()`, `OnScroll()`
+- `OnFocus()`, `OnSelect()`, `OnUISubmit()`, `OnUICancel()`
+
+**Input Message Shortcuts (VR/XR):**
+- `On6DOF()` with hand filtering
+- `OnGesture()` with type/confidence filtering
+- `OnButton()`, `OnButtonPressed()`, `OnButtonReleased()`
+- `OnAxis()`, `OnTouch()`, `OnControllerState()`, `OnGaze()`, `OnGazeHit()`
+
+All methods have responder extensions (null-safe).
+
+#### 4. DSL Phase 2.3: Message Filtering at Handler Level
+
+**Status:** Already implemented in Phase 2.1!
+
+The `.When()` predicates were implemented in `MmListenerBuilder<T>` (lines 217-230 of MmListener.cs) as part of the original Listener Pattern implementation.
+
+---
+
+### Critical Bug Fix: Assembly Reference Issue
+
+**Problem:** `MmStandardLibraryListenerExtensions.cs` was originally in `Protocol/DSL/` folder, which is in the `MercuryMessaging` assembly. However, it needed to reference types from `MercuryMessaging.StandardLibrary` assembly.
+
+**Error:** `CS0234: The type or namespace name 'StandardLibrary' does not exist in the namespace 'MercuryMessaging'`
+
+**Root Cause:** Assembly dependency architecture:
+```
+MercuryMessaging (core) - NO external dependencies
+    ↑
+MercuryMessaging.StandardLibrary - depends on core
+    ↑
+MercuryMessaging.Tests - depends on both
+```
+
+The core cannot reference StandardLibrary (circular dependency).
+
+**Fix:** Moved `MmStandardLibraryListenerExtensions.cs` from `Protocol/DSL/` to `StandardLibrary/` folder.
+
+---
+
+### Additional Fixes
+
+| File | Issue | Fix |
+|------|-------|-----|
+| `MmQuery.cs:34` | Constructor was `internal` | Made `public` (tests need direct construction) |
+| `MmStandardLibraryListenerTests.cs:491,516-517` | Ambiguous lambda calls | Added explicit type `(MmUIClickMessage msg) =>` |
+
+---
+
+### Test Files Created
+
+| File | Tests |
+|------|-------|
+| `MmRoutingExtensionsTests.cs` | ~300 lines, 15+ tests for registration/hierarchy |
+| `MmTagExtensionsTests.cs` | ~245 lines, 20+ tests for tag configuration |
+| `MmStandardLibraryListenerTests.cs` | ~530 lines, 25+ tests for UI/Input listeners |
+
+---
+
+### Commits This Session
+
+| Commit | Description |
+|--------|-------------|
+| `6969c7cf` | feat(dsl): Phase 2.5 & 2.6 - Runtime Registration and Tag Configuration |
+| `dde9536d` | feat(dsl): Phase 2.4 - Standard Library Listener Extensions |
+| `92e56dbb` | fix: Resolve assembly reference and ambiguous call errors |
+
+---
+
+### Files Summary
+
+**New Files (7):**
+- `Protocol/DSL/MmRoutingExtensions.cs` - Runtime registration
+- `Protocol/DSL/MmTagExtensions.cs` - Tag configuration
+- `StandardLibrary/MmStandardLibraryListenerExtensions.cs` - UI/Input listeners
+- `Tests/MmRoutingExtensionsTests.cs`
+- `Tests/MmTagExtensionsTests.cs`
+- `Tests/MmStandardLibraryListenerTests.cs`
+- Associated `.meta` files
+
+**Modified Files (3):**
+- `Protocol/DSL/MmQuery.cs` - Constructor made public
+- `Protocol/DSL/DSL_API_GUIDE.md` - Added Phase 2.4-2.6 documentation
+- All test files - Explicit type fixes
+
+---
+
+### DSL API Guide Updated
+
+Added three new sections to `DSL_API_GUIDE.md`:
+- **Section 10:** Standard Library Listeners (Phase 2.4)
+- **Section 11:** Runtime Registration (Phase 2.5)
+- **Section 12:** Tag Configuration (Phase 2.6)
+
+Updated API Reference Summary table with 4 new classes.
+
+---
+
+### Key Technical Insights
+
+**Assembly Dependency Pattern:**
+- Extensions for Standard Library types MUST live in the StandardLibrary assembly
+- Core framework cannot have circular references
+
+**Lambda Ambiguity Resolution:**
+```csharp
+// AMBIGUOUS (compiler can't infer type)
+relay.OnClick(msg => clickCount++);
+
+// EXPLICIT (always works)
+relay.OnClick((MmUIClickMessage msg) => clickCount++);
+```
+
+**MmTagHelper vs MmTag:**
+- `MmTag.Nothing` doesn't exist (enum doesn't have 0 value)
+- Use `MmTagHelper.Nothing` (const = 0)
+- Use `MmTagHelper.Everything` (const = -1)
+
+---
+
+### Current Status
+
+| Phase | Status |
+|-------|--------|
+| Phase 2.1: Listener Pattern | ✅ Complete (previous session) |
+| Phase 2.2: Hierarchy Query DSL | ✅ Complete (previous session) |
+| Phase 2.3: Message Filtering | ✅ Complete (part of 2.1) |
+| Phase 2.4: Standard Library Shortcuts | ✅ Complete |
+| Phase 2.5: Runtime Registration | ✅ Complete |
+| Phase 2.6: Tag Configuration | ✅ Complete |
+
+**DSL Phase 2: 100% Complete (6/6 phases)**
+
+---
+
+### Console Status
+
+✅ **0 errors** - All compilation issues resolved
+✅ All commits pushed to `user_study` branch
+
+---
+
+### Next Steps (Future Sessions)
+
+1. **Run PlayMode Tests** - Verify all 400+ tests still pass
+2. **DSL Phase 11: Tutorials** - Create interactive tutorial scripts
+3. **Performance Phase 2** - O(1) routing tables (optional, 20-30h)
+
+---
+
+**Last Updated:** 2025-11-26 (Session 9)
+**Branch:** user_study
+**Latest Commits:** 6969c7cf, dde9536d, 92e56dbb
+**Status:** DSL Phase 2 ✅ COMPLETE (all 6 sub-phases)
