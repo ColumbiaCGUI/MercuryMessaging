@@ -31,7 +31,7 @@ namespace MercuryMessaging.Protocol.DSL
         /// Creates a new query builder for the specified relay node.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal MmQuery(MmRelayNode relay)
+        public MmQuery(MmRelayNode relay)
         {
             _relay = relay;
             _levelFilter = MmLevelFilterHelper.SelfAndChildren;
