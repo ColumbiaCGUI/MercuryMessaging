@@ -56,7 +56,7 @@ namespace MercuryMessaging.Tests
                 .Execute();
 
             // Act
-            rootRelay.MmInvoke(MmMethod.MessageFloat, 42.5f, MmMetadataBlock.Default);
+            rootRelay.MmInvoke(MmMethod.MessageFloat, 42.5f, MmMetadataBlockHelper.Default);
 
             // Assert
             Assert.AreEqual(42.5f, receivedValue, "Listener should receive float value");
@@ -79,9 +79,9 @@ namespace MercuryMessaging.Tests
                 .Execute();
 
             // Act - send different types
-            rootRelay.MmInvoke(MmMethod.MessageInt, 42, MmMetadataBlock.Default);
-            rootRelay.MmInvoke(MmMethod.MessageString, "hello", MmMetadataBlock.Default);
-            rootRelay.MmInvoke(MmMethod.MessageBool, true, MmMetadataBlock.Default);
+            rootRelay.MmInvoke(MmMethod.MessageInt, 42, MmMetadataBlockHelper.Default);
+            rootRelay.MmInvoke(MmMethod.MessageString, "hello", MmMetadataBlockHelper.Default);
+            rootRelay.MmInvoke(MmMethod.MessageBool, true, MmMetadataBlockHelper.Default);
 
             // Assert
             Assert.AreEqual(0, callCount, "Listener should not receive non-float messages");
@@ -112,7 +112,7 @@ namespace MercuryMessaging.Tests
             Assert.IsTrue(subscription.IsDisposed, "Subscription should be marked as disposed");
 
             // Send message after dispose
-            rootRelay.MmInvoke(MmMethod.MessageFloat, 42.5f, MmMetadataBlock.Default);
+            rootRelay.MmInvoke(MmMethod.MessageFloat, 42.5f, MmMetadataBlockHelper.Default);
             Assert.AreEqual(0, callCount, "Disposed listener should not receive messages");
         }
 
@@ -138,7 +138,7 @@ namespace MercuryMessaging.Tests
                 .Execute();
 
             // Act
-            rootRelay.MmInvoke(MmMethod.MessageFloat, 10f, MmMetadataBlock.Default);
+            rootRelay.MmInvoke(MmMethod.MessageFloat, 10f, MmMetadataBlockHelper.Default);
 
             // Assert
             Assert.AreEqual(10f, value1, "Listener 1 should receive value");
@@ -169,9 +169,9 @@ namespace MercuryMessaging.Tests
                 .Execute();
 
             // Act
-            rootRelay.MmInvoke(MmMethod.MessageFloat, 1f, MmMetadataBlock.Default);
-            rootRelay.MmInvoke(MmMethod.MessageFloat, 2f, MmMetadataBlock.Default);
-            rootRelay.MmInvoke(MmMethod.MessageFloat, 3f, MmMetadataBlock.Default);
+            rootRelay.MmInvoke(MmMethod.MessageFloat, 1f, MmMetadataBlockHelper.Default);
+            rootRelay.MmInvoke(MmMethod.MessageFloat, 2f, MmMetadataBlockHelper.Default);
+            rootRelay.MmInvoke(MmMethod.MessageFloat, 3f, MmMetadataBlockHelper.Default);
 
             // Assert
             Assert.AreEqual(1, callCount, "One-time listener should only receive one message");
@@ -193,8 +193,8 @@ namespace MercuryMessaging.Tests
                 .Execute();
 
             // Act
-            rootRelay.MmInvoke(MmMethod.MessageInt, 1, MmMetadataBlock.Default);
-            rootRelay.MmInvoke(MmMethod.MessageInt, 2, MmMetadataBlock.Default);
+            rootRelay.MmInvoke(MmMethod.MessageInt, 1, MmMetadataBlockHelper.Default);
+            rootRelay.MmInvoke(MmMethod.MessageInt, 2, MmMetadataBlockHelper.Default);
 
             // Assert
             Assert.AreEqual(1, callCount, "Once modifier should make listener one-time");
@@ -219,10 +219,10 @@ namespace MercuryMessaging.Tests
                 .Execute();
 
             // Act
-            rootRelay.MmInvoke(MmMethod.MessageInt, 25, MmMetadataBlock.Default);
-            rootRelay.MmInvoke(MmMethod.MessageInt, 75, MmMetadataBlock.Default);
-            rootRelay.MmInvoke(MmMethod.MessageInt, 50, MmMetadataBlock.Default);
-            rootRelay.MmInvoke(MmMethod.MessageInt, 100, MmMetadataBlock.Default);
+            rootRelay.MmInvoke(MmMethod.MessageInt, 25, MmMetadataBlockHelper.Default);
+            rootRelay.MmInvoke(MmMethod.MessageInt, 75, MmMetadataBlockHelper.Default);
+            rootRelay.MmInvoke(MmMethod.MessageInt, 50, MmMetadataBlockHelper.Default);
+            rootRelay.MmInvoke(MmMethod.MessageInt, 100, MmMetadataBlockHelper.Default);
 
             // Assert
             Assert.AreEqual(2, receivedValues.Count, "Should only receive values > 50");
@@ -249,11 +249,11 @@ namespace MercuryMessaging.Tests
                 .Execute();
 
             // Act
-            rootRelay.MmInvoke(MmMethod.MessageInt, 10, MmMetadataBlock.Default); // Fails > 20
-            rootRelay.MmInvoke(MmMethod.MessageInt, 30, MmMetadataBlock.Default); // Passes all
-            rootRelay.MmInvoke(MmMethod.MessageInt, 35, MmMetadataBlock.Default); // Fails even
-            rootRelay.MmInvoke(MmMethod.MessageInt, 90, MmMetadataBlock.Default); // Fails < 80
-            rootRelay.MmInvoke(MmMethod.MessageInt, 50, MmMetadataBlock.Default); // Passes all
+            rootRelay.MmInvoke(MmMethod.MessageInt, 10, MmMetadataBlockHelper.Default); // Fails > 20
+            rootRelay.MmInvoke(MmMethod.MessageInt, 30, MmMetadataBlockHelper.Default); // Passes all
+            rootRelay.MmInvoke(MmMethod.MessageInt, 35, MmMetadataBlockHelper.Default); // Fails even
+            rootRelay.MmInvoke(MmMethod.MessageInt, 90, MmMetadataBlockHelper.Default); // Fails < 80
+            rootRelay.MmInvoke(MmMethod.MessageInt, 50, MmMetadataBlockHelper.Default); // Passes all
 
             // Assert
             Assert.AreEqual(2, receivedValues.Count, "Should only receive even values between 20 and 80");
@@ -307,7 +307,7 @@ namespace MercuryMessaging.Tests
             var subscription = rootRelay.OnFloat(value => receivedValue = value);
 
             // Act
-            rootRelay.MmInvoke(MmMethod.MessageFloat, 3.14f, MmMetadataBlock.Default);
+            rootRelay.MmInvoke(MmMethod.MessageFloat, 3.14f, MmMetadataBlockHelper.Default);
 
             // Assert
             Assert.AreEqual(3.14f, receivedValue, "OnFloat should receive float value");
@@ -327,7 +327,7 @@ namespace MercuryMessaging.Tests
             var subscription = rootRelay.OnInt(value => receivedValue = value);
 
             // Act
-            rootRelay.MmInvoke(MmMethod.MessageInt, 42, MmMetadataBlock.Default);
+            rootRelay.MmInvoke(MmMethod.MessageInt, 42, MmMetadataBlockHelper.Default);
 
             // Assert
             Assert.AreEqual(42, receivedValue, "OnInt should receive int value");
@@ -347,7 +347,7 @@ namespace MercuryMessaging.Tests
             var subscription = rootRelay.OnString(value => receivedValue = value);
 
             // Act
-            rootRelay.MmInvoke(MmMethod.MessageString, "hello world", MmMetadataBlock.Default);
+            rootRelay.MmInvoke(MmMethod.MessageString, "hello world", MmMetadataBlockHelper.Default);
 
             // Assert
             Assert.AreEqual("hello world", receivedValue, "OnString should receive string value");
@@ -367,7 +367,7 @@ namespace MercuryMessaging.Tests
             var subscription = rootRelay.OnBool(value => receivedValue = value);
 
             // Act
-            rootRelay.MmInvoke(MmMethod.MessageBool, true, MmMetadataBlock.Default);
+            rootRelay.MmInvoke(MmMethod.MessageBool, true, MmMetadataBlockHelper.Default);
 
             // Assert
             Assert.IsTrue(receivedValue, "OnBool should receive bool value");
@@ -391,7 +391,7 @@ namespace MercuryMessaging.Tests
             var subscription = rootRelay.OnInitialize(() => initCalled = true);
 
             // Act
-            rootRelay.MmInvoke(MmMethod.Initialize, MmMetadataBlock.Default);
+            rootRelay.MmInvoke(MmMethod.Initialize, MmMetadataBlockHelper.Default);
 
             // Assert
             Assert.IsTrue(initCalled, "OnInitialize should be called");
@@ -411,7 +411,7 @@ namespace MercuryMessaging.Tests
             var subscription = rootRelay.OnSetActive(value => receivedActive = value);
 
             // Act
-            rootRelay.MmInvoke(MmMethod.SetActive, true, MmMetadataBlock.Default);
+            rootRelay.MmInvoke(MmMethod.SetActive, true, MmMetadataBlockHelper.Default);
 
             // Assert
             Assert.IsTrue(receivedActive, "OnSetActive should receive true");
@@ -431,7 +431,7 @@ namespace MercuryMessaging.Tests
             var subscription = rootRelay.OnSwitch(state => receivedState = state);
 
             // Act
-            rootRelay.MmInvoke(MmMethod.Switch, "MainMenu", MmMetadataBlock.Default);
+            rootRelay.MmInvoke(MmMethod.Switch, "MainMenu", MmMetadataBlockHelper.Default);
 
             // Assert
             Assert.AreEqual("MainMenu", receivedState, "OnSwitch should receive state name");
@@ -509,7 +509,7 @@ namespace MercuryMessaging.Tests
 
             // Act - should not throw despite sub2 exception
             Assert.DoesNotThrow(() =>
-                rootRelay.MmInvoke(MmMethod.MessageFloat, 1f, MmMetadataBlock.Default));
+                rootRelay.MmInvoke(MmMethod.MessageFloat, 1f, MmMetadataBlockHelper.Default));
 
             // Assert - sub1 and sub3 should still have been called
             Assert.AreEqual(2, callCount, "Non-throwing handlers should still be called");
@@ -539,7 +539,7 @@ namespace MercuryMessaging.Tests
                 .Execute();
 
             // Act
-            rootRelay.MmInvoke(MmMethod.MessageFloat, 42.5f, MmMetadataBlock.Default);
+            rootRelay.MmInvoke(MmMethod.MessageFloat, 42.5f, MmMetadataBlockHelper.Default);
 
             // Assert
             Assert.AreEqual(42.5f, receivedValue, "Responder listener should receive float value");
@@ -564,8 +564,8 @@ namespace MercuryMessaging.Tests
                 .Execute();
 
             // Act
-            rootRelay.MmInvoke(MmMethod.MessageInt, 1, MmMetadataBlock.Default);
-            rootRelay.MmInvoke(MmMethod.MessageInt, 2, MmMetadataBlock.Default);
+            rootRelay.MmInvoke(MmMethod.MessageInt, 1, MmMetadataBlockHelper.Default);
+            rootRelay.MmInvoke(MmMethod.MessageInt, 2, MmMetadataBlockHelper.Default);
 
             // Assert
             Assert.AreEqual(1, callCount, "One-time responder listener should only fire once");
@@ -585,7 +585,7 @@ namespace MercuryMessaging.Tests
             var subscription = responder.OnFloat(value => receivedValue = value);
 
             // Act
-            rootRelay.MmInvoke(MmMethod.MessageFloat, 3.14f, MmMetadataBlock.Default);
+            rootRelay.MmInvoke(MmMethod.MessageFloat, 3.14f, MmMetadataBlockHelper.Default);
 
             // Assert
             Assert.AreEqual(3.14f, receivedValue, "Responder.OnFloat should receive value");
@@ -607,7 +607,7 @@ namespace MercuryMessaging.Tests
             var subscription = responder.OnInitialize(() => initCalled = true);
 
             // Act
-            rootRelay.MmInvoke(MmMethod.Initialize, MmMetadataBlock.Default);
+            rootRelay.MmInvoke(MmMethod.Initialize, MmMetadataBlockHelper.Default);
 
             // Assert
             Assert.IsTrue(initCalled, "Responder.OnInitialize should be called");
