@@ -33,6 +33,7 @@
 //  
 using System.Collections.Generic;
 using System.Collections;
+using System.Runtime.CompilerServices;
 using MercuryMessaging.Support.Extensions;
 using MercuryMessaging.Support.Data;
 using MercuryMessaging.Task;
@@ -60,6 +61,18 @@ namespace MercuryMessaging
         [Header("Performance Settings")]
         [Tooltip("Enable during performance tests to disable debug overhead (UpdateMessages tracking)")]
         public static bool PerformanceMode = false;
+
+        /// <summary>
+        /// Strict Mode - enables fail-fast behavior for debugging.
+        /// When enabled:
+        /// - Throws exceptions instead of logging warnings for routing errors
+        /// - Validates message parameters more strictly
+        /// - Provides more detailed error messages
+        /// Use during development to catch issues early.
+        /// Disable in production for resilient message handling.
+        /// </summary>
+        [Tooltip("Enable fail-fast behavior: throws exceptions instead of silent failures")]
+        public static bool StrictMode = false;
 
         // The position of the graph node in the graph view.
         public Vector2 nodePosition = new Vector2(0, 0);
@@ -159,6 +172,22 @@ namespace MercuryMessaging
         /// Indicates whether MmInvoke is currently executing a call.
         /// </summary>
         private bool _executing;
+
+        #region Phase 8: Algorithm Optimization Fields
+
+        /// <summary>
+        /// Tracks how many responders in the routing table have TagCheckEnabled.
+        /// When zero, tag checks can be skipped entirely for performance.
+        /// </summary>
+        private int _tagCheckEnabledCount = 0;
+
+        /// <summary>
+        /// Cache whether we need to perform tag checks at all.
+        /// Updated when responders are added/removed.
+        /// </summary>
+        protected bool HasTagCheckEnabledResponders => _tagCheckEnabledCount > 0;
+
+        #endregion
 
         /// <summary>
         /// Indicates whether the MmRelayNode is ready for use
@@ -279,7 +308,13 @@ namespace MercuryMessaging
             }
         }
 
-        public void UpdateMessages(MmMessage message)   
+        /// <summary>
+        /// Debug tracking for messages - tracks message flow through the hierarchy.
+        /// Phase 6 Optimization: Marked NoInlining to keep out of hot path.
+        /// Only called when PerformanceMode = false (debug mode).
+        /// </summary>
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public void UpdateMessages(MmMessage message)
         {
             List<MmRoutingTableItem> items = new List<MmRoutingTableItem>();
 
@@ -303,6 +338,11 @@ namespace MercuryMessaging
             }
         }
 
+        /// <summary>
+        /// Part of debug tracking - updates message lists and propagates.
+        /// Phase 6: NoInlining keeps this out of hot path.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.NoInlining)]
         private void UpdateItemAndPropagate(MmRoutingTableItem item, MmMessage message)
         {
             System.DateTime currentTime = System.DateTime.Now;
@@ -370,13 +410,21 @@ namespace MercuryMessaging
         /// <returns>Reference to new MmRoutingTable item.</returns>
         public virtual MmRoutingTableItem MmAddToRoutingTable(MmResponder mmResponder, MmLevelFilter level)
         {
+            bool tagCheckEnabled = mmResponder.TagCheckEnabled;
 			var routingTableItem = new MmRoutingTableItem (mmResponder.name, mmResponder) {
 				Level = level,
-				Tags = mmResponder.Tag  // Copy tag from responder to routing table item
+				Tags = mmResponder.Tag,  // Copy tag from responder to routing table item
+                TagCheckEnabled = tagCheckEnabled  // Phase 8: Cache for removal tracking
 			};
 
             if (RoutingTable.Contains(mmResponder))
                 return null; // Already in list
+
+            // Phase 8: Track tag-check-enabled responders for fast-path optimization
+            if (tagCheckEnabled)
+            {
+                _tagCheckEnabledCount++;
+            }
 
             //If there is an MmInvoke executing, add it to the
             //  MmRespondersToAdd queue.
@@ -411,6 +459,57 @@ namespace MercuryMessaging
 
             return routingTableItem;
         }
+
+        #region Phase 5: Delegate Dispatch API
+
+        /// <summary>
+        /// Set a fast handler delegate for a responder in this relay node's routing table.
+        /// When set, the handler is invoked directly (~1-4 ticks) instead of going through
+        /// virtual dispatch (~8-10 ticks).
+        ///
+        /// Usage:
+        ///   relay.SetFastHandler(myResponder, msg => HandleMessage(msg));
+        ///
+        /// Note: Call this after the responder is registered with MmAddToRoutingTable.
+        /// </summary>
+        /// <param name="responder">The responder to set the handler for.</param>
+        /// <param name="handler">The handler delegate to invoke directly.</param>
+        /// <returns>True if handler was set, false if responder not found in routing table.</returns>
+        public bool SetFastHandler(MmResponder responder, System.Action<MmMessage> handler)
+        {
+            if (responder == null) return false;
+
+            var item = RoutingTable[responder];
+            if (item == null) return false;
+
+            item.Handler = handler;
+            return true;
+        }
+
+        /// <summary>
+        /// Clear the fast handler for a responder, reverting to virtual dispatch.
+        /// </summary>
+        /// <param name="responder">The responder to clear the handler for.</param>
+        /// <returns>True if handler was cleared, false if responder not found.</returns>
+        public bool ClearFastHandler(MmResponder responder)
+        {
+            return SetFastHandler(responder, null);
+        }
+
+        /// <summary>
+        /// Check if a responder has a fast handler registered.
+        /// </summary>
+        /// <param name="responder">The responder to check.</param>
+        /// <returns>True if responder has a handler, false otherwise.</returns>
+        public bool HasFastHandler(MmResponder responder)
+        {
+            if (responder == null) return false;
+
+            var item = RoutingTable[responder];
+            return item?.HasHandler ?? false;
+        }
+
+        #endregion
 
         /// <summary>
         /// Grab all MmResponders attached to the same GameObject.
@@ -450,8 +549,16 @@ namespace MercuryMessaging
 
             for (int i = RoutingTable.Count - 1; i >= 0; i--)
             {
-                if (RoutingTable[i].Responder == null)
+                var item = RoutingTable[i];
+                if (item.Responder == null)
+                {
+                    // Phase 8: Decrement tag counter using cached value
+                    if (item.TagCheckEnabled)
+                    {
+                        _tagCheckEnabledCount--;
+                    }
                     RoutingTable.RemoveAt(i);
+                }
             }
         }
 
@@ -652,7 +759,12 @@ namespace MercuryMessaging
             {
                 if (message.HopCount >= maxMessageHops)
                 {
-                    MmLogger.LogFramework($"[HOP LIMIT] Message dropped at '{name}' after {message.HopCount} hops (max: {maxMessageHops}). Method: {message.MmMethod}");
+                    string errorMsg = $"[HOP LIMIT] Message dropped at '{name}' after {message.HopCount} hops (max: {maxMessageHops}). Method: {message.MmMethod}";
+                    if (StrictMode)
+                    {
+                        throw new System.InvalidOperationException(errorMsg);
+                    }
+                    MmLogger.LogFramework(errorMsg);
                     return;
                 }
 
@@ -674,7 +786,12 @@ namespace MercuryMessaging
                 // Check if we've already visited this node (circular path detected)
                 if (message.VisitedNodes.Contains(nodeInstanceId))
                 {
-                    MmLogger.LogFramework($"[CYCLE DETECTED] Message dropped at '{name}' - circular path detected. Method: {message.MmMethod}, Hops: {message.HopCount}");
+                    string errorMsg = $"[CYCLE DETECTED] Message dropped at '{name}' - circular path detected. Method: {message.MmMethod}, Hops: {message.HopCount}";
+                    if (StrictMode)
+                    {
+                        throw new System.InvalidOperationException(errorMsg);
+                    }
+                    MmLogger.LogFramework(errorMsg);
                     return;
                 }
 
@@ -850,7 +967,12 @@ namespace MercuryMessaging
                     routingTableItem, responderSpecificMessage);
 
                 if (checkPassed) {
-					responder.MmInvoke (responderSpecificMessage);
+                    // Phase 5: Delegate dispatch optimization
+                    // Handler invocation: ~1-4 ticks, Virtual dispatch: ~8-10 ticks
+                    if (routingTableItem.Handler != null)
+                        routingTableItem.Handler(responderSpecificMessage);
+                    else
+                        responder.MmInvoke(responderSpecificMessage);
 				}
 			}
 
@@ -874,7 +996,11 @@ namespace MercuryMessaging
                 if (ResponderCheck(levelFilter, activeFilter, selectedFilter, networkFilter,
                     routingTableItem, message))
                 {
-                    routingTableItem.Responder.MmInvoke(message);
+                    // Phase 5: Delegate dispatch optimization
+                    if (routingTableItem.Handler != null)
+                        routingTableItem.Handler(message);
+                    else
+                        routingTableItem.Responder.MmInvoke(message);
                 }
             }
 
@@ -1147,7 +1273,7 @@ namespace MercuryMessaging
 
             // Mark sender as visited to prevent self-delivery in path-based routing
             if (message.VisitedNodes == null)
-                message.VisitedNodes = new System.Collections.Generic.HashSet<int>();
+                message.VisitedNodes = MmHashSetPool.Get();
             message.VisitedNodes.Add(gameObject.GetInstanceID());
 
             // Forward to each target with transformed level filter
@@ -1350,15 +1476,36 @@ namespace MercuryMessaging
         /// <param name="message">MmMessage to be checked.</param>
         /// <returns>Returns whether responder has passed all checks.</returns>
         protected virtual bool ResponderCheck(MmLevelFilter levelFilter, MmActiveFilter activeFilter,
-			MmSelectedFilter selectedFilter, MmNetworkFilter networkFilter, 
+			MmSelectedFilter selectedFilter, MmNetworkFilter networkFilter,
             MmRoutingTableItem mmRoutingTableItem, MmMessage message)
 		{
-		    if (!TagCheck(mmRoutingTableItem, message)) return false; // Failed TagCheck
+            // Phase 8: Fast-path tag check - skip entirely if no responders care about tags
+            // OR if message tag is Everything (which always passes)
+            if (HasTagCheckEnabledResponders && message.MetadataBlock.Tag != MmTagHelper.Everything)
+            {
+                if (!TagCheck(mmRoutingTableItem, message)) return false;
+            }
 
-		    return LevelCheck (levelFilter, mmRoutingTableItem.Responder, mmRoutingTableItem.Level)
-				&& ActiveCheck (activeFilter, mmRoutingTableItem.Responder)
-				&& SelectedCheck(selectedFilter, mmRoutingTableItem.Responder)
-                && NetworkCheck(mmRoutingTableItem, message);
+            // Phase 8: Fast-path level check (inline for common case)
+            if ((levelFilter & mmRoutingTableItem.Level) == 0) return false;
+
+            // Phase 8: Fast-path active check - skip method call when filter is All
+            if (activeFilter != MmActiveFilter.All)
+            {
+                if (!ActiveCheck(activeFilter, mmRoutingTableItem.Responder)) return false;
+            }
+
+            // SelectedCheck always returns true in base MmRelayNode (MmRelaySwitchNode overrides)
+            // Still call for compatibility with overrides
+            if (!SelectedCheck(selectedFilter, mmRoutingTableItem.Responder)) return false;
+
+            // NetworkCheck only needed for deserialized messages
+            if (message.IsDeserialized)
+            {
+                if (!NetworkCheck(mmRoutingTableItem, message)) return false;
+            }
+
+            return true;
 		}
 
         /// <summary>
@@ -1518,14 +1665,24 @@ namespace MercuryMessaging
             // Validate lateral routing (siblings/cousins) requires AllowLateralRouting
             if ((hasSiblings || hasCousins) && (options == null || !options.AllowLateralRouting))
             {
-                MmLogger.LogFramework($"[ROUTING] Lateral routing (Siblings/Cousins) requires MmRoutingOptions.AllowLateralRouting = true at '{name}'");
+                string errorMsg = $"[ROUTING] Lateral routing (Siblings/Cousins) requires MmRoutingOptions.AllowLateralRouting = true at '{name}'";
+                if (StrictMode)
+                {
+                    throw new System.InvalidOperationException(errorMsg);
+                }
+                MmLogger.LogFramework(errorMsg);
                 return;
             }
 
             // Validate custom filter requires CustomFilter predicate
             if (hasCustom && (options == null || options.CustomFilter == null))
             {
-                MmLogger.LogFramework($"[ROUTING] Custom filter requires MmRoutingOptions.CustomFilter predicate at '{name}'");
+                string errorMsg = $"[ROUTING] Custom filter requires MmRoutingOptions.CustomFilter predicate at '{name}'";
+                if (StrictMode)
+                {
+                    throw new System.InvalidOperationException(errorMsg);
+                }
+                MmLogger.LogFramework(errorMsg);
                 return;
             }
 

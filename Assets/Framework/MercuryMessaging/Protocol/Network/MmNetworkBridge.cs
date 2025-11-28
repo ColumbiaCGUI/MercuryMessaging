@@ -366,7 +366,11 @@ namespace MercuryMessaging.Network
             }
             catch (Exception e)
             {
-                MmLog.LogError($"MmNetworkBridge: Failed to process received message: {e.Message}");
+                // FAIL-FAST: Log full exception with stack trace, not just message
+                MmLog.LogError($"MmNetworkBridge: Failed to process received message from sender {senderId}");
+                Debug.LogException(e);
+                // Note: We don't rethrow here as network message processing should be resilient,
+                // but the full error is logged for debugging
             }
         }
 

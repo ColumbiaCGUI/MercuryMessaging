@@ -440,12 +440,82 @@ namespace MercuryMessaging.Network
 
         private static void WriteSerializableData(BinaryWriter writer, MmMessageSerializable msg)
         {
-            // Serialize the object to JSON (simple approach; could use custom serialization)
-            string json = msg.value != null ? JsonUtility.ToJson(msg.value) : "";
-            WriteString(writer, json);
-            // Also write the type name for deserialization
+            // Write the type name for deserialization
             string typeName = msg.value?.GetType().AssemblyQualifiedName ?? "";
             WriteString(writer, typeName);
+
+            if (msg.value is MercuryMessaging.Task.IMmSerializable serializable)
+            {
+                // Use the proper IMmSerializable interface
+                object[] data = serializable.Serialize();
+                writer.Write(data.Length);
+                foreach (var obj in data)
+                {
+                    WriteObjectValue(writer, obj);
+                }
+            }
+            else if (msg.value != null)
+            {
+                // Fallback for non-IMmSerializable types - log warning
+                Debug.LogWarning($"MmBinarySerializer: Type {typeName} does not implement IMmSerializable. Serialization may fail.");
+                writer.Write(0); // Empty array
+            }
+            else
+            {
+                writer.Write(0); // Null value - empty array
+            }
+        }
+
+        /// <summary>
+        /// Write an object value to the binary stream with type information.
+        /// </summary>
+        private static void WriteObjectValue(BinaryWriter writer, object value)
+        {
+            if (value == null)
+            {
+                writer.Write((byte)0); // Null type marker
+                return;
+            }
+
+            switch (value)
+            {
+                case int i:
+                    writer.Write((byte)1);
+                    writer.Write(i);
+                    break;
+                case bool b:
+                    writer.Write((byte)2);
+                    writer.Write(b);
+                    break;
+                case float f:
+                    writer.Write((byte)3);
+                    writer.Write(f);
+                    break;
+                case string s:
+                    writer.Write((byte)4);
+                    WriteString(writer, s);
+                    break;
+                case double d:
+                    writer.Write((byte)5);
+                    writer.Write(d);
+                    break;
+                case long l:
+                    writer.Write((byte)6);
+                    writer.Write(l);
+                    break;
+                case byte by:
+                    writer.Write((byte)7);
+                    writer.Write(by);
+                    break;
+                case short sh:
+                    writer.Write((byte)8);
+                    writer.Write(sh);
+                    break;
+                default:
+                    Debug.LogWarning($"MmBinarySerializer: Unsupported object type in IMmSerializable: {value.GetType().Name}");
+                    writer.Write((byte)0); // Treat as null
+                    break;
+            }
         }
 
         #endregion
@@ -527,31 +597,70 @@ namespace MercuryMessaging.Network
 
         private static void ReadSerializableData(BinaryReader reader, MmMessageSerializable msg)
         {
-            string json = ReadString(reader);
             string typeName = ReadString(reader);
+            int dataLength = reader.ReadInt32();
 
-            if (!string.IsNullOrEmpty(typeName) && !string.IsNullOrEmpty(json))
+            if (string.IsNullOrEmpty(typeName))
             {
-                try
+                return; // No type, nothing to deserialize
+            }
+
+            // Read the object array
+            object[] data = new object[dataLength];
+            for (int i = 0; i < dataLength; i++)
+            {
+                data[i] = ReadObjectValue(reader);
+            }
+
+            try
+            {
+                Type type = Type.GetType(typeName);
+                if (type == null)
                 {
-                    Type type = Type.GetType(typeName);
-                    if (type != null)
-                    {
-                        // Note: JsonUtility doesn't work well with interfaces.
-                        // For IMmSerializable types, use Activator and custom deserialization.
-                        var obj = Activator.CreateInstance(type);
-                        if (obj is MercuryMessaging.Task.IMmSerializable serializable)
-                        {
-                            // TODO: IMmSerializable uses object[] Deserialize, not JSON.
-                            // This is a placeholder - full support needs custom binary format.
-                            msg.value = serializable;
-                        }
-                    }
+                    Debug.LogError($"MmBinarySerializer: Cannot find type '{typeName}' for deserialization");
+                    return;
                 }
-                catch (Exception e)
+
+                var obj = Activator.CreateInstance(type);
+                if (obj is MercuryMessaging.Task.IMmSerializable serializable)
                 {
-                    Debug.LogWarning($"Failed to deserialize MmMessageSerializable: {e.Message}");
+                    // Call Deserialize with the object array
+                    serializable.Deserialize(data, 0);
+                    msg.value = serializable;
                 }
+                else
+                {
+                    Debug.LogError($"MmBinarySerializer: Type '{typeName}' does not implement IMmSerializable");
+                }
+            }
+            catch (Exception e)
+            {
+                // FAIL-FAST: Log full exception, not just message
+                Debug.LogException(e);
+                throw new InvalidOperationException($"Failed to deserialize MmMessageSerializable of type '{typeName}'", e);
+            }
+        }
+
+        /// <summary>
+        /// Read an object value from the binary stream with type information.
+        /// </summary>
+        private static object ReadObjectValue(BinaryReader reader)
+        {
+            byte typeMarker = reader.ReadByte();
+            switch (typeMarker)
+            {
+                case 0: return null;
+                case 1: return reader.ReadInt32();
+                case 2: return reader.ReadBoolean();
+                case 3: return reader.ReadSingle();
+                case 4: return ReadString(reader);
+                case 5: return reader.ReadDouble();
+                case 6: return reader.ReadInt64();
+                case 7: return reader.ReadByte();
+                case 8: return reader.ReadInt16();
+                default:
+                    Debug.LogWarning($"MmBinarySerializer: Unknown type marker {typeMarker} during deserialization");
+                    return null;
             }
         }
 

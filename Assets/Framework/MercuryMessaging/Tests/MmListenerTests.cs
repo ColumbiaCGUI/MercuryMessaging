@@ -5,9 +5,11 @@
 
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.TestTools;
 using MercuryMessaging;
 using MercuryMessaging.Protocol.DSL;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace MercuryMessaging.Tests
 {
@@ -507,6 +509,9 @@ namespace MercuryMessaging.Tests
                 .OnReceived(_ => callCount++)
                 .Execute();
 
+            // Expect the error log from the exception handler
+            LogAssert.Expect(LogType.Error, new Regex(@"\[MmListener\] Exception in handler:.*Test exception"));
+
             // Act - should not throw despite sub2 exception
             Assert.DoesNotThrow(() =>
                 rootRelay.MmInvoke(MmMethod.MessageFloat, 1f, MmMetadataBlockHelper.Default));
@@ -631,9 +636,15 @@ namespace MercuryMessaging.Tests
             // Act & Assert - Should not throw, returns default/null
             var builder = orphanResponder.Listen<MmMessageFloat>();
 
+            // Expect the error log when trying to create listener without relay node
+            LogAssert.Expect(LogType.Error, "[MmListener] Cannot create listener without a relay node");
+
             // The default struct has null relay, so Execute() should return null
             var subscription = builder.OnReceived(_ => { }).Execute();
             Assert.IsNull(subscription, "Listener on responder without relay should return null");
+
+            // Expect another error log for the convenience method
+            LogAssert.Expect(LogType.Error, "[MmListener] Cannot create listener without a relay node");
 
             // Convenience methods should also return null
             var floatSub = orphanResponder.OnFloat(_ => { });
