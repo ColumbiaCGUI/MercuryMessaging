@@ -246,8 +246,17 @@ namespace MercuryMessaging.Protocol.DSL
             {
                 return _switchNode.RoutingTable[stateName];
             }
-            catch
+            catch (System.Collections.Generic.KeyNotFoundException)
             {
+                // State not found in routing table - expected behavior for undefined states
+                Debug.LogWarning($"AppStateBuilder: State '{stateName}' not found in routing table");
+                return null;
+            }
+            catch (System.Exception e)
+            {
+                // Unexpected error - log full exception
+                Debug.LogError($"AppStateBuilder: Error getting routing table item for state '{stateName}'");
+                Debug.LogException(e);
                 return null;
             }
         }

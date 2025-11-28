@@ -377,6 +377,44 @@ If the actual implementation differs from the plan, document why:
 3. **Suggest Fixes**: Offer concrete solutions, not just descriptions
 4. **Test Fixes**: Verify that proposed fixes actually work
 
+### No Silent Fallbacks Policy
+
+**CRITICAL:** This project follows a strict "fail-fast" policy. Silent fallbacks mask failures and make debugging extremely difficult.
+
+#### MUST Rules (Violations = Reject PR)
+
+- **EH-1 (MUST)**: Log full exception with `Debug.LogException(e)` or `MmLogger.LogError(e.ToString())` - never just `e.Message`
+- **EH-2 (MUST)**: Bare `catch` blocks without exception type are forbidden
+- **EH-3 (MUST)**: If catching and returning null/default, log warning with context first
+- **EH-4 (NEVER)**: Empty catch blocks `catch { }`
+- **EH-5 (NEVER)**: Catch-and-swallow without stack trace
+
+#### DO Instead (Alternatives)
+
+| ❌ Anti-Pattern | ✅ Do Instead |
+|----------------|---------------|
+| Return null on failure | Log warning first, then return null |
+| Catch all exceptions | Catch specific exception types |
+| Continue after error | Rethrow after logging (or let it propagate) |
+| `catch (Exception e) { Log(e.Message); }` | `catch (Exception e) { Debug.LogException(e); throw; }` |
+
+#### Examples
+
+**❌ WRONG - Silent Fallback:**
+```csharp
+try { /* operation */ }
+catch (Exception e) { Debug.LogWarning(e.Message); return null; }
+```
+
+**✅ CORRECT - Fail Fast:**
+```csharp
+try { /* operation */ }
+catch (SpecificException e) {
+    Debug.LogException(e);  // Full stack trace
+    throw;  // Let caller handle it
+}
+```
+
 ---
 
 ## Common Pitfalls to Avoid

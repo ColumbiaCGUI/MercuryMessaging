@@ -270,7 +270,11 @@ namespace MercuryMessaging
 		    }
 		    catch (Exception e)
             {
-                MmLogger.LogError(e.Message);
+                // FAIL-FAST: Log full exception with stack trace, not just message
+                MmLogger.LogError($"MmNetworkResponderPhoton: Failed to process network event");
+                Debug.LogException(e);
+                // Note: We don't rethrow here as network event processing should be resilient,
+                // but the full error is logged for debugging
             }
 		} 
     }
