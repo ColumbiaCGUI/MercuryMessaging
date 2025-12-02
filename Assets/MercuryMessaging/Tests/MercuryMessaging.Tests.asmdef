@@ -1,0 +1,31 @@
+{
+    "name": "MercuryMessaging.Tests",
+    "rootNamespace": "MercuryMessaging.Tests",
+    "references": [
+        "MercuryMessaging",
+        "MercuryMessaging.StandardLibrary",
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner",
+        "Unity.TextMeshPro",
+        "GUID:7c88a4a7926ee5145ad2dfa06f454c67"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [
+        {
+            "name": "com.firstgeargames.fishnet",
+            "expression": "",
+            "define": "FISHNET_AVAILABLE"
+        }
+    ],
+    "noEngineReferences": false
+}

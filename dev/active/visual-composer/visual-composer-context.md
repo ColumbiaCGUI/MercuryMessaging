@@ -1,6 +1,6 @@
 # Visual Network Composer - Technical Context
 
-**Last Updated:** 2025-11-18
+**Last Updated:** 2025-12-01
 **Status:** Planning - Not Started
 **Priority:** MEDIUM (Phase 4.2)
 
@@ -11,7 +11,31 @@
 **Current State:** Not Started
 **Blockers:** None - can begin anytime
 **Dependencies:** None (standalone developer tool)
-**Estimated Timeline:** 212 hours (5-6 weeks)
+**Estimated Timeline:** 316 hours (8 weeks)
+
+---
+
+## Technology Stack Decision (2025-12-01)
+
+### 2D Graph Editor: GraphViewBase (MIT)
+- **Package:** `com.gentlymad.graphviewbase` (already imported via git)
+- **Rationale:** MIT licensed, already imported, UIToolkit-based, not deprecated
+- **Documentation:** https://github.com/Gentlymad-Studios/GraphViewBase
+
+### 3D Scene Visualization: Custom GL-Based
+- **Approach:** Built-in Unity GL API with patterns from ALINE
+- **Reference:** eppz.Lines (MIT) for implementation patterns
+- **Rationale:** Zero paid dependencies, URP/HDRP compatible
+
+### Runtime Debugger: Custom Mercury Inspector
+- **Approach:** Lightweight IMGUI/UIToolkit solution focused on message flow
+- **Reference:** UnityRuntimeInspector (MIT) for UI patterns
+- **Rationale:** Focused solution more useful than general-purpose inspector
+
+### Reference Implementations (Study Only)
+- **ALINE:** Scope-based drawing API, CommandBuilder pattern, camera injection
+- **EPO Outline:** Component marking, static registry, layer filtering
+- **GraphViewBase:** Direct use (MIT licensed)
 
 ---
 
@@ -20,36 +44,44 @@
 **Where to start if beginning this task:**
 1. Read this document completely
 2. Review `visual-composer-tasks.md` for detailed checklist
-3. Study Unity's GraphView API documentation
-4. Review existing hierarchy mirroring needs
-5. Prototype simple node-based editor
+3. Study GraphViewBase source code (already imported)
+4. Study ALINE patterns for 3D visualization approach
+5. Prototype simple node-based editor extending GraphViewBase
 
 **First 3 steps to take:**
-1. Design hierarchy mirroring architecture (8h)
-2. Implement hierarchy traversal and node creation (16h)
-3. Create basic Unity Editor window (12h)
+1. Create prototype extending GraphViewBase's `GraphView` and `BaseNode` classes
+2. Implement MmRelayNode ↔ NodeView bidirectional sync
+3. Add GL-based scene visualization for connections
 
 **Key files to read first:**
-- Unity GraphView documentation
+- `Library/PackageCache/com.gentlymad.graphviewbase@.../Editor/Elements/GraphView.cs`
+- `Library/PackageCache/com.gentlymad.graphviewbase@.../Editor/Elements/Graph/BaseNode.cs`
+- `Assets/Plugins/Plugins/ALINE/Draw.cs` (for GL patterns)
 - `Assets/MercuryMessaging/Protocol/MmRelayNode.cs`
-- Examples of Unity node-based editors (Shader Graph, Visual Scripting)
 
 ---
 
 ## Technical Overview
 
-This initiative creates visual tools for constructing Mercury networks, eliminating manual setup and reducing errors. Four core tools:
+This initiative creates visual tools for constructing and debugging Mercury networks. **Six core tools:**
 
+### Editor Tools (Phase 1)
 1. **Hierarchy Mirroring** - Auto-convert Unity hierarchy to Mercury network
 2. **Network Templates** - Pre-built patterns (hub-spoke, chain, broadcast)
-3. **Visual Composer** - Drag-and-drop node graph editor
+3. **Visual Composer** - Drag-and-drop node graph editor (GraphViewBase)
 4. **Network Validator** - Detect issues before runtime
+
+### Visualization & Debugging (Phase 2-3)
+5. **3D Scene Visualization** - Real-time connection lines in Scene view (custom GL)
+6. **Runtime Debugger** - In-game message flow inspector (custom UI)
 
 **Expected Impact:**
 - 50% reduction in network setup time
 - 70% fewer configuration errors
 - Visual debugging of message flow
 - Reusable network patterns
+- **NEW:** Live message path visualization in Scene view
+- **NEW:** Runtime debugging without stopping play mode
 
 ---
 
@@ -638,21 +670,29 @@ Bottleneck Nodes: Hub, Controller
 
 ## Design Decisions
 
-### Decision 1: GraphView vs Custom Editor
+### Decision 1: Graph Editor Framework (Updated 2025-12-01)
 
-**Options:**
-A. Unity GraphView (used by Shader Graph)
-B. Custom node editor (full control)
-C. Third-party library (odin, NodeCanvas)
+**Options Evaluated:**
+A. Unity GraphView (`Experimental.GraphView`) - deprecated, minimal docs
+B. Unity Graph Toolkit (Unity 6.2+) - experimental, locked to Unity 6.2+
+C. GraphViewBase (MIT) - UIToolkit-based, already imported
+D. xNode - IMGUI-based, older
+E. Custom node editor - high effort
 
-**Decision:** A (Unity GraphView)
+**Decision:** C (GraphViewBase)
 
 **Rationale:**
-- Familiar to Unity developers
-- Robust and well-tested
-- Future-proof (Unity actively developing)
-- Good performance
-- Native look and feel
+- **MIT licensed** - can redistribute without paid dependencies
+- **Already imported** in project via git package
+- **UIToolkit-based** - not deprecated like `Experimental.GraphView`
+- **Works on any Unity version** with UIToolkit (not locked to Unity 6.2+)
+- **Source code available** - can customize as needed
+- **Actively maintained** by Gentlymad Studios
+
+**Rejected:**
+- Unity GraphView: Deprecated, minimal documentation, risky for long-term
+- Unity Graph Toolkit: Experimental, Unity 6.2+ only, API still changing
+- xNode: IMGUI-based (older technology), less active maintenance
 
 ### Decision 2: Export Format
 
@@ -683,34 +723,90 @@ C. Both
 - On-demand for detailed report
 - Toggleable to avoid performance impact
 
+### Decision 4: 3D Scene Visualization (New 2025-12-01)
+
+**Options:**
+A. ALINE (paid asset) - professional, feature-rich
+B. Popcron Gizmos (free) - SRP compatibility issues
+C. Custom GL solution - zero dependencies
+
+**Decision:** C (Custom GL solution)
+
+**Rationale:**
+- **Zero paid dependencies** - anyone can use without purchasing
+- **URP/HDRP compatible** via `RenderPipelineManager.endCameraRendering`
+- **Learn patterns from ALINE** - scope-based API, CommandBuilder batching
+- **Simpler than full library** - only need line drawing for connections
+
+**Implementation Approach:**
+```csharp
+// Inspired by ALINE's scope pattern
+using (MmDraw.WithColor(Color.cyan))
+{
+    MmDraw.Line(nodeA.position, nodeB.position);
+    MmDraw.Arrow(nodeB.position, direction);
+}
+```
+
+### Decision 5: Runtime Debugging (New 2025-12-01)
+
+**Options:**
+A. Fork UnityRuntimeInspector (MIT) - full-featured, GC-optimized
+B. Lightweight custom solution - focused on Mercury
+
+**Decision:** B (Lightweight custom solution)
+
+**Rationale:**
+- **Focused on Mercury messaging** - more useful than general inspector
+- **Smaller footprint** - less code to maintain
+- **Study UnityRuntimeInspector patterns** for UI best practices
+
 ---
 
-## Implementation Strategy
+## Implementation Strategy (Updated 2025-12-01)
 
-### Week 1-2: Hierarchy Mirroring (36h)
+**Priority Order:** Graph Editor → Scene Visualization → Runtime Debugger
 
-1. Design UI (8h)
-2. Implement traversal logic (16h)
-3. Add configuration options (12h)
+### Phase 1: Editor Tools (216h) - Weeks 1-6
 
-### Week 3-4: Templates (52h)
+**Week 1-2: Visual Composer Core (80h)**
+1. Study GraphViewBase architecture (8h)
+2. Create MmNetworkComposer EditorWindow (16h)
+3. Implement MmNodeView extending BaseNode (16h)
+4. Implement MmEdgeView extending BaseEdge (16h)
+5. Add bidirectional sync with scene (16h)
+6. Integration testing (8h)
 
-4. Create template base class (12h)
-5. Implement 5 core templates (20h)
-6. Add template UI (20h)
+**Week 2-3: Hierarchy Mirroring (36h)**
+7. Design UI (8h)
+8. Implement traversal logic (16h)
+9. Add configuration options (12h)
 
-### Week 4-6: Visual Composer (96h)
+**Week 3-4: Templates (52h)**
+10. Create template base class (12h)
+11. Implement 5 core templates (20h)
+12. Add template UI (20h)
 
-7. Design GraphView architecture (16h)
-8. Implement graph editor (40h)
-9. Add export functionality (16h)
-10. Integration testing (20h)
+**Week 5-6: Validation (48h)**
+13. Create validator class (20h)
+14. Implement validation rules (16h)
+15. Create validation UI (12h)
 
-### Week 6: Validation (48h)
+### Phase 2: Scene Visualization (40h) - Week 7
 
-11. Create validator class (20h)
-12. Implement validation rules (16h)
-13. Create validation UI (12h)
+**3D Connection Visualization**
+16. Create MmConnectionDrawer using GL API (16h)
+17. Add color-coding by message type (8h)
+18. Implement message pulse animation (8h)
+19. Add scene overlay toggle and settings (8h)
+
+### Phase 3: Runtime Debugger (60h) - Week 8
+
+**Mercury Message Inspector**
+20. Create MmRuntimeDebugger component (20h)
+21. Implement message stream view (16h)
+22. Add filtering by method/tag/level (12h)
+23. Create node hierarchy browser (12h)
 
 ---
 
@@ -733,16 +829,29 @@ C. Both
 ## References
 
 ### Key Technologies
-- Unity GraphView API
-- Unity UIElements
-- Unity EditorWindow
+- **GraphViewBase** (MIT) - https://github.com/Gentlymad-Studios/GraphViewBase
+- **Unity GL API** - Built-in line drawing
+- **Unity UIToolkit** - Modern UI framework
+- **Unity EditorWindow** - Editor extension base
+
+### Reference Implementations (Study Only)
+- `Assets/Plugins/Plugins/ALINE/Draw.cs` - Scope-based drawing API
+- `Assets/Plugins/Plugins/ALINE/CommandBuilder.cs` - Batch rendering
+- `Assets/Plugins/Plugins/EasyPerformantOutline/Scripts/Outlinable.cs` - Component marking
+- `Assets/Plugins/Plugins/EasyPerformantOutline/Scripts/Outliner.cs` - Render pipeline integration
+
+### Open Source Resources
+- [eppz.Lines](https://github.com/eppz/Unity.Library.eppz.Lines) (MIT) - GL drawing patterns
+- [UnityRuntimeInspector](https://github.com/yasirkula/UnityRuntimeInspector) (MIT) - Runtime UI patterns
 
 ### Related Documents
 - Master Plan: Phase 4.2
 - Tasks: `visual-composer-tasks.md`
+- Technology Decision: `.claude/plans/crispy-strolling-dawn.md`
 
 ---
 
-**Document Version:** 1.0
-**Last Updated:** 2025-11-18
+**Document Version:** 2.0
+**Last Updated:** 2025-12-01
 **Owner:** Developer Tools Team
+**Major Changes:** Technology stack revision (GraphViewBase, custom GL, runtime debugger)

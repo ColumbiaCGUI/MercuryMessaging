@@ -1,8 +1,19 @@
 # Performance Optimization Results
 
-**Date:** 2025-11-20
+**Date:** 2025-11-20 (Updated 2025-11-28)
 **Optimization Phase:** Investigation and Fix
 **Status:** ✅ Complete - Significant Improvements Achieved
+
+---
+
+> **LATEST VALIDATED DATA (2025-11-28)**
+>
+> The most recent validated performance data shows:
+> - Small: 14.54ms / 68.8 FPS / 100 msg/sec
+> - Medium: 14.29ms / 70.0 FPS / 500 msg/sec
+> - Large: 17.17ms / 58.3 FPS / 1000 msg/sec
+>
+> See `dev/performance-results/` for raw data.
 
 ---
 

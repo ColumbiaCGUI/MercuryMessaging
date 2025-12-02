@@ -1,8 +1,16 @@
 # Visual Network Composer - Task Checklist
 
-**Last Updated:** 2025-11-18
+**Last Updated:** 2025-12-01
 **Status:** Ready to Start
-**Total Effort:** 212 hours (5-6 weeks)
+**Total Effort:** 316 hours (8 weeks)
+
+---
+
+## Technology Stack (Updated 2025-12-01)
+
+- **2D Graph Editor:** GraphViewBase (MIT, already imported)
+- **3D Scene Visualization:** Custom GL-based solution (ALINE-inspired patterns)
+- **Runtime Debugger:** Custom Mercury Inspector (lightweight, focused)
 
 ---
 
@@ -164,103 +172,117 @@ public void TestHierarchyMirroring()
 
 ---
 
-## Tool 3: Visual Network Composer (96 hours)
+## Tool 3: Visual Network Composer (80 hours)
 
-### Task 3.1: Design GraphView Architecture (16h)
-- [ ] Study Unity GraphView API
-- [ ] Design MmNetworkComposer EditorWindow
-- [ ] Design MmGraphView class structure
-- [ ] Design NodeView (MmRelayNode visualization)
-- [ ] Design EdgeView (connection visualization)
-- [ ] Plan data model (MmNetworkGraph)
-- [ ] Design serialization format
+### Task 3.1: Study GraphViewBase Architecture (8h)
+- [ ] Read GraphViewBase source code in `Library/PackageCache/`
+- [ ] Understand `GraphView`, `BaseNode`, `BasePort`, `BaseEdge` classes
+- [ ] Study action callback pattern (`OnActionExecuted`)
+- [ ] Understand port connection validation (`CanConnectTo`)
+- [ ] Review drag-and-drop event system
+- [ ] Document key extension points
 
-**Acceptance:** Architecture document complete, classes outlined
+**Acceptance:** Understanding documented, ready to implement
 
 **Dependencies:** None
 
-**References:** Unity Shader Graph, Visual Scripting source
+**Key Files to Read:**
+- `Library/PackageCache/com.gentlymad.graphviewbase@.../Editor/Elements/GraphView.cs`
+- `Library/PackageCache/com.gentlymad.graphviewbase@.../Editor/Elements/Graph/BaseNode.cs`
+- `Library/PackageCache/com.gentlymad.graphviewbase@.../Editor/Elements/Graph/BasePort.cs`
 
 ---
 
-### Task 3.2: Implement Graph Editor Core (40h)
+### Task 3.2: Design MmNetworkComposer Architecture (8h)
+- [ ] Design MmNetworkComposer EditorWindow structure
+- [ ] Design MmGraphView class extending GraphViewBase's GraphView
+- [ ] Design MmNodeView extending BaseNode
+- [ ] Design MmEdgeView extending BaseEdge
+- [ ] Plan data model (MmNetworkGraph)
+- [ ] Design serialization format
+- [ ] Plan bidirectional sync with scene
+
+**Acceptance:** Architecture document complete, classes outlined
+
+**Dependencies:** Task 3.1
+
+**References:** GraphViewBase samples, existing MmRelayNode structure
+
+---
+
+### Task 3.3: Implement Graph Editor Core (40h)
 - [ ] Create MmNetworkComposer EditorWindow (8h)
   - Toolbar (New, Save, Load, Export, Validate)
-  - GraphView container
+  - GraphViewBase container
   - Inspector panel
   - Minimap panel
-- [ ] Implement MmGraphView (16h)
+- [ ] Implement MmGraphView extending GraphViewBase's GraphView (16h)
+  - Override `OnActionExecuted` for node/edge events
   - Node creation via drag-drop
   - Edge creation via port connections
   - Node selection and multi-select
   - Graph navigation (pan, zoom)
-  - Grid and snapping
-- [ ] Create NodeView for MmRelayNode (8h)
-  - Input/output ports
-  - Property display
-  - Visual styling
+- [ ] Create MmNodeView extending BaseNode (8h)
+  - Override port creation with Mercury-specific ports
+  - Input/output ports for routing directions
+  - Property display (Name, Tag, Filters)
+  - Visual styling with Mercury colors
   - Tag/filter indicators
 - [ ] Implement MmNetworkGraph data model (8h)
   - Node storage
   - Connection storage
   - Serialization (JSON)
   - Deserialization
+  - Scene sync events
 
 **Acceptance:** Graph editor functional with node/edge creation
 
-**Dependencies:** Task 3.1
+**Dependencies:** Task 3.2
 
 **Code Location:** `Assets/MercuryMessaging/Support/Editor/NetworkComposer/`
 
 ---
 
-### Task 3.3: Add Node Configuration (16h)
+### Task 3.4: Add Node Configuration (8h)
 - [ ] Create node inspector panel
 - [ ] Add property editing (name, tag, filters)
 - [ ] Implement real-time node updates
 - [ ] Add custom property drawers
 - [ ] Implement node search/filter in inspector
-- [ ] Add node documentation tooltips
 
 **Acceptance:** Users can configure all node properties via inspector
-
-**Dependencies:** Task 3.2
-
----
-
-### Task 3.4: Implement Export Functionality (16h)
-- [ ] Implement "Export to Scene" (8h)
-  - Create GameObjects from nodes
-  - Add MmRelayNode components
-  - Set up routing table connections
-  - Position objects in scene
-  - Handle hierarchy parenting
-- [ ] Implement "Save Network" (4h)
-  - Serialize graph to JSON/ScriptableObject
-  - Save to project assets
-- [ ] Implement "Load Network" (4h)
-  - Deserialize from JSON/ScriptableObject
-  - Recreate graph in editor
-
-**Acceptance:** Can export functional Mercury networks to scene
 
 **Dependencies:** Task 3.3
 
 ---
 
-### Task 3.5: Integration Testing (20h)
+### Task 3.5: Implement Bidirectional Sync (8h)
+- [ ] Implement scene → graph sync (8h)
+  - Detect MmRelayNode changes in scene
+  - Update corresponding nodes in graph
+  - Handle node creation/deletion in scene
+- [ ] Implement graph → scene sync (included above)
+  - Create GameObjects from nodes
+  - Add MmRelayNode components
+  - Set up routing table connections
+
+**Acceptance:** Changes in graph reflect in scene and vice versa
+
+**Dependencies:** Task 3.4
+
+---
+
+### Task 3.6: Integration Testing (8h)
 - [ ] Test with simple networks (hub-spoke, chain)
 - [ ] Test with complex networks (100+ nodes)
-- [ ] Test export and reimport workflows
-- [ ] Test template integration
+- [ ] Test bidirectional sync workflows
 - [ ] Test undo/redo functionality
 - [ ] Performance testing with large graphs
-- [ ] UI/UX testing and refinement
 - [ ] Bug fixing and polish
 
 **Acceptance:** Composer works reliably for all use cases
 
-**Dependencies:** Task 3.4
+**Dependencies:** Task 3.5
 
 ---
 
@@ -332,14 +354,164 @@ public void TestHierarchyMirroring()
 
 ---
 
+## Tool 5: 3D Scene Visualization (40 hours) - NEW
+
+### Task 5.1: Study ALINE Patterns (4h)
+- [ ] Read `Assets/Plugins/Plugins/ALINE/Draw.cs` - scope-based API
+- [ ] Read `Assets/Plugins/Plugins/ALINE/CommandBuilder.cs` - batching
+- [ ] Understand camera injection pattern (`CameraEvent`, `CommandBuffer`)
+- [ ] Document patterns to replicate
+
+**Acceptance:** Understanding documented, ready to implement custom solution
+
+**Dependencies:** None
+
+**Key Files to Study:**
+- `Assets/Plugins/Plugins/ALINE/Draw.cs`
+- `Assets/Plugins/Plugins/ALINE/CommandBuilder.cs`
+- `Assets/Plugins/Plugins/ALINE/DrawingManager.cs`
+
+---
+
+### Task 5.2: Implement MmConnectionDrawer (16h)
+- [ ] Create `MmConnectionDrawer` component
+- [ ] Implement GL-based line drawing for connections
+- [ ] Add URP/HDRP support via `RenderPipelineManager.endCameraRendering`
+- [ ] Batch all lines into single draw call
+- [ ] Implement scope-based API inspired by ALINE:
+  ```csharp
+  using (MmDraw.WithColor(Color.cyan))
+  {
+      MmDraw.Line(nodeA.position, nodeB.position);
+  }
+  ```
+
+**Acceptance:** Connection lines visible in Scene view
+
+**Dependencies:** Task 5.1
+
+**Code Location:** `Assets/MercuryMessaging/Support/Editor/SceneVisualization/`
+
+---
+
+### Task 5.3: Add Visual Enhancements (12h)
+- [ ] Color-code connections by message type/direction (4h)
+  - Blue: Child direction
+  - Green: Parent direction
+  - Yellow: Bidirectional
+- [ ] Implement message pulse animation (4h)
+  - Animated "packet" along connection line
+  - Triggered when message is sent
+- [ ] Add hierarchy depth visualization (4h)
+  - Vary line thickness by depth
+  - Add depth labels
+
+**Acceptance:** Connections visually distinguish message types
+
+**Dependencies:** Task 5.2
+
+---
+
+### Task 5.4: Scene Overlay Integration (8h)
+- [ ] Create SceneView overlay toggle
+- [ ] Add settings panel for visualization options
+- [ ] Implement frustum culling for performance
+- [ ] Add legend/key for color meanings
+- [ ] Test performance with 100+ nodes
+
+**Acceptance:** Visualization toggleable, performant at scale
+
+**Dependencies:** Task 5.3
+
+---
+
+## Tool 6: Runtime Debugger (60 hours) - NEW
+
+### Task 6.1: Study EPO Outline Patterns (4h)
+- [ ] Read `Assets/Plugins/Plugins/EasyPerformantOutline/Scripts/Outlinable.cs`
+- [ ] Understand component marking pattern
+- [ ] Study static registry pattern (`HashSet<Outlinable>`)
+- [ ] Document patterns for `MmHighlightable` component
+
+**Acceptance:** Understanding documented, ready to implement
+
+**Dependencies:** None
+
+**Key Files to Study:**
+- `Assets/Plugins/Plugins/EasyPerformantOutline/Scripts/Outlinable.cs`
+- `Assets/Plugins/Plugins/EasyPerformantOutline/Scripts/Outliner.cs`
+
+---
+
+### Task 6.2: Create MmRuntimeDebugger Component (20h)
+- [ ] Create `MmRuntimeDebugger` MonoBehaviour
+- [ ] Implement IMGUI-based debug panel (12h)
+  - Collapsible sections
+  - Scroll views for message list
+  - Filter dropdowns
+- [ ] Hook into `MmRelayNode.MmInvoke` for message capture (4h)
+- [ ] Add enable/disable toggle (keyboard shortcut) (4h)
+
+**Acceptance:** Debug panel shows when enabled during Play mode
+
+**Dependencies:** Task 6.1
+
+**Code Location:** `Assets/MercuryMessaging/Support/RuntimeDebugger/`
+
+---
+
+### Task 6.3: Implement Message Stream View (16h)
+- [ ] Create scrolling message log (8h)
+  - Timestamp
+  - Source node
+  - Target node(s)
+  - Method type
+  - Payload summary
+- [ ] Add message filtering (4h)
+  - By MmMethod type
+  - By tag
+  - By level filter
+- [ ] Implement pause/resume message capture (2h)
+- [ ] Add clear button (2h)
+
+**Acceptance:** Users can see and filter live message stream
+
+**Dependencies:** Task 6.2
+
+---
+
+### Task 6.4: Implement Node Hierarchy Browser (12h)
+- [ ] Create collapsible tree view of MmRelayNodes (6h)
+- [ ] Show message counts per node (2h)
+- [ ] Click to select node in scene (2h)
+- [ ] Show routing table for selected node (2h)
+
+**Acceptance:** Users can browse node hierarchy at runtime
+
+**Dependencies:** Task 6.2
+
+---
+
+### Task 6.5: Export and Testing (8h)
+- [ ] Implement message trace export (JSON/CSV) (4h)
+- [ ] Test with various network configurations (2h)
+- [ ] Performance testing during high message volume (2h)
+
+**Acceptance:** Debugger works reliably without impacting performance
+
+**Dependencies:** Tasks 6.3, 6.4
+
+---
+
 ## Integration & Documentation (16 hours)
 
-### Task 5.1: Tool Integration (8h)
+### Task 7.1: Tool Integration (8h)
 - [ ] Integrate hierarchy mirroring with templates
 - [ ] Integrate templates with visual composer
 - [ ] Add validation to all tools
 - [ ] Create unified menu system (Mercury → ...)
-- [ ] Add cross-tool workflows
+- [ ] Integrate scene visualization with composer
+- [ ] Link runtime debugger to scene selection
 
 **Acceptance:** All tools work together seamlessly
 
@@ -347,11 +519,13 @@ public void TestHierarchyMirroring()
 
 ---
 
-### Task 5.2: Documentation (8h)
+### Task 7.2: Documentation (8h)
 - [ ] Write tool documentation (4h)
   - Hierarchy Mirroring guide
   - Template usage guide
-  - Visual Composer manual
+  - Visual Composer manual (GraphViewBase)
+  - Scene Visualization guide
+  - Runtime Debugger guide
   - Validator reference
 - [ ] Create video tutorials (2h)
   - Screen recordings
@@ -359,41 +533,53 @@ public void TestHierarchyMirroring()
 - [ ] Write API reference (2h)
   - Template API
   - Validator API
+  - MmDraw API
 
 **Acceptance:** Complete documentation published
 
-**Dependencies:** Task 5.1
+**Dependencies:** Task 7.1
 
 ---
 
 ## Summary
 
-**Total Tasks:** 22
-**Total Effort:** 212 hours (5-6 weeks)
+**Total Tasks:** 32
+**Total Effort:** 316 hours (8 weeks)
 
 **Phase Breakdown:**
-- Tool 1 (Hierarchy Mirroring): 36h
-- Tool 2 (Network Templates): 52h
-- Tool 3 (Visual Composer): 96h
-- Tool 4 (Network Validator): 48h
-- Integration & Docs: 16h
+- **Phase 1: Editor Tools (216h)**
+  - Tool 1 (Hierarchy Mirroring): 36h
+  - Tool 2 (Network Templates): 52h
+  - Tool 3 (Visual Composer): 80h
+  - Tool 4 (Network Validator): 48h
+- **Phase 2: Scene Visualization (40h)**
+  - Tool 5 (3D Scene Viz): 40h
+- **Phase 3: Runtime Debugging (60h)**
+  - Tool 6 (Runtime Debugger): 60h
 
-**Critical Path:** Task 3 (Visual Composer) is the longest and most complex
+**Critical Path:** Tool 3 (Visual Composer) must be done first as it establishes the node/edge data model
 
-**Dependencies:** Most tasks can be parallelized, but integration requires all tools complete
+**Dependencies:** Phase 2-3 can start after Phase 1 core is complete
 
 ---
 
 ## Getting Started
 
 **First 3 tasks to complete:**
-1. Task 1.1: Design UI Architecture (8h)
-2. Task 2.1: Create Template Base Class (12h)
-3. Task 4.1: Create Validator Core (20h)
+1. Task 3.1: Study GraphViewBase Architecture (8h) - Required foundation
+2. Task 5.1: Study ALINE Patterns (4h) - Can be parallel
+3. Task 6.1: Study EPO Outline Patterns (4h) - Can be parallel
 
-These tasks can be done in parallel and unlock the rest of the work.
+These study tasks establish the patterns for all custom implementations.
+
+**Key Files to Read First:**
+- `Library/PackageCache/com.gentlymad.graphviewbase@.../Editor/Elements/GraphView.cs`
+- `Assets/Plugins/Plugins/ALINE/Draw.cs`
+- `Assets/Plugins/Plugins/EasyPerformantOutline/Scripts/Outlinable.cs`
 
 ---
 
-**Document Version:** 1.0
+**Document Version:** 2.0
+**Last Updated:** 2025-12-01
 **Maintained By:** Developer Tools Team
+**Major Changes:** Added Tools 5-6, updated to GraphViewBase, revised effort estimates

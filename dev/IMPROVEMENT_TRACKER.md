@@ -8,42 +8,59 @@
 
 ## Track 1: Production Engineering (IMMEDIATE)
 
-### P1: Performance Optimization (300h) - CRITICAL
+### P1: Performance Optimization (300h) - COMPLETE
 - **Target:** MessagePipe parity (zero-allocation, 5x faster than SendMessage)
-- **Status:** APPROVED - Ready to start
-- **Location:** `dev/active/performance-optimization/`
-- **Key Phases:**
-  - Phase 1: ObjectPool integration (80-90% allocation reduction)
+- **Status:** COMPLETE (Phases 1-8) - Phase 9 deferred for research
+- **Location:** `dev/archive/performance-optimization-complete/`
+- **Completed Phases:**
+  - Phase 1: ObjectPool integration (MmMessagePool, MmHashSetPool)
   - Phase 2: O(1) routing tables (Dictionary lookup)
-  - Phase 3-4: Source generators + delegate dispatch
-  - Phase 5-6: Compiler optimizations + memory tuning
-  - Phase 7-9: Burst compilation (requires NativeContainer migration)
-- **Current Performance:**
-  - vs Direct Calls: 28x slower
-  - vs SendMessage: 2.6x slower
-  - vs MessagePipe: ~15x slower
-- **Target Performance:**
-  - vs SendMessage: 5x FASTER
-  - vs MessagePipe: 2x slower (acceptable)
+  - Phase 3: LINQ removal (Array.Copy serialization)
+  - Phase 4: Source generators (MmGenerateDispatchAttribute)
+  - Phase 5: Delegate dispatch (SetFastHandler API)
+  - Phase 6: Compiler optimizations (AggressiveInlining)
+  - Phase 7: Memory optimizations (struct layout)
+  - Phase 8: Algorithm optimizations (skip unnecessary checks)
+- **Deferred:** Phase 9 (Burst compilation) - for 300+ responder scenarios
+- **Validated Performance (2025-11-28):**
+  - Small: 14.54ms / 68.8 FPS / 100 msg/sec
+  - Medium: 14.29ms / 70.0 FPS / 500 msg/sec
+  - Large: 17.17ms / 58.3 FPS / 1000 msg/sec
+- **Result:** 58-70 FPS at 1000 msg/sec - production ready
 
 ### P2: FishNet Networking (200h)
 - **Target:** Production-ready multiplayer
-- **Status:** APPROVED - Phase 0B network foundation complete
+- **Status:** Phase 1 COMPLETE ✅ (Sessions 1-8)
 - **Location:** `dev/active/networking/`
 - **Dependency:** Network infrastructure in Protocol/Network/
 - **Deliverable:** Working multiplayer demo scene with FishNet backend
+- **Completed (2025-12-01):**
+  - Phase 0A: Package modularization ✅
+  - Phase 0B: Networking foundation ✅
+  - Phase 1: FishNet implementation ✅
+    - Loopback tests: 15/15 PASS
+    - ParrelSync bidirectional messaging: VERIFIED (Session 8)
+    - Hierarchical routing over network: VERIFIED (Session 8)
+    - Server→Client: MmString routed to 4 responders ✅
+    - Client→Server: MmInt routed to 4 responders ✅
+- **Key Insight:** Every responder GameObject needs MmRelayNode
+- **Remaining:** Performance comparison vs PUN2, Fusion 2 implementation
 
-### P3: DSL/DX Improvements (120h)
-- **Target:** Even shorter syntax, tutorials, better IntelliSense
-- **Status:** Planning
-- **Location:** `dev/active/dsl-dx-improvements/` (to be created)
+### P3: DSL/DX Improvements (92h)
+- **Target:** Even shorter syntax, Roslyn analyzers, source generators
+- **Status:** Active (Planning Complete 2025-12-01)
+- **Location:** `dev/active/dsl-dx/`
 - **Key Phases:**
-  - Phase 1: Shorter syntax (operator overloads) - 40h
-  - Phase 2: Source generators for handlers - 40h
-  - Phase 3: Roslyn analyzers - 20h
-  - Phase 4: IntelliSense enhancements - 20h
-- **Current:** 86% verbosity reduction achieved
-- **Target:** 95% verbosity reduction
+  - Phase 1: Property-based syntax (`relay.To.Children.Send()`) - 16h
+  - Phase 2: Builder API for advanced cases - 8h
+  - Phase 3: Roslyn analyzers (MM005, MM010, MM001) - 20h
+  - Phase 4: Source generator enhancements - 40h
+  - Phase 5: Documentation updates - 8h
+- **Syntax Decision:** Level 1 Property-based (most familiar to Unity devs)
+- **Auto-Execute:** Dual API + Analyzer warnings (Option A + C)
+- **Current:** 86% verbosity reduction (48 chars)
+- **Target:** 95% verbosity reduction (32 chars)
+- **Wiki Tutorials:** Separate task at `dev/active/wiki-tutorials/`
 
 ### P4: Fusion 2 Networking (200h)
 - **Target:** Alternative backend, hot-swappable with FishNet
@@ -154,7 +171,7 @@
 - Two-tier API (Auto-Execute + Fluent Chain)
 - Works on both MmRelayNode and MmBaseResponder
 - 93+ tests passing
-- See `Assets/Framework/MercuryMessaging/Protocol/DSL/`
+- See `Assets/MercuryMessaging/Protocol/DSL/`
 
 ### Project Reorganization (2025-11-25)
 - 14 → 6 top-level folders
@@ -165,6 +182,15 @@
 ---
 
 ## Decision Log
+
+### 2025-12-01: DSL/DX Planning and Wiki Tutorials
+- **Syntax Decision:** Level 1 Property-based (`relay.To.Children.Send()`) over operators
+- **Auto-Execute:** Dual API (auto-execute + builder) + Analyzer warnings (MM005)
+- **Wiki Discovery:** Existing wiki at ColumbiaCGUI org (not CGUI-Lab)
+- **Wiki Strategy:** Keep existing tutorials 1-10, add new 5c, 11-14 for new features
+- **Task Folders:** `dev/active/dsl-dx/` (merged), `dev/active/wiki-tutorials/`
+- **Analyzers Planned:** MM005 (missing Execute), MM010 (non-partial class), MM001 (suggest DSL)
+- **Source Generators:** Extend existing `[MmGenerateDispatch]` generator
 
 ### 2025-11-27: Task Consolidation and Research Roadmap
 - Consolidated 11 active dev tasks into prioritized roadmap
@@ -186,6 +212,6 @@
 
 ---
 
-*Last Updated: 2025-11-27*
-*Next Review: End of Q1 2025*
+*Last Updated: 2025-12-01*
+*Next Review: End of Q1 2026*
 *Plan File: `.claude/plans/immutable-puzzling-pinwheel.md`*

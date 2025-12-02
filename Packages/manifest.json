@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "com.coplaydev.unity-mcp": "https://github.com/CoplayDev/unity-mcp.git?path=/MCPForUnity",
+    "com.firstgeargames.fishnet": "https://github.com/FirstGearGames/FishNet.git?path=Assets/FishNet",
     "com.gentlymad.graphviewbase": "https://github.com/Gentlymad-Studios/GraphViewBase.git",
     "com.gentlymad.odinserializer": "https://github.com/Gentlymad-Studios/OdinSerializer.git",
     "com.meta.xr.sdk.interaction.ovr": "81.0.0",
@@ -24,6 +25,7 @@
     "com.unity.xr.interaction.toolkit": "3.2.2",
     "com.unity.xr.meta-openxr": "2.3.0",
     "com.unity.xr.mock-hmd": "1.4.0-preview.2",
+    "com.veriorpies.parrelsync": "https://github.com/VeriorPies/ParrelSync.git?path=/ParrelSync",
     "com.unity.modules.accessibility": "1.0.0",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.androidjni": "1.0.0",

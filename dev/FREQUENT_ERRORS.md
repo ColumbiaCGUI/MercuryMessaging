@@ -678,10 +678,10 @@ When responders receive messages multiple times:
 ## Reference Files
 
 - **Core Routing Logic:** `Assets/MercuryMessaging/Protocol/MmRelayNode.cs`
-  - Standard routing pattern: Lines 705-722
-  - HandleAdvancedRouting: Line 1255
-  - RouteLateral: Line 1473
-  - RouteRecursive: Line 1506
+  - Standard routing pattern: See MmInvoke implementation
+  - HandleAdvancedRouting: See advanced routing section
+  - RouteLateral: See lateral routing methods
+  - RouteRecursive: See recursive routing methods
 
 - **Base Responder:** `Assets/MercuryMessaging/Protocol/MmBaseResponder.cs`
   - Method routing with switch statements
@@ -760,8 +760,118 @@ foreach (var targetNode in ResolvePathTargets(path))
 
 ---
 
-**Document Version:** 1.1
+---
+
+## Network Test Scene Creation (FishNet)
+
+### 4. ⚠️ CRITICAL: Every Responder Needs a Relay Node
+
+**Bug:** Messages reach parent relay node but don't propagate to child responders
+
+**Why This Happens:**
+- Child GameObjects with only responders (no `MmRelayNode`) aren't properly routed
+- `MmRefreshResponders()` only finds responders on the **same GameObject**
+- `RefreshParents()` can throw `NullReferenceException` when iterating child responders without relay nodes
+
+**Anti-Pattern (DON'T DO THIS):**
+```csharp
+// WRONG - Child responders without relay nodes
+var responderObj = new GameObject("TestResponder1");
+responderObj.transform.SetParent(testRootObj.transform);
+responderObj.AddComponent<NetworkTestResponder>();  // Only responder, no relay node!
+
+// This causes:
+// 1. Routing table doesn't include this responder properly
+// 2. Messages don't propagate to it
+// 3. NullReferenceException in RefreshParents() when iterating
+```
+
+**Correct Pattern (DO THIS):**
+```csharp
+// CORRECT - Every responder GameObject has a relay node
+var responderObj = new GameObject("TestResponder1");
+responderObj.transform.SetParent(testRootObj.transform);
+
+// Add relay node FIRST, then responder
+var childRelay = responderObj.AddComponent<MmRelayNode>();
+responderObj.AddComponent<NetworkTestResponder>();
+
+// Register with parent
+testRootRelay.MmAddToRoutingTable(childRelay, MmLevelFilter.Child);
+childRelay.AddParent(testRootRelay);
+```
+
+**Hierarchy Structure:**
+```
+TestRoot (MmRelayNode + NetworkTestResponder)      ← Correct
+  ├─ TestResponder1 (MmRelayNode + NetworkTestResponder)  ← Correct
+  ├─ TestResponder2 (MmRelayNode + NetworkTestResponder)  ← Correct
+  └─ ChildNode (MmRelayNode)
+      └─ NestedResponder1 (MmRelayNode + NetworkTestResponder)  ← Correct
+```
+
+**Files Fixed:** `NetworkTestSceneBuilder.cs` (2025-12-01)
+
+---
+
+### 5. ⚠️ Test Scene NetId Confusion (RootNode vs TestRoot)
+
+**Bug:** Server/client targeting different relay nodes (different NetIds)
+
+**Why This Happens:**
+- Scene has leftover `RootNode` from earlier testing
+- `FishNetTestManager` targets Inspector-assigned node (RootNode) instead of dynamically created TestRoot
+- Build Test Hierarchy creates TestRoot but doesn't disable/remove RootNode
+
+**Symptoms:**
+- Client receives messages (targets TestRoot)
+- Server sends to wrong NetId (targets old RootNode)
+- Log shows: `Node found but NO responders attached!`
+
+**Pattern:**
+```csharp
+// In CleanupTestObjects() - disable old scene objects
+var oldRootNode = GameObject.Find("RootNode");
+if (oldRootNode != null)
+{
+    oldRootNode.SetActive(false);
+    Debug.Log("[SceneBuilder] Disabled old RootNode");
+}
+
+// In ResolveTargetNetId() - prioritize TestRoot
+var testRoot = GameObject.Find("TestRoot");
+if (testRoot != null)
+{
+    targetRelayNode = testRoot.GetComponent<MmRelayNode>();
+    // Use TestRoot instead of Inspector-assigned RootNode
+}
+```
+
+**Files Fixed:** `NetworkTestSceneBuilder.cs`, `FishNetTestManager.cs` (2025-12-01)
+
+---
+
+### 6. Network Test Scene Checklist
+
+Before testing FishNet hierarchical routing:
+
+- [ ] **Click "Build Test Hierarchy" on BOTH server AND client**
+- [ ] **Verify TestRoot is active** (not the old RootNode)
+- [ ] **Check responder count in logs:** Should show 4+ responders
+- [ ] **Verify NetId matches on both sides:** Compare logs for same path-based ID
+- [ ] **Each child responder has its own MmRelayNode**
+- [ ] **MmAddToRoutingTable + AddParent called for each child**
+
+**Debug Logging:**
+```
+[FishNetTest] Target set to TestRoot (NetId: 765583435)
+[FishNetTest] [OK] Found 4 NetworkTestResponder(s) ready to receive messages
+```
+
+---
+
+**Document Version:** 1.3
 **Created:** 2025-11-21
-**Updated:** 2025-11-21 (Added Path Specification patterns)
+**Updated:** 2025-12-01 (Added network test scene patterns, relay node requirement)
 
 **Note:** This document will be updated as new bugs are discovered and patterns emerge. When you encounter a new bug, add it here following the established format.

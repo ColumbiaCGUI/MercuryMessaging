@@ -64,10 +64,10 @@ MmRelayNode.StrictMode = true;
 
 ```
 .claude/ASSISTANT_GUIDE.md
-Assets/Framework/MercuryMessaging/Protocol/DSL/AppStateBuilder.cs
-Assets/Framework/MercuryMessaging/Protocol/MmNetworkResponderPhoton.cs
-Assets/Framework/MercuryMessaging/Protocol/MmRelayNode.cs
-Assets/Framework/MercuryMessaging/Protocol/Network/MmBinarySerializer.cs
-Assets/Framework/MercuryMessaging/Protocol/Network/MmNetworkBridge.cs
-Assets/Framework/MercuryMessaging/Tests/MmListenerTests.cs
+Assets/MercuryMessaging/Protocol/DSL/AppStateBuilder.cs
+Assets/MercuryMessaging/Protocol/MmNetworkResponderPhoton.cs
+Assets/MercuryMessaging/Protocol/MmRelayNode.cs
+Assets/MercuryMessaging/Protocol/Network/MmBinarySerializer.cs
+Assets/MercuryMessaging/Protocol/Network/MmNetworkBridge.cs
+Assets/MercuryMessaging/Tests/MmListenerTests.cs
 ```

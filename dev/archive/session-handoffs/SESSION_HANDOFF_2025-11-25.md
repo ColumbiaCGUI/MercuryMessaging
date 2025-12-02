@@ -948,22 +948,22 @@ for (int i = 0; i < byteArr.Length; i++)
 ### Files Summary
 
 **Message Files Modified (13):**
-- `Assets/Framework/MercuryMessaging/Protocol/Message/MmMessage.cs`
-- `Assets/Framework/MercuryMessaging/Protocol/Message/MmMessageBool.cs`
-- `Assets/Framework/MercuryMessaging/Protocol/Message/MmMessageInt.cs`
-- `Assets/Framework/MercuryMessaging/Protocol/Message/MmMessageFloat.cs`
-- `Assets/Framework/MercuryMessaging/Protocol/Message/MmMessageString.cs`
-- `Assets/Framework/MercuryMessaging/Protocol/Message/MmMessageVector3.cs`
-- `Assets/Framework/MercuryMessaging/Protocol/Message/MmMessageVector4.cs`
-- `Assets/Framework/MercuryMessaging/Protocol/Message/MmMessageQuaternion.cs`
-- `Assets/Framework/MercuryMessaging/Protocol/Message/MmMessageTransform.cs`
-- `Assets/Framework/MercuryMessaging/Protocol/Message/MmMessageGameObject.cs`
-- `Assets/Framework/MercuryMessaging/Protocol/Message/MmMessageByteArray.cs`
-- `Assets/Framework/MercuryMessaging/Protocol/Message/MmMessageTransformList.cs`
-- `Assets/Framework/MercuryMessaging/Protocol/Message/MmMessageSerializable.cs`
+- `Assets/MercuryMessaging/Protocol/Message/MmMessage.cs`
+- `Assets/MercuryMessaging/Protocol/Message/MmMessageBool.cs`
+- `Assets/MercuryMessaging/Protocol/Message/MmMessageInt.cs`
+- `Assets/MercuryMessaging/Protocol/Message/MmMessageFloat.cs`
+- `Assets/MercuryMessaging/Protocol/Message/MmMessageString.cs`
+- `Assets/MercuryMessaging/Protocol/Message/MmMessageVector3.cs`
+- `Assets/MercuryMessaging/Protocol/Message/MmMessageVector4.cs`
+- `Assets/MercuryMessaging/Protocol/Message/MmMessageQuaternion.cs`
+- `Assets/MercuryMessaging/Protocol/Message/MmMessageTransform.cs`
+- `Assets/MercuryMessaging/Protocol/Message/MmMessageGameObject.cs`
+- `Assets/MercuryMessaging/Protocol/Message/MmMessageByteArray.cs`
+- `Assets/MercuryMessaging/Protocol/Message/MmMessageTransformList.cs`
+- `Assets/MercuryMessaging/Protocol/Message/MmMessageSerializable.cs`
 
 **Supporting Files Modified (1):**
-- `Assets/Framework/MercuryMessaging/Protocol/Core/MmMessagePool.cs` (bug fixes)
+- `Assets/MercuryMessaging/Protocol/Core/MmMessagePool.cs` (bug fixes)
 
 ---
 
@@ -1089,7 +1089,7 @@ None of these patterns have a clear "return to pool" point. The factory is desig
 
 #### 1. DSL Phase 2.5: Runtime Registration Extensions
 
-**File Created:** `Assets/Framework/MercuryMessaging/Protocol/DSL/MmRoutingExtensions.cs` (~335 lines)
+**File Created:** `Assets/MercuryMessaging/Protocol/DSL/MmRoutingExtensions.cs` (~335 lines)
 
 **Features:**
 - `RegisterWith()` - Single-line child registration (was 2 lines)
@@ -1103,7 +1103,7 @@ None of these patterns have a clear "return to pool" point. The factory is desig
 
 #### 2. DSL Phase 2.6: Tag Configuration DSL
 
-**File Created:** `Assets/Framework/MercuryMessaging/Protocol/DSL/MmTagExtensions.cs` (~380 lines)
+**File Created:** `Assets/MercuryMessaging/Protocol/DSL/MmTagExtensions.cs` (~380 lines)
 
 **Features:**
 - `WithTag()` / `WithTags()` - Fluent tag assignment
@@ -1117,7 +1117,7 @@ None of these patterns have a clear "return to pool" point. The factory is desig
 
 #### 3. DSL Phase 2.4: Standard Library Listener Extensions
 
-**File Created:** `Assets/Framework/MercuryMessaging/StandardLibrary/MmStandardLibraryListenerExtensions.cs` (~690 lines)
+**File Created:** `Assets/MercuryMessaging/StandardLibrary/MmStandardLibraryListenerExtensions.cs` (~690 lines)
 
 **UI Message Shortcuts:**
 - `OnClick()`, `OnHover()`, `OnDrag()`, `OnScroll()`

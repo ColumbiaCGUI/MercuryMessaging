@@ -8,6 +8,17 @@
 
 ---
 
+> **DATA VALIDITY WARNING (2025-11-28)**
+>
+> This report uses baseline data from `dev/archive/performance-analysis-baseline/` which had a throughput bug (~30 msg/sec cap). The throughput values in this report are artificially low.
+>
+> For validated current performance data, see `dev/performance-results/` (2025-11-28):
+> - Small: 14.54ms / 68.8 FPS / 100 msg/sec
+> - Medium: 14.29ms / 70.0 FPS / 500 msg/sec
+> - Large: 17.17ms / 58.3 FPS / 1000 msg/sec
+
+---
+
 ## Executive Summary
 
 This report presents comprehensive performance analysis of the MercuryMessaging framework after implementing all six Quick Win optimizations (QW-1 through QW-6). Testing was conducted across three scales (Small, Medium, Large) with varying responder counts and hierarchy depths to validate optimization effectiveness and characterize framework performance.
