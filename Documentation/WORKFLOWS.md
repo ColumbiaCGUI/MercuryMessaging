@@ -163,7 +163,7 @@ relay.MmInvoke(
 
 The Fluent DSL provides a modern, chainable API that reduces code verbosity by **86%** while maintaining full type safety. It's the recommended approach for new development.
 
-**Full Documentation:** See [DSL_API_GUIDE.md](../Assets/MercuryMessaging/Protocol/DSL/DSL_API_GUIDE.md)
+**Full Documentation:** See [API_GUIDE.md](./DSL/API_GUIDE.md)
 
 ### Quick Comparison
 
@@ -301,8 +301,8 @@ relay.Respond(queryId, 42);
 
 For comprehensive DSL coverage including all extension methods:
 
-@../Assets/MercuryMessaging/Protocol/DSL/README.md
+@./DSL/README.md
 
 For tutorial examples:
 
-@../Assets/MercuryMessaging/Examples/Tutorials/DSL/README.md
+@./Tutorials/DSL_QUICK_START.md
