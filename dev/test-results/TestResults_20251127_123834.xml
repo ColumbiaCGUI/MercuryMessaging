@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="4" result="Failed(Child)" total="4" passed="2" failed="2" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2025-11-27 17:37:58Z" end-time="2025-11-27 17:37:58Z" duration="0.1618988">
+  <test-suite type="TestSuite" id="1695" name="MercuryMessaging" fullname="MercuryMessaging" runstate="Runnable" testcasecount="646" result="Failed" site="Child" start-time="2025-11-27 17:37:58Z" end-time="2025-11-27 17:37:58Z" duration="0.161899" total="4" passed="2" failed="2" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1687" name="MercuryMessaging.Tests.dll" fullname="C:/Users/yangb/Research/MercuryMessaging/Library/ScriptAssemblies/MercuryMessaging.Tests.dll" runstate="Runnable" testcasecount="646" result="Failed" site="Child" start-time="2025-11-27 17:37:58Z" end-time="2025-11-27 17:37:58Z" duration="0.136981" total="4" passed="2" failed="2" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="8676" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="1688" name="MercuryMessaging" fullname="MercuryMessaging" runstate="Runnable" testcasecount="646" result="Failed" site="Child" start-time="2025-11-27 17:37:58Z" end-time="2025-11-27 17:37:58Z" duration="0.127825" total="4" passed="2" failed="2" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="1689" name="Tests" fullname="MercuryMessaging.Tests" runstate="Runnable" testcasecount="646" result="Failed" site="Child" start-time="2025-11-27 17:37:58Z" end-time="2025-11-27 17:37:58Z" duration="0.119277" total="4" passed="2" failed="2" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestFixture" id="1284" name="LazyCopyValidationTests" fullname="MercuryMessaging.Tests.LazyCopyValidationTests" classname="MercuryMessaging.Tests.LazyCopyValidationTests" runstate="Runnable" testcasecount="6" result="Passed" start-time="2025-11-27 17:37:58Z" end-time="2025-11-27 17:37:58Z" duration="0.090578" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <output><![CDATA[
+IgnoreFailingMessages:true
+]]></output>
+            <test-case id="1290" name="LazyCopy_WorksWithDifferentMessageTypes" fullname="MercuryMessaging.Tests.LazyCopyValidationTests.LazyCopy_WorksWithDifferentMessageTypes" methodname="LazyCopy_WorksWithDifferentMessageTypes" classname="MercuryMessaging.Tests.LazyCopyValidationTests" runstate="Runnable" seed="824071730" result="Passed" start-time="2025-11-27 17:37:58Z" end-time="2025-11-27 17:37:58Z" duration="0.071405" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[[QW-2 PASS] Lazy copying works with multiple message types
+]]></output>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1302" name="MessageHistoryCacheTests" fullname="MercuryMessaging.Tests.MessageHistoryCacheTests" classname="MercuryMessaging.Tests.MessageHistoryCacheTests" runstate="Runnable" testcasecount="18" result="Passed" start-time="2025-11-27 17:37:58Z" end-time="2025-11-27 17:37:58Z" duration="0.008360" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1311" name="EvictNow_ManualEviction_RemovesExpiredEntries" fullname="MercuryMessaging.Tests.MessageHistoryCacheTests.EvictNow_ManualEviction_RemovesExpiredEntries" methodname="EvictNow_ManualEviction_RemovesExpiredEntries" classname="MercuryMessaging.Tests.MessageHistoryCacheTests" runstate="Runnable" seed="1028087090" result="Passed" start-time="2025-11-27 17:37:58Z" end-time="2025-11-27 17:37:58Z" duration="0.003434" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1390" name="MmListenerTests" fullname="MercuryMessaging.Tests.MmListenerTests" classname="MercuryMessaging.Tests.MmListenerTests" runstate="Runnable" testcasecount="26" result="Failed" site="Child" start-time="2025-11-27 17:37:58Z" end-time="2025-11-27 17:37:58Z" duration="0.012472" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-case id="1409" name="HandlerException_DoesNotBreakOtherListeners" fullname="MercuryMessaging.Tests.MmListenerTests.HandlerException_DoesNotBreakOtherListeners" methodname="HandlerException_DoesNotBreakOtherListeners" classname="MercuryMessaging.Tests.MmListenerTests" runstate="Runnable" seed="1472965358" result="Failed" start-time="2025-11-27 17:37:58Z" end-time="2025-11-27 17:37:58Z" duration="0.006095" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <failure>
+                <message><![CDATA[Unhandled log message: '[Error] [MmListener] Exception in handler: System.Exception: Test exception
+  at MercuryMessaging.Tests.MmListenerTests+<>c.<HandlerException_DoesNotBreakOtherListeners>b__23_1 (MercuryMessaging.MmMessageFloat _) [0x00000] in C:\Users\yangb\Research\MercuryMessaging\Assets\Framework\MercuryMessaging\Tests\MmListenerTests.cs:503 
+  at MercuryMessaging.Protocol.DSL.MmListenerSubscription`1[T].TryInvoke (MercuryMessaging.MmMessage message) [0x00058] in C:\Users\yangb\Research\MercuryMessaging\Assets\Framework\MercuryMessaging\Protocol\DSL\MmListener.cs:83 '. Use UnityEngine.TestTools.LogAssert.Expect]]></message>
+                <stack-trace><![CDATA[MercuryMessaging.Protocol.DSL.MmListenerSubscription`1<MercuryMessaging.MmMessageFloat>:TryInvoke (MercuryMessaging.MmMessage) (at Assets/Framework/MercuryMessaging/Protocol/DSL/MmListener.cs:87)
+MercuryMessaging.Protocol.DSL.MmListenerSubscriptionImpl`1<MercuryMessaging.MmMessageFloat>:TryInvoke (MercuryMessaging.MmMessage) (at Assets/Framework/MercuryMessaging/Protocol/DSL/MmListener.cs:153)
+MercuryMessaging.MmRelayNode:NotifyListeners (MercuryMessaging.MmMessage) (at Assets/Framework/MercuryMessaging/Protocol/MmRelayNode.cs:661)
+MercuryMessaging.MmRelayNode:MmInvoke (MercuryMessaging.MmMessage) (at Assets/Framework/MercuryMessaging/Protocol/MmRelayNode.cs:694)
+MercuryMessaging.MmRelayNode:MmInvoke (MercuryMessaging.MmMethod,single,MercuryMessaging.MmMetadataBlock) (at Assets/Framework/MercuryMessaging/Protocol/MmRelayNode.cs:1031)
+MercuryMessaging.Tests.MmListenerTests/<>c__DisplayClass23_0:<HandlerException_DoesNotBreakOtherListeners>b__3 () (at Assets/Framework/MercuryMessaging/Tests/MmListenerTests.cs:512)
+NUnit.Framework.Constraints.ThrowsConstraint/VoidInvocationDescriptor:Invoke ()
+NUnit.Framework.Constraints.ThrowsConstraint/ExceptionInterceptor:Intercept (object)
+NUnit.Framework.Constraints.ThrowsNothingConstraint:ApplyTo (object)
+NUnit.Framework.Assert:That<object> (object,NUnit.Framework.Constraints.IResolveConstraint,string,object[])
+NUnit.Framework.Assert:That (NUnit.Framework.TestDelegate,NUnit.Framework.Constraints.IResolveConstraint,string,object[])
+NUnit.Framework.Assert:DoesNotThrow (NUnit.Framework.TestDelegate,string,object[])
+NUnit.Framework.Assert:DoesNotThrow (NUnit.Framework.TestDelegate)
+MercuryMessaging.Tests.MmListenerTests:HandlerException_DoesNotBreakOtherListeners () (at Assets/Framework/MercuryMessaging/Tests/MmListenerTests.cs:511)
+System.Reflection.MethodBase:Invoke (object,object[])
+NUnit.Framework.Internal.Reflect:InvokeMethod (System.Reflection.MethodInfo,object,object[])
+NUnit.Framework.Internal.MethodWrapper:Invoke (object,object[])
+NUnit.Framework.Internal.Commands.TestMethodCommand:RunNonAsyncTestMethod (NUnit.Framework.Internal.ITestExecutionContext)
+NUnit.Framework.Internal.Commands.TestMethodCommand:RunTestMethod (NUnit.Framework.Internal.ITestExecutionContext)
+NUnit.Framework.Internal.Commands.TestMethodCommand:Execute (NUnit.Framework.Internal.ITestExecutionContext)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+]]></stack-trace>
+              </failure>
+              <output><![CDATA[[MmListener] Exception in handler: System.Exception: Test exception
+  at MercuryMessaging.Tests.MmListenerTests+<>c.<HandlerException_DoesNotBreakOtherListeners>b__23_1 (MercuryMessaging.MmMessageFloat _) [0x00000] in C:\Users\yangb\Research\MercuryMessaging\Assets\Framework\MercuryMessaging\Tests\MmListenerTests.cs:503 
+  at MercuryMessaging.Protocol.DSL.MmListenerSubscription`1[T].TryInvoke (MercuryMessaging.MmMessage message) [0x00058] in C:\Users\yangb\Research\MercuryMessaging\Assets\Framework\MercuryMessaging\Protocol\DSL\MmListener.cs:83 
+]]></output>
+            </test-case>
+            <test-case id="1414" name="Responder_NoRelayNode_ReturnsDefaultSafely" fullname="MercuryMessaging.Tests.MmListenerTests.Responder_NoRelayNode_ReturnsDefaultSafely" methodname="Responder_NoRelayNode_ReturnsDefaultSafely" classname="MercuryMessaging.Tests.MmListenerTests" runstate="Runnable" seed="754378039" result="Failed" start-time="2025-11-27 17:37:58Z" end-time="2025-11-27 17:37:58Z" duration="0.001494" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <failure>
+                <message><![CDATA[Unhandled log message: '[Error] [MmListener] Cannot create listener without a relay node'. Use UnityEngine.TestTools.LogAssert.Expect]]></message>
+                <stack-trace><![CDATA[MercuryMessaging.Protocol.DSL.MmListenerBuilder`1<MercuryMessaging.MmMessageFloat>:Execute () (at Assets/Framework/MercuryMessaging/Protocol/DSL/MmListener.cs:275)
+MercuryMessaging.Tests.MmListenerTests:Responder_NoRelayNode_ReturnsDefaultSafely () (at Assets/Framework/MercuryMessaging/Tests/MmListenerTests.cs:635)
+System.Reflection.MethodBase:Invoke (object,object[])
+NUnit.Framework.Internal.Reflect:InvokeMethod (System.Reflection.MethodInfo,object,object[])
+NUnit.Framework.Internal.MethodWrapper:Invoke (object,object[])
+NUnit.Framework.Internal.Commands.TestMethodCommand:RunNonAsyncTestMethod (NUnit.Framework.Internal.ITestExecutionContext)
+NUnit.Framework.Internal.Commands.TestMethodCommand:RunTestMethod (NUnit.Framework.Internal.ITestExecutionContext)
+NUnit.Framework.Internal.Commands.TestMethodCommand:Execute (NUnit.Framework.Internal.ITestExecutionContext)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+]]></stack-trace>
+              </failure>
+              <output><![CDATA[[MmListener] Cannot create listener without a relay node
+Saving results to: C:/Users/yangb/AppData/LocalLow/DefaultCompany/MercuryMessaging\TestResults.xml
+]]></output>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

@@ -12,12 +12,12 @@ These are the most important files in the framework. Understanding these is esse
 
 | File | Lines | Purpose |
 |------|-------|---------|
-| `Assets/MercuryMessaging/Protocol/MmRelayNode.cs` | 1422 | **Central message router** - manages routing table, filters, hierarchy. The most important class in the framework. |
-| `Assets/MercuryMessaging/Protocol/MmBaseResponder.cs` | 383 | Base responder with method routing (SetActive, Initialize, Switch, etc.). Extend this class for standard message handling. |
-| `Assets/MercuryMessaging/Protocol/MmResponder.cs` | 124 | Abstract base implementing IMmResponder with lifecycle management. Foundation for all responders. |
-| `Assets/MercuryMessaging/Protocol/IMmResponder.cs` | 28 | Core interface defining the messaging contract. All responders implement this. |
-| `Assets/MercuryMessaging/Protocol/MmRelaySwitchNode.cs` | 188 | Relay node with FSM capabilities for state management. Used for state-based applications. |
-| `Assets/MercuryMessaging/Protocol/MmSwitchResponder.cs` | 148 | Controller for MmRelaySwitchNode with state transitions. Manages FSM state changes. |
+| `Assets/MercuryMessaging/Protocol/MmRelayNode.cs` | ~1500 | **Central message router** - manages routing table, filters, hierarchy. The most important class in the framework. |
+| `Assets/MercuryMessaging/Protocol/MmBaseResponder.cs` | ~400 | Base responder with method routing (SetActive, Initialize, Switch, etc.). Extend this class for standard message handling. |
+| `Assets/MercuryMessaging/Protocol/MmResponder.cs` | ~130 | Abstract base implementing IMmResponder with lifecycle management. Foundation for all responders. |
+| `Assets/MercuryMessaging/Protocol/IMmResponder.cs` | ~30 | Core interface defining the messaging contract. All responders implement this. |
+| `Assets/MercuryMessaging/Protocol/MmRelaySwitchNode.cs` | ~200 | Relay node with FSM capabilities for state management. Used for state-based applications. |
+| `Assets/MercuryMessaging/Protocol/MmSwitchResponder.cs` | ~150 | Controller for MmRelaySwitchNode with state transitions. Manages FSM state changes. |
 | `Assets/MercuryMessaging/Protocol/MmExtendableResponder.cs` | ~200 | Base responder with registration-based custom method handling. Preferred for custom methods (>= 1000). |
 
 ---
@@ -49,12 +49,56 @@ Filter types and routing configuration.
 |------|---------|
 | `Assets/MercuryMessaging/Protocol/MmMetadataBlock.cs` | Routing control parameters (contains all filters). Controls message targeting. |
 | `Assets/MercuryMessaging/Protocol/MmRoutingTable.cs` | Collection of responders with filtering capabilities. Manages registered responders. |
+| `Assets/MercuryMessaging/Protocol/MmRoutingTableItem.cs` | Individual responder entry in routing table with delegate support. |
 | `Assets/MercuryMessaging/Protocol/MmLevelFilter.cs` | Direction filter (Parent/Child/Self combinations). Controls hierarchy navigation. |
 | `Assets/MercuryMessaging/Protocol/MmActiveFilter.cs` | Active GameObject filter (Active only vs All). Filters by active state. |
 | `Assets/MercuryMessaging/Protocol/MmSelectedFilter.cs` | FSM selection filter (Selected vs All). Used with MmRelaySwitchNode. |
 | `Assets/MercuryMessaging/Protocol/MmNetworkFilter.cs` | Network message filter (Local/Network/All). Controls network routing. |
 | `Assets/MercuryMessaging/Protocol/MmTag.cs` | Multi-tag system (8 flags: Tag0-Tag7). Bitwise tag filtering. |
 | `Assets/MercuryMessaging/Protocol/MmMethod.cs` | Standard method enum (0-18 + custom 1000+). Message method identifiers. |
+
+---
+
+## Core Performance (Hot-Path Optimized)
+
+Performance-critical code for message pooling and dispatch.
+
+| File | Purpose |
+|------|---------|
+| `Assets/MercuryMessaging/Protocol/Core/MmMessagePool.cs` | ObjectPool implementation for zero-allocation message handling. |
+| `Assets/MercuryMessaging/Protocol/Core/MmHashSetPool.cs` | Pool for VisitedNodes HashSets used in cycle detection. |
+
+---
+
+## Fluent DSL API
+
+Chainable API for simplified message sending with 86% verbosity reduction.
+
+| File | Purpose |
+|------|---------|
+| `Assets/MercuryMessaging/Protocol/DSL/MmFluentMessage.cs` | Core fluent message builder with Execute() method. |
+| `Assets/MercuryMessaging/Protocol/DSL/MmMessagingExtensions.cs` | Send() extensions for MmRelayNode and MmBaseResponder. |
+| `Assets/MercuryMessaging/Protocol/DSL/MmRelayNodeExtensions.cs` | Broadcast/Notify auto-execute methods for relay nodes. |
+| `Assets/MercuryMessaging/Protocol/DSL/MmResponderExtensions.cs` | Broadcast/Notify auto-execute methods for responders. |
+| `Assets/MercuryMessaging/Protocol/DSL/MmFluentFilters.cs` | Active(), WithTag(), Where() filter extensions. |
+| `Assets/MercuryMessaging/Protocol/DSL/MmFluentPredicates.cs` | OfType(), Named() predicate extensions. |
+| `Assets/MercuryMessaging/Protocol/DSL/MmRoutingExtensions.cs` | ToChildren(), ToParents(), ToSiblings() routing extensions. |
+| `Assets/MercuryMessaging/Protocol/DSL/MmTemporalExtensions.cs` | After(), Every(), When() temporal extensions. |
+| `Assets/MercuryMessaging/Protocol/DSL/MmQueryExtensions.cs` | Query/Response pattern extensions. |
+| `Assets/MercuryMessaging/Protocol/DSL/MmListener.cs` | Callback-based message listener support. |
+
+---
+
+## Standard Library
+
+Pre-defined message types for common use cases.
+
+| File | Purpose |
+|------|---------|
+| `Assets/MercuryMessaging/StandardLibrary/UI/MmUIMessages.cs` | UI messages (Click, Hover, Drag, Scroll, Focus, Select, Submit, Cancel). |
+| `Assets/MercuryMessaging/StandardLibrary/UI/MmUIResponder.cs` | Base responder for UI message handling. |
+| `Assets/MercuryMessaging/StandardLibrary/Input/MmInputMessages.cs` | VR input messages (6DOF, Gesture, Haptic, Button, Axis, Touch, Gaze). |
+| `Assets/MercuryMessaging/StandardLibrary/Input/MmInputResponder.cs` | Base responder for VR input message handling. |
 
 ---
 
@@ -96,19 +140,24 @@ Utilities, data collection, and helper systems.
 
 ## Network Support
 
-Network message synchronization (optional, requires Photon Unity Networking).
+Network message synchronization with modular backend architecture.
 
 | File | Purpose |
 |------|---------|
 | `Assets/MercuryMessaging/Protocol/IMmNetworkResponder.cs` | Network responder interface. Contract for networked responders. |
 | `Assets/MercuryMessaging/Protocol/MmNetworkResponder.cs` | Base network responder. Foundation for networked message handling. |
-| `Assets/MercuryMessaging/Protocol/MmNetworkResponderPhoton.cs` | Photon networking integration. Photon-specific network implementation. |
+| `Assets/MercuryMessaging/Protocol/MmNetworkResponderPhoton.cs` | Photon networking integration (legacy). Photon-specific network implementation. |
+| `Assets/MercuryMessaging/Protocol/Network/IMmNetworkBackend.cs` | Network backend interface. Contract for pluggable networking. |
+| `Assets/MercuryMessaging/Protocol/Network/MmNetworkBridge.cs` | Bridge between MercuryMessaging and network backends. |
+| `Assets/MercuryMessaging/Protocol/Network/MmBinarySerializer.cs` | Binary message serialization for network transport. |
+| `Assets/MercuryMessaging/Protocol/Network/MmLoopbackBackend.cs` | Local testing backend (no network). |
+| `Assets/MercuryMessaging/Protocol/Network/Backends/Pun2Backend.cs` | PUN2 backend implementation. |
 
 ---
 
 ## Testing
 
-Test files for automated testing and validation.
+Test files for automated testing and validation (200+ tests total).
 
 | File | Purpose |
 |------|---------|
@@ -122,6 +171,18 @@ Test files for automated testing and validation.
 | `Assets/MercuryMessaging/Tests/FsmStateTransitionTests.cs` | FSM state transition tests (20 tests). Comprehensive FSM validation. |
 | `Assets/MercuryMessaging/Tests/MmExtendableResponderTests.cs` | Extendable responder tests. Validates custom method registration. |
 | `Assets/MercuryMessaging/Tests/MmExtendableResponderIntegrationTests.cs` | Integration tests for extendable responder. End-to-end validation. |
+| `Assets/MercuryMessaging/Tests/FluentApiTests.cs` | Core fluent API tests. Validates DSL syntax. |
+| `Assets/MercuryMessaging/Tests/FluentApiIntegrationTests.cs` | DSL integration tests. End-to-end fluent API validation. |
+| `Assets/MercuryMessaging/Tests/FluentApiPhase2Tests.cs` | Phase 2 DSL tests. Advanced routing validation. |
+| `Assets/MercuryMessaging/Tests/FluentApiPhase3Tests.cs` | Phase 3 DSL tests. Spatial and temporal extensions. |
+| `Assets/MercuryMessaging/Tests/AdvancedRoutingTests.cs` | Advanced routing tests. Siblings, cousins, descendants. |
+| `Assets/MercuryMessaging/Tests/MmListenerTests.cs` | Listener callback tests. Validates callback-based messaging. |
+| `Assets/MercuryMessaging/Tests/MmMessagePoolTests.cs` | Message pool tests. Validates zero-allocation messaging. |
+| `Assets/MercuryMessaging/Tests/RoutingTableIndexTests.cs` | O(1) routing table tests. Validates dictionary-based lookup. |
+| `Assets/MercuryMessaging/Tests/DelegateDispatchTests.cs` | Delegate dispatch tests. Validates fast handler invocation. |
+| `Assets/MercuryMessaging/Tests/MmBinarySerializerTests.cs` | Binary serializer tests. Validates network serialization. |
+| `Assets/MercuryMessaging/Tests/StandardLibrary/UIMessageTests.cs` | UI message tests. Validates standard library UI messages. |
+| `Assets/MercuryMessaging/Tests/StandardLibrary/InputMessageTests.cs` | Input message tests. Validates standard library VR input messages. |
 
 ---
 
@@ -134,7 +195,8 @@ Demo scenes and tutorial content.
 | `Assets/MercuryMessaging/Examples/Demo/TrafficLights.unity` | Traffic light simulation demo. Real-world usage example. |
 | `Assets/MercuryMessaging/Examples/Tutorials/SimpleScene/` | Basic light switch example. Simplest possible MercuryMessaging usage. |
 | `Assets/MercuryMessaging/Examples/Tutorials/Tutorial1-5/` | Progressive tutorial series. Step-by-step learning path. |
-| `Assets/_Project/Scripts/Tutorials/Tutorial4_ColorChanging/` | Custom method tutorial. Demonstrates MmExtendableResponder usage. |
+| `Assets/MercuryMessaging/Examples/Tutorials/DSL/` | Fluent DSL API tutorials. Modern API usage examples. |
+| `Assets/Project/Scripts/Tutorials/Tutorial4_ColorChanging/` | Custom method tutorial. Demonstrates MmExtendableResponder usage. |
 
 ---
 
@@ -157,31 +219,43 @@ Project documentation files.
 ## Quick Navigation by Use Case
 
 ### "I want to send messages"
-→ Start with `Protocol/MmRelayNode.cs` (MmInvoke method)
-→ See `Protocol/MmMetadataBlock.cs` for filtering options
+→ Start with `Assets/MercuryMessaging/Protocol/MmRelayNode.cs` (MmInvoke method)
+→ See `Assets/MercuryMessaging/Protocol/MmMetadataBlock.cs` for filtering options
+→ Use `relay.Send("value").ToChildren().Execute()` (Fluent DSL)
 
 ### "I want to receive messages"
-→ Extend `Protocol/MmBaseResponder.cs` for standard methods
-→ Extend `Protocol/MmExtendableResponder.cs` for custom methods (>= 1000)
+→ Extend `Assets/MercuryMessaging/Protocol/MmBaseResponder.cs` for standard methods
+→ Extend `Assets/MercuryMessaging/Protocol/MmExtendableResponder.cs` for custom methods (>= 1000)
 
 ### "I want to use FSM for state management"
-→ Use `Protocol/MmRelaySwitchNode.cs` as parent
-→ See `Support/FiniteStateMachine/FiniteStateMachine.cs` for FSM details
+→ Use `Assets/MercuryMessaging/Protocol/MmRelaySwitchNode.cs` as parent
+→ See `Assets/MercuryMessaging/Support/FiniteStateMachine/FiniteStateMachine.cs` for FSM details
 
 ### "I want to create custom message types"
-→ Extend `Protocol/Message/MmMessage.cs`
-→ See `Protocol/Message/MmMessageInt.cs` for example
+→ Extend `Assets/MercuryMessaging/Protocol/Message/MmMessage.cs`
+→ See `Assets/MercuryMessaging/Protocol/Message/MmMessageInt.cs` for example
 
 ### "I want to filter messages by tags"
-→ See `Protocol/MmTag.cs` for tag system
+→ See `Assets/MercuryMessaging/Protocol/MmTag.cs` for tag system
 → Set `Tag` and `TagCheckEnabled` in responders
+→ Use `relay.Send(value).ToChildren().WithTag(MmTag.Tag0).Execute()` (Fluent DSL)
+
+### "I want to use the Fluent DSL API"
+→ See `Assets/MercuryMessaging/Protocol/DSL/README.md` for overview
+→ See `Assets/MercuryMessaging/Protocol/DSL/DSL_API_GUIDE.md` for full reference
 
 ### "I want to understand performance"
 → See `Documentation/Performance/OPTIMIZATION_RESULTS.md`
 → See CLAUDE.md "Performance Characteristics" section
 
+### "I want to use source generators for faster dispatch"
+→ See `SourceGenerators/README.md` for setup and usage
+→ Add `[MmGenerateDispatch]` attribute to responder classes
+→ Mark class as `partial`
+→ Add `RoslynAnalyzer` label to `Assets/MercuryMessaging/Protocol/Analyzers/MercuryMessaging.Generators.dll`
+
 ### "I want to write tests"
-→ See `Tests/CircularBufferTests.cs` for pattern examples
+→ See `Assets/MercuryMessaging/Tests/CircularBufferTests.cs` for pattern examples
 → See CONTRIBUTING.md "Testing Standards Policy"
 
 ### "I want to contribute code"
@@ -219,5 +293,5 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for complete naming convention policy.
 
 ---
 
-**Last Updated:** 2025-11-20
+**Last Updated:** 2025-11-27
 **Maintained By:** Framework Team

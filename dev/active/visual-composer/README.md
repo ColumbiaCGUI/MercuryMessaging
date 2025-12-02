@@ -2,8 +2,9 @@
 
 **Status:** Ready to Start
 **Priority:** HIGH (UIST Major Contribution I)
-**Estimated Effort:** ~360 hours (9 weeks)
+**Estimated Effort:** ~316 hours (8 weeks)
 **Research Impact:** Novel tool for programming interactive systems
+**Technology Stack:** GraphViewBase (MIT), Custom GL, Custom IMGUI
 
 ---
 
@@ -58,18 +59,52 @@ We propose a **Live Visual Authoring and Introspection Environment** — not mer
 
 ## Technical Architecture
 
+### Technology Stack (Updated 2025-12-01)
+
+| Component | Technology | License |
+|-----------|------------|---------|
+| 2D Graph Editor | GraphViewBase | MIT (already imported) |
+| 3D Scene Visualization | Custom GL API | Zero-dependency |
+| Runtime Debugger | Custom IMGUI | Zero-dependency |
+
+**Key Decision:** Zero paid dependencies - all solutions are either MIT licensed or built using Unity's built-in APIs.
+
 ### Graph Rendering System
 
 ```
-Unity GraphView Framework
+GraphViewBase Framework (MIT)
     ↓
-Custom MmNodeView (renders Relay Nodes)
+MmNodeView extends BaseNode (renders Relay Nodes)
     ↓
-Custom MmEdgeView (renders Routing connections)
+MmEdgeView extends BaseEdge (renders Routing connections)
     ↓
 Bi-Directional Sync Layer
     ↓
 Scene Manipulation (add/remove routing entries)
+```
+
+### 3D Scene Visualization System
+
+```
+MmConnectionDrawer (custom component)
+    ↓
+GL.Begin/GL.End (Unity built-in)
+    ↓
+RenderPipelineManager.endCameraRendering (URP/HDRP)
+    ↓
+Batched line drawing (inspired by ALINE patterns)
+```
+
+### Runtime Debugging System
+
+```
+MmRuntimeDebugger (MonoBehaviour)
+    ↓
+IMGUI OnGUI() (Unity built-in)
+    ↓
+MmRelayNode.MmInvoke hook (message capture)
+    ↓
+Message stream + hierarchy browser
 ```
 
 ### Live Introspection Hook
@@ -155,31 +190,38 @@ public class MmIntrospectionHook {
 
 ---
 
-## Implementation Goals
+## Implementation Goals (Updated 2025-12-01)
 
-### Phase 1: Core Graph Visualization (120h)
-- Unity GraphView integration
+### Phase 1: Editor Tools (216h)
+
+**Visual Composer (80h)** - GraphViewBase integration
+- Extend GraphViewBase's `GraphView`, `BaseNode`, `BaseEdge`
 - Render MmRelayNodes as nodes
 - Render Routing Table entries as edges
 - Basic zoom/pan/selection
+- Bi-directional sync with scene
 
-### Phase 2: Bi-Directional Editing (80h)
-- Drag-to-connect nodes creates routing entries
-- Delete edge removes routing entry
-- Sync graph ↔ scene in real-time
-- Undo/Redo support
+**Supporting Tools (136h)**
+- Hierarchy Mirroring (36h)
+- Network Templates (52h)
+- Network Validator (48h)
 
-### Phase 3: Live Introspection (100h)
-- Hook into MmInvoke call chain
-- Animate message propagation
-- Highlight active paths
-- Display blockage indicators with reasons
+### Phase 2: 3D Scene Visualization (40h)
 
-### Phase 4: Runtime Manipulation (60h)
-- Enable graph editing during Play Mode
-- Apply changes immediately (hot-reload)
-- Save changes back to scene
-- Performance optimization
+**Custom GL-based solution** (ALINE-inspired patterns)
+- Connection lines between MmRelayNodes in Scene view
+- Color-coded by message direction/type
+- Animated message pulse effect
+- URP/HDRP compatible via RenderPipelineManager
+
+### Phase 3: Runtime Debugging (60h)
+
+**Custom Mercury Inspector** (EPO-inspired patterns)
+- Live message stream view
+- Node hierarchy browser
+- Filter by method/tag/level
+- Pause/step-through mode
+- Message trace export
 
 ---
 
@@ -255,8 +297,13 @@ public class MmIntrospectionHook {
 ## Quick Start
 
 See `USE_CASE.md` for business context, target scenarios, and expected benefits.
-See `visual-composer-context.md` for detailed UI mockups and GraphView architecture.
+See `visual-composer-context.md` for detailed UI mockups and GraphViewBase architecture.
 See `visual-composer-tasks.md` for granular implementation tasks.
+
+**Key Files to Study First:**
+- `Library/PackageCache/com.gentlymad.graphviewbase@.../Editor/Elements/GraphView.cs` - Graph framework
+- `Assets/Plugins/Plugins/ALINE/Draw.cs` - 3D drawing patterns (study only)
+- `Assets/Plugins/Plugins/EasyPerformantOutline/Scripts/Outlinable.cs` - Component patterns (study only)
 
 ---
 

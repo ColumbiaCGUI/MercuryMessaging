@@ -20,7 +20,7 @@ This document describes the development workflows for the MercuryMessaging frame
 ### 1. Planning Phase
 
 **For Small Features (< 2 hours):**
-- Create issue or document in dev/TECHNICAL_DEBT.md
+- Create issue or document in dev/IMPROVEMENT_TRACKER.md
 - Skip feature branch, work on current branch
 - Single commit when complete
 
@@ -119,7 +119,7 @@ namespace MercuryMessaging.Tests
 # 2. Update CLAUDE.md if architecture changed
 # 3. Update CONTRIBUTING.md if new patterns added
 # 4. Update FILE_REFERENCE.md if new important files added
-# 5. Update dev/TECHNICAL_DEBT.md if debt resolved
+# 5. Update dev/IMPROVEMENT_TRACKER.md if tracking new work
 
 # Commit documentation separately
 git add CLAUDE.md
@@ -287,7 +287,7 @@ public void EditorFeature_Scenario_ExpectedBehavior()
 **Always Update:**
 - ✅ Adding new public API → Update XML comments + CLAUDE.md
 - ✅ Changing architecture → Update CLAUDE.md
-- ✅ Resolving technical debt → Update TECHNICAL_DEBT.md
+- ✅ Tracking improvements → Update IMPROVEMENT_TRACKER.md
 - ✅ Adding new important file → Update FILE_REFERENCE.md
 - ✅ Changing development process → Update CONTRIBUTING.md or WORKFLOW.md
 
@@ -319,11 +319,11 @@ public void EditorFeature_Scenario_ExpectedBehavior()
 - Task management files
 - Support system files
 
-**dev/TECHNICAL_DEBT.md** (Known Issues)
-- Priority 1: Critical issues
-- Priority 2: Important improvements
-- Priority 3: Testing and validation
-- Priority 4: Code quality and maintenance
+**dev/IMPROVEMENT_TRACKER.md** (Roadmap & Tracking)
+- Track 1: Production Engineering (performance, networking)
+- Track 2: User Study planning
+- Track 3: Research publications
+- Completed Improvements log
 
 **dev/WORKFLOW.md** (This Document)
 - Feature development workflow
@@ -417,7 +417,7 @@ EOF
 # - Acceptance criteria
 # - Checkboxes for tracking
 
-# 5. Update TECHNICAL_DEBT.md to reference new task folder
+# 5. Update IMPROVEMENT_TRACKER.md to reference new task folder
 ```
 
 ### Working on an Existing Task
@@ -455,7 +455,7 @@ mv dev/active/[task-name]/ dev/archive/[task-name]/
 git add dev/active/ dev/archive/
 git commit -m "docs: Archive [task-name] (complete)"
 
-# 4. Update TECHNICAL_DEBT.md to mark task as complete
+# 4. Update IMPROVEMENT_TRACKER.md to mark task as complete
 ```
 
 ---
@@ -478,7 +478,7 @@ MercuryMessaging follows Semantic Versioning (SemVer):
 - [ ] Zero compilation errors or warnings
 - [ ] Performance benchmarks meet targets
 - [ ] Documentation up to date
-- [ ] TECHNICAL_DEBT.md reflects current state
+- [ ] IMPROVEMENT_TRACKER.md reflects current state
 - [ ] No P1 (critical) items in technical debt
 
 **Release Process:**
@@ -630,7 +630,7 @@ If you're unsure about any workflow:
    - [CLAUDE.md](../CLAUDE.md) - Framework overview
    - [CONTRIBUTING.md](../CONTRIBUTING.md) - Development standards
    - [FILE_REFERENCE.md](../FILE_REFERENCE.md) - Important files
-   - [TECHNICAL_DEBT.md](TECHNICAL_DEBT.md) - Known issues
+   - [IMPROVEMENT_TRACKER.md](IMPROVEMENT_TRACKER.md) - Roadmap & tracking
 
 2. **Check Active Tasks:**
    - `ls dev/active/` - See what's being worked on
@@ -646,5 +646,5 @@ If you're unsure about any workflow:
 
 ---
 
-**Last Updated:** 2025-11-20
+**Last Updated:** 2025-11-27
 **Maintained By:** Framework Team
