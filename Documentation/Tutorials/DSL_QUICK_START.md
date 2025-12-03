@@ -9,7 +9,7 @@ The MercuryMessaging DSL (Domain-Specific Language) provides a modern, fluent AP
 The DSL is built into MercuryMessaging. Just add the namespace:
 
 ```csharp
-using MercuryMessaging.Protocol.DSL;
+using MercuryMessaging;
 ```
 
 For Standard Library messages:

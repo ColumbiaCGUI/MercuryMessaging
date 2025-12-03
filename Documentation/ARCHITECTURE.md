@@ -17,9 +17,9 @@ Your Custom Responders
 ```
 
 **Key Files:**
-- `Assets/MercuryMessaging/Protocol/IMmResponder.cs` - Core interface
-- `Assets/MercuryMessaging/Protocol/MmResponder.cs` - Base implementation
-- `Assets/MercuryMessaging/Protocol/MmBaseResponder.cs` - Method routing with switch statements
+- `Assets/MercuryMessaging/Protocol/Interfaces/IMmResponder.cs` - Core interface
+- `Assets/MercuryMessaging/Protocol/Responders/MmResponder.cs` - Base implementation
+- `Assets/MercuryMessaging/Protocol/Responders/MmBaseResponder.cs` - Method routing with switch statements
 
 ## 2. Relay Node Pattern
 
@@ -36,7 +36,7 @@ Message → MmRelayNode → MmRoutingTable → Filtered Responders
 ```
 
 **Key File:**
-- `Assets/MercuryMessaging/Protocol/MmRelayNode.cs` (1422 lines - THE MOST IMPORTANT CLASS)
+- `Assets/MercuryMessaging/Protocol/Nodes/MmRelayNode.cs` - THE MOST IMPORTANT CLASS
 
 ## 3. Hierarchical Message Flow
 

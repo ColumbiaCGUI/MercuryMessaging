@@ -11,7 +11,7 @@
 
 RelayNode.MmInvoke()
 
-**File:** `Assets/MercuryMessaging/Protocol/MmRelayNode.cs`
+**File:** `Assets/MercuryMessaging/Protocol/Nodes/MmRelayNode.cs`
 **Location:** Lines 736-764 (routing table iteration loop)
 
 **Current State:**

@@ -12,13 +12,13 @@ These are the most important files in the framework. Understanding these is esse
 
 | File | Lines | Purpose |
 |------|-------|---------|
-| `Assets/MercuryMessaging/Protocol/MmRelayNode.cs` | ~1500 | **Central message router** - manages routing table, filters, hierarchy. The most important class in the framework. |
-| `Assets/MercuryMessaging/Protocol/MmBaseResponder.cs` | ~400 | Base responder with method routing (SetActive, Initialize, Switch, etc.). Extend this class for standard message handling. |
-| `Assets/MercuryMessaging/Protocol/MmResponder.cs` | ~130 | Abstract base implementing IMmResponder with lifecycle management. Foundation for all responders. |
+| `Assets/MercuryMessaging/Protocol/Nodes/MmRelayNode.cs` | ~1500 | **Central message router** - manages routing table, filters, hierarchy. The most important class in the framework. |
+| `Assets/MercuryMessaging/Protocol/Responders/MmBaseResponder.cs` | ~400 | Base responder with method routing (SetActive, Initialize, Switch, etc.). Extend this class for standard message handling. |
+| `Assets/MercuryMessaging/Protocol/Responders/MmResponder.cs` | ~130 | Abstract base implementing IMmResponder with lifecycle management. Foundation for all responders. |
 | `Assets/MercuryMessaging/Protocol/IMmResponder.cs` | ~30 | Core interface defining the messaging contract. All responders implement this. |
-| `Assets/MercuryMessaging/Protocol/MmRelaySwitchNode.cs` | ~200 | Relay node with FSM capabilities for state management. Used for state-based applications. |
+| `Assets/MercuryMessaging/Protocol/Nodes/MmRelaySwitchNode.cs` | ~200 | Relay node with FSM capabilities for state management. Used for state-based applications. |
 | `Assets/MercuryMessaging/Protocol/MmSwitchResponder.cs` | ~150 | Controller for MmRelaySwitchNode with state transitions. Manages FSM state changes. |
-| `Assets/MercuryMessaging/Protocol/MmExtendableResponder.cs` | ~200 | Base responder with registration-based custom method handling. Preferred for custom methods (>= 1000). |
+| `Assets/MercuryMessaging/Protocol/Responders/MmExtendableResponder.cs` | ~200 | Base responder with registration-based custom method handling. Preferred for custom methods (>= 1000). |
 
 ---
 
@@ -219,16 +219,16 @@ Project documentation files.
 ## Quick Navigation by Use Case
 
 ### "I want to send messages"
-→ Start with `Assets/MercuryMessaging/Protocol/MmRelayNode.cs` (MmInvoke method)
+→ Start with `Assets/MercuryMessaging/Protocol/Nodes/MmRelayNode.cs` (MmInvoke method)
 → See `Assets/MercuryMessaging/Protocol/MmMetadataBlock.cs` for filtering options
 → Use `relay.Send("value").ToChildren().Execute()` (Fluent DSL)
 
 ### "I want to receive messages"
-→ Extend `Assets/MercuryMessaging/Protocol/MmBaseResponder.cs` for standard methods
-→ Extend `Assets/MercuryMessaging/Protocol/MmExtendableResponder.cs` for custom methods (>= 1000)
+→ Extend `Assets/MercuryMessaging/Protocol/Responders/MmBaseResponder.cs` for standard methods
+→ Extend `Assets/MercuryMessaging/Protocol/Responders/MmExtendableResponder.cs` for custom methods (>= 1000)
 
 ### "I want to use FSM for state management"
-→ Use `Assets/MercuryMessaging/Protocol/MmRelaySwitchNode.cs` as parent
+→ Use `Assets/MercuryMessaging/Protocol/Nodes/MmRelaySwitchNode.cs` as parent
 → See `Assets/MercuryMessaging/Support/FiniteStateMachine/FiniteStateMachine.cs` for FSM details
 
 ### "I want to create custom message types"

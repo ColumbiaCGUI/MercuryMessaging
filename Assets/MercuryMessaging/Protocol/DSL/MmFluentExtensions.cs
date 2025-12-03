@@ -2,7 +2,7 @@ using System;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-namespace MercuryMessaging.Protocol.DSL
+namespace MercuryMessaging
 {
     /// <summary>
     /// Extension methods for MmRelayNode to enable fluent message sending.

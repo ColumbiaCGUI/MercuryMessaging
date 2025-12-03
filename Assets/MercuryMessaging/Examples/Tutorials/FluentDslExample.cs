@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using MercuryMessaging;
-using MercuryMessaging.Protocol;
-using MercuryMessaging.Protocol.DSL;
+
 
 namespace MercuryMessaging.Examples.Tutorials
 {

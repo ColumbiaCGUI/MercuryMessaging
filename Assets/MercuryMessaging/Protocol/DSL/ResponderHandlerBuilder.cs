@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MercuryMessaging.Protocol.DSL
+namespace MercuryMessaging
 {
     /// <summary>
     /// Fluent builder for configuring message handlers on MmExtendableResponder.

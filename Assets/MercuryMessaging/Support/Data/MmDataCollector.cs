@@ -36,7 +36,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace MercuryMessaging.Support.Data
+namespace MercuryMessaging.Data
 {
     /// <summary>
     /// The MmDataCollector stores a collection of MmDataCollectionItems.

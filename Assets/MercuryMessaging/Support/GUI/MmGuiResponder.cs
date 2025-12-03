@@ -31,7 +31,7 @@
 // =============================================================
 //  
 //  
-namespace MercuryMessaging.Support.GUI
+namespace MercuryMessaging
 {
     /// <summary>
     /// GUI Interaction Component - Adapter for IMmGUI objects.

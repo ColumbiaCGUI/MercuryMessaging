@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-namespace MercuryMessaging.Protocol.DSL
+namespace MercuryMessaging
 {
     /// <summary>
     /// Predicate types for fluent message filtering.

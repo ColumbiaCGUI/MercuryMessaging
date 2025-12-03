@@ -10,7 +10,7 @@ using System;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-namespace MercuryMessaging.Protocol.DSL
+namespace MercuryMessaging
 {
     /// <summary>
     /// Ultra-minimal extension methods for MmRelayNode.

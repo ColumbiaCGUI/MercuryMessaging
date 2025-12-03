@@ -28,7 +28,7 @@
 ## Critical References
 
 - [Frequent Errors](dev/FREQUENT_ERRORS.md) - Common bugs & debugging patterns (MUST READ)
-- [DSL API Guide](Assets/MercuryMessaging/Protocol/DSL/DSL_API_GUIDE.md) - Comprehensive Fluent API documentation
+- [DSL API Guide](Documentation/DSL/API_GUIDE.md) - Comprehensive Fluent API documentation
 - [FILE_REFERENCE.md](FILE_REFERENCE.md) - Complete list of important files with descriptions
 - [CONTRIBUTING.md](CONTRIBUTING.md) - Development standards, naming conventions, testing guidelines
 

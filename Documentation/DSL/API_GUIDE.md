@@ -7,7 +7,7 @@ The Fluent DSL provides a modern, chainable API for MercuryMessaging that reduce
 ## Quick Start
 
 ```csharp
-using MercuryMessaging.Protocol.DSL;
+using MercuryMessaging;
 
 // Traditional API (7 lines)
 var metadata = new MmMetadataBlock(
@@ -40,7 +40,7 @@ The unified API provides **identical methods** for both `MmRelayNode` and `MmBas
 These methods execute immediately - no `.Execute()` needed:
 
 ```csharp
-using MercuryMessaging.Protocol.DSL;
+using MercuryMessaging;
 
 // Broadcast DOWN to descendants (matches MmMethod enum names)
 relay.BroadcastInitialize();       // → MmMethod.Initialize
@@ -104,7 +104,7 @@ public class MyResponder : MmBaseResponder
 The shortest syntax for common messaging patterns. Routes first, then sends:
 
 ```csharp
-using MercuryMessaging.Protocol.DSL;
+using MercuryMessaging;
 
 // Property-based routing (shortest syntax)
 relay.To.Children.Send("Hello");           // Send string to children
@@ -517,7 +517,7 @@ Subscribe to incoming messages with a fluent API:
 #### Basic Subscription
 
 ```csharp
-using MercuryMessaging.Protocol.DSL;
+using MercuryMessaging;
 
 // Subscribe to typed messages
 var subscription = relay.Listen<MmMessageFloat>()
@@ -587,7 +587,7 @@ Query and traverse responder hierarchies with LINQ-like syntax:
 #### Basic Queries
 
 ```csharp
-using MercuryMessaging.Protocol.DSL;
+using MercuryMessaging;
 
 // Get query builder
 var builder = relay.Query();
@@ -807,7 +807,7 @@ Convenience methods for listening to Standard Library messages:
 #### UI Message Shortcuts
 
 ```csharp
-using MercuryMessaging.Protocol.DSL;
+using MercuryMessaging;
 
 // Click handling
 relay.OnClick(msg => {
@@ -864,7 +864,7 @@ relay.OnGazeHit(msg => HighlightObject(msg.HitPoint));
 Simplified runtime hierarchy setup:
 
 ```csharp
-using MercuryMessaging.Protocol.DSL;
+using MercuryMessaging;
 
 // Traditional (2 lines)
 parentRelay.MmAddToRoutingTable(childRelay, MmLevelFilter.Child);
@@ -893,7 +893,7 @@ bool isRoot = parentRelay.IsRoot();
 Fluent tag manipulation:
 
 ```csharp
-using MercuryMessaging.Protocol.DSL;
+using MercuryMessaging;
 
 // Single responder
 responder.WithTag(MmTag.Tag0).EnableTagChecking();

@@ -86,7 +86,7 @@ Performance test infrastructure optimizations successfully addressed the 6.5x fr
 ## Optimizations Implemented
 
 ### 1. PerformanceMode Flag
-**File:** `Assets/MercuryMessaging/Protocol/MmRelayNode.cs`
+**File:** `Assets/MercuryMessaging/Protocol/Nodes/MmRelayNode.cs`
 ```csharp
 public static bool PerformanceMode = false;
 
@@ -237,7 +237,7 @@ burstMode = false; // Unless stress testing
 ## Files Modified
 
 ### Core Framework
-- `Assets/MercuryMessaging/Protocol/MmRelayNode.cs` (PerformanceMode flag)
+- `Assets/MercuryMessaging/Protocol/Nodes/MmRelayNode.cs` (PerformanceMode flag)
 
 ### Test Infrastructure
 - `Assets/MercuryMessaging/Tests/Performance/Scripts/MessageGenerator.cs` (frame-based generation)

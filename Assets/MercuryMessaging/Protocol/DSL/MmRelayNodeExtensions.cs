@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-namespace MercuryMessaging.Protocol.DSL
+namespace MercuryMessaging
 {
     /// <summary>
     /// Convenience extension methods for MmRelayNode to simplify common messaging patterns.

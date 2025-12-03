@@ -7,7 +7,7 @@
 using System;
 using UnityEngine;
 
-namespace MercuryMessaging.Protocol.DSL
+namespace MercuryMessaging
 {
     /// <summary>
     /// Extension methods for network-aware messaging.

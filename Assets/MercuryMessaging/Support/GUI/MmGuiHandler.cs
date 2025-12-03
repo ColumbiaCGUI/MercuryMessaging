@@ -35,7 +35,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace MercuryMessaging.Support.GUI
+namespace MercuryMessaging
 {
 	public class MmGuiHandler : MonoBehaviour, IMmGUI
     {

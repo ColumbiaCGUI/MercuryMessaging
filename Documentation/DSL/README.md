@@ -139,7 +139,7 @@ relay.Send("Event")
 ### Using Filter Helpers
 
 ```csharp
-using MercuryMessaging.Protocol.DSL;
+using MercuryMessaging;
 
 // Use static filter constants
 relay.Send("Test")

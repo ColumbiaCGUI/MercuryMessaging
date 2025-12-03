@@ -6,11 +6,11 @@
 
 using System;
 using System.Collections.Generic;
-using MercuryMessaging.AppState;
-using MercuryMessaging.Support.FiniteStateMachine;
+
+
 using UnityEngine;
 
-namespace MercuryMessaging.Protocol.DSL
+namespace MercuryMessaging
 {
     /// <summary>
     /// Fluent builder for configuring application states.

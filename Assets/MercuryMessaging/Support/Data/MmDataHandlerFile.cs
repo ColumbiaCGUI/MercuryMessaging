@@ -35,7 +35,7 @@ using System;
 using System.IO;
 using UnityEngine;
 
-namespace MercuryMessaging.Support.Data
+namespace MercuryMessaging.Data
 {
     /// <summary>
     /// Load from and Save to XML files. Data should be fully encapsulated in the object 
