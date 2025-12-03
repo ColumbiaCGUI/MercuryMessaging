@@ -6,14 +6,21 @@
       "WebFetch(domain:columbiacgui.github.io)",
       "Bash(tasklist:*)",
       "Bash(\"C:\\Users\\yangb\\AppData\\Local\\Microsoft\\WinGet\\Links\\uvx.exe\" --version)",
-      "Bash(netstat:*)"
+      "Bash(netstat:*)",
+      "mcp__UnityMCP__manage_editor",
+      "mcp__UnityMCP__read_console",
+      "Bash(rm:*)",
+      "mcp__UnityMCP__manage_asset",
+      "mcp__UnityMCP__set_active_instance",
+      "mcp__UnityMCP__execute_menu_item",
+      "mcp__UnityMCP__run_tests"
     ],
     "deny": [],
     "ask": []
   },
+  "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
     "UnityMCP"
   ],
-  "outputStyle": "default",
-  "enableAllProjectMcpServers": true
+  "outputStyle": "default"
 }

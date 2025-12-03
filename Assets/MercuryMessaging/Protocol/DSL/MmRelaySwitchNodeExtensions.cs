@@ -5,9 +5,9 @@
 // Part of DSL Overhaul Phase 2
 
 using System;
-using MercuryMessaging.Support.FiniteStateMachine;
 
-namespace MercuryMessaging.Protocol.DSL
+
+namespace MercuryMessaging
 {
     /// <summary>
     /// Extension methods for MmRelaySwitchNode to enable fluent FSM configuration.

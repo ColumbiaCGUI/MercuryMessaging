@@ -236,7 +236,7 @@ if (parent != null)
 
 **Commit:** 7dd86891
 **Session:** 2025-11-21 Phase 2.1
-**File:** `Assets/MercuryMessaging/Protocol/MmRelayNode.cs`
+**File:** `Assets/MercuryMessaging/Protocol/Nodes/MmRelayNode.cs`
 
 **Symptoms:**
 - All 7 AdvancedRoutingTests failing (even after Bug #2 fixed)
@@ -341,7 +341,7 @@ yield return null; // Extra frame for responder registration
 ### Bug #5: Double-Delivery in Recursive Routing
 
 **Session:** 2025-11-21 (current)
-**File:** `Assets/MercuryMessaging/Protocol/MmRelayNode.cs`
+**File:** `Assets/MercuryMessaging/Protocol/Nodes/MmRelayNode.cs`
 
 **Symptoms:**
 - `AncestorsRouting_ReachesAllParents`: Expected 1, got 3 messages to Parent
@@ -677,13 +677,13 @@ When responders receive messages multiple times:
 
 ## Reference Files
 
-- **Core Routing Logic:** `Assets/MercuryMessaging/Protocol/MmRelayNode.cs`
+- **Core Routing Logic:** `Assets/MercuryMessaging/Protocol/Nodes/MmRelayNode.cs`
   - Standard routing pattern: See MmInvoke implementation
   - HandleAdvancedRouting: See advanced routing section
   - RouteLateral: See lateral routing methods
   - RouteRecursive: See recursive routing methods
 
-- **Base Responder:** `Assets/MercuryMessaging/Protocol/MmBaseResponder.cs`
+- **Base Responder:** `Assets/MercuryMessaging/Protocol/Responders/MmBaseResponder.cs`
   - Method routing with switch statements
   - Virtual method signatures
 

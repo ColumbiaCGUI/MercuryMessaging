@@ -31,7 +31,7 @@
 // =============================================================
 //  
 //  
-namespace MercuryMessaging.Support.Data
+namespace MercuryMessaging.Data
 {
     /// <summary>
     /// XML implementation of the IMmDataHandler.

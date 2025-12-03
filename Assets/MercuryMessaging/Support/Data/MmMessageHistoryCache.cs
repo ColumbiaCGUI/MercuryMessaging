@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MercuryMessaging.Support
+namespace MercuryMessaging.Data
 {
     /// <summary>
     /// Time-windowed LRU cache for tracking visited relay nodes in message routing.

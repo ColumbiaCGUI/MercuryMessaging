@@ -6,7 +6,7 @@
 
 using System;
 
-namespace MercuryMessaging.Protocol.DSL
+namespace MercuryMessaging
 {
     /// <summary>
     /// Extension methods for MmExtendableResponder to enable fluent handler configuration.

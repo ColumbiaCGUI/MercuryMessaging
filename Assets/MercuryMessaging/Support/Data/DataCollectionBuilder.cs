@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MercuryMessaging.Support.Data
+namespace MercuryMessaging.Data
 {
     /// <summary>
     /// Fluent builder for configuring MmDataCollector instances.

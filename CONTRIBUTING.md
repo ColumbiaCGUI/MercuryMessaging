@@ -104,7 +104,7 @@ Generic utilities that are not framework-specific do not require the prefix:
 **Correct:**
 
 ```
-Protocol/MmRelayNode.cs
+Protocol/Nodes/MmRelayNode.cs
 Protocol/Message/MmMessage.cs
 Support/Data/MmCircularBuffer.cs
 Support/Data/MmDataCollector.cs

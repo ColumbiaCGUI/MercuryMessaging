@@ -9,7 +9,7 @@ using MercuryMessaging;
 using MercuryMessaging.StandardLibrary.UI;
 using MercuryMessaging.StandardLibrary.Input;
 
-namespace MercuryMessaging.Protocol.DSL
+namespace MercuryMessaging.StandardLibrary
 {
     /// <summary>
     /// Extension methods for subscribing to Standard Library messages.

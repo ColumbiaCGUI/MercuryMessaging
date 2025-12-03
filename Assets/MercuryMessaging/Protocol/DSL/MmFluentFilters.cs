@@ -1,6 +1,6 @@
 using System.Runtime.CompilerServices;
 
-namespace MercuryMessaging.Protocol.DSL
+namespace MercuryMessaging
 {
     /// <summary>
     /// Provides convenient static properties for common routing filters.

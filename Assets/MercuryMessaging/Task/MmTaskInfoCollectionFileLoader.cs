@@ -35,7 +35,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using MercuryMessaging.Support.Data;
+using MercuryMessaging.Data;
 using UnityEngine;
 #if NETFX_CORE
 using StreamReader = WinRTLegacy.IO.StreamReader;

@@ -11,9 +11,8 @@
 // - Tier 2: Fluent Chain methods (Send().ToDescendants().Execute())
 
 using System.Runtime.CompilerServices;
-using MercuryMessaging.Support;
 
-namespace MercuryMessaging.Protocol.DSL
+namespace MercuryMessaging
 {
     /// <summary>
     /// Unified messaging extensions for both MmRelayNode and MmBaseResponder.

@@ -6,7 +6,7 @@
 using System.Runtime.CompilerServices;
 using MercuryMessaging;
 
-namespace MercuryMessaging.Protocol.DSL
+namespace MercuryMessaging
 {
     /// <summary>
     /// Extension methods for fluent tag configuration.

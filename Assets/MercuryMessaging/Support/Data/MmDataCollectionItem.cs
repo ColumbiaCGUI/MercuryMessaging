@@ -33,7 +33,7 @@
 //  
 using System;
 
-namespace MercuryMessaging.Support.Data
+namespace MercuryMessaging.Data
 {
     /// <summary>
     /// MmDataCollectionItems are recording units,

@@ -7,7 +7,7 @@
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-namespace MercuryMessaging.Protocol.DSL
+namespace MercuryMessaging
 {
     /// <summary>
     /// Property-based routing builder for shorter DSL syntax.

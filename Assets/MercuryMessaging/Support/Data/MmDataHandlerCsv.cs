@@ -31,7 +31,7 @@
 // =============================================================
 //  
 //  
-namespace MercuryMessaging.Support.Data
+namespace MercuryMessaging.Data
 {
     /// <summary>
     /// CSV implementation of the IMmDataHandler.

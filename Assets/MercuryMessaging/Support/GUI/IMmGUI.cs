@@ -31,7 +31,7 @@
 // =============================================================
 //  
 //  
-namespace MercuryMessaging.Support.GUI
+namespace MercuryMessaging
 {
     /// <summary>
     /// Defines interface for basic GUI 

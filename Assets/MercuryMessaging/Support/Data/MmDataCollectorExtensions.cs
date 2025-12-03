@@ -6,7 +6,7 @@
 
 using System;
 
-namespace MercuryMessaging.Support.Data
+namespace MercuryMessaging.Data
 {
     /// <summary>
     /// Extension methods for MmDataCollector to enable fluent configuration.

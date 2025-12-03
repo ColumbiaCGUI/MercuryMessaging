@@ -22,6 +22,63 @@
 
 ---
 
+## Namespace Organization
+
+MercuryMessaging uses a **consolidated namespace strategy** to minimize imports. Most developers only need:
+
+```csharp
+using MercuryMessaging;
+```
+
+This single import provides access to **95% of functionality**:
+- Core classes (MmRelayNode, MmBaseResponder, MmMessage, etc.)
+- Fluent DSL API (Send(), BroadcastInitialize(), etc.)
+- FSM (FiniteStateMachine, FsmConfigBuilder)
+- Extensions (GameObjectExtensions, TransformExtensions)
+- AppState (MmAppStateResponder, MmRelaySwitchNode)
+- GUI (MmGuiHandler, IMmGUI)
+- Utilities
+
+### Secondary Namespaces (5% of use cases)
+
+| Namespace | Purpose | When to Import |
+|-----------|---------|----------------|
+| `MercuryMessaging.Data` | Data collection, CSV export | User studies, logging |
+| `MercuryMessaging.Task` | Experiment management | Research tasks |
+| `MercuryMessaging.Network` | Network backends | Custom networking |
+| `MercuryMessaging.StandardLibrary.UI` | UI message types | Click, Hover, Drag |
+| `MercuryMessaging.StandardLibrary.Input` | VR input types | 6DOF, Gesture |
+| `MercuryMessaging.StandardLibrary.Animation` | Interpolators | Animations |
+| `MercuryMessaging.Editor` | Editor utilities | Custom inspectors |
+
+### Quick Start Examples
+
+```csharp
+// Basic messaging - just one import!
+using MercuryMessaging;
+
+public class MyResponder : MmBaseResponder
+{
+    void Start()
+    {
+        var relay = GetComponent<MmRelayNode>();
+        relay.BroadcastInitialize();              // DSL included
+        relay.Send("hello").ToChildren().Execute(); // Fluent API included
+    }
+}
+
+// UI messages - add StandardLibrary.UI
+using MercuryMessaging;
+using MercuryMessaging.StandardLibrary.UI;
+
+public class MyUIHandler : MmUIResponder
+{
+    protected override void ReceivedClick(MmUIClickMessage msg) { /* ... */ }
+}
+```
+
+---
+
 ## Directory Structure
 
 ### Project Root Structure (Assets/) - 6 Folders
@@ -94,8 +151,9 @@ Assets/
 For a complete list of important files with descriptions, see [FILE_REFERENCE.md](../FILE_REFERENCE.md).
 
 **Key Files:**
-- `Protocol/MmRelayNode.cs` (1422 lines) - Central message router
-- `Protocol/MmBaseResponder.cs` (383 lines) - Base responder with method routing
-- `Protocol/MmExtendableResponder.cs` - Registration-based custom method handling
-- `Protocol/MmRelaySwitchNode.cs` (188 lines) - FSM-enabled relay node
+- `Protocol/Nodes/MmRelayNode.cs` - Central message router
+- `Protocol/Responders/MmBaseResponder.cs` - Base responder with method routing
+- `Protocol/Responders/MmExtendableResponder.cs` - Registration-based custom method handling
+- `Protocol/Nodes/MmRelaySwitchNode.cs` - FSM-enabled relay node
+- `Protocol/DSL/*.cs` - Fluent API extensions
 - See [FILE_REFERENCE.md](../FILE_REFERENCE.md) for complete list

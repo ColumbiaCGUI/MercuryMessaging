@@ -7,7 +7,7 @@ using System;
 using System.Runtime.CompilerServices;
 using MercuryMessaging;
 
-namespace MercuryMessaging.Protocol.DSL
+namespace MercuryMessaging
 {
     /// <summary>
     /// Represents an active message listener subscription.

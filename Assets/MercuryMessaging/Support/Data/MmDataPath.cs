@@ -34,7 +34,7 @@
 using System.IO;
 using UnityEngine;
 
-namespace MercuryMessaging.Support.Data
+namespace MercuryMessaging.Data
 {
     /// <summary>
     /// Simplifies data file directory preparation/access.

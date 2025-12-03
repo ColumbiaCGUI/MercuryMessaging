@@ -34,11 +34,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using MercuryMessaging.Support.Extensions;
+
 using UnityEngine;
 using Matrix = UnityEngine.Matrix4x4;
 
-namespace MercuryMessaging.Support
+namespace MercuryMessaging
 {
 	/// <summary>
 	/// General utility functions
