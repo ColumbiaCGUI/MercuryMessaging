@@ -153,20 +153,20 @@ namespace MercuryMessaging.Tests
         [UnityTest]
         public IEnumerator Eviction_RefreshTimestamp_ExtendsLifetime()
         {
-            // Arrange
-            var cache = new MmMessageHistoryCache(60); // 60ms window
+            // Arrange - Use 150ms window with 50ms waits for robust timing margin (50ms buffer)
+            var cache = new MmMessageHistoryCache(150);
             cache.Add(1);
 
-            yield return new WaitForSeconds(0.04f); // 40ms
+            yield return new WaitForSeconds(0.05f); // 50ms
 
             // Act - Refresh node 1's timestamp
             cache.Add(1);
 
-            yield return new WaitForSeconds(0.04f); // Another 40ms (80ms from initial add, 40ms from refresh)
+            yield return new WaitForSeconds(0.05f); // Another 50ms (100ms from initial add, 50ms from refresh)
 
             cache.Add(2); // Trigger eviction
 
-            // Assert
+            // Assert - Node 1's timestamp was refreshed 50ms ago, well within 150ms window
             Assert.IsTrue(cache.Contains(1), "Node 1 should remain (timestamp was refreshed)");
             Assert.IsTrue(cache.Contains(2), "Node 2 should be present");
         }

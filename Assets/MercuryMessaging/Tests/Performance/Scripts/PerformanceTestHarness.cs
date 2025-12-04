@@ -423,7 +423,8 @@ namespace MercuryMessaging.Tests.Performance
             }
             catch (Exception e)
             {
-                Debug.LogError($"[PerformanceTestHarness] Export failed: {e.Message}");
+                Debug.LogError("[PerformanceTestHarness] Export failed");
+                Debug.LogException(e);
             }
         }
 

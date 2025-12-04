@@ -150,7 +150,7 @@ public class NetworkBackendTestRunner : MonoBehaviour
         }
         catch (System.Exception e)
         {
-            LogError($"  Failed to deserialize: {e.Message}");
+            LogError($"  Failed to deserialize: {e}");
         }
     }
 
@@ -435,7 +435,7 @@ public class NetworkBackendTestRunner : MonoBehaviour
         }
         catch (System.Exception e)
         {
-            Fail(testName, $"Exception: {e.Message}");
+            Fail(testName, $"Exception: {e}");
             return false;
         }
     }

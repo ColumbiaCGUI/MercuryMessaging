@@ -517,7 +517,8 @@ namespace MercuryMessaging.Tests.Performance
             }
             catch (Exception e)
             {
-                Debug.LogError($"[ComparisonTestHarness] Export failed: {e.Message}");
+                Debug.LogError("[ComparisonTestHarness] Export failed");
+                Debug.LogException(e);
             }
 
             // Export summary
@@ -570,7 +571,8 @@ namespace MercuryMessaging.Tests.Performance
             }
             catch (Exception e)
             {
-                Debug.LogWarning($"[ComparisonTestHarness] Summary export failed: {e.Message}");
+                Debug.LogWarning("[ComparisonTestHarness] Summary export failed");
+                Debug.LogException(e);
             }
         }
 
