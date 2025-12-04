@@ -265,8 +265,9 @@ namespace MercuryMessaging.Tests
             var standaloneObj = new GameObject("Standalone");
             var standaloneResponder = standaloneObj.AddComponent<TestMessageResponder>();
 
-            // Should return default builder without throwing
+            // Should return default builder without throwing, but logs error (FAIL-FAST)
             var builder = standaloneResponder.Build();
+            LogAssert.Expect(LogType.Error, "[MmDeferredRoutingBuilder] Execute called with no relay node. Message will not be sent.");
             Assert.DoesNotThrow(() => builder.ToChildren().Send("test").Execute());
 
             Object.DestroyImmediate(standaloneObj);

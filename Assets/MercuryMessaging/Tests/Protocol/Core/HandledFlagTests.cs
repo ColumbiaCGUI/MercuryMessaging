@@ -201,10 +201,14 @@ namespace MercuryMessaging.Tests
                 responder.shouldHandle = (i == 0); // First child handles
                 testObjects.Add(child);
                 childRelays.Add(childRelay);
+
+                // CRITICAL: Register child relay with parent's routing table for ToChildren() to work
+                relay.MmAddToRoutingTable(childRelay, MmLevelFilter.Child);
+                childRelay.AddParent(relay);
             }
 
             yield return null;
-            // CRITICAL: Refresh responders on CHILD relays where responders are attached
+            // Refresh child relays to register their responders
             foreach (var childRelay in childRelays)
             {
                 childRelay.MmRefreshResponders();

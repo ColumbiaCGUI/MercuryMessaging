@@ -367,11 +367,19 @@ namespace MercuryMessaging
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Execute()
         {
-            // Null-safe: silently do nothing if no relay node
-            if (_relay == null) return;
+            // FAIL-FAST: Log error if no relay node instead of silently failing
+            if (_relay == null)
+            {
+                UnityEngine.Debug.LogError("[MmDeferredRoutingBuilder] Execute called with no relay node. Message will not be sent.");
+                return;
+            }
 
             // Nothing to execute if no payload was set
-            if (!_hasPayload) return;
+            if (!_hasPayload)
+            {
+                UnityEngine.Debug.LogWarning("[MmDeferredRoutingBuilder] Execute called but no payload was set. Call Send() before Execute().");
+                return;
+            }
 
             // Delegate to MmFluentMessage for the actual routing logic
             var fluent = new MmFluentMessage(_relay, _method, _payload);

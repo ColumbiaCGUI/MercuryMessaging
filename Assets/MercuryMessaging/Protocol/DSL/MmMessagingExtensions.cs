@@ -263,7 +263,15 @@ namespace MercuryMessaging
         /// <returns>A fluent message builder for chaining.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static MmFluentMessage Send(this MmBaseResponder responder, object payload)
-            => responder.GetRelayNode()?.Send(payload) ?? default;
+        {
+            var relay = responder.GetRelayNode();
+            if (relay == null)
+            {
+                UnityEngine.Debug.LogWarning($"[MmMessagingExtensions] Send called on responder '{responder.name}' with no relay node. Message will not be sent.");
+                return default;
+            }
+            return relay.Send(payload);
+        }
 
         /// <summary>
         /// Start a fluent message chain from a responder with a method.
@@ -276,7 +284,15 @@ namespace MercuryMessaging
         /// <returns>A fluent message builder for chaining.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static MmFluentMessage Send(this MmBaseResponder responder, MmMethod method)
-            => responder.GetRelayNode()?.Send(method) ?? default;
+        {
+            var relay = responder.GetRelayNode();
+            if (relay == null)
+            {
+                UnityEngine.Debug.LogWarning($"[MmMessagingExtensions] Send called on responder '{responder.name}' with no relay node. Message will not be sent.");
+                return default;
+            }
+            return relay.Send(method);
+        }
 
         /// <summary>
         /// Start a fluent message chain from a responder with method and payload.
@@ -290,7 +306,15 @@ namespace MercuryMessaging
         /// <returns>A fluent message builder for chaining.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static MmFluentMessage Send(this MmBaseResponder responder, MmMethod method, object payload)
-            => responder.GetRelayNode()?.Send(method, payload) ?? default;
+        {
+            var relay = responder.GetRelayNode();
+            if (relay == null)
+            {
+                UnityEngine.Debug.LogWarning($"[MmMessagingExtensions] Send called on responder '{responder.name}' with no relay node. Message will not be sent.");
+                return default;
+            }
+            return relay.Send(method, payload);
+        }
 
         #endregion
     }

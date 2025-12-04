@@ -467,7 +467,7 @@ namespace MercuryMessaging.Tests.Network
             }
             catch (System.Exception e)
             {
-                AddLog($"Failed to deserialize: {e.Message}");
+                AddLog($"Failed to deserialize: {e}");
             }
         }
 
