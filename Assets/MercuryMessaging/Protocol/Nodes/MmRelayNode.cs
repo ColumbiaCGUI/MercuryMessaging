@@ -168,6 +168,13 @@ namespace MercuryMessaging
         public MmRoutingBuilder To => new MmRoutingBuilder(this);
 
         /// <summary>
+        /// Deferred routing builder for conditional/delayed execution.
+        /// Unlike To which auto-executes, Build() requires explicit Execute().
+        /// Enables: var msg = relay.Build().ToChildren().Send("Hello"); if (ready) msg.Execute();
+        /// </summary>
+        public MmDeferredRoutingBuilder Build() => new MmDeferredRoutingBuilder(this);
+
+        /// <summary>
         /// Indicates whether MmInvoke is currently executing a call.
         /// </summary>
         private bool _executing;
@@ -922,6 +929,11 @@ namespace MercuryMessaging
             // Second pass: invoke responders with appropriate messages
             foreach (var routingTableItem in RoutingTable) {
 				var responder = routingTableItem.Responder;
+
+                // Skip responders that don't want handled messages (early termination optimization)
+                if (message.Handled && !responder.ReceiveHandledMessages)
+                    continue;
+
 				MmLevelFilter responderLevel = routingTableItem.Level;
 
 				// FIX: Check if original levelFilter includes this responder's level
@@ -990,6 +1002,10 @@ namespace MercuryMessaging
                 var routingTableItem = MmRespondersToAdd.Dequeue();
 
                 MmAddToRoutingTable(routingTableItem.Responder, routingTableItem.Level);
+
+                // Skip responders that don't want handled messages
+                if (message.Handled && !routingTableItem.Responder.ReceiveHandledMessages)
+                    continue;
 
                 if (ResponderCheck(levelFilter, activeFilter, selectedFilter, networkFilter,
                     routingTableItem, message))
