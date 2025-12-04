@@ -123,13 +123,6 @@ namespace MercuryMessaging
 		public Queue<MmRoutingTableItem> MmRespondersToAdd =
 			new Queue<MmRoutingTableItem>();
 
-        /// <summary>
-        /// Queue of Memessages to route if serialExecution is enabled 
-        /// and messages are received while another message is being executed.
-        /// </summary>
-        protected Queue<KeyValuePair<MmMessageType, MmMessage>> SerialExecutionQueue =
-            new Queue<KeyValuePair<MmMessageType, MmMessage>>();
-
 		/// <summary>
 		/// Parents of this relay node.
 		/// </summary>
@@ -202,12 +195,6 @@ namespace MercuryMessaging
         /// </summary>
         public bool Initialized;
 
-
-        /// <summary>
-        /// Experimental - Allows forced order on 
-        /// MmInvocations received simultaneously
-        /// </summary>
-        private bool serialExecution = false;
 
         /// <summary>
         /// There may be an issue where a message is received before 
@@ -1014,18 +1001,6 @@ namespace MercuryMessaging
                         routingTableItem.Responder.MmInvoke(message);
                 }
             }
-
-            //if (serialExecution)
-            //{
-            //    if (SerialExecutionQueue.Count != 0)
-            //    {
-            //        MmLogger.LogFramework("%%%%%%%%%%%Dequeueing%%%%%%%%%");
-            //        KeyValuePair<MmMessageType, MmMessage> DequeuedMessage = SerialExecutionQueue.Dequeue();
-            //        MmInvoke(DequeuedMessage.Key, DequeuedMessage.Value);
-            //    }
-
-            //    _executing = false;
-            //}
         }
 
         #region MmInvoke utility methods
