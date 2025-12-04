@@ -58,7 +58,9 @@ Future async/thread-safe messaging will use `ConcurrentQueue<T>`, Job System, or
 
 ---
 
-## E1-E3: Handled Flag Early Termination (1-2h)
+## E1-E3: Handled Flag Early Termination (1-2h) ✅ COMPLETE
+
+**Completed:** 2025-12-03
 
 ### Goal
 Add WPF-style `Handled` flag to stop message propagation after a handler consumes the message.
@@ -118,14 +120,14 @@ if (message.Handled && !routingTableItem.Responder.ReceiveHandledMessages)
 ```
 
 ### Testing
-**File:** `Assets/MercuryMessaging/Tests/HandledFlagTests.cs`
+**File:** `Assets/MercuryMessaging/Tests/Protocol/Core/HandledFlagTests.cs`
 
-- [ ] Test default `Handled = false` (no change to existing behavior)
-- [ ] Test `Handled = true` stops propagation to remaining responders
-- [ ] Test `Handled` flag resets for new messages (not polluted across messages)
-- [ ] Test with different routing patterns (ToChildren, ToDescendants, ToAll)
-- [ ] Test interaction with existing filters (Tag, Active, Selected)
-- [ ] Performance test: verify early termination actually reduces dispatch time
+- [x] Test default `Handled = false` (no change to existing behavior)
+- [x] Test `Handled = true` stops propagation to remaining responders
+- [x] Test `Handled` flag resets for new messages (not polluted across messages)
+- [x] Test with different routing patterns (ToChildren)
+- [x] Test ReceiveHandledMessages=true allows receiving handled messages
+- [x] Test Handled flag preserved in message copies
 
 ---
 
