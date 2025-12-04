@@ -25,7 +25,7 @@ This folder contains core framework performance optimizations for MercuryMessagi
 | ID | Task | Effort | Status |
 |----|------|--------|--------|
 | D1 | Remove SerialExecutionQueue dead code | 15 min | ✅ Complete |
-| E1-E3 | Handled flag early termination | 1-2h | Pending |
+| E1-E3 | Handled flag early termination | 1-2h | ✅ Complete |
 | P1-P3 | MmRelaySwitchNode caching | 4h | Pending |
 | Q1-Q4 | MmRoutingChecks consolidation | 4h | Pending |
 | S1-S7 | Serialization overhaul | 16h | Pending |
