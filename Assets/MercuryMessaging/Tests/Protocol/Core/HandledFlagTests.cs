@@ -190,6 +190,7 @@ namespace MercuryMessaging.Tests
             var relay = rootNode.AddComponent<MmRelayNode>();
 
             // Create child nodes
+            var childRelays = new List<MmRelayNode>();
             for (int i = 0; i < 3; i++)
             {
                 var child = new GameObject($"Child_{i}");
@@ -199,10 +200,15 @@ namespace MercuryMessaging.Tests
                 responder.responderId = i;
                 responder.shouldHandle = (i == 0); // First child handles
                 testObjects.Add(child);
+                childRelays.Add(childRelay);
             }
 
             yield return null;
-            relay.MmRefreshResponders();
+            // CRITICAL: Refresh responders on CHILD relays where responders are attached
+            foreach (var childRelay in childRelays)
+            {
+                childRelay.MmRefreshResponders();
+            }
             yield return null;
 
             // Act
@@ -261,6 +267,10 @@ namespace MercuryMessaging.Tests
                 responder.responderId = i;
                 responder.shouldHandle = handleMessage && (i == handlerIndex);
             }
+
+            // CRITICAL: Refresh responders after adding them, since MmRelayNode.Start()
+            // already ran before the responders were added
+            relay.MmRefreshResponders();
 
             return node;
         }
