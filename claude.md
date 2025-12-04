@@ -27,10 +27,11 @@
 
 ## Critical References
 
+@./CONTRIBUTING.md
+
 - [Frequent Errors](dev/FREQUENT_ERRORS.md) - Common bugs & debugging patterns (MUST READ)
 - [DSL API Guide](Documentation/DSL/API_GUIDE.md) - Comprehensive Fluent API documentation
 - [FILE_REFERENCE.md](FILE_REFERENCE.md) - Complete list of important files with descriptions
-- [CONTRIBUTING.md](CONTRIBUTING.md) - Development standards, naming conventions, testing guidelines
 
 ---
 
@@ -43,8 +44,6 @@
 ---
 
 ## Development Standards
-
-For complete development standards, guidelines, and contribution process, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 **Key Standards:**
 - Core framework files must use "Mm" prefix (MmRelayNode, MmMessage, etc.)
