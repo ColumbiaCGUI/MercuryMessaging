@@ -96,6 +96,13 @@ namespace MercuryMessaging
         public System.Collections.Generic.HashSet<int> VisitedNodes;
 
         /// <summary>
+        /// When set to true, stops message propagation to remaining responders.
+        /// Useful for event-style messages where only one handler should respond.
+        /// Similar to WPF's RoutedEventArgs.Handled pattern.
+        /// </summary>
+        public bool Handled { get; set; } = false;
+
+        /// <summary>
         /// Indicates whether this message was obtained from the MmMessagePool.
         /// Used internally to determine if the message should be returned to pool after routing.
         /// </summary>
@@ -190,6 +197,7 @@ namespace MercuryMessaging
             root = message.root;
             TimeStamp = message.TimeStamp;
             HopCount = message.HopCount;
+            Handled = message.Handled;
 
             // Copy visited nodes set for cycle detection (using pool to avoid allocation)
             if (message.VisitedNodes != null)

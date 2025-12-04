@@ -219,6 +219,7 @@ namespace MercuryMessaging
             msg.root = true;
             msg.TimeStamp = null;
             msg.HopCount = 0;
+            msg.Handled = false; // Reset Handled flag for E1-E3 early termination feature
             msg._isPooled = true; // Mark as pooled for return tracking
 
             // Return VisitedNodes HashSet to pool if it exists

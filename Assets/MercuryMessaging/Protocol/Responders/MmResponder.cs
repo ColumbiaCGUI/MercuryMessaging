@@ -60,9 +60,17 @@ namespace MercuryMessaging
 
         /// <summary>
         /// By default IMmResponders have this set to true so that they receive
-        /// all messages. 
+        /// all messages.
         /// </summary>
         [SerializeField] private bool tagCheckEnabled = true;
+
+        /// <summary>
+        /// When true, this responder receives messages even if Handled=true.
+        /// Useful for logging, analytics, or handlers that need to see all messages.
+        /// Default: false (responder skipped after message is handled).
+        /// Similar to WPF's handledEventsToo parameter.
+        /// </summary>
+        [SerializeField] private bool receiveHandledMessages = false;
 
         /// <summary>
         /// Handle to an instance's GameObject.
@@ -91,7 +99,17 @@ namespace MercuryMessaging
 			get { return tagCheckEnabled; }
 			set { tagCheckEnabled = value; }
 		}
-        
+
+        /// <summary>
+        /// When true, this responder receives messages even if Handled=true.
+        /// Useful for logging, analytics, or handlers that need to see all messages.
+        /// </summary>
+        public bool ReceiveHandledMessages
+        {
+            get { return receiveHandledMessages; }
+            set { receiveHandledMessages = value; }
+        }
+
         /// <summary>
         /// Awake: Invokes MmOnAwakeComplete
         /// </summary>
