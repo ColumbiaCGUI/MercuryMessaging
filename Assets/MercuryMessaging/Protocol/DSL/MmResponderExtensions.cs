@@ -173,6 +173,18 @@ namespace MercuryMessaging
         }
 
         /// <summary>
+        /// Deferred routing builder for conditional/delayed execution.
+        /// Unlike To() which auto-executes, Build() requires explicit Execute().
+        /// Enables: var msg = responder.Build().ToChildren().Send("Hello"); if (ready) msg.Execute();
+        /// Null-safe: returns default struct that no-ops if responder has no relay node.
+        /// </summary>
+        public static MmDeferredRoutingBuilder Build(this MmBaseResponder responder)
+        {
+            var relay = responder.GetRelayNode();
+            return relay != null ? new MmDeferredRoutingBuilder(relay) : default;
+        }
+
+        /// <summary>
         /// Get the relay node associated with this responder, creating one if needed.
         /// </summary>
         public static MmRelayNode GetOrCreateRelayNode(this MmBaseResponder responder)

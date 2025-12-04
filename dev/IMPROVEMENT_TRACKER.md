@@ -46,20 +46,36 @@
 - **Key Insight:** Every responder GameObject needs MmRelayNode
 - **Remaining:** Performance comparison vs PUN2, Fusion 2 implementation
 
+### P2b: Core Performance Phase 2 (26h)
+- **Target:** FSM caching, routing flexibility, serialization overhaul
+- **Status:** Active (Planning Complete 2025-12-03)
+- **Location:** `dev/active/core-performance/`
+- **Plan File:** `.claude/plans/iterative-leaping-shannon.md`
+- **Key Tasks:**
+  - D1: Remove SerialExecutionQueue dead code (15 min)
+  - E1-E3: Handled flag early termination (1-2h)
+  - P1-P3: MmRelaySwitchNode caching (4h)
+  - Q1-Q4: MmRoutingChecks consolidation (4h) - replaces MmQuickNode
+  - S1-S7: Serialization overhaul (16h) - zero-allocation binary
+- **Dependencies:** None (independent from P2 FishNet)
+- **Deliverable:** Faster FSM, flexible routing, modern serialization
+
 ### P3: DSL/DX Improvements (92h)
 - **Target:** Even shorter syntax, Roslyn analyzers, source generators
-- **Status:** Active (Planning Complete 2025-12-01)
+- **Status:** In Progress - Phases 1-2 Complete (2025-12-03)
 - **Location:** `dev/active/dsl-dx/`
 - **Key Phases:**
-  - Phase 1: Property-based syntax (`relay.To.Children.Send()`) - 16h
-  - Phase 2: Builder API for advanced cases - 8h
+  - Phase 1: Property-based syntax (`relay.To.Children.Send()`) - 16h ✅
+  - Phase 2: Builder API for advanced cases - 8h ✅
   - Phase 3: Roslyn analyzers (MM005, MM010, MM001) - 20h
   - Phase 4: Source generator enhancements - 40h
   - Phase 5: Documentation updates - 8h
-- **Syntax Decision:** Level 1 Property-based (most familiar to Unity devs)
-- **Auto-Execute:** Dual API + Analyzer warnings (Option A + C)
-- **Current:** 86% verbosity reduction (48 chars)
-- **Target:** 95% verbosity reduction (32 chars)
+- **Completed (Phases 1-2):**
+  - `relay.To.Children.Send("Hello")` - auto-executes immediately
+  - `relay.Build().ToChildren().Send("Hello").Execute()` - deferred execution
+  - Both work on MmRelayNode and MmBaseResponder
+  - 26 tests covering property routing and builder API
+- **Target:** 95% verbosity reduction (32 chars) - achieved
 - **Wiki Tutorials:** Separate task at `dev/active/wiki-tutorials/`
 
 ### P4: Fusion 2 Networking (200h)
@@ -183,6 +199,16 @@
 
 ## Decision Log
 
+### 2025-12-03: Core Performance Phase 2 Planning
+- **New Task:** Created `dev/active/core-performance/` for P2b
+- **Dead Code:** D1 removes SerialExecutionQueue (experimental, never completed)
+- **Handled Flag:** E1-E3 adds WPF-style early termination for message propagation
+- **FSM Caching:** P1-P3 caches current state for faster SelectedCheck
+- **Routing Flexibility:** Q1-Q4 adds MmRoutingChecks flags, eliminates MmQuickNode
+- **Serialization:** S1-S7 replaces IMmSerializable with zero-allocation IMmBinarySerializable
+- **Total Effort:** 26h
+- **Plan File:** `.claude/plans/iterative-leaping-shannon.md`
+
 ### 2025-12-01: DSL/DX Planning and Wiki Tutorials
 - **Syntax Decision:** Level 1 Property-based (`relay.To.Children.Send()`) over operators
 - **Auto-Execute:** Dual API (auto-execute + builder) + Analyzer warnings (MM005)
@@ -212,6 +238,8 @@
 
 ---
 
-*Last Updated: 2025-12-01*
+*Last Updated: 2025-12-03*
 *Next Review: End of Q1 2026*
-*Plan File: `.claude/plans/immutable-puzzling-pinwheel.md`*
+*Active Task Folders:*
+- *P2b Core Performance: `dev/active/core-performance/`*
+- *P3 DSL/DX: `dev/active/dsl-dx/`*
