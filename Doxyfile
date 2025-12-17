@@ -1,0 +1,163 @@
+# Doxyfile for MercuryMessaging Framework
+# Generated: 2025-12-16
+# Run with: doxygen Doxyfile
+
+#---------------------------------------------------------------------------
+# Project Information
+#---------------------------------------------------------------------------
+
+PROJECT_NAME           = "MercuryMessaging"
+PROJECT_NUMBER         = "4.0.0"
+PROJECT_BRIEF          = "Hierarchical message routing framework for Unity"
+PROJECT_LOGO           =
+OUTPUT_DIRECTORY       = docs
+
+#---------------------------------------------------------------------------
+# Build Configuration
+#---------------------------------------------------------------------------
+
+# Extract all entities (even if no documentation)
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = YES
+EXTRACT_PACKAGE        = YES
+EXTRACT_STATIC         = YES
+EXTRACT_LOCAL_CLASSES  = YES
+
+# Parse C# files
+OPTIMIZE_OUTPUT_JAVA   = YES
+BUILTIN_STL_SUPPORT    = YES
+
+# Show inheritance hierarchy
+INLINE_INHERITED_MEMB  = YES
+FULL_PATH_NAMES        = YES
+STRIP_FROM_PATH        = Assets/MercuryMessaging
+SHORT_NAMES            = NO
+
+# Generate detailed member documentation
+JAVADOC_AUTOBRIEF      = YES
+MULTILINE_CPP_IS_BRIEF = NO
+
+# Include source code
+SOURCE_BROWSER         = YES
+INLINE_SOURCES         = NO
+STRIP_CODE_COMMENTS    = YES
+REFERENCED_BY_RELATION = YES
+REFERENCES_RELATION    = YES
+
+#---------------------------------------------------------------------------
+# Input Configuration
+#---------------------------------------------------------------------------
+
+INPUT                  = Assets/MercuryMessaging
+INPUT_ENCODING         = UTF-8
+FILE_PATTERNS          = *.cs
+RECURSIVE              = YES
+
+# Exclude test and example files
+EXCLUDE_PATTERNS       = */Tests/* */Examples/* */Editor/*
+
+# Enable markdown
+MARKDOWN_SUPPORT       = YES
+AUTOLINK_SUPPORT       = YES
+
+#---------------------------------------------------------------------------
+# HTML Output
+#---------------------------------------------------------------------------
+
+GENERATE_HTML          = YES
+HTML_OUTPUT            = html
+HTML_FILE_EXTENSION    = .html
+HTML_COLORSTYLE        = AUTO_LIGHT
+HTML_DYNAMIC_SECTIONS  = YES
+HTML_DYNAMIC_MENUS     = YES
+HTML_INDEX_NUM_ENTRIES = 100
+
+# Search functionality
+SEARCHENGINE           = YES
+SERVER_BASED_SEARCH    = NO
+
+# Tree view
+GENERATE_TREEVIEW      = YES
+TREEVIEW_WIDTH         = 250
+
+#---------------------------------------------------------------------------
+# LaTeX Output (disabled)
+#---------------------------------------------------------------------------
+
+GENERATE_LATEX         = NO
+
+#---------------------------------------------------------------------------
+# XML Output (for external tools)
+#---------------------------------------------------------------------------
+
+GENERATE_XML           = NO
+
+#---------------------------------------------------------------------------
+# Diagrams (requires Graphviz)
+#---------------------------------------------------------------------------
+
+# Graphviz enabled - using Maya's bundled version
+HAVE_DOT               = YES
+DOT_PATH               = "C:/Program Files/Autodesk/Maya2026/bin/graphviz"
+
+# Enable class diagrams and graphs (CLASS_DIAGRAMS removed - obsolete in Doxygen 1.15+)
+COLLABORATION_GRAPH    = YES
+GROUP_GRAPHS           = YES
+INCLUDE_GRAPH          = YES
+INCLUDED_BY_GRAPH      = YES
+CALL_GRAPH             = NO
+CALLER_GRAPH           = NO
+GRAPHICAL_HIERARCHY    = YES
+DIRECTORY_GRAPH        = YES
+DOT_IMAGE_FORMAT       = svg
+DOT_MULTI_TARGETS      = YES
+
+#---------------------------------------------------------------------------
+# Preprocessor
+#---------------------------------------------------------------------------
+
+ENABLE_PREPROCESSING   = YES
+MACRO_EXPANSION        = NO
+EXPAND_ONLY_PREDEF     = NO
+SEARCH_INCLUDES        = YES
+
+# Unity conditional compilation symbols
+PREDEFINED             = UNITY_EDITOR FISH_NET FUSION_WEAVER
+
+#---------------------------------------------------------------------------
+# Warning Configuration
+#---------------------------------------------------------------------------
+
+QUIET                  = NO
+WARNINGS               = YES
+WARN_IF_UNDOCUMENTED   = YES
+WARN_IF_DOC_ERROR      = YES
+WARN_NO_PARAMDOC       = YES
+WARN_AS_ERROR          = NO
+WARN_FORMAT            = "$file:$line: $text"
+
+#---------------------------------------------------------------------------
+# Sorting
+#---------------------------------------------------------------------------
+
+SORT_MEMBER_DOCS       = YES
+SORT_BRIEF_DOCS        = NO
+SORT_MEMBERS_CTORS_1ST = YES
+SORT_GROUP_NAMES       = NO
+SORT_BY_SCOPE_NAME     = NO
+
+#---------------------------------------------------------------------------
+# Grouping
+#---------------------------------------------------------------------------
+
+# Group classes by namespace
+SHOW_NAMESPACES        = YES
+
+#---------------------------------------------------------------------------
+# External References
+#---------------------------------------------------------------------------
+
+GENERATE_TAGFILE       =
+ALLEXTERNALS           = NO
+EXTERNAL_GROUPS        = YES
+EXTERNAL_PAGES         = YES
