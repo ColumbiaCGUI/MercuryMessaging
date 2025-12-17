@@ -1,0 +1,5 @@
+<map id="MercuryMessaging.Network.MmRegistryResolver" name="MercuryMessaging.Network.MmRegistryResolver">
+<area shape="rect" id="Node000001" title="Simple registry&#45;based GameObject resolver." alt="" coords="5,93,192,133"/>
+<area shape="rect" id="Node000002" href="$interface_mercury_messaging_1_1_network_1_1_i_mm_game_object_resolver.html" title="Interface for resolving network IDs to GameObjects and vice versa." alt="" coords="5,5,192,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="101,59,101,93,96,93,96,59"/>
+</map>

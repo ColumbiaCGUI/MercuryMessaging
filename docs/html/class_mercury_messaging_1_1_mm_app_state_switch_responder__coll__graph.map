@@ -1,0 +1,18 @@
+<map id="MercuryMessaging.MmAppStateSwitchResponder" name="MercuryMessaging.MmAppStateSwitchResponder">
+<area shape="rect" id="Node000001" title="MmSwitchResponder for controlling MmAppStates." alt="" coords="243,340,455,380"/>
+<area shape="rect" id="Node000002" href="$class_mercury_messaging_1_1_mm_switch_responder.html" title="Controller for MmRelaySwitchNode." alt="" coords="175,251,373,291"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="301,299,335,338,330,342,297,303"/>
+<area shape="rect" id="Node000003" href="$class_mercury_messaging_1_1_mm_base_responder.html" title="MmResponder that implements a switch handling the framework&#45;provided MmMethods." alt="" coords="118,155,369,180"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="253,193,271,250,266,251,248,194"/>
+<area shape="rect" id="Node000004" href="$class_mercury_messaging_1_1_mm_responder.html" title="Base implmentation of IMmResponder." alt="" coords="72,80,292,105"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="203,114,235,153,231,156,199,118"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="252,5,363,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="277,40,203,82,201,77,274,35"/>
+<area shape="rect" id="Node000007" href="$class_mercury_messaging_1_1_mm_gui_handler.html" title=" " alt="" coords="316,80,539,105"/>
+<area shape="poly" id="edge7_Node000007_Node000005" title=" " alt="" coords="339,35,409,78,407,82,337,40"/>
+<area shape="rect" id="Node000006" href="$interface_mercury_messaging_1_1_i_mm_responder.html" title="The core of MercuryMessaging." alt="" coords="5,5,228,31"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="139,40,173,78,169,81,135,43"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="427,119,413,197,387,292,363,341,358,339,382,290,408,196,422,118"/>
+<area shape="rect" id="Node000008" href="$interface_mercury_messaging_1_1_i_mm_g_u_i.html" title="Defines interface for basic GUI requirements in Mercury." alt="" coords="387,5,569,31"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="464,44,438,81,433,78,460,41"/>
+</map>

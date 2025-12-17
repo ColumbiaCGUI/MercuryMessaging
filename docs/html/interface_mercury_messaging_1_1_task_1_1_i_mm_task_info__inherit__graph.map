@@ -1,0 +1,9 @@
+<map id="MercuryMessaging.Task.IMmTaskInfo" name="MercuryMessaging.Task.IMmTaskInfo">
+<area shape="rect" id="Node000001" title="Interface defining structure with basic organizational information." alt="" coords="5,5,199,45"/>
+<area shape="rect" id="Node000002" href="$class_mercury_messaging_1_1_task_1_1_mm_task_info.html" title="MmTaskInfo contains basic information for tasks in the Mercury environment." alt="" coords="7,93,197,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,59,105,93,99,93,99,59"/>
+<area shape="rect" id="Node000003" href="$class_mercury_messaging_1_1_task_1_1_mm_transformation_task_info.html" title="A task info that supports tasks requiring 3D transformations meet particular requirements." alt="" coords="7,181,197,221"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="105,147,105,181,99,181,99,147"/>
+<area shape="rect" id="Node000004" href="$class_mercury_messaging_1_1_task_1_1_mm_look_at_task_info.html" title=" " alt="" coords="7,269,197,309"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="105,235,105,269,99,269,99,235"/>
+</map>

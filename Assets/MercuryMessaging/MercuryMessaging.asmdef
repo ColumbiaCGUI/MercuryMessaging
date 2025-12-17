@@ -2,21 +2,22 @@
     "name": "MercuryMessaging",
     "rootNamespace": "MercuryMessaging",
     "references": [
-        "Unity.XR.Interaction.Toolkit",
-        "Unity.InputSystem",
-        "Unity.Mathematics",
-        "NewGraph",
-        "NewGraph.Editor",
-        "ALINE",
-        "EPO"
+        "GUID:7c88a4a7926ee5145ad2dfa06f454c67",
+        "GUID:1baf1ffff1031e948b3b228ab3453251"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
-    "allowUnsafeCode": false,
+    "allowUnsafeCode": true,
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": [],
+    "versionDefines": [
+        {
+            "name": "com.firstgeargames.fishnet",
+            "expression": "",
+            "define": "FISHNET_AVAILABLE"
+        }
+    ],
     "noEngineReferences": false
 }

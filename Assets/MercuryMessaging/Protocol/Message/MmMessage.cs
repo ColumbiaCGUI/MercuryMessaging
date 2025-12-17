@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2017-2019, Columbia University
+﻿// Copyright (c) 2017-2025, Columbia University
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -27,11 +27,11 @@
 //  
 // =============================================================
 // Authors: 
-// Carmine Elvezio, Mengu Sukan, Samuel Silverman, Steven Feiner
+// Ben Yang, Carmine Elvezio, Mengu Sukan, Samuel Silverman, Steven Feiner
 // =============================================================
 //  
 //
-using System.Linq;
+using System;
 
 namespace MercuryMessaging
 {
@@ -94,6 +94,19 @@ namespace MercuryMessaging
         /// Helps identify circular message paths in addition to hop counting.
         /// </summary>
         public System.Collections.Generic.HashSet<int> VisitedNodes;
+
+        /// <summary>
+        /// When set to true, stops message propagation to remaining responders.
+        /// Useful for event-style messages where only one handler should respond.
+        /// Similar to WPF's RoutedEventArgs.Handled pattern.
+        /// </summary>
+        public bool Handled { get; set; } = false;
+
+        /// <summary>
+        /// Indicates whether this message was obtained from the MmMessagePool.
+        /// Used internally to determine if the message should be returned to pool after routing.
+        /// </summary>
+        internal bool _isPooled;
 
         /// <summary>
         /// Creates a basic MmMessage with a default control block
@@ -184,11 +197,12 @@ namespace MercuryMessaging
             root = message.root;
             TimeStamp = message.TimeStamp;
             HopCount = message.HopCount;
+            Handled = message.Handled;
 
-            // Copy visited nodes set for cycle detection
+            // Copy visited nodes set for cycle detection (using pool to avoid allocation)
             if (message.VisitedNodes != null)
             {
-                VisitedNodes = new System.Collections.Generic.HashSet<int>(message.VisitedNodes);
+                VisitedNodes = MmHashSetPool.GetCopy(message.VisitedNodes);
             }
         }
 
@@ -219,17 +233,32 @@ namespace MercuryMessaging
         }
 
         /// <summary>
+        /// Number of elements serialized by the base MmMessage class.
+        /// Used by derived classes for efficient array pre-allocation.
+        /// Base: 3 (MmMethod, MmMessageType, NetId) + Metadata: 5 = 8 total
+        /// </summary>
+        public const int BASE_SERIALIZED_SIZE = 8;
+
+        /// <summary>
         /// Serialize the MmMessage
         /// </summary>
         /// <returns>Object array representation of a MmMessage</returns>
         public virtual object[] Serialize()
         {
-            object[] thisSerialized = new object[] { 
-                (short)MmMethod, 
-                (short)MmMessageType,
-                (int)NetId};
-            thisSerialized = thisSerialized.Concat(MetadataBlock.Serialize()).ToArray();
-            return thisSerialized;
+            object[] metadataSerialized = MetadataBlock.Serialize();
+
+            // Pre-allocate combined array: 3 base + metadata length
+            object[] result = new object[3 + metadataSerialized.Length];
+
+            // Fill base data directly
+            result[0] = (short)MmMethod;
+            result[1] = (short)MmMessageType;
+            result[2] = (int)NetId;
+
+            // Copy metadata using Array.Copy (no LINQ)
+            Array.Copy(metadataSerialized, 0, result, 3, metadataSerialized.Length);
+
+            return result;
         }
     }
 }

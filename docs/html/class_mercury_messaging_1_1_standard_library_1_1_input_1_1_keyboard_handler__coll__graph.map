@@ -1,0 +1,7 @@
+<map id="MercuryMessaging.StandardLibrary.Input.KeyboardHandler" name="MercuryMessaging.StandardLibrary.Input.KeyboardHandler">
+<area shape="rect" id="Node000001" title="Sample Keyboard Handler, useful for creating simple input handling using MercuryMessaging." alt="" coords="52,101,248,141"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,116,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="82,39,135,99,131,103,78,43"/>
+<area shape="rect" id="Node000003" href="$class_mercury_messaging_1_1_mm_logger.html" title="Mercury&#39;s Logger is used throughout the framework to log: Framework, MmResponder, Application,..." alt="" coords="141,5,338,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="222,43,169,103,165,99,218,39"/>
+</map>

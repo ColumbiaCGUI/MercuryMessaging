@@ -1,0 +1,5 @@
+<map id="MercuryMessaging.Network.MmServerReconciliation" name="MercuryMessaging.Network.MmServerReconciliation">
+<area shape="rect" id="Node000001" title="Server&#45;side input processing and state broadcast." alt="" coords="5,116,192,156"/>
+<area shape="rect" id="Node000002" href="$struct_mercury_messaging_1_1_network_1_1_mm_state_snapshot.html" title="State snapshot for prediction/reconciliation." alt="" coords="5,5,192,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="101,59,101,116,96,116,96,59"/>
+</map>
