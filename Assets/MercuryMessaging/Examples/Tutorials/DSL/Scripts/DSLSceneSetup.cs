@@ -1,6 +1,11 @@
 // Copyright (c) 2017-2025, Columbia University
 // DSL Tutorial: Scene Setup
 // Creates the tutorial scene hierarchy at runtime
+//
+// Suppress MM006: MmRefreshResponders is called at the end of SetupScene() method
+// Suppress MM008: SetParent establishes Unity hierarchy, routing is set up at end of setup
+#pragma warning disable MM006
+#pragma warning disable MM008
 
 using UnityEngine;
 using MercuryMessaging;

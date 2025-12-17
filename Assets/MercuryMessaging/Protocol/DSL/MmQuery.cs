@@ -3,6 +3,9 @@
 // DSL Phase 2.2: Hierarchy Query DSL
 // Provides LINQ-like querying of MercuryMessaging hierarchies
 
+// Suppress MM015: Filter equality checks are intentional for exact match routing logic
+#pragma warning disable MM015
+
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;

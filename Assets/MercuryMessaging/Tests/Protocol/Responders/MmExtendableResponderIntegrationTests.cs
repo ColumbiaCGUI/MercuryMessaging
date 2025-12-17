@@ -1,4 +1,7 @@
-// Copyright (c) 2017-2019, Columbia University
+﻿// Suppress MM analyzer warnings - test code intentionally uses patterns that trigger warnings
+#pragma warning disable MM002, MM005, MM006, MM008, MM014, MM015
+
+// Copyright (c) 2017-2025, Columbia University
 // All rights reserved.
 //
 // Integration tests for MmExtendableResponder with MercuryMessaging framework
@@ -358,7 +361,6 @@ namespace MercuryMessaging.Tests
         {
             // Arrange - Add MmBaseResponder alongside MmExtendableResponder
             var baseResponder = parentObject.AddComponent<MmBaseResponder>();
-            bool baseInitializeCalled = false;
 
             // Can't easily test MmBaseResponder without subclassing, so we'll verify both exist
             Assert.IsNotNull(parentResponder, "MmExtendableResponder should exist");

@@ -244,7 +244,7 @@ namespace MercuryMessaging.Tests
             var child1 = _root.AddChildNode("Child1");
             var child2 = _root.AddChildNode("Child2");
 
-            child1.ReparentTo(child2);
+            child1.MmSetParent(child2);
 
             Assert.AreEqual(child2.transform, child1.transform.parent);
         }

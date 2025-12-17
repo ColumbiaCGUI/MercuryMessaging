@@ -196,7 +196,7 @@ public partial class MyResponder : MmBaseResponder
 
 ## Future Optimization Opportunities
 
-See `dev/active/framework-analysis/framework-analysis-tasks.md` for Priority 3 tasks:
+See `dev/archive/framework-analysis/` for Priority 3 tasks:
 - **Routing optimization (420h):** O(1) routing tables, spatial indexing
 - **Network performance (500h):** Delta tracking, compression
 - **Visual composer (360h):** Editor tools for hierarchy design

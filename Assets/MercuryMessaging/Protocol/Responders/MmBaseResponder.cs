@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2017-2019, Columbia University
+﻿// Copyright (c) 2017-2025, Columbia University
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -27,10 +27,13 @@
 //  
 // =============================================================
 // Authors: 
-// Carmine Elvezio, Mengu Sukan, Samuel Silverman, Steven Feiner
+// Ben Yang, Carmine Elvezio, Mengu Sukan, Samuel Silverman, Steven Feiner
 // =============================================================
-//  
-//  
+//
+//
+// Suppress CS0618: IMmSerializable is obsolete - kept for backward compatibility
+#pragma warning disable CS0618
+
 using System;
 using System.Collections.Generic;
 using MercuryMessaging.Task;
@@ -42,6 +45,11 @@ namespace MercuryMessaging
     /// MmResponder that implements a switch handling
     /// the framework-provided MmMethods.
     /// </summary>
+    /// <remarks>
+    /// Responders require an MmRelayNode on the same GameObject to receive routed messages.
+    /// The [RequireComponent] attribute ensures this is enforced automatically.
+    /// </remarks>
+    [RequireComponent(typeof(MmRelayNode))]
 	public class MmBaseResponder : MmResponder
 	{
         /// <summary>
@@ -89,7 +97,8 @@ namespace MercuryMessaging
                     break;
                 case MmMethod.TaskInfo:
                     var messageSerializable = (MmMessageSerializable) msg;
-                    ApplyTaskInfo(messageSerializable.value);
+                    if (messageSerializable.value is IMmSerializable taskValue)
+                        ApplyTaskInfo(taskValue);
                     break;
                 case MmMethod.Message:
                     ReceivedMessage(msg);

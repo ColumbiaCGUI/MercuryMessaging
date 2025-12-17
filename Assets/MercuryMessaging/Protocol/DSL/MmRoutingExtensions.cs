@@ -3,6 +3,9 @@
 // DSL Phase 2.5: Runtime Registration Extensions
 // Simplifies runtime hierarchy setup from 2 lines to 1 line
 
+// Suppress MM015: Filter equality checks are intentional for exact match routing logic
+#pragma warning disable MM015
+
 using System.Runtime.CompilerServices;
 using MercuryMessaging;
 

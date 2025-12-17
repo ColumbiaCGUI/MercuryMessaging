@@ -16,7 +16,8 @@
 **IMPORTANT:** The core MercuryMessaging framework (AppState, Protocol, Support/Data, Task) has **ZERO** third-party dependencies as of 2025-11-19.
 
 ### Optional Dependencies (Properly Isolated)
-- **Photon Unity Networking** (optional) - Wrapped in `#if PHOTON_AVAILABLE` for network features
+- **FishNet** (optional) - Wrapped in `#if FISH_NET` for network features
+- **Photon Fusion 2** (optional) - Wrapped in `#if FUSION_WEAVER` for network features
 
 **Policy:** The core framework must remain dependency-free to ensure maximum portability and minimal breaking changes.
 
@@ -148,7 +149,7 @@ Assets/
 
 ## Important Files Reference
 
-For a complete list of important files with descriptions, see [FILE_REFERENCE.md](../FILE_REFERENCE.md).
+For a complete list of important files with descriptions, see [FILE_REFERENCE.md](FILE_REFERENCE.md).
 
 **Key Files:**
 - `Protocol/Nodes/MmRelayNode.cs` - Central message router
@@ -156,4 +157,4 @@ For a complete list of important files with descriptions, see [FILE_REFERENCE.md
 - `Protocol/Responders/MmExtendableResponder.cs` - Registration-based custom method handling
 - `Protocol/Nodes/MmRelaySwitchNode.cs` - FSM-enabled relay node
 - `Protocol/DSL/*.cs` - Fluent API extensions
-- See [FILE_REFERENCE.md](../FILE_REFERENCE.md) for complete list
+- See [FILE_REFERENCE.md](FILE_REFERENCE.md) for complete list

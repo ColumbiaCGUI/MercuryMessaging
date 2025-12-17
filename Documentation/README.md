@@ -2,21 +2,30 @@
 
 Internal documentation for the MercuryMessaging framework.
 
-## Claude Code Modules
+## For Users
 
-These files are imported by `CLAUDE.md` using the `@import` syntax to provide context to Claude Code for AI-assisted development:
+See the **[GitHub Wiki](https://github.com/ColumbiaCGUI/MercuryMessaging/wiki)** for tutorials and user guides.
 
-- **OVERVIEW.md** - Project overview, directory structure, dependencies
-- **ARCHITECTURE.md** - Core patterns (Responder, Relay Node, Hierarchical Flow)
-- **API_REFERENCE.md** - Message structure, methods, filtering system
-- **WORKFLOWS.md** - Common tasks, Fluent DSL API examples
-- **STANDARD_LIBRARY.md** - UI and Input message types
-- **TESTING.md** - Running tests, debugging, common gotchas
-- **PERFORMANCE.md** - Benchmarks, configuration recommendations
+## For AI Assistants (Claude Code)
 
-## Performance Analysis
+These files are imported by `CLAUDE.md` using the `@import` syntax to provide context:
 
-The `Performance/` subfolder contains detailed performance benchmarks and optimization results:
+| File | Purpose |
+|------|---------|
+| **OVERVIEW.md** | Project overview, directory structure, dependencies |
+| **ARCHITECTURE.md** | Core patterns (Responder, Relay Node, Hierarchical Flow) |
+| **API_REFERENCE.md** | Message structure, methods, filtering system |
+| **WORKFLOWS.md** | Common tasks, Fluent DSL API examples |
+| **STANDARD_LIBRARY.md** | UI and Input message types |
+| **TESTING.md** | Running tests, debugging, common gotchas |
+| **PERFORMANCE.md** | Benchmarks, configuration recommendations |
 
-- `PERFORMANCE_REPORT.md` - Baseline performance measurements
-- `OPTIMIZATION_RESULTS.md` - Quick Win optimization validation
+## Subfolders
+
+- **Performance/** - Detailed performance reports and optimization results
+- **SourceGenerators/** - `[MmGenerateDispatch]` and `[MmHandler]` attribute documentation
+- **Testing/** - Performance and network testing infrastructure guides
+
+---
+
+*Last Updated: 2025-12-12*

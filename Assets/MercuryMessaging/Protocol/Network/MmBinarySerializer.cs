@@ -1,4 +1,4 @@
-// Copyright (c) 2017-2025, Columbia University
+﻿// Copyright (c) 2017-2025, Columbia University
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -27,11 +27,14 @@
 //
 // =============================================================
 // Authors:
-// Carmine Elvezio, Mengu Sukan, Steven Feiner, [Contributors]
+// Ben Yang, Carmine Elvezio, Mengu Sukan, Steven Feiner, [Contributors]
 // =============================================================
 //
+// Suppress CS0618: IMmSerializable is obsolete - kept for backward compatibility
+#pragma warning disable CS0618
 
 using System;
+using System.Buffers;
 using System.IO;
 using System.Text;
 using UnityEngine;
@@ -70,13 +73,16 @@ namespace MercuryMessaging.Network
 
         /// <summary>
         /// Fixed header size in bytes.
+        /// Magic(4) + Version(1) + MsgType(2) + Method(2) + NetId(4) + Metadata(4) = 17
         /// </summary>
-        public const int HeaderSize = 15;
+        public const int HeaderSize = 17;
 
         #region Serialization
 
         /// <summary>
         /// Serialize an MmMessage to a byte array.
+        /// Uses MemoryStream internally (allocates each call).
+        /// For zero-allocation serialization, use SerializePooled().
         /// </summary>
         /// <param name="message">The message to serialize</param>
         /// <returns>Byte array representation of the message</returns>
@@ -91,7 +97,7 @@ namespace MercuryMessaging.Network
                 writer.Write((short)message.MmMessageType);
                 writer.Write((short)message.MmMethod);
                 writer.Write(message.NetId);
-                writer.Write(PackMetadata(message.MetadataBlock));
+                writer.Write(PackMetadata(message.MetadataBlock)); // uint (4 bytes)
 
                 // Write type-specific payload
                 WritePayload(writer, message);
@@ -101,20 +107,223 @@ namespace MercuryMessaging.Network
         }
 
         /// <summary>
-        /// Pack metadata block into 2 bytes.
-        /// Byte 0: Level(4 bits) | Active(2 bits) | Selected(2 bits)
-        /// Byte 1: Network(2 bits) | Tag high bits(6 bits reserved)
+        /// Serialize an MmMessage using pooled MmWriter for zero allocations (except final array).
+        /// This is the preferred method for high-performance scenarios.
         /// </summary>
-        private static ushort PackMetadata(MmMetadataBlock metadata)
+        /// <param name="message">The message to serialize</param>
+        /// <returns>Byte array representation of the message</returns>
+        public static byte[] SerializePooled(MmMessage message)
         {
-            int packed = 0;
-            packed |= ((int)metadata.LevelFilter & 0x0F);
-            packed |= ((int)metadata.ActiveFilter & 0x03) << 4;
-            packed |= ((int)metadata.SelectedFilter & 0x03) << 6;
-            packed |= ((int)metadata.NetworkFilter & 0x03) << 8;
-            // Tag uses remaining bits (supports Tag0-Tag7)
-            packed |= ((int)metadata.Tag & 0x3F) << 10;
-            return (ushort)packed;
+            using (var writer = MmWriter.Get(HeaderSize + 64)) // Estimate initial size
+            {
+                // Write header
+                writer.WriteRawBytes(MagicNumber, 0, 4);
+                writer.WriteByte(FormatVersion);
+                writer.WriteShort((short)message.MmMessageType);
+                writer.WriteShort((short)message.MmMethod);
+                writer.WriteUInt(message.NetId);
+                writer.WriteUInt(PackMetadata(message.MetadataBlock)); // uint (4 bytes)
+
+                // Write type-specific payload
+                WritePayloadPooled(writer, message);
+
+                return writer.ToArray();
+            }
+        }
+
+        /// <summary>
+        /// Write type-specific payload using pooled MmWriter.
+        /// </summary>
+        private static void WritePayloadPooled(MmWriter writer, MmMessage message)
+        {
+            switch (message.MmMessageType)
+            {
+                case MmMessageType.MmVoid:
+                    // No payload for void messages
+                    break;
+
+                case MmMessageType.MmInt:
+                    writer.WriteInt(((MmMessageInt)message).value);
+                    break;
+
+                case MmMessageType.MmBool:
+                    writer.WriteBool(((MmMessageBool)message).value);
+                    break;
+
+                case MmMessageType.MmFloat:
+                    writer.WriteFloat(((MmMessageFloat)message).value);
+                    break;
+
+                case MmMessageType.MmString:
+                    writer.WriteString(((MmMessageString)message).value);
+                    break;
+
+                case MmMessageType.MmVector3:
+                    writer.WriteVector3(((MmMessageVector3)message).value);
+                    break;
+
+                case MmMessageType.MmVector4:
+                    writer.WriteVector4(((MmMessageVector4)message).value);
+                    break;
+
+                case MmMessageType.MmQuaternion:
+                    writer.WriteQuaternion(((MmMessageQuaternion)message).value);
+                    break;
+
+                case MmMessageType.MmByteArray:
+                    writer.WriteBytes(((MmMessageByteArray)message).byteArr);
+                    break;
+
+                case MmMessageType.MmTransform:
+                    WriteTransformDataPooled(writer, (MmMessageTransform)message);
+                    break;
+
+                case MmMessageType.MmTransformList:
+                    WriteTransformListDataPooled(writer, (MmMessageTransformList)message);
+                    break;
+
+                case MmMessageType.MmGameObject:
+                    writer.WriteUInt(((MmMessageGameObject)message).GameObjectNetId);
+                    break;
+
+                case MmMessageType.MmSerializable:
+                    WriteSerializableDataPooled(writer, (MmMessageSerializable)message);
+                    break;
+
+                default:
+                    throw new ArgumentException($"Unknown message type: {message.MmMessageType}");
+            }
+        }
+
+        private static void WriteTransformDataPooled(MmWriter writer, MmMessageTransform msg)
+        {
+            writer.WriteVector3(msg.MmTransform.Translation);
+            writer.WriteQuaternion(msg.MmTransform.Rotation);
+            writer.WriteVector3(msg.MmTransform.Scale);
+            writer.WriteBool(msg.LocalTransform);
+        }
+
+        private static void WriteTransformListDataPooled(MmWriter writer, MmMessageTransformList msg)
+        {
+            int count = msg.transforms?.Count ?? 0;
+            writer.WriteInt(count);
+            if (msg.transforms != null)
+            {
+                foreach (var t in msg.transforms)
+                {
+                    writer.WriteVector3(t.Translation);
+                    writer.WriteQuaternion(t.Rotation);
+                    writer.WriteVector3(t.Scale);
+                }
+            }
+        }
+
+        private static void WriteSerializableDataPooled(MmWriter writer, MmMessageSerializable msg)
+        {
+            // Check for new IMmBinarySerializable first (zero-allocation path)
+            if (msg.value is IMmBinarySerializable binarySerializable)
+            {
+                // Write type ID from registry
+                ushort typeId = MmTypeRegistry.GetTypeId(binarySerializable);
+                writer.WriteUShort(typeId);
+                if (typeId != MmTypeRegistry.NullTypeId)
+                {
+                    binarySerializable.WriteTo(writer);
+                }
+                return;
+            }
+
+            // Legacy path: IMmSerializable with object[] (fallback)
+            string typeName = msg.value?.GetType().AssemblyQualifiedName ?? "";
+            writer.WriteString(typeName);
+
+            if (msg.value is MercuryMessaging.Task.IMmSerializable serializable)
+            {
+                object[] data = serializable.Serialize();
+                writer.WriteInt(data.Length);
+                foreach (var obj in data)
+                {
+                    WriteObjectValuePooled(writer, obj);
+                }
+            }
+            else if (msg.value != null)
+            {
+                Debug.LogWarning($"MmBinarySerializer: Type {typeName} does not implement IMmBinarySerializable or IMmSerializable.");
+                writer.WriteInt(0);
+            }
+            else
+            {
+                writer.WriteInt(0);
+            }
+        }
+
+        private static void WriteObjectValuePooled(MmWriter writer, object value)
+        {
+            if (value == null)
+            {
+                writer.WriteByte(0);
+                return;
+            }
+
+            switch (value)
+            {
+                case int i:
+                    writer.WriteByte(1);
+                    writer.WriteInt(i);
+                    break;
+                case bool b:
+                    writer.WriteByte(2);
+                    writer.WriteBool(b);
+                    break;
+                case float f:
+                    writer.WriteByte(3);
+                    writer.WriteFloat(f);
+                    break;
+                case string s:
+                    writer.WriteByte(4);
+                    writer.WriteString(s);
+                    break;
+                case double d:
+                    writer.WriteByte(5);
+                    writer.WriteDouble(d);
+                    break;
+                case long l:
+                    writer.WriteByte(6);
+                    writer.WriteLong(l);
+                    break;
+                case byte by:
+                    writer.WriteByte(7);
+                    writer.WriteByte(by);
+                    break;
+                case short sh:
+                    writer.WriteByte(8);
+                    writer.WriteShort(sh);
+                    break;
+                default:
+                    Debug.LogWarning($"MmBinarySerializer: Unsupported object type: {value.GetType().Name}");
+                    writer.WriteByte(0);
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Pack metadata block into 3 bytes (stored as uint, only 18 bits used).
+        /// Bits 0-3:   LevelFilter (4 bits)
+        /// Bits 4-5:   ActiveFilter (2 bits)
+        /// Bits 6-7:   SelectedFilter (2 bits)
+        /// Bits 8-9:   NetworkFilter (2 bits)
+        /// Bits 10-17: Tag (8 bits - supports Tag0-Tag7, where Tag7 = 0x80)
+        /// </summary>
+        private static uint PackMetadata(MmMetadataBlock metadata)
+        {
+            uint packed = 0;
+            packed |= ((uint)metadata.LevelFilter & 0x0F);
+            packed |= ((uint)metadata.ActiveFilter & 0x03) << 4;
+            packed |= ((uint)metadata.SelectedFilter & 0x03) << 6;
+            packed |= ((uint)metadata.NetworkFilter & 0x03) << 8;
+            // Tag uses 8 bits (supports Tag0-Tag7, where Tag7 = 0x80)
+            packed |= ((uint)metadata.Tag & 0xFF) << 10;
+            return packed;
         }
 
         /// <summary>
@@ -187,6 +396,8 @@ namespace MercuryMessaging.Network
 
         /// <summary>
         /// Deserialize a byte array to an MmMessage.
+        /// Uses MemoryStream internally.
+        /// For zero-allocation deserialization, use DeserializePooled().
         /// </summary>
         /// <param name="data">The byte array to deserialize</param>
         /// <returns>Deserialized MmMessage</returns>
@@ -218,7 +429,7 @@ namespace MercuryMessaging.Network
                 var messageType = (MmMessageType)reader.ReadInt16();
                 var method = (MmMethod)reader.ReadInt16();
                 uint netId = reader.ReadUInt32();
-                ushort packedMetadata = reader.ReadUInt16();
+                uint packedMetadata = reader.ReadUInt32();
                 var metadata = UnpackMetadata(packedMetadata);
 
                 // Create and populate message
@@ -230,6 +441,219 @@ namespace MercuryMessaging.Network
                 ReadPayload(reader, message);
 
                 return message;
+            }
+        }
+
+        /// <summary>
+        /// Deserialize a byte array using pooled MmReader for minimal allocations.
+        /// This is the preferred method for high-performance scenarios.
+        /// </summary>
+        /// <param name="data">The byte array to deserialize</param>
+        /// <returns>Deserialized MmMessage</returns>
+        public static MmMessage DeserializePooled(byte[] data)
+        {
+            if (data == null || data.Length < HeaderSize)
+            {
+                throw new ArgumentException("Invalid message data: too short");
+            }
+
+            var reader = new MmReader(data);
+
+            // Validate magic number
+            byte m0 = reader.ReadByte();
+            byte m1 = reader.ReadByte();
+            byte m2 = reader.ReadByte();
+            byte m3 = reader.ReadByte();
+            if (m0 != MagicNumber[0] || m1 != MagicNumber[1] ||
+                m2 != MagicNumber[2] || m3 != MagicNumber[3])
+            {
+                throw new InvalidDataException("Invalid message: bad magic number");
+            }
+
+            // Read version
+            byte version = reader.ReadByte();
+            if (version > FormatVersion)
+            {
+                throw new InvalidDataException($"Unsupported message version: {version}");
+            }
+
+            // Read header
+            var messageType = (MmMessageType)reader.ReadShort();
+            var method = (MmMethod)reader.ReadShort();
+            uint netId = reader.ReadUInt();
+            uint packedMetadata = reader.ReadUInt();
+            var metadata = UnpackMetadata(packedMetadata);
+
+            // Create and populate message
+            MmMessage message = CreateMessage(messageType, metadata);
+            message.MmMethod = method;
+            message.NetId = netId;
+
+            // Read type-specific payload
+            ReadPayloadPooled(reader, message);
+
+            return message;
+        }
+
+        /// <summary>
+        /// Read type-specific payload using pooled MmReader.
+        /// </summary>
+        private static void ReadPayloadPooled(MmReader reader, MmMessage message)
+        {
+            switch (message.MmMessageType)
+            {
+                case MmMessageType.MmVoid:
+                    // No payload
+                    break;
+
+                case MmMessageType.MmInt:
+                    ((MmMessageInt)message).value = reader.ReadInt();
+                    break;
+
+                case MmMessageType.MmBool:
+                    ((MmMessageBool)message).value = reader.ReadBool();
+                    break;
+
+                case MmMessageType.MmFloat:
+                    ((MmMessageFloat)message).value = reader.ReadFloat();
+                    break;
+
+                case MmMessageType.MmString:
+                    ((MmMessageString)message).value = reader.ReadString();
+                    break;
+
+                case MmMessageType.MmVector3:
+                    ((MmMessageVector3)message).value = reader.ReadVector3();
+                    break;
+
+                case MmMessageType.MmVector4:
+                    ((MmMessageVector4)message).value = reader.ReadVector4();
+                    break;
+
+                case MmMessageType.MmQuaternion:
+                    ((MmMessageQuaternion)message).value = reader.ReadQuaternion();
+                    break;
+
+                case MmMessageType.MmByteArray:
+                    ((MmMessageByteArray)message).byteArr = reader.ReadBytes();
+                    break;
+
+                case MmMessageType.MmTransform:
+                    ReadTransformDataPooled(reader, (MmMessageTransform)message);
+                    break;
+
+                case MmMessageType.MmTransformList:
+                    ReadTransformListDataPooled(reader, (MmMessageTransformList)message);
+                    break;
+
+                case MmMessageType.MmGameObject:
+                    ((MmMessageGameObject)message).GameObjectNetId = reader.ReadUInt();
+                    break;
+
+                case MmMessageType.MmSerializable:
+                    ReadSerializableDataPooled(reader, (MmMessageSerializable)message);
+                    break;
+            }
+        }
+
+        private static void ReadTransformDataPooled(MmReader reader, MmMessageTransform msg)
+        {
+            var translation = reader.ReadVector3();
+            var rotation = reader.ReadQuaternion();
+            var scale = reader.ReadVector3();
+            msg.MmTransform = new MmTransform(translation, scale, rotation);
+            msg.LocalTransform = reader.ReadBool();
+        }
+
+        private static void ReadTransformListDataPooled(MmReader reader, MmMessageTransformList msg)
+        {
+            int count = reader.ReadInt();
+            msg.transforms = new System.Collections.Generic.List<MmTransform>(count);
+            for (int i = 0; i < count; i++)
+            {
+                var translation = reader.ReadVector3();
+                var rotation = reader.ReadQuaternion();
+                var scale = reader.ReadVector3();
+                msg.transforms.Add(new MmTransform(translation, scale, rotation));
+            }
+        }
+
+        private static void ReadSerializableDataPooled(MmReader reader, MmMessageSerializable msg)
+        {
+            // Try new IMmBinarySerializable path first (check for type ID)
+            ushort typeId = reader.ReadUShort();
+            if (typeId != MmTypeRegistry.NullTypeId)
+            {
+                // New binary serialization path
+                var instance = MmTypeRegistry.Create(typeId);
+                if (instance != null)
+                {
+                    instance.ReadFrom(reader);
+                    msg.value = instance;
+                }
+                return;
+            }
+
+            // Legacy path: type name + object array
+            string typeName = reader.ReadString();
+            int dataLength = reader.ReadInt();
+
+            if (string.IsNullOrEmpty(typeName))
+            {
+                return;
+            }
+
+            // Read the object array
+            object[] data = new object[dataLength];
+            for (int i = 0; i < dataLength; i++)
+            {
+                data[i] = ReadObjectValuePooled(reader);
+            }
+
+            try
+            {
+                Type type = Type.GetType(typeName);
+                if (type == null)
+                {
+                    Debug.LogError($"MmBinarySerializer: Cannot find type '{typeName}' for deserialization");
+                    return;
+                }
+
+                var obj = Activator.CreateInstance(type);
+                if (obj is MercuryMessaging.Task.IMmSerializable serializable)
+                {
+                    serializable.Deserialize(data, 0);
+                    msg.value = serializable;
+                }
+                else
+                {
+                    Debug.LogError($"MmBinarySerializer: Type '{typeName}' does not implement IMmSerializable");
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+                throw new InvalidOperationException($"Failed to deserialize MmMessageSerializable of type '{typeName}'", e);
+            }
+        }
+
+        private static object ReadObjectValuePooled(MmReader reader)
+        {
+            byte typeMarker = reader.ReadByte();
+            switch (typeMarker)
+            {
+                case 0: return null;
+                case 1: return reader.ReadInt();
+                case 2: return reader.ReadBool();
+                case 3: return reader.ReadFloat();
+                case 4: return reader.ReadString();
+                case 5: return reader.ReadDouble();
+                case 6: return reader.ReadLong();
+                case 7: return reader.ReadByte();
+                case 8: return reader.ReadShort();
+                default:
+                    Debug.LogWarning($"MmBinarySerializer: Unknown type marker {typeMarker} during deserialization");
+                    return null;
             }
         }
 
@@ -247,15 +671,15 @@ namespace MercuryMessaging.Network
         }
 
         /// <summary>
-        /// Unpack metadata from 2 bytes.
+        /// Unpack metadata from 4 bytes (uint).
         /// </summary>
-        private static MmMetadataBlock UnpackMetadata(ushort packed)
+        private static MmMetadataBlock UnpackMetadata(uint packed)
         {
             var level = (MmLevelFilter)(packed & 0x0F);
             var active = (MmActiveFilter)((packed >> 4) & 0x03);
             var selected = (MmSelectedFilter)((packed >> 6) & 0x03);
             var network = (MmNetworkFilter)((packed >> 8) & 0x03);
-            var tag = (MmTag)((packed >> 10) & 0x3F);
+            var tag = (MmTag)((packed >> 10) & 0xFF); // 8 bits for all Tag0-Tag7
 
             return new MmMetadataBlock(tag, level, active, selected, network);
         }

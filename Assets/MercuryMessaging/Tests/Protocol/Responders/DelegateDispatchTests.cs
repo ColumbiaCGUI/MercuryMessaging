@@ -1,3 +1,6 @@
+// Suppress MM analyzer warnings - test code intentionally uses patterns that trigger warnings
+#pragma warning disable MM002, MM005, MM006, MM008, MM014, MM015
+
 // Copyright (c) 2017-2025, Columbia University
 // All rights reserved.
 // Phase 5: Delegate Dispatch - Validation Tests
@@ -164,10 +167,9 @@ namespace MercuryMessaging.Tests
         {
             // Arrange
             var responder = CreateChildResponder("TestResponder", rootRelay);
-            bool handlerCalled = false;
 
-            // Act
-            bool result = rootRelay.SetFastHandler(responder, (msg) => { handlerCalled = true; });
+            // Act - handler body not called in this test, just verifying registration
+            bool result = rootRelay.SetFastHandler(responder, (msg) => { });
 
             // Assert
             Assert.IsTrue(result);

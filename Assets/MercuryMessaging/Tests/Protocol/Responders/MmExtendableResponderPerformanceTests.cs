@@ -1,4 +1,7 @@
-// Copyright (c) 2017-2019, Columbia University
+﻿// Suppress MM analyzer warnings - test code intentionally uses patterns that trigger warnings
+#pragma warning disable MM002, MM005, MM006, MM008, MM014, MM015
+
+// Copyright (c) 2017-2025, Columbia University
 // All rights reserved.
 //
 // Performance benchmark tests for MmExtendableResponder
@@ -208,9 +211,10 @@ namespace MercuryMessaging.Tests
             foreach (var obj in responders)
                 UnityEngine.Object.DestroyImmediate(obj);
 
-            // Assert memory overhead is reasonable (< 1 KB per responder with 3 handlers)
-            Assert.Less(memoryPerResponder, 1024,
-                $"Memory per responder should be < 1 KB, got {memoryPerResponder:F2} bytes");
+            // Assert memory overhead is reasonable (< 2 KB per responder with 3 handlers)
+            // Note: Each responder now includes an auto-added MmRelayNode via [RequireComponent]
+            Assert.Less(memoryPerResponder, 2048,
+                $"Memory per responder should be < 2 KB, got {memoryPerResponder:F2} bytes");
         }
 
         [Test]

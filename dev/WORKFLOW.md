@@ -118,7 +118,7 @@ namespace MercuryMessaging.Tests
 # 1. Update XML comments for all new public APIs
 # 2. Update CLAUDE.md if architecture changed
 # 3. Update CONTRIBUTING.md if new patterns added
-# 4. Update FILE_REFERENCE.md if new important files added
+# 4. Update Documentation/FILE_REFERENCE.md if new important files added
 # 5. Update dev/IMPROVEMENT_TRACKER.md if tracking new work
 
 # Commit documentation separately
@@ -278,6 +278,43 @@ public void EditorFeature_Scenario_ExpectedBehavior()
 - Use Stopwatch or Unity Profiler
 - Document baseline expectations
 
+### Automated Test Result Export
+
+**Location:** Test results are automatically exported to `dev/test-results/`
+
+**Files Generated:**
+- `TestResults_YYYYMMDD_HHMMSS.xml` - Full NUnit-compatible XML results
+- `TestResults_YYYYMMDD_HHMMSS_summary.txt` - Quick summary with failed tests
+
+**Implementation:** `Assets/MercuryMessaging/Editor/MmTestResultExporter.cs`
+
+The `MmTestResultExporter` class automatically:
+1. Registers with Unity Test Framework via `ICallbacks`
+2. Exports results on test run completion
+3. Generates both XML and summary files
+
+**For AI Assistants (Claude Code, etc.):**
+To check test results programmatically:
+```bash
+# Find latest test results
+find dev/test-results -name "*.xml" -type f | sort -r | head -1
+
+# Read summary file
+cat dev/test-results/TestResults_*_summary.txt | head -20
+
+# Search for failed tests in XML
+grep -A5 "result=\"Failed\"" dev/test-results/TestResults_*.xml | head -50
+```
+
+**Via Unity MCP:**
+```
+# Run tests (results auto-exported)
+mcp__UnityMCP__run_tests mode=PlayMode
+
+# Check console for export confirmation
+mcp__UnityMCP__read_console action=get count=5
+```
+
 ---
 
 ## Documentation Workflow
@@ -288,7 +325,7 @@ public void EditorFeature_Scenario_ExpectedBehavior()
 - ✅ Adding new public API → Update XML comments + CLAUDE.md
 - ✅ Changing architecture → Update CLAUDE.md
 - ✅ Tracking improvements → Update IMPROVEMENT_TRACKER.md
-- ✅ Adding new important file → Update FILE_REFERENCE.md
+- ✅ Adding new important file → Update Documentation/FILE_REFERENCE.md
 - ✅ Changing development process → Update CONTRIBUTING.md or WORKFLOW.md
 
 **Optional:**
@@ -312,7 +349,7 @@ public void EditorFeature_Scenario_ExpectedBehavior()
 - Code quality guidelines
 - Commit message format
 
-**FILE_REFERENCE.md** (Important Files)
+**Documentation/FILE_REFERENCE.md** (Important Files)
 - Core protocol files with descriptions
 - Message system files
 - Filtering and routing files
@@ -629,7 +666,7 @@ If you're unsure about any workflow:
 1. **Check Documentation:**
    - [CLAUDE.md](../CLAUDE.md) - Framework overview
    - [CONTRIBUTING.md](../CONTRIBUTING.md) - Development standards
-   - [FILE_REFERENCE.md](../FILE_REFERENCE.md) - Important files
+   - [FILE_REFERENCE.md](../Documentation/FILE_REFERENCE.md) - Important files
    - [IMPROVEMENT_TRACKER.md](IMPROVEMENT_TRACKER.md) - Roadmap & tracking
 
 2. **Check Active Tasks:**

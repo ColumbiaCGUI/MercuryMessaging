@@ -118,7 +118,7 @@ namespace MercuryMessaging.Tests.Performance
             // Find generators if not set
             if (traditionalGenerator == null)
             {
-                traditionalGenerator = FindObjectOfType<MessageGenerator>();
+                traditionalGenerator = FindFirstObjectByType<MessageGenerator>();
                 if (traditionalGenerator != null)
                 {
                     Debug.Log($"[ComparisonTestHarness] Found traditional generator: {traditionalGenerator.gameObject.name}");
@@ -127,7 +127,7 @@ namespace MercuryMessaging.Tests.Performance
 
             if (dslGenerator == null)
             {
-                dslGenerator = FindObjectOfType<MessageGenerator_DSL>();
+                dslGenerator = FindFirstObjectByType<MessageGenerator_DSL>();
                 if (dslGenerator != null)
                 {
                     Debug.Log($"[ComparisonTestHarness] Found DSL generator: {dslGenerator.gameObject.name}");
@@ -143,7 +143,7 @@ namespace MercuryMessaging.Tests.Performance
             // Auto-find TMP_Text if not assigned
             if (displayText == null)
             {
-                displayText = FindObjectOfType<TMP_Text>();
+                displayText = FindFirstObjectByType<TMP_Text>();
                 if (displayText != null)
                 {
                     Debug.Log($"[ComparisonTestHarness] Found display text: {displayText.gameObject.name}");

@@ -17,7 +17,7 @@ namespace UserStudy.Editor
     /// </summary>
     public class SmartHomeEventsSceneBuilder
     {
-        [MenuItem("UserStudy/Build Smart Home Events Scene")]
+        [MenuItem("MercuryMessaging/User Study/Build Smart Home Events Scene")]
         public static void BuildScene()
         {
             if (EditorUtility.DisplayDialog(

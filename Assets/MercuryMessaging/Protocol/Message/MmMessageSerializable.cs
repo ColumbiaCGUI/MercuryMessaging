@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2017-2019, Columbia University
+﻿// Copyright (c) 2017-2025, Columbia University
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -27,10 +27,13 @@
 //  
 // =============================================================
 // Authors: 
-// Carmine Elvezio, Mengu Sukan, Samuel Silverman, Steven Feiner
+// Ben Yang, Carmine Elvezio, Mengu Sukan, Samuel Silverman, Steven Feiner
 // =============================================================
-//  
-//  
+//
+//
+// Suppress CS0618: IMmSerializable is obsolete - kept for backward compatibility
+#pragma warning disable CS0618
+
 using System;
 using MercuryMessaging.Task;
 using UnityEngine;
@@ -48,10 +51,10 @@ namespace MercuryMessaging
     public class MmMessageSerializable : MmMessage
     {
         /// <summary>
-        /// Serialized item Payload
-        /// Item needs to implement IMmSerializable
+        /// Serialized item Payload.
+        /// Can hold either IMmSerializable (legacy) or IMmBinarySerializable (new).
         /// </summary>
-        public IMmSerializable value;
+        public object value;
 
         /// <summary>
         /// Creates a basic MmMessageSerializable
@@ -99,7 +102,10 @@ namespace MercuryMessaging
         {
             MmMessageSerializable newMessage = new MmMessageSerializable (this);
 
-            newMessage.value = value.Copy();
+            if (value is IMmSerializable serializable)
+                newMessage.value = serializable.Copy();
+            else
+                newMessage.value = value; // IMmBinarySerializable or other - shallow copy
             return newMessage;
         }
 
@@ -112,10 +118,11 @@ namespace MercuryMessaging
         {
             int index = base.Deserialize(data);
             Type type = Type.GetType((string) data[index++]);
-            value = (IMmSerializable) Activator.CreateInstance(type);
+            var serializable = (IMmSerializable) Activator.CreateInstance(type);
+            value = serializable;
             Debug.Log(index);
             Debug.Log(data.Length);
-            index = value.Deserialize(data, index);
+            index = serializable.Deserialize(data, index);
             return index;
         }
 
@@ -126,7 +133,16 @@ namespace MercuryMessaging
         public override object[] Serialize()
         {
             object[] baseSerialized = base.Serialize();
-            object[] valueSerialized = value.Serialize();
+
+            // Only legacy IMmSerializable supports object[] serialization
+            if (!(value is IMmSerializable serializable))
+            {
+                // For IMmBinarySerializable, use binary serialization path instead
+                Debug.LogWarning("MmMessageSerializable.Serialize: value is not IMmSerializable. Use MmBinarySerializer instead.");
+                return baseSerialized;
+            }
+
+            object[] valueSerialized = serializable.Serialize();
 
             // Pre-allocate combined array: base + 1 (type name) + value serialized length
             object[] result = new object[baseSerialized.Length + 1 + valueSerialized.Length];

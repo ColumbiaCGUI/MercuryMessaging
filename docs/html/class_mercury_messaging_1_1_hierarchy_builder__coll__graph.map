@@ -1,0 +1,5 @@
+<map id="MercuryMessaging.HierarchyBuilder" name="MercuryMessaging.HierarchyBuilder">
+<area shape="rect" id="Node000001" title="Fluent builder for constructing MercuryMessaging hierarchies programmatically." alt="" coords="5,136,196,176"/>
+<area shape="rect" id="Node000002" href="$class_mercury_messaging_1_1_hierarchy_builder_1_1_node_builder.html" title="Internal node builder." alt="" coords="5,5,196,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="103,59,103,136,98,136,98,59"/>
+</map>

@@ -212,7 +212,7 @@ Each scene is designed to be:
 
 ### Related Documentation
 - [../../CLAUDE.md](../../CLAUDE.md) - MercuryMessaging framework documentation
-- [../../FILE_REFERENCE.md](../../FILE_REFERENCE.md) - Important files reference
+- [../../Documentation/FILE_REFERENCE.md](../../Documentation/FILE_REFERENCE.md) - Important files reference
 - [../../CONTRIBUTING.md](../../CONTRIBUTING.md) - Development standards
 
 ---

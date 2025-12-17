@@ -17,7 +17,9 @@ namespace UserStudy.SmartHome.Events
         [SerializeField] private float heatingRate = 0.5f;
 
         private bool isHeating = true;
+        #pragma warning disable CS0414
         private bool isNightMode = false;
+        #pragma warning restore CS0414
 
         #region ISmartDevice Implementation
         public GameObject GameObject => gameObject;

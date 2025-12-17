@@ -3,6 +3,9 @@
 // DSL Phase 2.6: Tag Configuration Extensions
 // Provides fluent API for configuring tags on responders
 
+// Suppress MM015: Filter equality checks are intentional for exact match routing logic
+#pragma warning disable MM015
+
 using System.Runtime.CompilerServices;
 using MercuryMessaging;
 

@@ -1,0 +1,9 @@
+<map id="MercuryMessaging.StandardLibrary.Animation.InterpolatorAlpha" name="MercuryMessaging.StandardLibrary.Animation.InterpolatorAlpha">
+<area shape="rect" id="Node000001" title=" " alt="" coords="435,41,659,81"/>
+<area shape="rect" id="Node000002" href="$class_mercury_messaging_1_1_standard_library_1_1_animation_1_1_interpolator-1-g.html" title=" " alt="" coords="164,5,387,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="400,39,435,44,434,49,400,45"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,13,116,38"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="130,23,164,23,164,28,130,28"/>
+<area shape="rect" id="Node000004" href="$interface_mercury_messaging_1_1_standard_library_1_1_animation_1_1_interpolator_material-1-g.html" title=" " alt="" coords="180,70,371,125"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="384,80,434,74,435,79,385,86"/>
+</map>

@@ -1,0 +1,27 @@
+var class_mercury_messaging_1_1_standard_library_1_1_input_1_1_mm_input_touch_message =
+[
+    [ "MmInputTouchMessage", "class_mercury_messaging_1_1_standard_library_1_1_input_1_1_mm_input_touch_message.html#a1ebe9a74cbd44369e1c7d2c8bc6a0e75", null ],
+    [ "MmInputTouchMessage", "class_mercury_messaging_1_1_standard_library_1_1_input_1_1_mm_input_touch_message.html#ac0b1a795d76b4934f4fded598cc17343", null ],
+    [ "MmInputTouchMessage", "class_mercury_messaging_1_1_standard_library_1_1_input_1_1_mm_input_touch_message.html#a7c15b459b5096be3b0a49f9804cab90c", null ],
+    [ "Copy", "class_mercury_messaging_1_1_standard_library_1_1_input_1_1_mm_input_touch_message.html#aca3e3eab0f04d455e0d3b1bda8edb7a5", null ],
+    [ "Deserialize", "class_mercury_messaging_1_1_standard_library_1_1_input_1_1_mm_input_touch_message.html#acd03b9bc41f4c1d0f6d23168f547c984", null ],
+    [ "Serialize", "class_mercury_messaging_1_1_standard_library_1_1_input_1_1_mm_input_touch_message.html#af8f67b88967c03407e36ec62498c285e", null ],
+    [ "_isPooled", "class_mercury_messaging_1_1_standard_library_1_1_input_1_1_mm_input_touch_message.html#a002e742c30dd9d358fd86da1c86ecd7a", null ],
+    [ "BASE_SERIALIZED_SIZE", "class_mercury_messaging_1_1_standard_library_1_1_input_1_1_mm_input_touch_message.html#a63e7eb420f5c1acd878af15b6af6108c", null ],
+    [ "Delta", "class_mercury_messaging_1_1_standard_library_1_1_input_1_1_mm_input_touch_message.html#a8df2e6c4b09cff6415269c76befb9e24", null ],
+    [ "Hand", "class_mercury_messaging_1_1_standard_library_1_1_input_1_1_mm_input_touch_message.html#ad18f0fdd6e73aebb121677a2ec8c9144", null ],
+    [ "HopCount", "class_mercury_messaging_1_1_standard_library_1_1_input_1_1_mm_input_touch_message.html#a77add6deb349507f793d41dfade789eb", null ],
+    [ "MAX_HOPS_DEFAULT", "class_mercury_messaging_1_1_standard_library_1_1_input_1_1_mm_input_touch_message.html#ab81aa0765f7db79a3a4b8db5bccccc90", null ],
+    [ "MetadataBlock", "class_mercury_messaging_1_1_standard_library_1_1_input_1_1_mm_input_touch_message.html#a72a5153cda9de1eea4a5a4d48a9c085b", null ],
+    [ "MmMessageType", "class_mercury_messaging_1_1_standard_library_1_1_input_1_1_mm_input_touch_message.html#a1667c425c939ec54c5f37703a139965a", null ],
+    [ "MmMethod", "class_mercury_messaging_1_1_standard_library_1_1_input_1_1_mm_input_touch_message.html#ae65ffc2606c0dfa83bd5b20b1136b9fb", null ],
+    [ "NetId", "class_mercury_messaging_1_1_standard_library_1_1_input_1_1_mm_input_touch_message.html#a605d6073caf84b2314b9bc004ef80e05", null ],
+    [ "Phase", "class_mercury_messaging_1_1_standard_library_1_1_input_1_1_mm_input_touch_message.html#a4ef238fbc6f39bd24028255a667adbc8", null ],
+    [ "Position", "class_mercury_messaging_1_1_standard_library_1_1_input_1_1_mm_input_touch_message.html#a9559c73ce2bdb90ff2a870419ab09444", null ],
+    [ "root", "class_mercury_messaging_1_1_standard_library_1_1_input_1_1_mm_input_touch_message.html#ae714e44a3e14deafb1f232a4865342a2", null ],
+    [ "TimeStamp", "class_mercury_messaging_1_1_standard_library_1_1_input_1_1_mm_input_touch_message.html#a37d05fdfaccb95a8aa72f1adf92de968", null ],
+    [ "TouchId", "class_mercury_messaging_1_1_standard_library_1_1_input_1_1_mm_input_touch_message.html#a1de38f7fbc52ffec1762c113868254e9", null ],
+    [ "VisitedNodes", "class_mercury_messaging_1_1_standard_library_1_1_input_1_1_mm_input_touch_message.html#a1b8930dc1853a661e809ee7a44fdd150", null ],
+    [ "Handled", "class_mercury_messaging_1_1_standard_library_1_1_input_1_1_mm_input_touch_message.html#aaa26d29dc816c3f750118996e99c0f89", null ],
+    [ "IsDeserialized", "class_mercury_messaging_1_1_standard_library_1_1_input_1_1_mm_input_touch_message.html#a47b3c4e8e7ee649012a5751b1543ce20", null ]
+];

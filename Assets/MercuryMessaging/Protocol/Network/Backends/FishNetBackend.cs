@@ -1,4 +1,4 @@
-// Copyright (c) 2017-2025, Columbia University
+﻿// Copyright (c) 2017-2025, Columbia University
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -27,7 +27,7 @@
 //
 // =============================================================
 // Authors:
-// Carmine Elvezio, Mengu Sukan, Steven Feiner, [Contributors]
+// Ben Yang, Carmine Elvezio, Mengu Sukan, Steven Feiner, [Contributors]
 // =============================================================
 //
 
@@ -35,6 +35,9 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using MmLog = MercuryMessaging.MmLogger;
+
+// Suppress CS0067: Events may not be invoked when FISHNET_AVAILABLE is not defined
+#pragma warning disable 0067
 
 #if FISHNET_AVAILABLE
 using FishNet;
@@ -64,7 +67,7 @@ namespace MercuryMessaging.Network.Backends
     ///
     /// FishNet Broadcasts are preferred over RPCs because:
     /// - They don't require NetworkObject components
-    /// - They work globally (like PUN2's RaiseEvent)
+    /// - They work globally without scene object requirements
     /// - They support byte[] payloads directly
     /// </summary>
     /// <remarks>

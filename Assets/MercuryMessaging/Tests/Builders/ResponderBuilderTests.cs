@@ -1,9 +1,11 @@
+// Suppress MM analyzer warnings - test code intentionally uses patterns that trigger warnings
+#pragma warning disable MM002, MM005, MM006, MM008, MM014, MM015
+
 // Copyright (c) 2017-2025, Columbia University
 // All rights reserved.
 //
 // ResponderBuilderTests.cs - Tests for Responder Handler DSL
 // Part of DSL Overhaul Phase 6
-
 
 using NUnit.Framework;
 using UnityEngine;
@@ -199,41 +201,28 @@ namespace MercuryMessaging.Tests
 
         #region Relay Node Access Tests
 
+        // Note: MmBaseResponder has [RequireComponent(typeof(MmRelayNode))] so relay is always present
+        // when a responder is added to a GameObject
+
         [Test]
-        public void GetRelayNode_ReturnsNullWhenNoRelay()
+        public void GetRelayNode_ReturnsAutoAddedRelay()
         {
+            // [RequireComponent] ensures MmRelayNode is always present
             var relay = _responder.GetRelayNode();
 
-            Assert.IsNull(relay);
+            Assert.IsNotNull(relay, "Relay node should be auto-added by [RequireComponent]");
         }
 
         [Test]
-        public void GetRelayNode_ReturnsRelayWhenPresent()
+        public void GetOrCreateRelayNode_ReturnsExistingAutoAddedRelay()
         {
-            _responderObj.AddComponent<MmRelayNode>();
-
-            var relay = _responder.GetRelayNode();
-
-            Assert.IsNotNull(relay);
-        }
-
-        [Test]
-        public void GetOrCreateRelayNode_CreatesWhenMissing()
-        {
-            var relay = _responder.GetOrCreateRelayNode();
-
-            Assert.IsNotNull(relay);
-            Assert.IsNotNull(_responderObj.GetComponent<MmRelayNode>());
-        }
-
-        [Test]
-        public void GetOrCreateRelayNode_ReturnsExistingWhenPresent()
-        {
-            var existing = _responderObj.AddComponent<MmRelayNode>();
+            // [RequireComponent] already added relay, so GetOrCreate should return it
+            var existing = _responderObj.GetComponent<MmRelayNode>();
+            Assert.IsNotNull(existing, "Relay should already exist from [RequireComponent]");
 
             var relay = _responder.GetOrCreateRelayNode();
 
-            Assert.AreSame(existing, relay);
+            Assert.AreSame(existing, relay, "Should return the auto-added relay");
         }
 
         #endregion

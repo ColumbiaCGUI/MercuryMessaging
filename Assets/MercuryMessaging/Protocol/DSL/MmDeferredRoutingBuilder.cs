@@ -4,6 +4,9 @@
 // MmDeferredRoutingBuilder.cs - Deferred routing builder for conditional execution
 // Part of DSL Phase 2: Builder API for Advanced Cases
 
+// Suppress MM015: Filter equality checks are intentional for exact match routing logic
+#pragma warning disable MM015
+
 using System.Runtime.CompilerServices;
 using UnityEngine;
 

@@ -2,32 +2,27 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
+using UnityEditor.Build;
 using UnityEngine;
 
 namespace MercuryMessaging.Editor
 {
     /// <summary>
-	/// Custom scripting define symbols used by MercuryMessaging
-	/// This class has been adapted from Photon's PhotonEditorUtils.cs
-    /// 
-	/// </summary>
+    /// Custom scripting define symbols used by MercuryMessaging.
+    ///
+    /// Supported networking backends:
+    /// - FishNet (uses FISH_NET define)
+    /// - Photon Fusion 2 (uses FUSION_WEAVER define)
+    ///
+    /// Note: PUN2 support was removed in 2025-12. Use FishNet or Fusion 2 instead.
+    /// </summary>
     [InitializeOnLoad]
     public static class MercuryThirdPartyUtils
     {
-        // True if Photon Pun 2 API is available
-        public static bool HasPun;
-
         static MercuryThirdPartyUtils()
         {
-            HasPun = Type.GetType("Photon.Pun.PhotonNetwork, Assembly-CSharp") != null || Type.GetType("Photon.Pun.PhotonNetwork, Assembly-CSharp-firstpass") != null || Type.GetType("Photon.Pun.PhotonNetwork, PhotonUnityNetworking") != null;
-
-            if (HasPun)
-            {
-                // MOUNTING SYMBOLS
-                #if !PHOTON_AVAILABLE
-                AddScriptingDefineSymbolToAllBuildTargetGroups("PHOTON_AVAILABLE");
-                #endif
-            }
+            // Auto-detection for third-party integrations can be added here
+            // Currently, FishNet and Fusion 2 manage their own define symbols
         }
 
         /// <summary>
@@ -46,7 +41,8 @@ namespace MercuryMessaging.Editor
                     continue;
                 }
 
-                var defineSymbols = PlayerSettings.GetScriptingDefineSymbolsForGroup(group).Split(';').Select(d => d.Trim()).ToList();
+                var namedTarget = NamedBuildTarget.FromBuildTargetGroup(group);
+                var defineSymbols = PlayerSettings.GetScriptingDefineSymbols(namedTarget).Split(';').Select(d => d.Trim()).ToList();
 
                 if (!defineSymbols.Contains(defineSymbol))
                 {
@@ -54,7 +50,7 @@ namespace MercuryMessaging.Editor
 
                     try
                     {
-                        PlayerSettings.SetScriptingDefineSymbolsForGroup(group, string.Join(";", defineSymbols.ToArray()));
+                        PlayerSettings.SetScriptingDefineSymbols(namedTarget, string.Join(";", defineSymbols.ToArray()));
                     }
                     catch (Exception e)
                     {
@@ -65,44 +61,13 @@ namespace MercuryMessaging.Editor
         }
 
         /// <summary>
-        /// Removes MercuryMessaging's Script Define Symbols from project
+        /// Removes MercuryMessaging's Script Define Symbols from project.
+        /// Currently a no-op since supported backends (FishNet, Fusion 2) manage their own symbols.
         /// </summary>
         public static void CleanUpMercuryDefineSymbols()
         {
-            foreach (BuildTarget target in Enum.GetValues(typeof(BuildTarget)))
-            {
-                BuildTargetGroup group = BuildPipeline.GetBuildTargetGroup(target);
-
-                if (group == BuildTargetGroup.Unknown)
-                {
-                    continue;
-                }
-
-                var defineSymbols = PlayerSettings.GetScriptingDefineSymbolsForGroup(group)
-                    .Split(';')
-                    .Select(d => d.Trim())
-                    .ToList();
-
-                List<string> newDefineSymbols = new List<string>();
-                foreach (var symbol in defineSymbols)
-                {
-                    if ("PHOTON_AVAILABLE".Equals(symbol))
-                    {
-                        continue;
-                    }
-
-                    newDefineSymbols.Add(symbol);
-                }
-
-                try
-                {
-                    PlayerSettings.SetScriptingDefineSymbolsForGroup(group, string.Join(";", newDefineSymbols.ToArray()));
-                }
-                catch (Exception e)
-                {
-                    Debug.LogErrorFormat("Could not set clean up Mercury's define symbols for build target: {0} group: {1}, {2}", target, group, e);
-                }
-            }
+            // No custom define symbols to clean up
+            // FishNet and Fusion 2 manage their own define symbols
         }
     }
 

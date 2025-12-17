@@ -1,14 +1,15 @@
 {
+  "scopedRegistries": [],
   "dependencies": {
+    "com.coplaydev.unity-mcp": "https://github.com/CoplayDev/unity-mcp.git?path=/MCPForUnity",
     "com.firstgeargames.fishnet": "https://github.com/FirstGearGames/FishNet.git?path=Assets/FishNet",
     "com.gentlymad.graphviewbase": "https://github.com/Gentlymad-Studios/GraphViewBase.git",
     "com.gentlymad.odinserializer": "https://github.com/Gentlymad-Studios/OdinSerializer.git",
-    "com.meta.xr.sdk.interaction.ovr": "83.0.0",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.2d.tilemap": "1.0.0",
     "com.unity.ai.navigation": "2.0.9",
     "com.unity.analytics": "3.8.2",
-    "com.unity.burst": "1.8.26",
+    "com.unity.burst": "1.8.27",
     "com.unity.collab-proxy": "2.10.2",
     "com.unity.collections": "2.6.3",
     "com.unity.ide.rider": "3.0.38",
@@ -21,10 +22,8 @@
     "com.unity.test-framework": "1.6.0",
     "com.unity.timeline": "1.8.9",
     "com.unity.ugui": "2.0.0",
-    "com.unity.xr.hands": "1.7.2",
     "com.unity.xr.interaction.toolkit": "3.3.0",
-    "com.unity.xr.meta-openxr": "2.3.0",
-    "com.unity.xr.mock-hmd": "1.4.0-preview.2",
+    "com.unity.xr.management": "4.5.3",
     "com.veriorpies.parrelsync": "https://github.com/VeriorPies/ParrelSync.git?path=/ParrelSync",
     "com.unity.modules.accessibility": "1.0.0",
     "com.unity.modules.adaptiveperformance": "1.0.0",
@@ -57,8 +56,6 @@
     "com.unity.modules.vectorgraphics": "1.0.0",
     "com.unity.modules.vehicles": "1.0.0",
     "com.unity.modules.video": "1.0.0",
-    "com.unity.modules.vr": "1.0.0",
-    "com.unity.modules.wind": "1.0.0",
-    "com.unity.modules.xr": "1.0.0"
+    "com.unity.modules.wind": "1.0.0"
   }
 }

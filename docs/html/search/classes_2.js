@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['colorchanger',['ColorChanger',['../class_mercury_messaging_1_1_support_1_1_interpolators_1_1_color_changer.html',1,'MercuryMessaging::Support::Interpolators']]]
+  ['datacollectionbuilder_0',['DataCollectionBuilder',['../class_mercury_messaging_1_1_data_1_1_data_collection_builder.html',1,'MercuryMessaging::Data']]]
 ];

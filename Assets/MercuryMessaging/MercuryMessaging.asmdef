@@ -2,11 +2,12 @@
     "name": "MercuryMessaging",
     "rootNamespace": "MercuryMessaging",
     "references": [
-        "GUID:7c88a4a7926ee5145ad2dfa06f454c67"
+        "GUID:7c88a4a7926ee5145ad2dfa06f454c67",
+        "GUID:1baf1ffff1031e948b3b228ab3453251"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
-    "allowUnsafeCode": false,
+    "allowUnsafeCode": true,
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,

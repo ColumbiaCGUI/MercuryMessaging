@@ -27,10 +27,12 @@
 // 
 // =============================================================
 // Authors: 
-// Carmine Elvezio, Mengu Sukan, Samuel Silverman, Steven Feiner
+// Ben Yang, Carmine Elvezio, Mengu Sukan, Samuel Silverman, Steven Feiner
 // =============================================================
-// 
-// 
+//
+//
+// Suppress MM002: Self-only filter is intentional in editor code for property validation
+#pragma warning disable MM002
 
 using System;
 using UnityEditor;

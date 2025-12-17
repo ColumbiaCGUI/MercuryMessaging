@@ -35,7 +35,7 @@ namespace MercuryMessaging.Examples.Tutorials.DSL
             relay = GetComponent<MmRelayNode>();
         }
 
-        void Start()
+        new void Start()
         {
             // Run tutorial examples
             Tier1Examples();

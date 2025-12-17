@@ -1,0 +1,13 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,109,95,134"/>
+<area shape="rect" id="Node000001" href="$interface_mercury_messaging_1_1_i_mm_listener_subscription.html" title="Non&#45;generic base interface for listener subscriptions." alt="" coords="143,5,349,45"/>
+<area shape="poly" id="edge9_Node000000_Node000001" title=" " alt="" coords="76,98,106,76,141,55,170,43,172,48,144,60,109,80,79,102"/>
+<area shape="rect" id="Node000003" href="$class_mercury_messaging_1_1_mm_listener_subscription-1-g.html" title="Represents an active message listener subscription." alt="" coords="144,69,348,109"/>
+<area shape="poly" id="edge11_Node000000_Node000003" title=" " alt="" coords="108,109,143,103,144,109,108,115"/>
+<area shape="rect" id="Node000004" href="$struct_mercury_messaging_1_1_network_1_1_mm_byte_array_pool_1_1_scoped_array.html" title="Scoped array that returns to pool on dispose." alt="" coords="143,133,349,173"/>
+<area shape="poly" id="edge12_Node000000_Node000004" title=" " alt="" coords="108,128,143,134,142,139,108,133"/>
+<area shape="rect" id="Node000005" href="$class_mercury_messaging_1_1_network_1_1_mm_writer.html" title="High&#45;performance binary writer that uses ArrayPool for zero&#45;allocation serialization." alt="" coords="153,197,339,237"/>
+<area shape="poly" id="edge13_Node000000_Node000005" title=" " alt="" coords="79,140,109,163,144,183,172,195,170,200,141,188,106,167,76,145"/>
+<area shape="rect" id="Node000002" href="$class_mercury_messaging_1_1_mm_listener_subscription_impl-1-g.html" title="Generic listener subscription that implements the interface." alt="" coords="397,5,601,45"/>
+<area shape="poly" id="edge10_Node000001_Node000002" title=" " alt="" coords="363,23,397,23,397,28,363,28"/>
+</map>

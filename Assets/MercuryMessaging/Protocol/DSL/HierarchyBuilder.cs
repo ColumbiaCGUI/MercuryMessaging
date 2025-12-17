@@ -4,6 +4,9 @@
 // HierarchyBuilder.cs - Fluent builder for MercuryMessaging hierarchies
 // Part of DSL Overhaul Phase 7
 
+// Suppress MM008: SetParent without routing - this builder handles routing via Build() and MmSetParent extension
+#pragma warning disable MM008
+
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -425,7 +428,10 @@ namespace MercuryMessaging
 
         /// <summary>
         /// Move this node to a new parent.
+        /// Note: Does NOT unregister from the old parent's routing table.
+        /// For proper reparenting, use MmSetParent instead.
         /// </summary>
+        [Obsolete("Use MmSetParent for proper parent management including old parent unregistration")]
         public static void ReparentTo(this MmRelayNode node, MmRelayNode newParent)
         {
             if (node == null || newParent == null) return;
@@ -433,6 +439,77 @@ namespace MercuryMessaging
             node.transform.SetParent(newParent.transform);
             newParent.MmAddToRoutingTable(node, MmLevelFilter.Child);
             node.AddParent(newParent);
+        }
+
+        /// <summary>
+        /// Set the parent of this relay node, properly handling routing table registration.
+        /// This is the recommended way to reparent relay nodes at runtime.
+        /// Handles: unregister from old parent, Unity SetParent, register with new parent.
+        /// </summary>
+        /// <param name="node">The node to reparent</param>
+        /// <param name="newParent">The new parent relay node (null to make this a root node)</param>
+        /// <param name="worldPositionStays">If true, the world position is maintained. Passed to Transform.SetParent.</param>
+        public static void MmSetParent(this MmRelayNode node, MmRelayNode newParent, bool worldPositionStays = true)
+        {
+            if (node == null) return;
+
+            // Step 1: Unregister from old parent's routing table
+            var oldParentTransform = node.transform.parent;
+            if (oldParentTransform != null)
+            {
+                var oldParentRelay = oldParentTransform.GetComponentInParent<MmRelayNode>();
+                if (oldParentRelay != null)
+                {
+                    // Find and remove this node from old parent's routing table
+                    for (int i = oldParentRelay.RoutingTable.Count - 1; i >= 0; i--)
+                    {
+                        if (oldParentRelay.RoutingTable[i].Responder == node)
+                        {
+                            oldParentRelay.RoutingTable.RemoveAt(i);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // Step 2: Unity hierarchy update
+            node.transform.SetParent(newParent?.transform, worldPositionStays);
+
+            // Step 3: Register with new parent (if any)
+            if (newParent != null)
+            {
+                newParent.MmAddToRoutingTable(node, MmLevelFilter.Child);
+                node.AddParent(newParent);
+            }
+
+            // Step 4: Refresh parent list to update internal state
+            node.RefreshParents();
+        }
+
+        /// <summary>
+        /// Set the parent by Transform, looking up the MmRelayNode automatically.
+        /// </summary>
+        /// <param name="node">The node to reparent</param>
+        /// <param name="newParentTransform">The new parent transform (must have MmRelayNode)</param>
+        /// <param name="worldPositionStays">If true, the world position is maintained.</param>
+        public static void MmSetParent(this MmRelayNode node, Transform newParentTransform, bool worldPositionStays = true)
+        {
+            if (node == null) return;
+
+            MmRelayNode newParentRelay = null;
+            if (newParentTransform != null)
+            {
+                newParentRelay = newParentTransform.GetComponent<MmRelayNode>();
+                if (newParentRelay == null)
+                {
+                    Debug.LogWarning($"[MmSetParent] Target transform '{newParentTransform.name}' has no MmRelayNode. " +
+                                    "Using Unity SetParent only - message routing will not work.", node);
+                    node.transform.SetParent(newParentTransform, worldPositionStays);
+                    return;
+                }
+            }
+
+            node.MmSetParent(newParentRelay, worldPositionStays);
         }
 
         /// <summary>

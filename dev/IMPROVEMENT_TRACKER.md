@@ -28,10 +28,10 @@
   - Large: 17.17ms / 58.3 FPS / 1000 msg/sec
 - **Result:** 58-70 FPS at 1000 msg/sec - production ready
 
-### P2: FishNet Networking (200h)
+### P2: FishNet Networking (200h) - COMPLETE ✅
 - **Target:** Production-ready multiplayer
-- **Status:** Phase 1 COMPLETE ✅ (Sessions 1-8)
-- **Location:** `dev/active/networking/`
+- **Status:** COMPLETE (2025-12-12)
+- **Location:** `dev/archive/networking/`
 - **Dependency:** Network infrastructure in Protocol/Network/
 - **Deliverable:** Working multiplayer demo scene with FishNet backend
 - **Completed (2025-12-01):**
@@ -44,45 +44,61 @@
     - Server→Client: MmString routed to 4 responders ✅
     - Client→Server: MmInt routed to 4 responders ✅
 - **Key Insight:** Every responder GameObject needs MmRelayNode
-- **Remaining:** Performance comparison vs PUN2, Fusion 2 implementation
+- **Result:** FishNet backend production-ready, Fusion 2 backend scaffolded
 
-### P2b: Core Performance Phase 2 (26h)
+### P2b: Core Performance Phase 2 (26h) - COMPLETE ✅
 - **Target:** FSM caching, routing flexibility, serialization overhaul
-- **Status:** Active (Planning Complete 2025-12-03)
-- **Location:** `dev/active/core-performance/`
+- **Status:** COMPLETE (2025-12-04) - All tests passing
+- **Location:** `dev/archive/core-performance/`
 - **Plan File:** `.claude/plans/iterative-leaping-shannon.md`
-- **Key Tasks:**
-  - D1: Remove SerialExecutionQueue dead code (15 min)
-  - E1-E3: Handled flag early termination (1-2h)
-  - P1-P3: MmRelaySwitchNode caching (4h)
-  - Q1-Q4: MmRoutingChecks consolidation (4h) - replaces MmQuickNode
-  - S1-S7: Serialization overhaul (16h) - zero-allocation binary
-- **Dependencies:** None (independent from P2 FishNet)
-- **Deliverable:** Faster FSM, flexible routing, modern serialization
+- **Completed Tasks:**
+  - D1: Remove SerialExecutionQueue dead code ✅
+  - E1-E3: Handled flag early termination ✅
+  - P1-P3: MmRelaySwitchNode caching ✅
+  - Q1-Q4: MmRoutingChecks consolidation ✅ (MmQuickNode marked [Obsolete])
+  - S1-S7: Serialization overhaul ✅ (IMmBinarySerializable, MmWriter, MmReader)
+  - DX1-DX4: Developer experience improvements ✅
+- **Test Infrastructure:**
+  - MmTestResultExporter.cs - Auto-exports test results to dev/test-results/
+  - MmTestHierarchy - Fluent test hierarchy builder with IDisposable
+- **Result:** All 100+ tests passing, no compilation errors
 
-### P3: DSL/DX Improvements (92h)
+### P3: DSL/DX Improvements (92h) - COMPLETE ✅
 - **Target:** Even shorter syntax, Roslyn analyzers, source generators
-- **Status:** In Progress - Phases 1-2 Complete (2025-12-03)
-- **Location:** `dev/active/dsl-dx/`
+- **Status:** COMPLETE (2025-12-12) - All phases done
+- **Location:** `dev/archive/dsl-dx/`
 - **Key Phases:**
   - Phase 1: Property-based syntax (`relay.To.Children.Send()`) - 16h ✅
   - Phase 2: Builder API for advanced cases - 8h ✅
-  - Phase 3: Roslyn analyzers (MM005, MM010, MM001) - 20h
-  - Phase 4: Source generator enhancements - 40h
-  - Phase 5: Documentation updates - 8h
-- **Completed (Phases 1-2):**
+  - Phase 3: Roslyn analyzers (15 analyzers MM001-MM015) - 20h ✅
+  - Phase 4: Source generator enhancements ([MmHandler] attribute) - 40h ✅
+  - Phase 5: Documentation updates - 8h ✅ (via wiki tutorials)
+- **Completed:**
   - `relay.To.Children.Send("Hello")` - auto-executes immediately
   - `relay.Build().ToChildren().Send("Hello").Execute()` - deferred execution
   - Both work on MmRelayNode and MmBaseResponder
   - 26 tests covering property routing and builder API
-- **Target:** 95% verbosity reduction (32 chars) - achieved
-- **Wiki Tutorials:** Separate task at `dev/active/wiki-tutorials/`
+  - **15 Roslyn Analyzers (MM001-MM015)** with code fix providers for MM005/MM010
+  - **[MmHandler] attribute** for source-generated dispatch of custom methods
+  - Generator diagnostics MMG001-MMG003 for invalid configurations
+  - Test coverage in `Tests/Generators/MmHandlerAttributeTests.cs`
+- **Analyzer Deployment:** `Assets/MercuryMessaging/Protocol/Analyzers/`
+- **Result:** 95% verbosity reduction achieved (32 chars)
 
-### P4: Fusion 2 Networking (200h)
+### P4: Fusion 2 Networking (200h) - DEFERRED
 - **Target:** Alternative backend, hot-swappable with FishNet
-- **Status:** Planning
-- **Location:** `dev/active/networking/`
-- **Dependency:** FishNet implementation complete
+- **Status:** Scaffolded, testing deferred until Fusion 2 needed
+- **Location:** `dev/archive/networking/` (scaffolding in Protocol/Network/Backends/)
+- **Dependency:** FishNet implementation complete ✅
+- **Scaffolded (2025-12-11):**
+  - Fusion2Backend.cs - IMmNetworkBackend implementation
+  - MmFusion2Bridge.cs - NetworkBehaviour for RPC handling
+  - Fusion2Resolver.cs - IMmGameObjectResolver implementation
+  - RPC design: TickAligned=false for immediate delivery
+- **To Complete When Needed:**
+  - Install Fusion 2 package and add FUSION2_AVAILABLE define
+  - Loopback and multi-client testing
+  - State authority handling refinement
 
 ---
 
@@ -116,7 +132,7 @@
 ### P8: Network Prediction (400h) - CHI 2026
 - **Novel:** Hierarchical client-side prediction
 - **Status:** Planning
-- **Location:** `dev/active/networking/` (network prediction component)
+- **Location:** `dev/active/network-prediction/`
 - **Impact:** 100-200ms perceived latency reduction in distributed XR
 - **Research Question:** Can route prediction reduce perceived latency by 100-200ms?
 
@@ -141,7 +157,7 @@
 ### Thread Safety (4-8h)
 - **Trigger:** When async/await messaging is needed
 - **Approach:** Lock-based (Option A) is simplest
-- **Location:** Merged into performance-optimization Phase 10
+- **Location:** `dev/archive/thread-safety/` (design docs)
 
 ### Parallel Dispatch (360h)
 - **Trigger:** After Performance Optimization complete
@@ -209,12 +225,19 @@
 - **Total Effort:** 26h
 - **Plan File:** `.claude/plans/iterative-leaping-shannon.md`
 
+### 2025-12-12: Track 1 Production Engineering Complete
+- **Archived:** dsl-dx, networking, wiki-tutorials moved to `dev/archive/`
+- **P2 FishNet:** COMPLETE - Production-ready multiplayer with FishNet backend
+- **P3 DSL/DX:** COMPLETE - 95% verbosity reduction, 15 analyzers, [MmHandler] attribute
+- **P4 Fusion 2:** DEFERRED - Scaffolded, ready when needed
+- **Wiki Tutorials:** 14 tutorials drafted in `dev/wiki-drafts/`, ready for wiki push
+- **Next:** P5 User Study (Track 2)
+
 ### 2025-12-01: DSL/DX Planning and Wiki Tutorials
 - **Syntax Decision:** Level 1 Property-based (`relay.To.Children.Send()`) over operators
 - **Auto-Execute:** Dual API (auto-execute + builder) + Analyzer warnings (MM005)
 - **Wiki Discovery:** Existing wiki at ColumbiaCGUI org (not CGUI-Lab)
 - **Wiki Strategy:** Keep existing tutorials 1-10, add new 5c, 11-14 for new features
-- **Task Folders:** `dev/active/dsl-dx/` (merged), `dev/active/wiki-tutorials/`
 - **Analyzers Planned:** MM005 (missing Execute), MM010 (non-partial class), MM001 (suggest DSL)
 - **Source Generators:** Extend existing `[MmGenerateDispatch]` generator
 
@@ -238,8 +261,26 @@
 
 ---
 
-*Last Updated: 2025-12-03*
+### 2025-12-11: Roslyn Analyzers Phase 3 Complete
+- **All 15 Analyzers Implemented:** MM001-MM015 deployed and working
+- **Key Implementation Details:**
+  - Analyzer DLL built with netstandard2.0 target
+  - Uses Microsoft.CodeAnalysis.CSharp 4.3.0 (Unity compatible)
+  - Deployed to `Assets/MercuryMessaging/Editor/Analyzers/`
+  - Meta file requires `RoslynAnalyzer` label for Unity to recognize
+- **Test Cases:** `AnalyzerTestCases.cs` with `#define MM_ANALYZER_TEST`
+- **Warnings in Test Files:** Expected - analyzers correctly flag patterns that would be problematic in production code
+- **Code Fix Providers:** MM005 (add .Execute()) and MM010 (add partial keyword)
+- **Next:** Phase 4 - Source generator enhancements
+
+---
+
+*Last Updated: 2025-12-12*
 *Next Review: End of Q1 2026*
 *Active Task Folders:*
-- *P2b Core Performance: `dev/active/core-performance/`*
-- *P3 DSL/DX: `dev/active/dsl-dx/`*
+- *P5 User Study: `dev/active/user-study/`*
+
+*Recently Archived:*
+- *P2 FishNet: `dev/archive/networking/` - COMPLETE*
+- *P3 DSL/DX: `dev/archive/dsl-dx/` - COMPLETE*
+- *Wiki Tutorials: `dev/archive/wiki-tutorials/` - COMPLETE, ready for wiki push*

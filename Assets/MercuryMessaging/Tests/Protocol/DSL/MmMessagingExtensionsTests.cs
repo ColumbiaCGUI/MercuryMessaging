@@ -1,3 +1,6 @@
+// Suppress MM analyzer warnings - test code intentionally uses patterns that trigger warnings
+#pragma warning disable MM002, MM005, MM006, MM008, MM014, MM015
+
 // Copyright (c) 2017-2025, Columbia University
 // All rights reserved.
 //
@@ -343,14 +346,20 @@ namespace MercuryMessaging.Tests
         }
 
         [Test]
-        public void Responder_Send_WithNullRelayNode_ReturnsDefault()
+        public void Responder_Send_WithAutoAddedRelayNode_ReturnsValidMessage()
         {
+            // [RequireComponent] on MmBaseResponder auto-adds MmRelayNode
             var standaloneObj = new GameObject("Standalone");
             var standaloneResponder = standaloneObj.AddComponent<TestMessageResponder>();
 
-            // Should return default MmFluentMessage, not throw
+            // Relay is auto-added, so Send() should return valid fluent message
             var result = standaloneResponder.Send("test");
-            Assert.AreEqual(default(MmFluentMessage), result);
+
+            // Verify relay was auto-added and result is valid
+            Assert.IsNotNull(standaloneObj.GetComponent<MmRelayNode>(),
+                "MmRelayNode should be auto-added by [RequireComponent]");
+            Assert.AreNotEqual(default(MmFluentMessage), result,
+                "Send should return valid fluent message with auto-added relay");
 
             Object.DestroyImmediate(standaloneObj);
         }

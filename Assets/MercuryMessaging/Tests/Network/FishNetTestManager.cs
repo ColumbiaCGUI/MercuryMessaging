@@ -1,23 +1,27 @@
+// FishNet Integration Test Manager - Only compiles when FishNet is installed
+// To use: Install FishNet package, which defines FISHNET_AVAILABLE
+
+#if FISHNET_AVAILABLE
+
+// Suppress MM analyzer warnings - test code intentionally uses patterns that trigger warnings
+#pragma warning disable MM002, MM005, MM006, MM008, MM014, MM015
+
 // Copyright (c) 2017-2025, Columbia University
 // All rights reserved.
 //
 // FishNet Integration Test Manager
 // Tests MercuryMessaging FishNetBackend with proper MmNetworkBridge routing
-//
 
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using MercuryMessaging;
 using MercuryMessaging.Network;
-
-#if FISHNET_AVAILABLE
 using FishNet;
 using FishNet.Managing;
 using FishNet.Connection;
 using FishNet.Transporting;
 using MercuryMessaging.Network.Backends;
-#endif
 
 namespace MercuryMessaging.Tests.Network
 {
@@ -1068,3 +1072,5 @@ namespace MercuryMessaging.Tests.Network
         #endregion
     }
 }
+
+#endif // FISHNET_AVAILABLE

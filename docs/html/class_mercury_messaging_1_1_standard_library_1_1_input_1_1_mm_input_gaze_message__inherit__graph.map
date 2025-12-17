@@ -1,0 +1,5 @@
+<map id="MercuryMessaging.StandardLibrary.Input.MmInputGazeMessage" name="MercuryMessaging.StandardLibrary.Input.MmInputGazeMessage">
+<area shape="rect" id="Node000001" title="Eye tracking gaze message." alt="" coords="5,79,236,119"/>
+<area shape="rect" id="Node000002" href="$class_mercury_messaging_1_1_mm_message.html" title="Base class for messages passed through MmInvoke." alt="" coords="15,5,226,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="123,44,123,79,118,79,118,44"/>
+</map>

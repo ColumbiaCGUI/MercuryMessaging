@@ -15,29 +15,23 @@ namespace MercuryMessaging.Tests
     [TestFixture]
     public class FluentApiTests
     {
-        private GameObject _testObject;
+        private MmTestHierarchy _hierarchy;
         private MmRelayNode _relay;
         private TestResponder _responder;
 
         [SetUp]
         public void Setup()
         {
-            // Create test GameObject with relay and responder
-            _testObject = new GameObject("TestObject");
-            _relay = _testObject.AddComponent<MmRelayNode>();
-            _responder = _testObject.AddComponent<TestResponder>();
-
-            // CRITICAL: Refresh responders after runtime component addition
-            _relay.MmRefreshResponders();
+            // Use MmTestHierarchy for cleaner test setup
+            _hierarchy = MmTestHierarchy.CreateSingle<TestResponder>("TestObject");
+            _relay = _hierarchy.Root;
+            _responder = _hierarchy.GetRootResponder<TestResponder>();
         }
 
         [TearDown]
         public void TearDown()
         {
-            if (_testObject != null)
-            {
-                Object.DestroyImmediate(_testObject);
-            }
+            _hierarchy?.Dispose();
         }
 
         #region Basic Send Tests
@@ -107,16 +101,9 @@ namespace MercuryMessaging.Tests
         [UnityTest]
         public IEnumerator ToChildren_RoutesOnlyToChildren()
         {
-            // Arrange
-            var child = new GameObject("Child");
-            child.transform.SetParent(_testObject.transform);
-            var childRelay = child.AddComponent<MmRelayNode>();
-            var childResponder = child.AddComponent<TestResponder>();
-
-            // CRITICAL: Establish bidirectional routing relationship
-            childRelay.MmRefreshResponders();
-            childRelay.RefreshParents(); // Child discovers parent
-            _relay.MmAddToRoutingTable(childRelay, MmLevelFilter.Child); // Parent discovers child
+            // Arrange - add a child using MmTestHierarchy
+            var childRelay = _hierarchy.AddChild<TestResponder>("TestObject", "Child");
+            var childResponder = childRelay.GetComponent<TestResponder>();
 
             yield return null; // Wait for hierarchy setup
 
@@ -128,38 +115,32 @@ namespace MercuryMessaging.Tests
             // Assert
             Assert.AreEqual(0, _responder.StringMessagesReceived.Count, "Parent should not receive");
             Assert.AreEqual(1, childResponder.StringMessagesReceived.Count, "Child should receive");
-
-            // Cleanup
-            Object.DestroyImmediate(child);
         }
 
         [UnityTest]
         public IEnumerator ToParents_RoutesOnlyToParents()
         {
-            // Arrange
-            var parent = new GameObject("Parent");
-            _testObject.transform.SetParent(parent.transform);
-            var parentRelay = parent.AddComponent<MmRelayNode>();
-            var parentResponder = parent.AddComponent<TestResponder>();
+            // Arrange - Create a separate hierarchy with Parent/Child structure
+            using var parentHierarchy = MmTestHierarchy.Build("Parent")
+                .WithResponder<TestResponder>()
+                .AddChild<TestResponder>("Child")
+                .Build();
 
-            // CRITICAL: Establish bidirectional routing relationship
-            parentRelay.MmRefreshResponders();
-            parentRelay.MmAddToRoutingTable(_relay, MmLevelFilter.Child); // Parent discovers child FIRST
-            parentRelay.RefreshParents(); // THEN this calls _relay.AddParent(parentRelay)
+            var parentRelay = parentHierarchy.Root;
+            var parentResponder = parentHierarchy.GetRootResponder<TestResponder>();
+            var childRelay = parentHierarchy.GetNode("Child");
+            var childResponder = parentHierarchy.GetResponder<TestResponder>("Child");
 
             yield return null; // Wait for hierarchy setup
 
             // Act
-            _relay.Send("Test").ToParents().Execute();
+            childRelay.Send("Test").ToParents().Execute();
 
             yield return null; // Wait for message processing
 
             // Assert
-            Assert.AreEqual(0, _responder.StringMessagesReceived.Count, "Self should not receive");
+            Assert.AreEqual(0, childResponder.StringMessagesReceived.Count, "Self should not receive");
             Assert.AreEqual(1, parentResponder.StringMessagesReceived.Count, "Parent should receive");
-
-            // Cleanup
-            Object.DestroyImmediate(parent);
         }
 
         [Test]
@@ -184,7 +165,7 @@ namespace MercuryMessaging.Tests
         public void Active_FiltersInactiveObjects()
         {
             // Arrange
-            _testObject.SetActive(false);
+            _hierarchy.Root.gameObject.SetActive(false);
 
             // Act
             _relay.Send("Test").Active().Execute();
@@ -198,7 +179,7 @@ namespace MercuryMessaging.Tests
         public void IncludeInactive_AllowsInactiveObjects()
         {
             // Arrange
-            _testObject.SetActive(false);
+            _hierarchy.Root.gameObject.SetActive(false);
 
             // Act
             _relay.Send("Test").IncludeInactive().Execute();
@@ -208,7 +189,7 @@ namespace MercuryMessaging.Tests
                 "Inactive object should receive when IncludeInactive is used");
 
             // Restore active state
-            _testObject.SetActive(true);
+            _hierarchy.Root.gameObject.SetActive(true);
         }
 
         [Test]
@@ -434,7 +415,7 @@ namespace MercuryMessaging.Tests
         /// <summary>
         /// Test responder that tracks all received messages.
         /// </summary>
-        private class TestResponder : MmBaseResponder
+        internal class TestResponder : MmBaseResponder
         {
             public List<string> StringMessagesReceived = new();
             public List<bool> BoolMessagesReceived = new();

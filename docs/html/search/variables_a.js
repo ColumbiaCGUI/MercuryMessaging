@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['outputtype',['OutputType',['../class_mercury_messaging_1_1_support_1_1_data_1_1_mm_data_collector.html#a1d465e9c4f911c0dd7e6ad3caac58c7b',1,'MercuryMessaging::Support::Data::MmDataCollector']]]
+  ['key_0',['Key',['../class_mercury_messaging_1_1_standard_library_1_1_input_1_1_keyboard_handler_1_1_entry.html#af971cb3b34b07370a6ba1ce215b571cb',1,'MercuryMessaging::StandardLibrary::Input::KeyboardHandler::Entry']]]
 ];

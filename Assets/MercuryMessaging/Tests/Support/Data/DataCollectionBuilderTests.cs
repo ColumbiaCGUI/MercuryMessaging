@@ -87,8 +87,6 @@ namespace MercuryMessaging.Tests
         [Test]
         public void Collect_AddsDataItem()
         {
-            string capturedValue = null;
-
             _collector.Configure()
                 .Collect("TestItem", () => "TestValue")
                 .Build();

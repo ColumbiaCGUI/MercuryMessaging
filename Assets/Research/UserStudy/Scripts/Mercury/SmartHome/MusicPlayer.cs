@@ -26,7 +26,7 @@ namespace UserStudy.SmartHome.Mercury
             }
         }
 
-        void Update()
+        new void Update()
         {
             // Pulse visual feedback when music is playing
             if (isPlaying)

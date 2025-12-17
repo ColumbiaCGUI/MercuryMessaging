@@ -1,4 +1,4 @@
-// Copyright (c) 2017-2025, Columbia University
+﻿// Copyright (c) 2017-2025, Columbia University
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -27,7 +27,7 @@
 //
 // =============================================================
 // Authors:
-// Carmine Elvezio, Mengu Sukan, Steven Feiner, [Contributors]
+// Ben Yang, Carmine Elvezio, Mengu Sukan, Steven Feiner, [Contributors]
 // =============================================================
 //
 
@@ -42,7 +42,7 @@ namespace MercuryMessaging.Network
     /// Central orchestrator for MercuryMessaging network communication.
     ///
     /// MmNetworkBridge:
-    /// - Manages the active network backend (FishNet, Fusion, PUN2, etc.)
+    /// - Manages the active network backend (FishNet, Fusion 2)
     /// - Handles message serialization/deserialization via MmBinarySerializer
     /// - Resolves network IDs to GameObjects via IMmGameObjectResolver
     /// - Routes incoming network messages to the correct MmRelayNode
@@ -68,7 +68,7 @@ namespace MercuryMessaging.Network
             {
                 if (_instance == null)
                 {
-                    _instance = FindObjectOfType<MmNetworkBridge>();
+                    _instance = FindFirstObjectByType<MmNetworkBridge>();
                     if (_instance == null)
                     {
                         var go = new GameObject("MmNetworkBridge");
