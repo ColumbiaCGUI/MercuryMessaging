@@ -1,0 +1,89 @@
+cff-version: 1.2.0
+message: "If you use MercuryMessaging, please cite our CHI 2018 paper."
+title: "MercuryMessaging"
+abstract: "A hierarchical message routing framework for Unity that enables loosely-coupled communication between GameObjects through a message-based architecture."
+type: software
+authors:
+  - family-names: "Elvezio"
+    given-names: "Carmine"
+    affiliation: "Columbia University"
+  - family-names: "Sukan"
+    given-names: "Mengu"
+    affiliation: "Columbia University"
+  - family-names: "Feiner"
+    given-names: "Steven K."
+    affiliation: "Columbia University"
+repository-code: "https://github.com/ColumbiaCGUI/MercuryMessaging"
+url: "https://columbiacgui.github.io/MercuryMessaging/"
+license: BSD-3-Clause
+keywords:
+  - unity
+  - messaging
+  - game-development
+  - vr
+  - xr
+  - entity-component-system
+
+preferred-citation:
+  type: conference-paper
+  title: "Mercury: A Messaging Framework for Modular UI Components"
+  authors:
+    - family-names: "Elvezio"
+      given-names: "Carmine"
+    - family-names: "Sukan"
+      given-names: "Mengu"
+    - family-names: "Feiner"
+      given-names: "Steven K."
+  doi: "10.1145/3173574.3174162"
+  year: 2018
+  month: 4
+  collection-title: "Proceedings of the 2018 CHI Conference on Human Factors in Computing Systems"
+  collection-type: proceedings
+  conference:
+    name: "CHI '18"
+    city: "Montreal"
+    country: "CA"
+  publisher:
+    name: "ACM"
+    city: "New York"
+    country: "US"
+  start: 1
+  end: 12
+  pages: 12
+
+references:
+  - type: conference-paper
+    title: "An XR GUI for Visualizing Messages in ECS Architectures"
+    authors:
+      - family-names: "Yang"
+        given-names: "Ben"
+      - family-names: "He"
+        given-names: "Xichen"
+      - family-names: "Li"
+        given-names: "Jace"
+      - family-names: "Elvezio"
+        given-names: "Carmine"
+      - family-names: "Feiner"
+        given-names: "Steven K."
+    doi: "10.1109/ISMAR-Adjunct64951.2024.00189"
+    year: 2024
+    month: 10
+    collection-title: "2024 IEEE International Symposium on Mixed and Augmented Reality Adjunct (ISMAR-Adjunct)"
+    collection-type: proceedings
+    conference:
+      name: "IEEE ISMAR 2024"
+    publisher:
+      name: "IEEE"
+    start: 878
+    end: 879
+
+  - type: thesis
+    title: "XR Development with the Relay and Responder Pattern"
+    authors:
+      - family-names: "Elvezio"
+        given-names: "Carmine"
+    doi: "10.7916/D8-K5VE-HK48"
+    year: 2021
+    institution:
+      name: "Columbia University"
+    thesis-type: "PhD dissertation"
