@@ -64,26 +64,59 @@ relay.BroadcastValue(10).ToDescendants().Execute();
 
 ---
 
+## When to Use MercuryMessaging
+
+**VR/XR Applications:**
+```csharp
+// Hand controller triggers effect on all interactive objects in reach
+handRelay.Send(grabEvent).ToDescendants().OfType<IGrabbable>().Execute();
+```
+
+**Game State Management:**
+```csharp
+// Switch game state - only the active state receives messages
+gameManager.BroadcastSwitch("Gameplay");
+relay.Send(score).ToDescendants().Selected().Execute(); // Only Gameplay responders
+```
+
+**Network Synchronization:**
+```csharp
+// Automatically serialize and broadcast to all networked clients
+relay.Send(playerPosition).ToDescendants().Networked().Execute();
+```
+
+**UI Event Propagation:**
+```csharp
+// Menu button click notifies parent navigation controller
+menuRelay.NotifyComplete(); // Parents handle navigation flow
+```
+
+---
+
 ## Installation
 
-**Unity Package Manager (Git URL):**
+**Option 1: Release Package (Recommended)**
+1. Download the latest release from [Releases](https://github.com/ColumbiaCGUI/MercuryMessaging/releases)
+2. Import the `.unitypackage` into your project
+
+**Option 2: Unity Package Manager (Git URL)**
 ```
 https://github.com/ColumbiaCGUI/MercuryMessaging.git?path=Assets/MercuryMessaging
 ```
 
-**Manual Installation:**
-Download or clone the repository and copy `Assets/MercuryMessaging/` into your project's Assets folder.
+**Option 3: Manual Installation**
+Clone the repository and copy `Assets/MercuryMessaging/` into your project's Assets folder.
 
 ---
 
 ## Compatibility
 
-| Unity Version | Status |
-|---------------|--------|
-| Unity 6 (6000.x) | Tested |
-| Unity 2022.3 LTS | Recommended |
-| Unity 2021.3 LTS | Supported |
-| Unity 2020.3 | Legacy |
+| Unity Version | Release | Status |
+|---------------|---------|--------|
+| Unity 6 (6000.x) | v4.0.0 | Current |
+| Unity 2022.3 LTS | v3.0.0 | Recommended |
+| Unity 2021.3 LTS | v3.0.0 | Supported |
+| Unity 2020.3 | v2.0.0 | Legacy |
 
 **Platforms:** Windows, macOS, Linux, Android, iOS, WebGL, Quest 2/3, PC VR (OpenXR)
 
@@ -93,9 +126,11 @@ Download or clone the repository and copy `Assets/MercuryMessaging/` into your p
 
 ## Documentation
 
-- **[Wiki Tutorials](https://github.com/ColumbiaCGUI/MercuryMessaging/wiki/Tutorials)** - Step-by-step learning path
-- **[API Reference](https://columbiacgui.github.io/MercuryMessaging/)** - Complete API documentation
-- **[Examples](Assets/MercuryMessaging/Examples/)** - Demo scenes and sample code
+| Resource | Description |
+|----------|-------------|
+| **[📖 API Reference](https://columbiacgui.github.io/MercuryMessaging/)** | Complete API documentation (Doxygen) |
+| **[📚 Wiki Tutorials](https://github.com/ColumbiaCGUI/MercuryMessaging/wiki/Tutorials)** | Step-by-step learning path |
+| **[💡 Examples](Assets/MercuryMessaging/Examples/)** | Demo scenes and sample code |
 
 ---
 
