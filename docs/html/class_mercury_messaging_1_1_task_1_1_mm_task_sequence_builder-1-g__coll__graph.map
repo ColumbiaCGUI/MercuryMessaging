@@ -1,0 +1,38 @@
+<map id="MercuryMessaging.Task.MmTaskSequenceBuilder&lt; T &gt;" name="MercuryMessaging.Task.MmTaskSequenceBuilder&lt; T &gt;">
+<area shape="rect" id="Node000001" title="Fluent builder for configuring task sequences." alt="" coords="2021,233,2212,273"/>
+<area shape="rect" id="Node000002" href="$class_mercury_messaging_1_1_task_1_1_mm_task_manager-1-g.html" title="Class to manage a collection of tasks." alt="" coords="1692,233,1883,273"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1896,251,2021,251,2021,256,1896,256"/>
+<area shape="rect" id="Node000003" href="$class_mercury_messaging_1_1_mm_base_responder.html" title="MmResponder that implements a switch handling the framework&#45;provided MmMethods." alt="" coords="1021,210,1272,235"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="1286,223,1468,230,1668,240,1692,242,1692,247,1668,245,1468,235,1286,229"/>
+<area shape="rect" id="Node000004" href="$class_mercury_messaging_1_1_mm_responder.html" title="Base implmentation of IMmResponder." alt="" coords="404,206,624,231"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="638,217,1021,219,1021,225,638,222"/>
+<area shape="rect" id="Node000008" href="$class_mercury_messaging_1_1_mm_relay_node.html" title="Base routing node of Mercury XM." alt="" coords="776,125,997,150"/>
+<area shape="poly" id="edge8_Node000008_Node000004" title=" " alt="" coords="586,200,827,147,828,153,587,206"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="188,261,299,286"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="312,257,450,229,451,234,313,262"/>
+<area shape="rect" id="Node000016" href="$class_mercury_messaging_1_1_data_1_1_mm_data_path.html" title="Simplifies data file directory preparation/access." alt="" coords="419,263,609,303"/>
+<area shape="poly" id="edge18_Node000016_Node000005" title=" " alt="" coords="312,273,419,277,419,282,312,278"/>
+<area shape="rect" id="Node000006" href="$interface_mercury_messaging_1_1_i_mm_responder.html" title="The core of MercuryMessaging." alt="" coords="132,203,355,229"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="368,215,404,215,404,220,368,220"/>
+<area shape="rect" id="Node000007" href="$class_mercury_messaging_1_1_mm_relay_switch_node.html" title="an MmRelayNode with an FSM to allow for limited MmResponder selection in the MmRelayNode&#39;s MmRoutingT..." alt="" coords="1300,145,1491,185"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="1504,172,1585,183,1669,201,1746,231,1744,236,1667,207,1585,188,1504,177"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="1011,135,1137,137,1272,145,1300,148,1299,153,1272,151,1137,143,1011,140"/>
+<area shape="poly" id="edge15_Node000007_Node000008" title=" " alt="" coords="936,152,977,164,1022,173,1094,180,1167,181,1300,174,1300,179,1167,187,1094,185,1021,179,976,169,934,157"/>
+<area shape="rect" id="Node000009" href="$interface_mercury_messaging_1_1_i_mm_node.html" title="Defines methods required by an MmResponder &amp; utility methods making invocation MmMethods with built&#45;i..." alt="" coords="419,70,609,95"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="624,84,752,99,846,122,845,127,752,104,623,90"/>
+<area shape="rect" id="Node000010" href="$class_mercury_messaging_1_1_mm_circular_buffer-1-g.html" title="Fixed&#45;size circular buffer that automatically overwrites oldest entries Used for message history trac..." alt="" coords="413,125,615,165"/>
+<area shape="poly" id="edge10_Node000008_Node000010" title=" " alt="" coords="629,143,752,141,776,141,776,146,752,147,629,148"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="181,133,306,158"/>
+<area shape="poly" id="edge11_Node000010_Node000011" title=" " alt="" coords="320,143,413,143,413,148,320,148"/>
+<area shape="rect" id="Node000012" href="$class_mercury_messaging_1_1_mm_routing_table.html" title="A form of Reorderable List ReorderableList&lt;T&gt; specifically for all derivations of MmResponder." alt="" coords="413,5,615,45"/>
+<area shape="poly" id="edge12_Node000008_Node000012" title=" " alt="" coords="629,43,691,57,753,75,812,98,862,122,860,127,810,103,751,80,690,62,628,48"/>
+<area shape="rect" id="Node000013" href="$class_mercury_messaging_1_1_reorderable_list-1-g.html" title=" " alt="" coords="141,5,346,45"/>
+<area shape="poly" id="edge13_Node000012_Node000013" title=" " alt="" coords="360,23,412,23,412,28,360,28"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="5,13,83,38"/>
+<area shape="poly" id="edge14_Node000013_Node000014" title=" " alt="" coords="96,23,140,23,140,28,96,28"/>
+<area shape="rect" id="Node000015" href="$class_mercury_messaging_1_1_data_1_1_mm_task_user_configurator.html" title="User configuration script for use by MmDataCollector." alt="" coords="1052,263,1241,303"/>
+<area shape="poly" id="edge16_Node000002_Node000015" title=" " alt="" coords="1255,275,1692,255,1692,260,1255,280"/>
+<area shape="poly" id="edge17_Node000015_Node000016" title=" " alt="" coords="623,280,1052,280,1052,285,623,285"/>
+<area shape="rect" id="Node000017" href="$interface_mercury_messaging_1_1_task_1_1_i_mm_task_info_collection_loader-1-g.html" title="Defines interfaces for loading Task Info collections." alt="" coords="1296,331,1495,371"/>
+<area shape="poly" id="edge19_Node000002_Node000017" title=" " alt="" coords="1508,348,1588,340,1667,321,1717,298,1759,271,1761,276,1720,303,1669,327,1588,345,1509,353"/>
+</map>

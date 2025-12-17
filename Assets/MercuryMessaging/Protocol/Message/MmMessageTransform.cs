@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2017-2019, Columbia University
+﻿// Copyright (c) 2017-2025, Columbia University
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -27,11 +27,11 @@
 //  
 // =============================================================
 // Authors: 
-// Carmine Elvezio, Mengu Sukan, Samuel Silverman, Steven Feiner
+// Ben Yang, Carmine Elvezio, Mengu Sukan, Samuel Silverman, Steven Feiner
 // =============================================================
 //  
 //
-using System.Linq;
+using System;
 
 namespace MercuryMessaging
 {
@@ -134,14 +134,25 @@ namespace MercuryMessaging
         /// <summary>
         /// Serialize the MmMessageTransform
         /// </summary>
-        /// <param name="writer">Object array representation of a MmMessageTransform</param>
+        /// <returns>Object array representation of a MmMessageTransform</returns>
         public override object[] Serialize()
         {
             object[] baseSerialized = base.Serialize();
-            object[] thisSerialized = MmTransform.Serialize(); 
-            thisSerialized = thisSerialized.Concat(new object[] { LocalTransform }).ToArray();
-            object[] combinedSerialized = baseSerialized.Concat(thisSerialized).ToArray();
-            return combinedSerialized;
+            object[] transformSerialized = MmTransform.Serialize();
+
+            // Pre-allocate combined array: base + transform + 1 (LocalTransform)
+            object[] result = new object[baseSerialized.Length + transformSerialized.Length + 1];
+
+            // Copy base data using Array.Copy (no LINQ)
+            Array.Copy(baseSerialized, 0, result, 0, baseSerialized.Length);
+
+            // Copy transform data
+            Array.Copy(transformSerialized, 0, result, baseSerialized.Length, transformSerialized.Length);
+
+            // Fill LocalTransform directly
+            result[baseSerialized.Length + transformSerialized.Length] = LocalTransform;
+
+            return result;
         }
 	}
 }

@@ -1,0 +1,29 @@
+<map id="MercuryMessaging.Network.Backends.Fusion2TestManager" name="MercuryMessaging.Network.Backends.Fusion2TestManager">
+<area shape="rect" id="Node000001" title="Photon Fusion 2 integration test manager for MercuryMessaging." alt="" coords="1469,89,1675,129"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="188,43,299,69"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="298,37,397,14,455,6,513,3,1255,3,1295,5,1336,12,1414,33,1483,61,1536,87,1534,92,1481,66,1412,39,1335,17,1295,10,1255,8,513,8,455,11,398,20,300,42"/>
+<area shape="rect" id="Node000004" href="$class_mercury_messaging_1_1_mm_responder.html" title="Base implmentation of IMmResponder." alt="" coords="404,110,624,135"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="310,69,462,107,461,112,308,75"/>
+<area shape="rect" id="Node000012" href="$class_mercury_messaging_1_1_network_1_1_backends_1_1_fusion2_test_manager.html" title="Photon Fusion 2 integration test manager for MercuryMessaging." alt="" coords="1151,89,1356,129"/>
+<area shape="poly" id="edge13_Node000012_Node000002" title=" " alt="" coords="313,57,1127,100,1151,101,1150,107,1127,105,312,62"/>
+<area shape="rect" id="Node000003" href="$class_mercury_messaging_1_1_mm_relay_node.html" title="Base routing node of Mercury XM." alt="" coords="776,161,997,186"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="1011,176,1176,175,1266,171,1356,161,1435,146,1507,127,1509,132,1436,151,1356,167,1267,176,1176,181,1011,181"/>
+<area shape="poly" id="edge14_Node000012_Node000003" title=" " alt="" coords="973,156,1150,125,1151,130,974,161"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="638,130,752,144,828,158,827,163,752,149,637,135"/>
+<area shape="rect" id="Node000005" href="$interface_mercury_messaging_1_1_i_mm_responder.html" title="The core of MercuryMessaging." alt="" coords="132,110,355,135"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="368,120,404,120,404,125,368,125"/>
+<area shape="rect" id="Node000006" href="$interface_mercury_messaging_1_1_i_mm_node.html" title="Defines methods required by an MmResponder &amp; utility methods making invocation MmMethods with built&#45;i..." alt="" coords="419,290,609,315"/>
+<area shape="poly" id="edge6_Node000003_Node000006" title=" " alt="" coords="583,284,623,275,688,262,751,243,814,213,864,184,867,189,816,218,753,248,690,267,625,280,584,289"/>
+<area shape="rect" id="Node000007" href="$class_mercury_messaging_1_1_mm_circular_buffer-1-g.html" title="Fixed&#45;size circular buffer that automatically overwrites oldest entries Used for message history trac..." alt="" coords="413,225,615,265"/>
+<area shape="poly" id="edge7_Node000003_Node000007" title=" " alt="" coords="629,240,690,234,751,223,809,205,858,184,860,189,811,210,753,228,691,239,629,245"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="181,233,306,258"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="320,243,413,243,413,248,320,248"/>
+<area shape="rect" id="Node000009" href="$class_mercury_messaging_1_1_mm_routing_table.html" title="A form of Reorderable List ReorderableList&lt;T&gt; specifically for all derivations of MmResponder." alt="" coords="413,160,615,200"/>
+<area shape="poly" id="edge9_Node000003_Node000009" title=" " alt="" coords="629,175,775,173,775,178,629,181"/>
+<area shape="rect" id="Node000010" href="$class_mercury_messaging_1_1_reorderable_list-1-g.html" title=" " alt="" coords="141,160,346,200"/>
+<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="360,177,412,177,412,183,360,183"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="5,167,83,193"/>
+<area shape="poly" id="edge11_Node000010_Node000011" title=" " alt="" coords="96,177,140,177,140,183,96,183"/>
+<area shape="poly" id="edge12_Node000001_Node000012" title=" " alt="" coords="1370,107,1469,107,1469,112,1370,112"/>
+<area shape="poly" id="edge15_Node000012_Node000012" title=" " alt="" coords="1224,73,1234,66,1253,63,1270,65,1281,71,1285,80,1284,89,1278,88,1280,81,1277,74,1268,70,1253,68,1237,71,1227,77"/>
+</map>

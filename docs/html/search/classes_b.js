@@ -1,7 +1,4 @@
 var searchData=
 [
-  ['speechrecognitionresponder',['SpeechRecognitionResponder',['../class_speech_recognition_responder.html',1,'']]],
-  ['sphere1controller',['Sphere1Controller',['../class_mercury_messaging_1_1_tutorials_1_1_tutorial1_1_1_sphere1_controller.html',1,'MercuryMessaging::Tutorials::Tutorial1']]],
-  ['sphere2controller',['Sphere2Controller',['../class_mercury_messaging_1_1_tutorials_1_1_tutorial1_1_1_sphere2_controller.html',1,'MercuryMessaging::Tutorials::Tutorial1']]],
-  ['stateevents',['StateEvents',['../class_mercury_messaging_1_1_support_1_1_finite_state_machine_1_1_state_events.html',1,'MercuryMessaging::Support::FiniteStateMachine']]]
+  ['objectpool_2d1_2dg_0',['ObjectPool-1-g',['../class_mercury_messaging_1_1_network_1_1_object_pool-1-g.html',1,'MercuryMessaging::Network']]]
 ];

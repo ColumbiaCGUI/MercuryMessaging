@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2017-2019, Columbia University
+﻿// Copyright (c) 2017-2025, Columbia University
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -27,11 +27,13 @@
 //  
 // =============================================================
 // Authors: 
-// Carmine Elvezio, Mengu Sukan, Samuel Silverman, Steven Feiner
+// Ben Yang, Carmine Elvezio, Mengu Sukan, Samuel Silverman, Steven Feiner
 // =============================================================
-//  
-//  
-using MercuryMessaging.Support.Extensions;
+//
+//
+// Suppress CS0618: IMmSerializable is obsolete - kept for backward compatibility
+#pragma warning disable CS0618
+
 using UnityEngine;
 using System.Linq;
 

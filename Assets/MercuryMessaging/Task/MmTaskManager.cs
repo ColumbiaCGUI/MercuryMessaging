@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2017-2019, Columbia University
+﻿// Copyright (c) 2017-2025, Columbia University
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -27,14 +27,17 @@
 //  
 // =============================================================
 // Authors: 
-// Carmine Elvezio, Mengu Sukan, Steven Feiner
+// Ben Yang, Carmine Elvezio, Mengu Sukan, Steven Feiner
 // =============================================================
-//  
-//  
+//
+//
+// Suppress MM002: Self-only filter is intentional for task management operations
+#pragma warning disable MM002
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using MercuryMessaging.Support.Data;
+using MercuryMessaging.Data;
 using UnityEngine;
 
 namespace MercuryMessaging.Task
@@ -92,7 +95,7 @@ namespace MercuryMessaging.Task
         /// <summary>
         /// This should be an item placed on the same GameObject as the MmTaskManager itself
         /// </summary>
-	    private ITaskInfoCollectionLoader<U> taskInfoCollectionLoader;
+	    private IMmTaskInfoCollectionLoader<U> taskInfoCollectionLoader;
         
         /// <summary>
         /// Total number of task infos that have the same name.
@@ -111,7 +114,7 @@ namespace MercuryMessaging.Task
         /// Handle to the task info collection loader that is used to load the 
         /// task collection.
         /// </summary>
-	    public ITaskInfoCollectionLoader<U> TaskInfoCollectionLoader
+	    public IMmTaskInfoCollectionLoader<U> TaskInfoCollectionLoader
 	    {
 	        get { return taskInfoCollectionLoader; }
 	    }
@@ -126,7 +129,7 @@ namespace MercuryMessaging.Task
 	    {
             MmLogger.LogApplication("MmTaskManager Awake");
 
-            taskInfoCollectionLoader = GetComponent<ITaskInfoCollectionLoader<U>>();
+            taskInfoCollectionLoader = GetComponent<IMmTaskInfoCollectionLoader<U>>();
             MmTaskUserData = GetComponent<MmTaskUserConfigurator>();
         }
 

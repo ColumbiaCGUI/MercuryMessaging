@@ -1,0 +1,11 @@
+<map id="MercuryMessaging.Task.MmLookAtTaskInfo" name="MercuryMessaging.Task.MmLookAtTaskInfo">
+<area shape="rect" id="Node000001" title=" " alt="" coords="115,269,305,309"/>
+<area shape="rect" id="Node000002" href="$class_mercury_messaging_1_1_task_1_1_mm_transformation_task_info.html" title="A task info that supports tasks requiring 3D transformations meet particular requirements." alt="" coords="115,181,305,221"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="213,235,213,269,207,269,207,235"/>
+<area shape="rect" id="Node000003" href="$class_mercury_messaging_1_1_task_1_1_mm_task_info.html" title="MmTaskInfo contains basic information for tasks in the Mercury environment." alt="" coords="115,93,305,133"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="213,147,213,181,207,181,207,147"/>
+<area shape="rect" id="Node000004" href="$interface_mercury_messaging_1_1_task_1_1_i_mm_task_info.html" title="Interface defining structure with basic organizational information." alt="" coords="5,5,199,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="138,52,188,91,184,95,135,56"/>
+<area shape="rect" id="Node000005" href="$interface_mercury_messaging_1_1_task_1_1_i_mm_serializable.html" title="Interface defining serializable structure to be used in IMmMessages." alt="" coords="223,5,416,45"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="286,56,236,95,233,91,283,52"/>
+</map>

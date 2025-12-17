@@ -1,0 +1,15 @@
+<map id="MercuryMessaging.Task.MmLookAtTaskInfo" name="MercuryMessaging.Task.MmLookAtTaskInfo">
+<area shape="rect" id="Node000001" title=" " alt="" coords="792,77,983,117"/>
+<area shape="rect" id="Node000002" href="$class_mercury_messaging_1_1_task_1_1_mm_transformation_task_info.html" title="A task info that supports tasks requiring 3D transformations meet particular requirements." alt="" coords="552,27,743,67"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="756,67,793,75,792,80,755,72"/>
+<area shape="rect" id="Node000003" href="$class_mercury_messaging_1_1_task_1_1_mm_task_info.html" title="MmTaskInfo contains basic information for tasks in the Mercury environment." alt="" coords="248,7,439,47"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="453,31,552,38,551,43,452,36"/>
+<area shape="rect" id="Node000004" href="$interface_mercury_messaging_1_1_task_1_1_i_mm_task_info.html" title="Interface defining structure with basic organizational information." alt="" coords="5,5,199,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="212,23,248,23,248,29,212,29"/>
+<area shape="rect" id="Node000005" href="$interface_mercury_messaging_1_1_task_1_1_i_mm_serializable.html" title="Interface defining serializable structure to be used in IMmMessages." alt="" coords="5,71,199,111"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="190,65,267,44,268,49,192,70"/>
+<area shape="rect" id="Node000006" href="$class_mercury_messaging_1_1_task_1_1_mm_transform_task_threshold.html" title="This class contains transformation threshold information for MmTransformationTaskInfos." alt="" coords="248,72,439,112"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="212,89,248,89,248,94,212,94"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="453,95,552,99,743,99,792,98,792,103,743,104,552,104,452,100"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="452,75,528,64,551,60,552,66,528,69,453,80"/>
+</map>

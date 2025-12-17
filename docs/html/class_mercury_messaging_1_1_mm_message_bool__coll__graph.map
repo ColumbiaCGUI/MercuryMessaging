@@ -1,0 +1,9 @@
+<map id="MercuryMessaging.MmMessageBool" name="MercuryMessaging.MmMessageBool">
+<area shape="rect" id="Node000001" title="MmMessage with bool payload." alt="" coords="5,301,243,327"/>
+<area shape="rect" id="Node000002" href="$class_mercury_messaging_1_1_mm_message.html" title="Base class for messages passed through MmInvoke." alt="" coords="19,227,229,252"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="127,266,127,301,121,301,121,266"/>
+<area shape="rect" id="Node000003" href="$class_mercury_messaging_1_1_mm_metadata_block.html" title="MmMetadataBlock is a collection of settings allowing you to specify the precise invocation path of an..." alt="" coords="18,116,230,156"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="127,170,127,227,121,227,121,170"/>
+<area shape="rect" id="Node000004" href="$class_mercury_messaging_1_1_mm_routing_options.html" title="Configuration options for advanced message routing behavior." alt="" coords="23,5,225,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="127,59,127,116,121,116,121,59"/>
+</map>

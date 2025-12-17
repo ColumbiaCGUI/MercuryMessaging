@@ -1,4 +1,4 @@
-// Copyright (c) 2017-2019, Columbia University
+﻿// Copyright (c) 2017-2025, Columbia University
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -27,7 +27,7 @@
 //  
 // =============================================================
 // Authors: 
-// Carmine Elvezio, Mengu Sukan, Steven Feiner
+// Ben Yang, Carmine Elvezio, Mengu Sukan, Steven Feiner
 // =============================================================
 //  
 //  
@@ -39,7 +39,7 @@ namespace MercuryMessaging.Task
     /// Defines interfaces for loading Task Info collections.
     /// </summary>
     /// <typeparam name="U">Must be of type IMmTaskInfo</typeparam>
-    public interface ITaskInfoCollectionLoader<U> where U : class, IMmTaskInfo
+    public interface IMmTaskInfoCollectionLoader<U> where U : class, IMmTaskInfo
     {
         /// <summary>
         /// Prepare task by loading or generating appropriate file.
