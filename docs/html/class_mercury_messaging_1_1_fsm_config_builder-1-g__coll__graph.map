@@ -1,0 +1,13 @@
+<map id="MercuryMessaging.FsmConfigBuilder&lt; T &gt;" name="MercuryMessaging.FsmConfigBuilder&lt; T &gt;">
+<area shape="rect" id="Node000001" title="Fluent builder for configuring FiniteStateMachine event handlers." alt="" coords="155,335,354,375"/>
+<area shape="rect" id="Node000002" href="$class_mercury_messaging_1_1_finite_state_machine-1-g.html" title="Finite State Machine, supporting generic types states." alt="" coords="155,184,354,224"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="257,238,257,334,252,334,252,238"/>
+<area shape="rect" id="Node000003" href="$class_mercury_messaging_1_1_keyed_list-2-g.html" title=" " alt="" coords="55,95,249,135"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="186,141,234,182,231,186,183,146"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="5,13,139,38"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="94,46,137,93,133,96,90,50"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="163,5,301,45"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="208,57,171,96,167,93,204,53"/>
+<area shape="rect" id="Node000006" href="$interface_mercury_messaging_1_1_i_finite_state_machine-1-g.html" title="Defines required methods for a Finite State Machine." alt="" coords="273,95,444,135"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="327,146,279,186,275,182,324,141"/>
+</map>

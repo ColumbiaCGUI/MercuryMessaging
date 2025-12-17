@@ -1,0 +1,27 @@
+<map id="MercuryMessaging.MmTemporalBuilder" name="MercuryMessaging.MmTemporalBuilder">
+<area shape="rect" id="Node000001" title="Fluent builder for temporal message operations." alt="" coords="1115,195,1325,235"/>
+<area shape="rect" id="Node000002" href="$class_mercury_messaging_1_1_mm_relay_node.html" title="Base routing node of Mercury XM." alt="" coords="776,141,997,167"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="970,167,1115,193,1114,199,969,172"/>
+<area shape="rect" id="Node000003" href="$class_mercury_messaging_1_1_mm_responder.html" title="Base implmentation of IMmResponder." alt="" coords="404,29,624,55"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="638,54,696,66,753,82,816,110,867,139,864,144,814,115,751,87,695,71,637,59"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="188,5,299,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="313,21,404,30,403,35,312,27"/>
+<area shape="rect" id="Node000005" href="$interface_mercury_messaging_1_1_i_mm_responder.html" title="The core of MercuryMessaging." alt="" coords="132,55,355,80"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="368,53,404,50,404,55,368,58"/>
+<area shape="rect" id="Node000006" href="$interface_mercury_messaging_1_1_i_mm_node.html" title="Defines methods required by an MmResponder &amp; utility methods making invocation MmMethods with built&#45;i..." alt="" coords="419,79,609,104"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="623,92,687,97,753,107,807,122,855,139,853,144,806,127,751,113,687,103,623,97"/>
+<area shape="rect" id="Node000007" href="$class_mercury_messaging_1_1_mm_circular_buffer-1-g.html" title="Fixed&#45;size circular buffer that automatically overwrites oldest entries Used for message history trac..." alt="" coords="413,129,615,169"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="630,150,648,150,775,151,775,157,648,155,629,155"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="181,136,306,161"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="320,146,413,146,413,151,320,151"/>
+<area shape="rect" id="Node000009" href="$class_mercury_messaging_1_1_mm_routing_table.html" title="A form of Reorderable List ReorderableList&lt;T&gt; specifically for all derivations of MmResponder." alt="" coords="413,193,615,233"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="629,197,752,179,829,164,830,169,752,185,630,202"/>
+<area shape="rect" id="Node000010" href="$class_mercury_messaging_1_1_reorderable_list-1-g.html" title=" " alt="" coords="141,193,346,233"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="360,210,412,210,412,215,360,215"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="5,200,83,225"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="96,210,140,210,140,215,96,215"/>
+<area shape="rect" id="Node000012" href="$class_mercury_messaging_1_1_mm_metadata_block.html" title="MmMetadataBlock is a collection of settings allowing you to specify the precise invocation path of an..." alt="" coords="781,223,993,263"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="1006,242,1090,237,1121,233,1121,238,1091,242,1006,247"/>
+<area shape="rect" id="Node000013" href="$class_mercury_messaging_1_1_mm_routing_options.html" title="Configuration options for advanced message routing behavior." alt="" coords="413,257,615,297"/>
+<area shape="poly" id="edge12_Node000012_Node000013" title=" " alt="" coords="629,269,752,259,780,256,781,261,752,265,629,274"/>
+</map>

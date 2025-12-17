@@ -2,12 +2,12 @@
     "name": "Assets",
     "roots": ["Assets"],
     "includes": [],
-    "excludes": ["Assets/Temp/", "Assets/External/"],
+    "excludes": [],
     "options": {
         "types": true,
         "properties": true,
         "extended": false,
-        "dependencies": true
+        "dependencies": false
     },
     "baseScore": 999
 }

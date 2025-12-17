@@ -1,0 +1,26 @@
+var class_mercury_messaging_1_1_data_1_1_mm_message_history_cache =
+[
+    [ "CacheEntry", "class_mercury_messaging_1_1_data_1_1_mm_message_history_cache_1_1_cache_entry.html", "class_mercury_messaging_1_1_data_1_1_mm_message_history_cache_1_1_cache_entry" ],
+    [ "CacheStatistics", "struct_mercury_messaging_1_1_data_1_1_mm_message_history_cache_1_1_cache_statistics.html", "struct_mercury_messaging_1_1_data_1_1_mm_message_history_cache_1_1_cache_statistics" ],
+    [ "MmMessageHistoryCache", "class_mercury_messaging_1_1_data_1_1_mm_message_history_cache.html#a8fc070d08ee0fb0edfc6042ea5a84bd2", null ],
+    [ "Add", "class_mercury_messaging_1_1_data_1_1_mm_message_history_cache.html#a4177e30d21b8c7b406aa8afab73370ef", null ],
+    [ "Clear", "class_mercury_messaging_1_1_data_1_1_mm_message_history_cache.html#a32bd554931ba88d4d650348448efc12b", null ],
+    [ "Contains", "class_mercury_messaging_1_1_data_1_1_mm_message_history_cache.html#a31c01dbbde15fec38c1da9bbf2ee37bf", null ],
+    [ "EvictNow", "class_mercury_messaging_1_1_data_1_1_mm_message_history_cache.html#a01aa2816e140216166103c0f67b0bbae", null ],
+    [ "EvictOldEntries", "class_mercury_messaging_1_1_data_1_1_mm_message_history_cache.html#a800096714303adf060c2f8de11c369b4", null ],
+    [ "GetOldestEntryAge", "class_mercury_messaging_1_1_data_1_1_mm_message_history_cache.html#abc0de6be4dd24fe1b5fb2911543ec32f", null ],
+    [ "GetStatistics", "class_mercury_messaging_1_1_data_1_1_mm_message_history_cache.html#ac0d4d9bea25320f2843f9ab6a50941df", null ],
+    [ "ToString", "class_mercury_messaging_1_1_data_1_1_mm_message_history_cache.html#a82d5224508db7268ab95481fa1a2632d", null ],
+    [ "_addCount", "class_mercury_messaging_1_1_data_1_1_mm_message_history_cache.html#a0e298303a6596fcff12d07eee08d3d73", null ],
+    [ "_evictionCount", "class_mercury_messaging_1_1_data_1_1_mm_message_history_cache.html#acf8605dd701430b3d350acbf230e25be", null ],
+    [ "_evictionQueue", "class_mercury_messaging_1_1_data_1_1_mm_message_history_cache.html#afe20bd8be41076a5aa0e1e9cf430e2d6", null ],
+    [ "_lastEvictionCheck", "class_mercury_messaging_1_1_data_1_1_mm_message_history_cache.html#a4f08ff9b6dfce5f75995fefcd80b80c8", null ],
+    [ "_nodeMap", "class_mercury_messaging_1_1_data_1_1_mm_message_history_cache.html#a362d28f843670f54fd4bad83012ec4a1", null ],
+    [ "_visitedNodes", "class_mercury_messaging_1_1_data_1_1_mm_message_history_cache.html#a06eb076ec94af84cc5bd9b3970db1e4e", null ],
+    [ "_windowSizeSeconds", "class_mercury_messaging_1_1_data_1_1_mm_message_history_cache.html#a8317d9f1d89212c7f1d7e996297db032", null ],
+    [ "EVICTION_CHECK_INTERVAL", "class_mercury_messaging_1_1_data_1_1_mm_message_history_cache.html#ae00a83643427b67f231694500431e3fa", null ],
+    [ "AddCount", "class_mercury_messaging_1_1_data_1_1_mm_message_history_cache.html#a049cdf4cc1b498a764e74925133cf7fc", null ],
+    [ "Count", "class_mercury_messaging_1_1_data_1_1_mm_message_history_cache.html#ab43f72e3f23b3b65d20d5f6603632bff", null ],
+    [ "EvictionCount", "class_mercury_messaging_1_1_data_1_1_mm_message_history_cache.html#aac78f0247f96d3d1b29892179737ac36", null ],
+    [ "HitRate", "class_mercury_messaging_1_1_data_1_1_mm_message_history_cache.html#a6d65ffb4f7f694368c9137eac7d9b67b", null ]
+];

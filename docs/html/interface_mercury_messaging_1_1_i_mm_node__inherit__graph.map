@@ -1,0 +1,11 @@
+<map id="MercuryMessaging.IMmNode" name="MercuryMessaging.IMmNode">
+<area shape="rect" id="Node000001" title="Defines methods required by an MmResponder &amp; utility methods making invocation MmMethods with built&#45;i..." alt="" coords="5,63,196,88"/>
+<area shape="rect" id="Node000002" href="$class_mercury_messaging_1_1_mm_relay_node.html" title="Base routing node of Mercury XM." alt="" coords="244,63,465,88"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="210,73,244,73,244,78,210,78"/>
+<area shape="rect" id="Node000003" href="$class_mercury_messaging_1_1_mm_quick_node.html" title="Modification of the standard MmRelayNode that allows skipping of standard checks to allow for faster ..." alt="" coords="513,5,736,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="428,57,564,28,565,33,429,62"/>
+<area shape="rect" id="Node000004" href="$class_mercury_messaging_1_1_mm_relay_app_state_node.html" title="MmRelayNode for handling MmAppStateResponder." alt="" coords="529,55,720,95"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="479,73,529,73,529,78,479,78"/>
+<area shape="rect" id="Node000005" href="$class_mercury_messaging_1_1_mm_relay_switch_node.html" title="an MmRelayNode with an FSM to allow for limited MmResponder selection in the MmRelayNode&#39;s MmRoutingT..." alt="" coords="529,119,720,159"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="423,89,540,117,539,122,422,94"/>
+</map>

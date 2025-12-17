@@ -1,4 +1,4 @@
-// Copyright (c) 2017-2019, Columbia University
+﻿// Copyright (c) 2017-2025, Columbia University
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -27,7 +27,7 @@
 //  
 // =============================================================
 // Authors: 
-// Carmine Elvezio, Mengu Sukan, Steven Feiner
+// Ben Yang, Carmine Elvezio, Mengu Sukan, Steven Feiner
 // =============================================================
 //  
 //  
@@ -35,7 +35,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using MercuryMessaging.Support.Data;
+using MercuryMessaging.Data;
 using UnityEngine;
 #if NETFX_CORE
 using StreamReader = WinRTLegacy.IO.StreamReader;
@@ -47,13 +47,13 @@ using StreamReader = System.IO.StreamReader;
 namespace MercuryMessaging.Task
 {
     /// <summary>
-    /// Base implementation of ITaskInfoCollectionLoader, specifically for
+    /// Base implementation of IMmTaskInfoCollectionLoader, specifically for
     /// use in loading from file.
     /// </summary>
     /// <typeparam name="U">Must implement IMmTaskInfo, which contains 
     /// properties for basic data needed by Mercury Task Managers</typeparam>
     [RequireComponent(typeof(MmTaskUserConfigurator))]
-	public class MmTaskInfoCollectionFileLoader<U> : MonoBehaviour, ITaskInfoCollectionLoader<U>
+	public class MmTaskInfoCollectionFileLoader<U> : MonoBehaviour, IMmTaskInfoCollectionLoader<U>
         where U : class, IMmTaskInfo, new()
     {
         /// <summary>

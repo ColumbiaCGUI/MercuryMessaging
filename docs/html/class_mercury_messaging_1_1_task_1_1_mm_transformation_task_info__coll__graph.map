@@ -1,0 +1,12 @@
+<map id="MercuryMessaging.Task.MmTransformationTaskInfo" name="MercuryMessaging.Task.MmTransformationTaskInfo">
+<area shape="rect" id="Node000001" title="A task info that supports tasks requiring 3D transformations meet particular requirements." alt="" coords="116,205,307,245"/>
+<area shape="rect" id="Node000002" href="$class_mercury_messaging_1_1_task_1_1_mm_task_info.html" title="MmTaskInfo contains basic information for tasks in the Mercury environment." alt="" coords="9,95,200,135"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="135,143,195,203,191,207,131,147"/>
+<area shape="rect" id="Node000003" href="$interface_mercury_messaging_1_1_task_1_1_i_mm_task_info.html" title="Interface defining structure with basic organizational information." alt="" coords="5,5,199,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="106,59,107,94,101,95,100,59"/>
+<area shape="rect" id="Node000004" href="$interface_mercury_messaging_1_1_task_1_1_i_mm_serializable.html" title="Interface defining serializable structure to be used in IMmMessages." alt="" coords="223,5,416,45"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="261,53,152,97,150,92,259,48"/>
+<area shape="rect" id="Node000005" href="$class_mercury_messaging_1_1_task_1_1_mm_transform_task_threshold.html" title="This class contains transformation threshold information for MmTransformationTaskInfos." alt="" coords="224,95,415,135"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="322,59,322,95,317,95,317,59"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="293,146,232,207,228,203,289,142"/>
+</map>

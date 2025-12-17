@@ -1,0 +1,7 @@
+<map id="MercuryMessaging.MmGuiHandler" name="MercuryMessaging.MmGuiHandler">
+<area shape="rect" id="Node000001" title=" " alt="" coords="35,79,257,104"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,116,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="86,37,134,76,130,80,83,41"/>
+<area shape="rect" id="Node000003" href="$interface_mercury_messaging_1_1_i_mm_g_u_i.html" title="Defines interface for basic GUI requirements in Mercury." alt="" coords="140,5,323,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="209,41,162,80,158,76,206,37"/>
+</map>

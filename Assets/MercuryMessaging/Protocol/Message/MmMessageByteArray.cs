@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2017-2019, Columbia University
+﻿// Copyright (c) 2017-2025, Columbia University
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -27,11 +27,11 @@
 //  
 // =============================================================
 // Authors: 
-// Carmine Elvezio, Mengu Sukan, Samuel Silverman, Steven Feiner
+// Ben Yang, Carmine Elvezio, Mengu Sukan, Samuel Silverman, Steven Feiner
 // =============================================================
 //  
 //  
-using System.Linq;
+using System;
 
 namespace MercuryMessaging
 {
@@ -120,16 +120,32 @@ namespace MercuryMessaging
         /// Serialize the MmMessageByteArray
         /// </summary>
         /// <returns>Object array representation of a MmMessageByteArray</returns>
+        /// <remarks>
+        /// Optimized from O(n²) to O(n) by pre-allocating exact size instead of
+        /// repeatedly calling Concat().ToArray() in a loop.
+        /// </remarks>
         public override object[] Serialize()
 		{
             object[] baseSerialized = base.Serialize();
-            object[] thisSerialized = new object[] {byteArr.Length};
-            foreach (byte b in byteArr)
+
+            // Pre-allocate combined array: base + 1 (length) + byte array length
+            // This fixes O(n²) complexity from the foreach + Concat pattern
+            object[] result = new object[baseSerialized.Length + 1 + byteArr.Length];
+
+            // Copy base data using Array.Copy (no LINQ)
+            Array.Copy(baseSerialized, 0, result, 0, baseSerialized.Length);
+
+            // Fill length
+            result[baseSerialized.Length] = byteArr.Length;
+
+            // Fill byte array directly (no loop concatenation)
+            int idx = baseSerialized.Length + 1;
+            for (int i = 0; i < byteArr.Length; i++)
             {
-                thisSerialized = thisSerialized.Concat(new object[] { b }).ToArray();
+                result[idx + i] = byteArr[i];
             }
-            object[] combinedSerialized = baseSerialized.Concat(thisSerialized).ToArray();
-            return combinedSerialized;
+
+            return result;
 		}
     }
 }
