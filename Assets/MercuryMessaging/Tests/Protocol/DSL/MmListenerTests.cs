@@ -1,3 +1,6 @@
+// Suppress MM analyzer warnings - test code intentionally uses patterns that trigger warnings
+#pragma warning disable MM002, MM005, MM006, MM008, MM014, MM015
+
 // Copyright (c) 2017-2025, Columbia University
 // All rights reserved.
 // DSL Phase 2.1: Listener Pattern Unit Tests
@@ -622,32 +625,30 @@ namespace MercuryMessaging.Tests
         }
 
         /// <summary>
-        /// Test 24: Responder without relay node returns null/default safely.
+        /// Test 24: Responder with auto-added relay node (via [RequireComponent]) works correctly.
+        /// Note: MmBaseResponder has [RequireComponent(typeof(MmRelayNode))] so relay is always present.
         /// </summary>
         [Test]
-        public void Responder_NoRelayNode_ReturnsDefaultSafely()
+        public void Responder_WithAutoAddedRelayNode_WorksCorrectly()
         {
-            // Arrange - Create responder on object WITHOUT relay node
-            var orphanGO = new GameObject("OrphanResponder");
-            testObjects.Add(orphanGO);
-            var orphanResponder = orphanGO.AddComponent<MmBaseResponder>();
-            // Note: No MmRelayNode added!
+            // Arrange - Create responder, [RequireComponent] auto-adds MmRelayNode
+            var responderGO = new GameObject("ResponderWithAutoRelay");
+            testObjects.Add(responderGO);
+            var responder = responderGO.AddComponent<MmBaseResponder>();
 
-            // Act & Assert - Should not throw, returns default/null
-            var builder = orphanResponder.Listen<MmMessageFloat>();
+            // Verify relay was auto-added
+            Assert.IsNotNull(responderGO.GetComponent<MmRelayNode>(),
+                "MmRelayNode should be auto-added by [RequireComponent]");
 
-            // The default struct has null relay, so Execute() will log an error and return null
-            // We expect the error to be logged
-            LogAssert.Expect(LogType.Error, "[MmListener] Cannot create listener without a relay node");
-            var subscription = builder.OnReceived(_ => { }).Execute();
-            Assert.IsNull(subscription, "Listener on responder without relay should return null");
+            // Act - Create listeners (should work since relay is present)
+            var floatSub = responder.OnFloat(_ => { });
+            Assert.IsNotNull(floatSub, "OnFloat should return valid subscription with auto-added relay");
 
-            // Convenience methods return null silently (no error log) via null-conditional
-            var floatSub = orphanResponder.OnFloat(_ => { });
-            Assert.IsNull(floatSub, "OnFloat on orphan responder should return null");
+            // GetListenerCount should return 1
+            Assert.AreEqual(1, responder.GetListenerCount(), "Should have 1 listener");
 
-            // GetListenerCount should return 0
-            Assert.AreEqual(0, orphanResponder.GetListenerCount(), "Orphan responder should have 0 listeners");
+            // Cleanup
+            floatSub.Dispose();
         }
 
         /// <summary>

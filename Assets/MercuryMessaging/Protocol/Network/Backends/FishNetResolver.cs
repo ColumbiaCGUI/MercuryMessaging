@@ -1,4 +1,4 @@
-// Copyright (c) 2017-2025, Columbia University
+﻿// Copyright (c) 2017-2025, Columbia University
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -27,7 +27,7 @@
 //
 // =============================================================
 // Authors:
-// Carmine Elvezio, Mengu Sukan, Steven Feiner, [Contributors]
+// Ben Yang, Carmine Elvezio, Mengu Sukan, Steven Feiner, [Contributors]
 // =============================================================
 //
 
@@ -48,10 +48,10 @@ namespace MercuryMessaging.Network.Backends
     /// so this resolver checks both paths.
     /// </summary>
     /// <remarks>
-    /// Key differences from PUN2:
-    /// - PUN2 uses PhotonView.ViewID
-    /// - FishNet uses NetworkObject.ObjectId
-    /// - FishNet has separate server/client spawned dictionaries
+    /// FishNet specifics:
+    /// - Uses NetworkObject.ObjectId for identification
+    /// - Has separate server/client spawned dictionaries
+    /// - Compare with Fusion2Resolver which uses NetworkObject.Id.Raw
     /// </remarks>
     public class FishNetResolver : IMmGameObjectResolver
     {

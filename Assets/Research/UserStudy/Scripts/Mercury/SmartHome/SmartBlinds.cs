@@ -26,7 +26,7 @@ namespace UserStudy.SmartHome.Mercury
             TagCheckEnabled = true;
         }
 
-        void Update()
+        new void Update()
         {
             // Smoothly animate blind position
             if (Mathf.Abs(currentPosition - targetPosition) > 0.01f)

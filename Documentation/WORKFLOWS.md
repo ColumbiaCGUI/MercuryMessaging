@@ -302,7 +302,3 @@ relay.Respond(queryId, 42);
 For comprehensive DSL coverage including all extension methods:
 
 @./DSL/README.md
-
-For tutorial examples:
-
-@./Tutorials/DSL_QUICK_START.md

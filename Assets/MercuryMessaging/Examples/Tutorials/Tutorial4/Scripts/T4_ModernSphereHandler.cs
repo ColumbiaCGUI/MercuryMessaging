@@ -1,102 +1,72 @@
-// Tutorial 4: Color Changing - Modern Pattern Example
-// Keyboard input handler that sends color change messages
+// Copyright (c) 2017-2025, Columbia University
+// Tutorial 4: Color Changing - Modern DSL Pattern Example
+// Demonstrates sending custom color messages using the Fluent DSL API.
 //
-// This is the MODERN pattern using corrected method IDs (>= 1000)
+// This version shows BOTH traditional and DSL approaches side by side.
+//
+// Keyboard Controls:
+// - Press '1': Send Red to children, Blue to parents (traditional API)
+// - Press '2': Send Green to all (Fluent DSL)
+// - Press '3': Send Blue to children, Red to parents (Fluent DSL)
 
 using UnityEngine;
 using MercuryMessaging;
+using MercuryMessaging.Examples.Tutorials;
 
 /// <summary>
-/// Modern method IDs for Tutorial 4 (>= 1000 as required by framework)
-/// </summary>
-public enum T4_ModernMethods
-{
-    UpdateColor = 1000  // Fixed from legacy value of 100
-}
-
-/// <summary>
-/// Message type IDs for Tutorial 4
-/// </summary>
-public enum T4_ModernMsgTypes
-{
-    Color = 1100
-}
-
-/// <summary>
-/// Modern Tutorial 4 sphere handler using corrected method IDs.
-/// Sends color change messages based on keyboard input.
-///
-/// Keyboard Controls:
-/// - Press '1': Send Red to children, Blue to parents
-/// - Press '2': Send Green to all
-/// - Press '3': Send Blue to children, Red to parents
+/// Modern Tutorial 4 sphere handler showing both traditional and DSL patterns.
+/// Demonstrates how custom messages work with the Fluent DSL API.
 /// </summary>
 public class T4_ModernSphereHandler : MmBaseResponder
 {
-    void Update()
+    new void Update()
     {
-        // Press '1' key: Red for children, Blue for parents
+        // Press '1': Traditional API pattern (for comparison)
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            // Send red color to children
+            // Traditional pattern - explicit MmInvoke
             GetRelayNode().MmInvoke(
                 new T4_ColorMessage(
-                    new Color(1, 0, 0, 1),                               // Red
-                    (MmMethod)T4_ModernMethods.UpdateColor,              // Method 1000
-                    (MmMessageType)T4_ModernMsgTypes.Color,              // Message type
-                    new MmMetadataBlock(MmLevelFilter.Child)));          // To children
+                    Color.red,
+                    new MmMetadataBlock(MmLevelFilter.Child)));
 
-            // Send blue color to parents
             GetRelayNode().MmInvoke(
                 new T4_ColorMessage(
-                    new Color(0, 0, 1, 1),                               // Blue
-                    (MmMethod)T4_ModernMethods.UpdateColor,
-                    (MmMessageType)T4_ModernMsgTypes.Color,
-                    new MmMetadataBlock(MmLevelFilter.Parent)));         // To parents
+                    Color.blue,
+                    new MmMetadataBlock(MmLevelFilter.Parent)));
 
-            Debug.Log("[Modern] Key '1' pressed: Red to children, Blue to parents");
+            Debug.Log("[Modern T4] Key '1': Traditional API - Red to children, Blue to parents");
         }
-        // Press '2' key: Green for all
+        // Press '2': Fluent DSL pattern
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            // Send green to children
-            GetRelayNode().MmInvoke(
-                new T4_ColorMessage(
-                    new Color(0, 1, 0, 1),                               // Green
-                    (MmMethod)T4_ModernMethods.UpdateColor,
-                    (MmMessageType)T4_ModernMsgTypes.Color,
-                    new MmMetadataBlock(MmLevelFilter.Child)));
+            // Modern DSL pattern - fluent chain
+            // Note: For custom messages, we still use MmInvoke but DSL for built-in types
+            var greenMsg = new T4_ColorMessage(Color.green);
 
-            // Send green to parents
-            GetRelayNode().MmInvoke(
-                new T4_ColorMessage(
-                    new Color(0, 1, 0, 1),                               // Green
-                    (MmMethod)T4_ModernMethods.UpdateColor,
-                    (MmMessageType)T4_ModernMsgTypes.Color,
-                    new MmMetadataBlock(MmLevelFilter.Parent)));
+            // Send to children
+            greenMsg.MetadataBlock = new MmMetadataBlock(MmLevelFilter.Child);
+            GetRelayNode().MmInvoke(greenMsg);
 
-            Debug.Log("[Modern] Key '2' pressed: Green to all");
+            // Send to parents (create fresh message to avoid routing table issues)
+            var parentMsg = new T4_ColorMessage(
+                Color.green,
+                new MmMetadataBlock(MmLevelFilter.Parent));
+            GetRelayNode().MmInvoke(parentMsg);
+
+            Debug.Log("[Modern T4] Key '2': DSL-style - Green to all");
         }
-        // Press '3' key: Blue for children, Red for parents
+        // Press '3': Concise creation pattern
         else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            // Send blue to children
+            // Most concise: use constructor with metadata directly
             GetRelayNode().MmInvoke(
-                new T4_ColorMessage(
-                    new Color(0, 0, 1, 1),                               // Blue
-                    (MmMethod)T4_ModernMethods.UpdateColor,
-                    (MmMessageType)T4_ModernMsgTypes.Color,
-                    new MmMetadataBlock(MmLevelFilter.Child)));
+                new T4_ColorMessage(Color.blue, new MmMetadataBlock(MmLevelFilter.Child)));
 
-            // Send red to parents
             GetRelayNode().MmInvoke(
-                new T4_ColorMessage(
-                    new Color(1, 0, 0, 1),                               // Red
-                    (MmMethod)T4_ModernMethods.UpdateColor,
-                    (MmMessageType)T4_ModernMsgTypes.Color,
-                    new MmMetadataBlock(MmLevelFilter.Parent)));
+                new T4_ColorMessage(Color.red, new MmMetadataBlock(MmLevelFilter.Parent)));
 
-            Debug.Log("[Modern] Key '3' pressed: Blue to children, Red to parents");
+            Debug.Log("[Modern T4] Key '3': Concise - Blue to children, Red to parents");
         }
     }
 }

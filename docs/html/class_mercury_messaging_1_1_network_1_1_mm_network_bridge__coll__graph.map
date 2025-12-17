@@ -1,0 +1,9 @@
+<map id="MercuryMessaging.Network.MmNetworkBridge" name="MercuryMessaging.Network.MmNetworkBridge">
+<area shape="rect" id="Node000001" title="Central orchestrator for MercuryMessaging network communication." alt="" coords="5,191,192,231"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="38,5,149,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="97,45,101,190,95,190,91,45"/>
+<area shape="rect" id="Node000003" href="$class_mercury_messaging_1_1_network_1_1_mm_network_bridge.html" title="Central orchestrator for MercuryMessaging network communication." alt="" coords="115,80,301,120"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="122,36,182,78,179,82,119,41"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="181,131,120,192,116,188,178,128"/>
+<area shape="poly" id="edge4_Node000003_Node000003" title=" " alt="" coords="316,92,328,100,320,107,302,110,301,105,318,102,323,100,314,97"/>
+</map>

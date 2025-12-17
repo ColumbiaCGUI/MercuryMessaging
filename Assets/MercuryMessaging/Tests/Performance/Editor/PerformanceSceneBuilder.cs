@@ -1,3 +1,6 @@
+// Suppress MM analyzer warnings - test code intentionally uses patterns that trigger warnings
+#pragma warning disable MM002, MM005, MM006, MM008, MM014, MM015
+
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -17,7 +20,7 @@ namespace MercuryMessaging.Tests.Performance.Editor
         private bool createMediumScale = true;
         private bool createLargeScale = true;
 
-        [MenuItem("Mercury/Performance/Build Test Scenes")]
+        [MenuItem("MercuryMessaging/Performance/Build Test Scenes")]
         public static void ShowWindow()
         {
             GetWindow<PerformanceSceneBuilder>("Build Performance Scenes");

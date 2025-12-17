@@ -4,6 +4,9 @@
 // MmRoutingBuilder.cs - Property-based routing builder for shorter DSL syntax
 // Part of DSL Phase 1: Shorter Syntax
 
+// Suppress MM015: Filter equality checks are intentional for exact match routing logic
+#pragma warning disable MM015
+
 using System.Runtime.CompilerServices;
 using UnityEngine;
 

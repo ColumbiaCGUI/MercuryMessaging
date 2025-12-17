@@ -1,4 +1,4 @@
-// Copyright (c) 2017-2019, Columbia University
+﻿// Copyright (c) 2017-2025, Columbia University
 // All rights reserved.
 // QW-5: Remove LINQ Allocations - Validation Tests
 // Tests manual foreach implementations match original LINQ behavior

@@ -473,7 +473,7 @@ Based on test results and code analysis:
 
 ### 7.3 Long-term Improvements
 
-See `dev/active/framework-analysis/framework-analysis-tasks.md` for:
+See `dev/archive/framework-analysis/` for:
 - **Routing optimization (420h)** - Advanced filters, O(1) routing tables, spatial indexing
 - **Network performance (500h)** - Delta state tracking, compression, bandwidth optimization
 - **Visual composer (360h)** - Editor tools for hierarchy design and message flow visualization

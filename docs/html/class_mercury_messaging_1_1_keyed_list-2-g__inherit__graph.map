@@ -1,0 +1,9 @@
+<map id="MercuryMessaging.KeyedList&lt; K, V &gt;" name="MercuryMessaging.KeyedList&lt; K, V &gt;">
+<area shape="rect" id="Node000001" title=" " alt="" coords="55,93,249,133"/>
+<area shape="rect" id="Node000004" href="$class_mercury_messaging_1_1_finite_state_machine-1-g.html" title="Finite State Machine, supporting generic types states." alt="" coords="53,181,251,221"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="155,147,155,181,149,181,149,147"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,13,139,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="94,46,136,91,132,95,90,50"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="163,5,301,45"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="207,57,172,95,168,91,203,54"/>
+</map>

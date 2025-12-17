@@ -1,9 +1,11 @@
+// Suppress MM analyzer warnings - test code intentionally uses patterns that trigger warnings
+#pragma warning disable MM002, MM005, MM006, MM008, MM014, MM015
+
 // Copyright (c) 2017-2025, Columbia University
 // All rights reserved.
 //
 // NetworkExtensionsTests.cs - Tests for Network DSL Extensions
 // Part of DSL Overhaul Phase 5
-
 
 using NUnit.Framework;
 using UnityEngine;

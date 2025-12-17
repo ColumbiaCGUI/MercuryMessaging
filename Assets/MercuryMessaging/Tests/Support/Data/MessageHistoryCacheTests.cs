@@ -1,4 +1,4 @@
-// Copyright (c) 2017-2019, Columbia University
+﻿// Copyright (c) 2017-2025, Columbia University
 // All rights reserved.
 //
 // Unit tests for MmMessageHistoryCache (LRU cache with time-based eviction)

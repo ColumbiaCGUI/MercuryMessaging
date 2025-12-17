@@ -1,4 +1,4 @@
-// Copyright (c) 2017-2025, Columbia University
+﻿// Copyright (c) 2017-2025, Columbia University
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -27,7 +27,7 @@
 //
 // =============================================================
 // Authors:
-// Carmine Elvezio, Mengu Sukan, Steven Feiner, [Contributors]
+// Ben Yang, Carmine Elvezio, Mengu Sukan, Steven Feiner, [Contributors]
 // =============================================================
 //
 
@@ -132,7 +132,7 @@ namespace MercuryMessaging.Network
         int LocalClientId { get; }
 
         /// <summary>
-        /// Human-readable name of this backend (e.g., "FishNet", "Fusion2", "PUN2").
+        /// Human-readable name of this backend (e.g., "FishNet", "Fusion2").
         /// </summary>
         string BackendName { get; }
 

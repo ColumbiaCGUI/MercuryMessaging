@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2017-2019, Columbia University
+﻿// Copyright (c) 2017-2025, Columbia University
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -27,10 +27,21 @@
 //  
 // =============================================================
 // Authors: 
-// Carmine Elvezio, Mengu Sukan, Steven Feiner
+// Ben Yang, Carmine Elvezio, Mengu Sukan, Steven Feiner
 // =============================================================
-//  
-//  
+//
+//
+// Suppress CS0618: IMmSerializable is obsolete - kept for backward compatibility
+#pragma warning disable CS0618
+// Suppress MM002: Self-only filter is intentional for recursive routing and routing table registration
+#pragma warning disable MM002
+// Suppress MM009: MmRelayNode IS the base router - it handles routing directly, not via base.MmInvoke
+#pragma warning disable MM009
+// Suppress MM014: MmRefreshResponders is a utility method, not a message handler
+#pragma warning disable MM014
+// Suppress MM015: Filter equality checks are intentional for exact match routing logic
+#pragma warning disable MM015
+
 using System.Collections.Generic;
 using System.Collections;
 using System.Runtime.CompilerServices;
@@ -44,9 +55,45 @@ using UnityEngine;
 namespace MercuryMessaging
 {
     /// <summary>
+    /// Flags controlling which routing checks to perform during message dispatch.
+    /// Disable specific checks for performance at the cost of filtering capability.
+    /// </summary>
+    /// <remarks>
+    /// Use EnabledChecks on MmRelayNode to control which filters are applied:
+    /// <code>
+    /// // Full filtering (default, backward compatible)
+    /// relay.EnabledChecks = MmRoutingChecks.All;
+    ///
+    /// // Skip tag checks only (common optimization)
+    /// relay.EnabledChecks = MmRoutingChecks.All &amp; ~MmRoutingChecks.Tag;
+    ///
+    /// // Skip ALL checks (equivalent to old MmQuickNode behavior)
+    /// relay.EnabledChecks = MmRoutingChecks.None;
+    /// </code>
+    /// </remarks>
+    [System.Flags]
+    public enum MmRoutingChecks
+    {
+        /// <summary>No routing checks performed - messages go to all responders.</summary>
+        None = 0,
+        /// <summary>Level filter check (Child/Parent/Self routing).</summary>
+        Level = 1,
+        /// <summary>Active filter check (active GameObjects only).</summary>
+        Active = 2,
+        /// <summary>Selected filter check (FSM state selection).</summary>
+        Selected = 4,
+        /// <summary>Tag filter check (tag-based routing).</summary>
+        Tag = 8,
+        /// <summary>Network filter check (local vs network messages).</summary>
+        Network = 16,
+        /// <summary>All routing checks enabled (default).</summary>
+        All = Level | Active | Selected | Tag | Network
+    }
+
+    /// <summary>
     /// Base routing node of Mercury XM.
     /// Contains a list of MmResponders and sends MmMessages
-    /// to responders in list, following the specifications of 
+    /// to responders in list, following the specifications of
     /// control blocks to MmInvoke method.
     /// </summary>
 	public class MmRelayNode : MmResponder, IMmNode
@@ -74,6 +121,19 @@ namespace MercuryMessaging
         /// </summary>
         [Tooltip("Enable fail-fast behavior: throws exceptions instead of silent failures")]
         public static bool StrictMode = false;
+
+        /// <summary>
+        /// Controls which routing checks are performed during message dispatch.
+        /// Default: All checks enabled. Disable specific checks for performance.
+        /// WARNING: Disabling checks means messages bypass those filters entirely.
+        /// </summary>
+        /// <remarks>
+        /// Setting EnabledChecks to None makes this node behave like the legacy MmQuickNode,
+        /// bypassing all filtering and sending messages to all registered responders.
+        /// </remarks>
+        [Header("Routing Check Settings")]
+        [Tooltip("Which routing checks to perform. Disable for performance at cost of filtering.")]
+        public MmRoutingChecks EnabledChecks = MmRoutingChecks.All;
 
         // The position of the graph node in the graph view.
         public Vector2 nodePosition = new Vector2(0, 0);
@@ -1481,28 +1541,37 @@ namespace MercuryMessaging
 			MmSelectedFilter selectedFilter, MmNetworkFilter networkFilter,
             MmRoutingTableItem mmRoutingTableItem, MmMessage message)
 		{
-            // Phase 8: Fast-path tag check - skip entirely if no responders care about tags
-            // OR if message tag is Everything (which always passes)
-            if (HasTagCheckEnabledResponders && message.MetadataBlock.Tag != MmTagHelper.Everything)
+            // Q1-Q3: Use EnabledChecks flags to control which routing checks are performed.
+            // When EnabledChecks == None, all messages pass to all responders (MmQuickNode behavior).
+
+            // Tag check (only if enabled and responders care about tags)
+            if ((EnabledChecks & MmRoutingChecks.Tag) != 0
+                && HasTagCheckEnabledResponders
+                && message.MetadataBlock.Tag != MmTagHelper.Everything)
             {
                 if (!TagCheck(mmRoutingTableItem, message)) return false;
             }
 
-            // Phase 8: Fast-path level check (inline for common case)
-            if ((levelFilter & mmRoutingTableItem.Level) == 0) return false;
+            // Level check (only if enabled) - inline for common case
+            if ((EnabledChecks & MmRoutingChecks.Level) != 0)
+            {
+                if ((levelFilter & mmRoutingTableItem.Level) == 0) return false;
+            }
 
-            // Phase 8: Fast-path active check - skip method call when filter is All
-            if (activeFilter != MmActiveFilter.All)
+            // Active check (only if enabled and filter is not All)
+            if ((EnabledChecks & MmRoutingChecks.Active) != 0 && activeFilter != MmActiveFilter.All)
             {
                 if (!ActiveCheck(activeFilter, mmRoutingTableItem.Responder)) return false;
             }
 
-            // SelectedCheck always returns true in base MmRelayNode (MmRelaySwitchNode overrides)
-            // Still call for compatibility with overrides
-            if (!SelectedCheck(selectedFilter, mmRoutingTableItem.Responder)) return false;
+            // Selected check (only if enabled) - MmRelaySwitchNode overrides this
+            if ((EnabledChecks & MmRoutingChecks.Selected) != 0)
+            {
+                if (!SelectedCheck(selectedFilter, mmRoutingTableItem.Responder)) return false;
+            }
 
-            // NetworkCheck only needed for deserialized messages
-            if (message.IsDeserialized)
+            // Network check (only if enabled and message is from network)
+            if ((EnabledChecks & MmRoutingChecks.Network) != 0 && message.IsDeserialized)
             {
                 if (!NetworkCheck(mmRoutingTableItem, message)) return false;
             }

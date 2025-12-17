@@ -1,0 +1,15 @@
+<map id="MercuryMessaging.StandardLibrary.Animation.MaterialChanger&lt; T, TI &gt;" name="MercuryMessaging.StandardLibrary.Animation.MaterialChanger&lt; T, TI &gt;">
+<area shape="rect" id="Node000001" title=" " alt="" coords="31,295,252,349"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="65,191,175,217"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="127,230,139,294,134,295,122,231"/>
+<area shape="rect" id="Node000003" href="$class_mercury_messaging_1_1_finite_state_machine-1-g.html" title="Finite State Machine, supporting generic types states." alt="" coords="199,184,398,224"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="264,234,179,297,175,292,261,230"/>
+<area shape="rect" id="Node000004" href="$class_mercury_messaging_1_1_keyed_list-2-g.html" title=" " alt="" coords="55,95,249,135"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="197,139,268,182,266,186,194,144"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="5,13,139,38"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="94,46,137,93,133,96,90,50"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="163,5,301,45"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="208,57,171,96,167,93,204,53"/>
+<area shape="rect" id="Node000007" href="$interface_mercury_messaging_1_1_i_finite_state_machine-1-g.html" title="Defines required methods for a Finite State Machine." alt="" coords="273,95,444,135"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="340,147,314,185,309,182,336,144"/>
+</map>

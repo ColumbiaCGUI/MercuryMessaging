@@ -1,749 +1,359 @@
-# MercuryMessaging Fluent DSL API Guide
+# Fluent DSL API Guide
 
-## Overview
-
-The Fluent DSL provides a modern, chainable API for MercuryMessaging that reduces code verbosity by **70%** while maintaining full type safety and zero allocation overhead.
-
-## Quick Start
-
-```csharp
-using MercuryMessaging;
-
-// Traditional API (7 lines)
-var metadata = new MmMetadataBlock(
-    MmLevelFilter.Child,
-    MmActiveFilter.Active,
-    MmSelectedFilter.All,
-    MmNetworkFilter.Local
-);
-relay.MmInvoke(MmMethod.MessageInt, 42, metadata);
-
-// Fluent DSL (1 line)
-relay.Send(MmMethod.MessageInt, 42).ToChildren().Active().Execute();
-```
+Comprehensive reference for the MercuryMessaging Fluent DSL API.
 
 ---
 
-## Unified Messaging API (NEW)
+## Table of Contents
 
-The unified API provides **identical methods** for both `MmRelayNode` and `MmBaseResponder`, organized into two tiers:
+1. [Tier 1: Auto-Execute Methods](#tier-1-auto-execute-methods)
+2. [Tier 2: Fluent Chain Methods](#tier-2-fluent-chain-methods)
+3. [Routing Methods](#routing-methods)
+4. [Filter Methods](#filter-methods)
+5. [Predicate Methods](#predicate-methods)
+6. [Temporal Methods](#temporal-methods)
+7. [Query/Response Pattern](#queryresponse-pattern)
+8. [Migration Guide](#migration-guide)
+9. [Performance Notes](#performance-notes)
 
-### Two-Tier Design
+---
 
-| Tier | Description | When to Use |
-|------|-------------|-------------|
-| **Tier 1** | Auto-execute methods (`BroadcastInitialize()`, `NotifyComplete()`) | Quick, common operations |
-| **Tier 2** | Fluent chain with `.Execute()` (`Send().ToDescendants().Execute()`) | Full control over routing |
+## Tier 1: Auto-Execute Methods
 
-### Tier 1: Auto-Execute Methods
+Simple methods that execute immediately without calling `.Execute()`.
 
-These methods execute immediately - no `.Execute()` needed:
+### Broadcast Methods (Down)
+
+Send messages DOWN to descendants.
 
 ```csharp
-using MercuryMessaging;
+// Standard methods
+relay.BroadcastInitialize();              // MmMethod.Initialize
+relay.BroadcastRefresh();                 // MmMethod.Refresh
+relay.BroadcastSetActive(true);           // MmMethod.SetActive with bool
+relay.BroadcastSwitch("StateName");       // MmMethod.Switch with string
 
-// Broadcast DOWN to descendants (matches MmMethod enum names)
-relay.BroadcastInitialize();       // → MmMethod.Initialize
-relay.BroadcastRefresh();          // → MmMethod.Refresh
-relay.BroadcastSetActive(true);    // → MmMethod.SetActive
-relay.BroadcastSwitch("MenuState"); // → MmMethod.Switch
-relay.BroadcastValue(42);          // → MmMethod.MessageInt
-relay.BroadcastValue(3.14f);       // → MmMethod.MessageFloat
-relay.BroadcastValue("hello");     // → MmMethod.MessageString
-relay.BroadcastValue(true);        // → MmMethod.MessageBool
-
-// Notify UP to parents/ancestors
-relay.NotifyComplete();            // → MmMethod.Complete to parents
-relay.NotifyValue(100);            // → MmMethod.MessageInt to parents
-relay.NotifyValue("done");         // → MmMethod.MessageString to parents
+// Value methods (auto-detect type)
+relay.BroadcastValue(true);               // MmMethod.MessageBool
+relay.BroadcastValue(42);                 // MmMethod.MessageInt
+relay.BroadcastValue(3.14f);              // MmMethod.MessageFloat
+relay.BroadcastValue("hello");            // MmMethod.MessageString
+relay.BroadcastValue(new Vector3(1,2,3)); // MmMethod.MessageVector3
 ```
 
-### Works on Responders Too!
+### Notify Methods (Up)
 
-The same API works on `MmBaseResponder` (null-safe):
+Send messages UP to parents/ancestors.
+
+```csharp
+relay.NotifyComplete();                   // MmMethod.Complete to parents
+relay.NotifyValue(42);                    // Value to parents
+relay.NotifyValue("status");              // String to parents
+relay.NotifyValue(true);                  // Bool to parents
+```
+
+### Responder Support
+
+All Tier 1 methods work on `MmBaseResponder` too:
 
 ```csharp
 public class MyResponder : MmBaseResponder
 {
-    public void StartTask()
+    void DoSomething()
     {
-        // Tier 1: Same methods, same behavior!
+        // These work identically to relay node methods!
         this.BroadcastInitialize();
-        this.BroadcastValue("task started");
-    }
-
-    public void FinishTask()
-    {
         this.NotifyComplete();
-        this.NotifyValue(100);  // Report final score
-    }
-
-    // Tier 2: Fluent chain from responder
-    public void CustomBroadcast()
-    {
-        this.Send("alert").ToDescendants().WithTag(MmTag.Tag0).Execute();
+        this.BroadcastValue("hello");
     }
 }
 ```
 
-### Naming Convention
-
-| Direction | Prefix | Example | MmMethod |
-|-----------|--------|---------|----------|
-| **Down** (descendants) | `Broadcast*` | `BroadcastInitialize()` | Initialize |
-| **Up** (parents) | `Notify*` | `NotifyComplete()` | Complete |
-
-### File Location
-
-- `Assets/MercuryMessaging/Protocol/DSL/MmMessagingExtensions.cs`
-
 ---
 
-## Property-Based Routing (NEW)
+## Tier 2: Fluent Chain Methods
 
-The shortest syntax for common messaging patterns. Routes first, then sends:
+Full control with chainable builder pattern. **Always call `.Execute()` at the end.**
 
-```csharp
-using MercuryMessaging;
-
-// Property-based routing (shortest syntax)
-relay.To.Children.Send("Hello");           // Send string to children
-relay.To.Parents.Send(42);                 // Send int to parents
-relay.To.Descendants.Initialize();         // Initialize all descendants
-relay.To.Children.Active.Refresh();        // Refresh only active children
-relay.To.Children.WithTag(MmTag.Tag0).SetActive(false);
-```
-
-### Syntax Comparison
-
-| Fluent API (Tier 2) | Property Routing | Savings |
-|---------------------|------------------|---------|
-| `relay.Send("x").ToChildren().Execute()` | `relay.To.Children.Send("x")` | 38% shorter |
-| `relay.Send(42).ToParents().Active().Execute()` | `relay.To.Parents.Active.Send(42)` | 33% shorter |
-| `relay.Send(MmMethod.Initialize).ToDescendants().Execute()` | `relay.To.Descendants.Initialize()` | 45% shorter |
-
-### Direction Properties
-
-| Property | Description |
-|----------|-------------|
-| `.Children` | Direct children only |
-| `.Parents` | Direct parents only |
-| `.Descendants` | Self + all descendants recursively |
-| `.Ancestors` | Self + all ancestors recursively |
-| `.Siblings` | Same-parent nodes |
-| `.SelfAndChildren` | Default routing |
-| `.All` | All connected nodes (bidirectional) |
-
-### Filter Properties
-
-| Property | Description |
-|----------|-------------|
-| `.Active` | Only active GameObjects |
-| `.IncludeInactive` | Include inactive GameObjects |
-| `.Selected` | Only FSM-selected responders |
-| `.OverNetwork` | Send over network too |
-| `.LocalOnly` | Local only (default) |
-| `.WithTag(tag)` | Filter by tag |
-
-### Terminal Methods (Auto-Execute)
-
-All terminal methods execute immediately - no `.Execute()` needed:
-
-| Method | MmMethod |
-|--------|----------|
-| `.Send(string)` | MessageString |
-| `.Send(int)` | MessageInt |
-| `.Send(float)` | MessageFloat |
-| `.Send(bool)` | MessageBool |
-| `.Send(Vector3)` | MessageVector3 |
-| `.Initialize()` | Initialize |
-| `.Refresh()` | Refresh |
-| `.Complete()` | Complete |
-| `.SetActive(bool)` | SetActive |
-| `.Switch(int/string)` | Switch |
-
-### Works on Responders Too!
+### Basic Usage
 
 ```csharp
-public class MyResponder : MmBaseResponder
-{
-    public void NotifyParent()
-    {
-        // Same syntax, null-safe (no-op if no relay node)
-        this.To().Parents.Send("done");
-        this.To().Parents.Send(100);
-    }
+// Send with routing
+relay.Send("hello").ToChildren().Execute();
+relay.Send(42).ToParents().Execute();
+relay.Send(MmMethod.Initialize).ToDescendants().Execute();
 
-    public void BroadcastToChildren()
-    {
-        this.To().Children.Initialize();
-        this.To().Descendants.Active.Refresh();
-    }
-}
-```
-
-### File Location
-
-- `Assets/MercuryMessaging/Protocol/DSL/MmRoutingBuilder.cs`
-
----
-
-## Core APIs
-
-### 1. MmFluentMessage - Chainable Message Builder
-
-The primary entry point for fluent messaging:
-
-```csharp
-// Basic usage
-relay.Send(MmMethod.Initialize).ToChildren().Execute();
-
-// With payload
-relay.Send(MmMethod.MessageInt, 100).ToDescendants().Execute();
-relay.Send(MmMethod.MessageString, "Hello").ToParents().Execute();
-
-// Chain multiple filters
-relay.Send(MmMethod.SetActive, true)
-    .ToChildren()
+// Send with filters
+relay.Send("hello")
+    .ToDescendants()
     .Active()
     .WithTag(MmTag.Tag0)
-    .LocalOnly()
     .Execute();
 ```
 
-#### Routing Methods
-
-| Method | Description |
-|--------|-------------|
-| `.ToChildren()` | Target direct children |
-| `.ToParents()` | Target direct parents |
-| `.ToDescendants()` | Target all descendants recursively |
-| `.ToAncestors()` | Target all ancestors recursively |
-| `.ToSiblings()` | Target siblings (same parent) |
-| `.ToAll()` | Target all connected nodes |
-| `.To(MmLevelFilter)` | Custom level filter |
-
-#### Filter Methods
-
-| Method | Description |
-|--------|-------------|
-| `.Active()` | Only active GameObjects |
-| `.IncludeInactive()` | Include inactive GameObjects |
-| `.Selected()` | Only FSM-selected responders |
-| `.WithTag(MmTag)` | Filter by Mercury tag |
-| `.WithTags(params MmTag[])` | Multiple tags (OR) |
-| `.LocalOnly()` | Local messages only |
-| `.NetworkOnly()` | Network messages only |
-| `.AllDestinations()` | Both local and network |
-
----
-
-### 2. Spatial Filtering (Phase 2)
-
-Filter targets based on spatial relationships:
+### Send Overloads
 
 ```csharp
-// Within radius
-relay.Send(MmMethod.MessageString, "Explosion")
-    .ToDescendants()
-    .Within(10f)  // 10 units radius
-    .Execute();
+// By method
+relay.Send(MmMethod.Initialize);
+relay.Send(MmMethod.SetActive, true);
 
-// Directional cone
-relay.Send(MmMethod.Initialize)
-    .ToDescendants()
-    .InCone(transform.forward, 45f, 20f)  // 45° cone, 20 units
-    .Execute();
+// By value (auto-detects MmMethod)
+relay.Send(true);                         // MessageBool
+relay.Send(42);                           // MessageInt
+relay.Send(3.14f);                        // MessageFloat
+relay.Send("hello");                      // MessageString
+relay.Send(new Vector3(1,2,3));           // MessageVector3
 
-// Bounding box
-var bounds = new Bounds(roomCenter, roomSize);
-relay.Send(MmMethod.SetActive, true)
+// By message object
+relay.Send(customMessage);
+```
+
+---
+
+## Routing Methods
+
+Control message direction through the hierarchy.
+
+### Direction Methods
+
+| Method | Description | MmLevelFilter Equivalent |
+|--------|-------------|-------------------------|
+| `.ToSelf()` | Only self | `Self` |
+| `.ToChildren()` | Direct children only | `Child` |
+| `.ToParents()` | Direct parents only | `Parent` |
+| `.ToDescendants()` | All descendants recursively | `Descendants` |
+| `.ToAncestors()` | All ancestors recursively | `Ancestors` |
+| `.ToSiblings()` | Same-level nodes | `Siblings` |
+| `.ToAll()` | Bidirectional (up and down) | `SelfAndBidirectional` |
+
+### Examples
+
+```csharp
+// Direct children only (not grandchildren)
+relay.Send("hello").ToChildren().Execute();
+
+// All descendants (children, grandchildren, etc.)
+relay.Send("hello").ToDescendants().Execute();
+
+// Direct parents only
+relay.Send("complete").ToParents().Execute();
+
+// All ancestors (parents, grandparents, etc.)
+relay.Send("complete").ToAncestors().Execute();
+
+// Siblings (same level in hierarchy)
+relay.Send("sync").ToSiblings().Execute();
+
+// Everything (up and down)
+relay.Send("reset").ToAll().Execute();
+```
+
+### Custom Level Filter
+
+```csharp
+// Using To() with explicit filter
+relay.Send("hello").To(MmLevelFilter.Child | MmLevelFilter.Self).Execute();
+```
+
+---
+
+## Filter Methods
+
+Refine which responders receive the message.
+
+### Active Filter
+
+```csharp
+// Only active GameObjects (default)
+relay.Send("hello").ToDescendants().Active().Execute();
+
+// Include inactive GameObjects
+relay.Send("hello").ToDescendants().All().Execute();
+```
+
+### Selected Filter
+
+```csharp
+// Only responders in current FSM state
+relay.Send("hello").ToDescendants().Selected().Execute();
+
+// All responders regardless of FSM state
+relay.Send("hello").ToDescendants().Unselected().Execute();
+```
+
+### Tag Filter
+
+```csharp
+// Single tag
+relay.Send("hello").ToDescendants().WithTag(MmTag.Tag0).Execute();
+
+// Multiple tags (OR logic)
+relay.Send("hello").ToDescendants().WithTag(MmTag.Tag0 | MmTag.Tag1).Execute();
+
+// Exclude tag
+relay.Send("hello").ToDescendants().WithoutTag(MmTag.Tag2).Execute();
+```
+
+### Network Filter
+
+```csharp
+// Local only (no network propagation)
+relay.Send("hello").ToDescendants().Local().Execute();
+
+// Network only
+relay.Send("hello").ToDescendants().Network().Execute();
+
+// Both local and network
+relay.Send("hello").ToDescendants().Networked().Execute();
+```
+
+### Combining Filters
+
+```csharp
+relay.Send("hello")
     .ToDescendants()
-    .InBounds(bounds)
+    .Active()
+    .Selected()
+    .WithTag(MmTag.Tag0)
+    .Local()
     .Execute();
 ```
 
 ---
 
-### 3. Type Filtering (Phase 2)
+## Predicate Methods
 
-Filter by component types:
+Advanced filtering using custom conditions.
+
+### Type Filtering
 
 ```csharp
 // By component type
-relay.Send(MmMethod.Initialize)
-    .ToDescendants()
-    .OfType<Enemy>()
-    .Execute();
+relay.Send("damage").ToDescendants().OfType<Enemy>().Execute();
 
 // By interface
-relay.Send(MmMethod.Complete)
+relay.Send("heal").ToDescendants().Implementing<IDamageable>().Execute();
+```
+
+### Custom Predicates
+
+```csharp
+// Custom condition
+relay.Send("alert")
     .ToDescendants()
-    .Implementing<ISaveable>()
+    .Where(go => go.layer == LayerMask.NameToLayer("Enemies"))
     .Execute();
 
-// By Unity layer
-relay.Send(MmMethod.SetActive, false)
+// Name matching (supports wildcards)
+relay.Send("activate").ToDescendants().Named("Door*").Execute();
+relay.Send("deactivate").ToDescendants().Named("*Controller").Execute();
+```
+
+### Spatial Filtering
+
+```csharp
+// Within radius (meters)
+relay.Send("explosion")
     .ToDescendants()
-    .OnLayer("Enemies")
+    .Within(10f)
+    .Execute();
+
+// In cone (direction, angle, range)
+relay.Send("alert")
+    .ToDescendants()
+    .InCone(transform.forward, 45f, 20f)
+    .Execute();
+
+// In bounds
+relay.Send("activate")
+    .ToDescendants()
+    .InBounds(triggerBounds)
     .Execute();
 ```
 
 ---
 
-### 4. Custom Predicates (Phase 2)
+## Temporal Methods
 
-Use lambda expressions for custom filtering:
+Time-based message sending patterns.
 
-```csharp
-// Custom GameObject predicate
-relay.Send(MmMethod.MessageInt, 50)
-    .ToDescendants()
-    .Where(go => go.GetComponent<Health>()?.Value < 100)
-    .Execute();
-
-// Custom relay predicate
-relay.Send(MmMethod.Initialize)
-    .ToDescendants()
-    .WhereRelay(node => node.Tag == MmTag.Tag0)
-    .Execute();
-
-// Name pattern matching
-relay.Send(MmMethod.Refresh)
-    .ToDescendants()
-    .Named("Enemy")  // Contains "Enemy"
-    .Execute();
-```
-
----
-
-### 5. MmMessageFactory (Phase 3)
-
-Centralized message creation with type inference:
-
-```csharp
-// Type-inferred creation
-var msg = MmMessageFactory.Create(42);        // MmMessageInt
-var msg = MmMessageFactory.Create("Hello");   // MmMessageString
-var msg = MmMessageFactory.Create(true);      // MmMessageBool
-
-// Typed factories
-var intMsg = MmMessageFactory.Int(100);
-var floatMsg = MmMessageFactory.Float(3.14f);
-var stringMsg = MmMessageFactory.String("Test");
-var vec3Msg = MmMessageFactory.Vector3(Vector3.up);
-
-// Command factories
-var init = MmMessageFactory.Initialize();
-var active = MmMessageFactory.SetActive(true);
-var switchMsg = MmMessageFactory.Switch("GameState");
-
-// Custom methods (>= 1000)
-var custom = MmMessageFactory.Custom(1001);
-var customWithPayload = MmMessageFactory.Custom(1002, 42);
-
-// Metadata configuration
-var msg = MmMessageFactory.Int(100)
-    .ToChildren()
-    .WithTag(MmTag.UI);
-```
-
----
-
-### 6. Convenience Extensions (Phase 3)
-
-High-level helpers for common patterns:
-
-#### Broadcast (Downward)
-
-```csharp
-// Broadcast to all descendants
-relay.Broadcast(MmMethod.Initialize);
-relay.Broadcast(MmMethod.SetActive, true);
-relay.Broadcast(MmMethod.MessageInt, 42);
-
-// Convenience shortcuts
-relay.BroadcastInitialize();
-relay.BroadcastSetActive(false);
-```
-
-#### Notify (Upward)
-
-```csharp
-// Notify parent
-relay.Notify(MmMethod.Complete);
-relay.Notify(MmMethod.MessageInt, 100);
-
-// Notify all ancestors
-relay.NotifyAncestors(MmMethod.Refresh);
-
-// Convenience shortcut
-relay.NotifyComplete();
-```
-
-#### SendTo (Named Target)
-
-```csharp
-// Find and send to named target
-relay.SendTo("Player", MmMethod.Initialize);
-relay.SendTo("ScoreUI", MmMethod.MessageInt, 1000);
-
-// Direct reference
-relay.SendTo(playerRelay, MmMethod.SetActive, true);
-
-// Check if target exists
-if (relay.HasTarget("Boss"))
-{
-    relay.SendTo("Boss", MmMethod.Initialize);
-}
-
-// Try pattern
-if (relay.TryFindTarget("Player", out var target))
-{
-    // Use target directly
-}
-```
-
-#### Query/Response
-
-```csharp
-// Send query with callback
-int queryId = relay.Query(MmMethod.MessageInt, response =>
-{
-    var health = ((MmMessageInt)response).value;
-    Debug.Log($"Player health: {health}");
-});
-
-// In responder - send response
-relay.Respond(queryId, 75);
-
-// Cancel pending query
-MmRelayNodeExtensions.CancelQuery(queryId);
-
-// Clear all queries (on scene change)
-MmRelayNodeExtensions.ClearPendingQueries();
-```
-
----
-
-### 7. Temporal Extensions (Phase 3)
-
-Time-based messaging patterns:
-
-#### Delayed Execution
+### Delayed Execution
 
 ```csharp
 // Send after delay
 var handle = relay.After(2f, MmMethod.Initialize);
 
-// With metadata
-var handle = relay.After(1.5f, MmMethod.SetActive, true);
+// With value
+relay.After(1.5f, MmMethod.MessageString, "delayed hello");
 
-// Cancel before execution
+// Cancel if needed
 handle.Cancel();
 ```
 
-#### Repeating Messages
+### Repeating Messages
 
 ```csharp
-// Repeat indefinitely
+// Repeat forever
 var handle = relay.Every(1f, MmMethod.Refresh);
 
 // Repeat N times
-var handle = relay.Every(0.5f, MmMethod.MessageInt, 1, repeatCount: 10);
+relay.Every(0.5f, MmMethod.Refresh, repeatCount: 5);
 
-// Stop repeating
+// Cancel
 handle.Cancel();
 ```
 
-#### Conditional Execution
+### Conditional Execution
 
 ```csharp
-// Execute when condition is true
-relay.When(() => player.IsReady, MmMethod.Initialize);
+// Execute when condition becomes true
+relay.When(() => isReady, MmMethod.Initialize);
 
 // With timeout
-relay.When(() => levelLoaded, MmMethod.Complete, timeout: 5f);
+relay.When(() => playerInRange, MmMethod.Activate, timeout: 10f);
 ```
 
-#### Fluent Temporal Builder
+### Sequence Example
 
 ```csharp
-// Schedule with fluent syntax
-relay.Schedule(MmMethod.Initialize)
-    .ToDescendants()
-    .After(2f)
-    .Execute();
-
-// Repeating with routing
-relay.Schedule(MmMethod.Refresh)
-    .ToChildren()
-    .Every(1f, maxRepeats: 5)
-    .Execute();
+// Countdown: 3-2-1-Go!
+relay.After(0f, MmMethod.MessageInt, 3);
+relay.After(1f, MmMethod.MessageInt, 2);
+relay.After(2f, MmMethod.MessageInt, 1);
+relay.After(3f, MmMethod.MessageString, "Go!");
 ```
 
-#### Async/Await (Task-based)
+---
+
+## Query/Response Pattern
+
+Request-response messaging with callbacks.
+
+### Sending Queries
 
 ```csharp
-// Async request
-var response = await relay.RequestAsync<MmMessageInt>(
-    MmMethod.MessageInt,
-    timeout: 2f
-);
-Debug.Log($"Got: {response.value}");
+// Query with callback
+int queryId = relay.Query(MmMethod.MessageInt, response => {
+    var value = ((MmMessageInt)response).value;
+    Debug.Log($"Received response: {value}");
+});
+```
 
-// With cancellation
-var cts = new CancellationTokenSource();
-try
+### Responding to Queries
+
+```csharp
+// In responder
+public override void MmInvoke(MmMessage message)
 {
-    var result = await relay.RequestAsync<MmMessageFloat>(
-        MmMethod.MessageFloat,
-        timeout: 5f,
-        cancellationToken: cts.Token
-    );
+    base.MmInvoke(message);
+
+    if (message.QueryId > 0)
+    {
+        // This is a query, send response
+        relay.Respond(message.QueryId, 42);
+    }
 }
-catch (OperationCanceledException)
-{
-    Debug.Log("Request cancelled");
-}
-```
-
----
-
-### 8. Listener Pattern (Phase 2.1)
-
-Subscribe to incoming messages with a fluent API:
-
-#### Basic Subscription
-
-```csharp
-using MercuryMessaging;
-
-// Subscribe to typed messages
-var subscription = relay.Listen<MmMessageFloat>()
-    .OnReceived(msg => brightness = msg.value)
-    .Execute();
-
-// Later, unsubscribe
-subscription.Dispose();
-```
-
-#### Filtering Incoming Messages
-
-```csharp
-// Filter by value
-relay.Listen<MmMessageInt>()
-    .When(msg => msg.value > 50)
-    .OnReceived(msg => TriggerAlert(msg.value))
-    .Execute();
-
-// Filter by tag
-relay.Listen<MmMessageString>()
-    .WithTag(MmTag.Tag0)
-    .OnReceived(msg => HandleTaggedMessage(msg))
-    .Execute();
-```
-
-#### One-Time Listeners
-
-```csharp
-// Auto-disposes after first message
-relay.ListenOnce<MmMessageString>()
-    .OnReceived(msg => ProcessResult(msg.value))
-    .Execute();
-```
-
-#### Convenience Methods
-
-```csharp
-// Quick subscriptions (no builder needed)
-var sub1 = relay.OnFloat(value => slider.value = value);
-var sub2 = relay.OnInt(value => score = value);
-var sub3 = relay.OnString(value => label.text = value);
-var sub4 = relay.OnBool(value => gameObject.SetActive(value));
-
-// Method-based listeners
-relay.OnInitialize(() => Setup());
-relay.OnRefresh(() => UpdateUI());
-relay.OnComplete(() => FinishTask());
-relay.OnSwitch(stateName => HandleState(stateName));
-```
-
-#### Works on Responders
-
-```csharp
-// Same API from responder (null-safe)
-myResponder.Listen<MmMessageFloat>()
-    .OnReceived(msg => HandleFloat(msg.value))
-    .Execute();
-```
-
----
-
-### 9. Hierarchy Query DSL (Phase 2.2)
-
-Query and traverse responder hierarchies with LINQ-like syntax:
-
-#### Basic Queries
-
-```csharp
-using MercuryMessaging;
-
-// Get query builder
-var builder = relay.Query();
-
-// Query children
-var children = relay.Query<MmResponder>().Children().ToList();
-
-// Query all descendants
-var descendants = relay.Query<MmResponder>().Descendants().ToList();
-```
-
-#### Direction Methods
-
-| Method | Description |
-|--------|-------------|
-| `.Children()` | Direct children only |
-| `.Parents()` | Direct parents only |
-| `.Descendants()` | All descendants (recursive) |
-| `.Ancestors()` | All ancestors (recursive) |
-| `.Siblings()` | Same-level nodes |
-| `.SelfAndChildren()` | Self + direct children |
-| `.All()` | All connected nodes (bidirectional) |
-
-#### Filter Methods
-
-```csharp
-// Filter by type
-var enemies = relay.Query<EnemyResponder>()
-    .Descendants()
-    .ToList();
-
-// Filter by tag
-var tagged = relay.Query<MmResponder>()
-    .Children()
-    .WithTag(MmTag.Tag0)
-    .ToList();
-
-// Active GameObjects only
-var active = relay.Query<MmResponder>()
-    .Descendants()
-    .Active()
-    .ToList();
-
-// Custom predicate
-var filtered = relay.Query<MmResponder>()
-    .Descendants()
-    .Where(r => r.gameObject.name.Contains("Enemy"))
-    .ToList();
-
-// By name (exact match)
-var named = relay.Query<MmResponder>()
-    .Descendants()
-    .Named("Player")
-    .FirstOrDefault();
-
-// By name pattern (wildcard)
-var pattern = relay.Query<MmResponder>()
-    .Descendants()
-    .NamedLike("Enemy*")
-    .ToList();
-```
-
-#### Execution Methods
-
-| Method | Description |
-|--------|-------------|
-| `.Execute(action)` | Call action on each match |
-| `.ToList()` | Get all matches as List |
-| `.FirstOrDefault()` | Get first match or null |
-| `.First()` | Get first match (throws if none) |
-| `.Count()` | Count matching items |
-| `.Any()` | Check if any match |
-| `.Any(predicate)` | Check if any match predicate |
-
-#### Convenience Extensions
-
-```csharp
-// Quick searches
-var enemy = relay.FindDescendant<EnemyResponder>();
-var parent = relay.FindAncestor<GameManager>();
-var all = relay.FindAllDescendants<MmResponder>();
-
-// By name
-var player = relay.FindByName("Player");
-var enemies = relay.FindByPattern("Enemy*");
-
-// Counts and checks
-int children = relay.ChildCount();
-int descendants = relay.DescendantCount();
-bool hasChildren = relay.HasChildren();
-bool hasEnemy = relay.HasDescendant<EnemyResponder>();
-```
-
-#### Execute Actions
-
-```csharp
-// Execute action on all matches
-relay.Query<EnemyResponder>()
-    .Descendants()
-    .Active()
-    .Execute(enemy => enemy.TakeDamage(10));
-```
-
-#### Works on Responders
-
-```csharp
-// Same API from responder (null-safe)
-var siblings = myResponder.Query<UIResponder>().Siblings().ToList();
-int siblingCount = myResponder.SiblingCount();
-bool hasSiblings = myResponder.HasSiblings();
-```
-
----
-
-## Best Practices
-
-### 1. Choose the Right Method
-
-| Scenario | Recommended API |
-|----------|-----------------|
-| Simple downward message | `Broadcast()` |
-| Upward notification | `Notify()` |
-| Specific target by name | `SendTo()` |
-| Complex filtering | `Send().Where().Execute()` |
-| Delayed execution | `After()` |
-| Repeating updates | `Every()` |
-
-### 2. Performance Tips
-
-- Use `Broadcast()` for simple cases (minimal overhead)
-- Avoid spatial predicates in tight loops
-- Prefer `ToChildren()` over `ToDescendants()` when possible
-- Cancel temporal handles when destroying GameObjects
-
-### 3. Common Patterns
-
-```csharp
-// Initialize entire subtree
-gameManager.BroadcastInitialize();
-
-// Child notifies parent of completion
-childRelay.NotifyComplete();
-
-// Enable all UI elements
-uiRoot.SendTo("MainMenu", MmMethod.SetActive, true);
-
-// Damage enemies in area
-playerRelay.Send(MmMethod.MessageInt, damage)
-    .ToDescendants()
-    .OfType<Enemy>()
-    .Within(attackRadius)
-    .Execute();
-
-// Periodic health check
-healthCheckHandle = relay.Every(1f, MmMethod.Refresh);
-// On destroy: healthCheckHandle.Cancel();
 ```
 
 ---
@@ -752,174 +362,108 @@ healthCheckHandle = relay.Every(1f, MmMethod.Refresh);
 
 ### From Traditional API
 
-```csharp
-// Before
-relay.MmInvoke(MmMethod.Initialize, new MmMetadataBlock(
-    MmLevelFilter.Child, MmActiveFilter.All,
-    MmSelectedFilter.All, MmNetworkFilter.Local));
-
-// After
-relay.Send(MmMethod.Initialize).ToChildren().Execute();
-// Or even simpler:
-relay.Broadcast(MmMethod.Initialize);
-```
+| Traditional | Fluent DSL |
+|-------------|------------|
+| `relay.MmInvoke(MmMethod.Initialize)` | `relay.BroadcastInitialize()` |
+| `relay.MmInvoke(MmMethod.Initialize, meta)` | `relay.Send(MmMethod.Initialize).To(filter).Execute()` |
+| `relay.MmInvoke(method, value, meta)` | `relay.Send(value).To(filter).Execute()` |
+| `new MmMetadataBlock(LevelFilter.Child)` | `.ToChildren()` |
+| `new MmMetadataBlock(LevelFilter.Parent)` | `.ToParents()` |
+| `MmActiveFilter.Active` | `.Active()` |
+| `MmSelectedFilter.Selected` | `.Selected()` |
+| `MmNetworkFilter.All` | `.Networked()` |
+| `tag: MmTag.Tag0` | `.WithTag(MmTag.Tag0)` |
 
 ### Gradual Migration
 
-Both APIs work together - migrate incrementally:
+Traditional and Fluent APIs can coexist:
 
 ```csharp
-// Mix traditional and DSL
-relay.MmInvoke(MmMethod.OldFeature, metadata);  // Keep working
-relay.Broadcast(MmMethod.NewFeature);           // Use DSL for new code
+// These are equivalent and can be mixed
+relay.MmInvoke(MmMethod.Initialize, new MmMetadataBlock(MmLevelFilter.Child));
+relay.Send(MmMethod.Initialize).ToChildren().Execute();
+relay.BroadcastInitialize(); // If default routing is acceptable
 ```
 
 ---
 
-## API Reference Summary
+## Performance Notes
 
-| Class | Purpose |
-|-------|---------|
-| `MmFluentMessage` | Chainable message builder (struct) |
-| `MmFluentExtensions` | `Send()` extension methods on MmRelayNode |
-| `MmFluentFilters` | Static routing helpers (Children, Parents, etc.) |
-| `MmFluentPredicates` | Predicate infrastructure for filtering |
-| `MmMessageFactory` | Centralized message creation |
-| `MmRelayNodeExtensions` | Convenience methods (Broadcast, Notify, etc.) |
-| `MmTemporalExtensions` | Time-based messaging (After, Every, When) |
-| `MmListenerBuilder<T>` | Fluent listener subscription builder (Phase 2.1) |
-| `MmListenerSubscription<T>` | Disposable subscription handle (Phase 2.1) |
-| `MmListenerExtensions` | `Listen()` extension methods (Phase 2.1) |
-| `MmQuery<T>` | LINQ-like hierarchy query builder (Phase 2.2) |
-| `MmQueryBuilder` | Non-generic query entry point (Phase 2.2) |
-| `MmQueryExtensions` | `Query()` extension methods (Phase 2.2) |
-| `MmStandardLibraryListenerExtensions` | UI/Input message shortcuts (Phase 2.4) |
-| `MmRoutingExtensions` | Runtime hierarchy registration (Phase 2.5) |
-| `MmTagExtensions` | Fluent tag configuration (Phase 2.6) |
-| `MmTagConfigBuilder` | Bulk tag configuration builder (Phase 2.6) |
+### Zero Allocations
+
+`MmFluentMessage` is a **struct**, not a class. The builder pattern creates no heap allocations:
+
+```csharp
+// This allocates ZERO bytes on the heap
+relay.Send("hello").ToDescendants().Active().WithTag(MmTag.Tag0).Execute();
+```
+
+### Inlining
+
+All methods use `[MethodImpl(MethodImplOptions.AggressiveInlining)]` for optimal performance.
+
+### When to Use Each Tier
+
+| Scenario | Recommended |
+|----------|-------------|
+| Simple broadcast to children | Tier 1: `BroadcastInitialize()` |
+| Notify parent of completion | Tier 1: `NotifyComplete()` |
+| Custom routing needed | Tier 2: `Send().To...().Execute()` |
+| Multiple filters | Tier 2: Chain `.Active().WithTag()` |
+| Spatial/predicate filtering | Tier 2: `.Where()`, `.Within()` |
+
+### Performance Comparison
+
+| API | Overhead |
+|-----|----------|
+| Traditional `MmInvoke` | Baseline |
+| Tier 1 Auto-Execute | ~Same (inlined) |
+| Tier 2 Fluent Chain | +2-5ns (struct copy) |
+
+The overhead is negligible for all practical use cases.
 
 ---
 
-### 10. Standard Library Listeners (Phase 2.4)
+## Common Patterns
 
-Convenience methods for listening to Standard Library messages:
-
-#### UI Message Shortcuts
+### State Machine Transitions
 
 ```csharp
-using MercuryMessaging;
+// Switch to new state
+relay.BroadcastSwitch("Gameplay");
 
-// Click handling
-relay.OnClick(msg => {
-    if (msg.IsDoubleClick) OpenItem();
-    if (msg.IsRightClick) ShowContextMenu();
-});
-
-// Hover with bool handler
-relay.OnHover(isEnter => {
-    if (isEnter) ShowTooltip();
-    else HideTooltip();
-});
-
-// Drag handling
-relay.OnDrag(msg => {
-    if (msg.Phase == MmDragPhase.Move)
-        transform.position += (Vector3)msg.Delta;
-});
-
-// Selection handling
-relay.OnSelect((int index) => selectedIndex = index);
-relay.OnSelect((string value) => selectedItem = value);
+// Notify completion to parent state machine
+relay.NotifyComplete();
 ```
 
-#### Input Message Shortcuts (VR/XR)
+### Hierarchical Activation
 
 ```csharp
-// 6DOF tracking
-relay.On6DOF(msg => {
-    if (msg.Hand == MmHandedness.Right && msg.IsTracked)
-        rightHand.SetPositionAndRotation(msg.Position, msg.Rotation);
-});
+// Activate all children
+relay.BroadcastSetActive(true);
 
-// Filter by hand
-relay.On6DOF(MmHandedness.Left, msg => UpdateLeftHand(msg));
+// Activate only UI-tagged children
+relay.Send(MmMethod.SetActive, true)
+    .ToDescendants()
+    .WithTag(MmTag.UI)
+    .Execute();
+```
 
-// Gesture with confidence threshold
-relay.OnGesture(MmGestureType.Pinch, 0.9f, msg => SelectObject());
+### Networked Position Sync
 
-// Button press only
-relay.OnButtonPressed(msg => Fire());
+```csharp
+relay.Send(transform.position)
+    .ToDescendants()
+    .Networked()
+    .Execute();
+```
 
-// Specific button
-relay.OnButton("Trigger", msg => HandleTrigger(msg.State));
+### Delayed Respawn
 
-// Gaze hit only (looking at something)
-relay.OnGazeHit(msg => HighlightObject(msg.HitPoint));
+```csharp
+relay.After(3f, MmMethod.Initialize);
 ```
 
 ---
 
-### 11. Runtime Registration (Phase 2.5)
-
-Simplified runtime hierarchy setup:
-
-```csharp
-using MercuryMessaging;
-
-// Traditional (2 lines)
-parentRelay.MmAddToRoutingTable(childRelay, MmLevelFilter.Child);
-childRelay.AddParent(parentRelay);
-
-// Fluent DSL (1 line)
-childRelay.RegisterWith(parentRelay);
-
-// Bulk registration
-parentRelay.RegisterChildren(child1, child2, child3);
-
-// Unregistration
-childRelay.UnregisterFrom(parentRelay);
-parentRelay.UnregisterChildren(child1, child2);
-
-// Hierarchy queries
-bool hasParents = childRelay.HasParents();
-var parent = childRelay.GetFirstParent();
-bool isRoot = parentRelay.IsRoot();
-```
-
----
-
-### 12. Tag Configuration (Phase 2.6)
-
-Fluent tag manipulation:
-
-```csharp
-using MercuryMessaging;
-
-// Single responder
-responder.WithTag(MmTag.Tag0).EnableTagChecking();
-
-// Multiple tags
-responder.WithTags(MmTag.Tag0, MmTag.Tag1);
-
-// Tag manipulation
-responder.AddTag(MmTag.Tag2);
-responder.RemoveTag(MmTag.Tag0);
-responder.ClearTags();
-
-// Tag queries
-bool hasTag = responder.HasTag(MmTag.Tag0);
-bool hasAll = responder.HasAllTags(MmTag.Tag0, MmTag.Tag1);
-bool hasAny = responder.HasAnyTag(MmTag.Tag0, MmTag.Tag1);
-
-// Bulk configuration from relay
-relay.ConfigureTags()
-    .ApplyToSelf(MmTag.Tag0)
-    .ApplyToChildren(MmTag.Tag1, enableChecking: true)
-    .ApplyToDescendants(MmTag.Tag2)
-    .Build();
-```
-
----
-
-*Last Updated: 2025-11-26*
-*DSL Version: Phase 2.6 (Tag Configuration) Complete*
+*MercuryMessaging 4.0.0 - Fluent DSL API Guide*

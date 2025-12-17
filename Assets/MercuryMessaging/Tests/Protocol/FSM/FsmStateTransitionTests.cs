@@ -1,4 +1,4 @@
-// Copyright (c) 2017-2019, Columbia University
+﻿// Copyright (c) 2017-2025, Columbia University
 // All rights reserved.
 //
 // FSM State Transition Tests
@@ -21,7 +21,7 @@ namespace MercuryMessaging.Tests
     [TestFixture]
     public class FsmStateTransitionTests
     {
-        private GameObject rootObject;
+        private MmTestHierarchy _hierarchy;
         private MmRelaySwitchNode switchNode;
         private List<GameObject> stateObjects;
         private List<string> eventLog;
@@ -50,38 +50,42 @@ namespace MercuryMessaging.Tests
         [TearDown]
         public void TearDown()
         {
-            // Unity automatically cleans up GameObjects between tests
+            // Clean up hierarchy using IDisposable pattern
+            _hierarchy?.Dispose();
             stateObjects.Clear();
             eventLog.Clear();
-            rootObject = null;
             switchNode = null;
         }
 
         #region Helper Methods
 
         /// <summary>
-        /// Creates a simple FSM hierarchy with the specified number of states
+        /// Creates a simple FSM hierarchy with the specified number of states using MmTestHierarchy
         /// </summary>
         private void CreateSimpleFSM(int stateCount)
         {
-            // Create root with MmRelaySwitchNode
-            rootObject = new GameObject("FSM_Root");
-            switchNode = rootObject.AddComponent<MmRelaySwitchNode>();
+            // Use MmTestHierarchyBuilder for cleaner setup
+            var builder = MmTestHierarchy.Build("FSM_Root").AsSwitchNode();
 
-            // Create state children (MmRelayNode components)
+            // Add state children
             for (int i = 0; i < stateCount; i++)
             {
-                GameObject stateObj = new GameObject($"State{i}");
-                stateObj.transform.SetParent(rootObject.transform);
-                var childNode = stateObj.AddComponent<MmRelayNode>();
-                stateObjects.Add(stateObj);
-
-                // Manually add child to parent's routing table (children don't auto-register in tests)
-                switchNode.MmAddToRoutingTable(childNode, MmLevelFilter.Child);
+                builder.AddChild($"State{i}");
+                builder.Parent(); // Return to root for next sibling
             }
 
-            // Manually call Awake on parent to initialize FSM from routing table
-            switchNode.Awake();
+            _hierarchy = builder.Build();
+            switchNode = _hierarchy.Root as MmRelaySwitchNode;
+
+            // Populate stateObjects list for compatibility with existing tests
+            for (int i = 0; i < stateCount; i++)
+            {
+                var stateNode = _hierarchy.GetNode($"State{i}");
+                stateObjects.Add(stateNode.gameObject);
+            }
+
+            // Initialize FSM from routing table
+            switchNode.RebuildFSM();
         }
 
         /// <summary>

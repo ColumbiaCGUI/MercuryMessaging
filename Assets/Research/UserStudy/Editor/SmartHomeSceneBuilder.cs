@@ -1,3 +1,8 @@
+// Suppress MM006: This is an Editor scene builder - MmRefreshResponders is called at runtime during Awake.
+// Suppress MM008: SetParent establishes Unity's Transform hierarchy, routing is auto-discovered at runtime.
+#pragma warning disable MM006
+#pragma warning disable MM008
+
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -14,7 +19,7 @@ namespace UserStudy.Editor
     /// </summary>
     public class SmartHomeSceneBuilder : EditorWindow
     {
-        [MenuItem("UserStudy/Build Smart Home Mercury Scene")]
+        [MenuItem("MercuryMessaging/User Study/Build Smart Home Mercury Scene")]
         public static void BuildScene()
         {
             if (EditorUtility.DisplayDialog(

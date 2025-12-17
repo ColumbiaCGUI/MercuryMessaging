@@ -1,0 +1,5 @@
+<map id="MercuryMessaging.StandardLibrary.Input.MmInputButtonMessage" name="MercuryMessaging.StandardLibrary.Input.MmInputButtonMessage">
+<area shape="rect" id="Node000001" title="Button input message." alt="" coords="5,79,244,119"/>
+<area shape="rect" id="Node000002" href="$class_mercury_messaging_1_1_mm_message.html" title="Base class for messages passed through MmInvoke." alt="" coords="19,5,230,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="127,44,127,79,122,79,122,44"/>
+</map>

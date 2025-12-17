@@ -1,3 +1,7 @@
+// Suppress MM008: This class manages non-MercuryMessaging GameObjects (cars, pedestrians)
+// SetParent is used for Unity hierarchy organization, not MM routing
+#pragma warning disable MM008
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

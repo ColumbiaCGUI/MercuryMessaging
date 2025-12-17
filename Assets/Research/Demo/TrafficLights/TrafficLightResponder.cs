@@ -12,7 +12,9 @@ public class TrafficLightResponder : MmBaseResponder
 
     public int mode;
 
+    #pragma warning disable CS0414
     float delay;
+    #pragma warning restore CS0414
 
     public override void Awake()
     {

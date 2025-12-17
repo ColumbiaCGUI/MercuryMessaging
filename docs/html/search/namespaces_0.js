@@ -1,15 +1,12 @@
 var searchData=
 [
-  ['appstate',['AppState',['../namespace_mercury_messaging_1_1_app_state.html',1,'MercuryMessaging']]],
-  ['data',['Data',['../namespace_mercury_messaging_1_1_support_1_1_data.html',1,'MercuryMessaging::Support']]],
-  ['extensions',['Extensions',['../namespace_mercury_messaging_1_1_support_1_1_extensions.html',1,'MercuryMessaging::Support']]],
-  ['finitestatemachine',['FiniteStateMachine',['../namespace_mercury_messaging_1_1_support_1_1_finite_state_machine.html',1,'MercuryMessaging::Support']]],
-  ['gui',['GUI',['../namespace_mercury_messaging_1_1_support_1_1_g_u_i.html',1,'MercuryMessaging::Support']]],
-  ['input',['Input',['../namespace_mercury_messaging_1_1_support_1_1_input.html',1,'MercuryMessaging::Support']]],
-  ['interpolators',['Interpolators',['../namespace_mercury_messaging_1_1_support_1_1_interpolators.html',1,'MercuryMessaging::Support']]],
-  ['mercurymessaging',['MercuryMessaging',['../namespace_mercury_messaging.html',1,'']]],
-  ['support',['Support',['../namespace_mercury_messaging_1_1_support.html',1,'MercuryMessaging']]],
-  ['task',['Task',['../namespace_mercury_messaging_1_1_task.html',1,'MercuryMessaging']]],
-  ['tutorial1',['Tutorial1',['../namespace_mercury_messaging_1_1_tutorials_1_1_tutorial1.html',1,'MercuryMessaging::Tutorials']]],
-  ['tutorials',['Tutorials',['../namespace_mercury_messaging_1_1_tutorials.html',1,'MercuryMessaging']]]
+  ['mercurymessaging_0',['MercuryMessaging',['../namespace_mercury_messaging.html',1,'']]],
+  ['mercurymessaging_3a_3adata_1',['Data',['../namespace_mercury_messaging_1_1_data.html',1,'MercuryMessaging']]],
+  ['mercurymessaging_3a_3anetwork_2',['Network',['../namespace_mercury_messaging_1_1_network.html',1,'MercuryMessaging']]],
+  ['mercurymessaging_3a_3anetwork_3a_3abackends_3',['Backends',['../namespace_mercury_messaging_1_1_network_1_1_backends.html',1,'MercuryMessaging::Network']]],
+  ['mercurymessaging_3a_3astandardlibrary_4',['StandardLibrary',['../namespace_mercury_messaging_1_1_standard_library.html',1,'MercuryMessaging']]],
+  ['mercurymessaging_3a_3astandardlibrary_3a_3aanimation_5',['Animation',['../namespace_mercury_messaging_1_1_standard_library_1_1_animation.html',1,'MercuryMessaging::StandardLibrary']]],
+  ['mercurymessaging_3a_3astandardlibrary_3a_3ainput_6',['Input',['../namespace_mercury_messaging_1_1_standard_library_1_1_input.html',1,'MercuryMessaging::StandardLibrary']]],
+  ['mercurymessaging_3a_3astandardlibrary_3a_3aui_7',['UI',['../namespace_mercury_messaging_1_1_standard_library_1_1_u_i.html',1,'MercuryMessaging::StandardLibrary']]],
+  ['mercurymessaging_3a_3atask_8',['Task',['../namespace_mercury_messaging_1_1_task.html',1,'MercuryMessaging']]]
 ];

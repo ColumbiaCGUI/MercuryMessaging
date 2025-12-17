@@ -1,67 +1,70 @@
-using System.Collections;
-using System.Collections.Generic;
+// Copyright (c) 2017-2025, Columbia University
+// Tutorial 4: Color Changing - Classic Pattern Example
+// Demonstrates sending custom color messages with keyboard input.
+//
+// Keyboard Controls:
+// - Press '1': Send Red to children (with Tag0), Blue to parents
+// - Press '2': Send Green to all
+// - Press '3': Send Blue to children, Red to parents
+
 using UnityEngine;
-
 using MercuryMessaging;
+using MercuryMessaging.Examples.Tutorials;
 
-public enum T4_myMethods
-{
-    UpdateColor = 100
-}
-
-public enum T4_myMsgTypes
-{
-    Color = 1100
-}
-
-
+/// <summary>
+/// Tutorial 4 classic sphere handler demonstrating custom message sending.
+/// Uses T4_ColorMessage to change colors of other objects in hierarchy.
+/// </summary>
 public class T4_SphereHandler : MmBaseResponder
 {
-    // // Start is called before the first frame update
-    void Start()
+    new void Update()
     {
-    }
-
-    // // Update is called once per frame
-    // void Update()
-    // {
-        
-    // }
-    void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.Alpha1))
+        // Press '1': Red to children (with Tag0), Blue to parents
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            GetRelayNode().MmInvoke( new T4_ColorMessage(new Color(1,0,0,1), (MmMethod)T4_myMethods.UpdateColor, (MmMessageType)T4_myMsgTypes.Color, new MmMetadataBlock(((MmTag)(1)),MmLevelFilter.Child)));
-            GetRelayNode().MmInvoke( new T4_ColorMessage(new Color(0,0,1,1), (MmMethod)T4_myMethods.UpdateColor, (MmMessageType)T4_myMsgTypes.Color, new MmMetadataBlock(MmLevelFilter.Parent)));
+            // Send red to children with Tag0 filter
+            GetRelayNode().MmInvoke(
+                new T4_ColorMessage(
+                    Color.red,
+                    new MmMetadataBlock(MmTag.Tag0, MmLevelFilter.Child)));
+
+            // Send blue to parents
+            GetRelayNode().MmInvoke(
+                new T4_ColorMessage(
+                    Color.blue,
+                    new MmMetadataBlock(MmLevelFilter.Parent)));
+
+            Debug.Log("[T4] Key '1': Red to children (Tag0), Blue to parents");
         }
+        // Press '2': Green to all
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             GetRelayNode().MmInvoke(
-                new T4_ColorMessage(new Color(0, 1, 0, 1),
-                (MmMethod)T4_myMethods.UpdateColor,
-                (MmMessageType)T4_myMsgTypes.Color,
-                new MmMetadataBlock(MmLevelFilter.Child)));
+                new T4_ColorMessage(
+                    Color.green,
+                    new MmMetadataBlock(MmLevelFilter.Child)));
 
             GetRelayNode().MmInvoke(
-                new T4_ColorMessage(new Color(0, 1, 0, 1),
-                (MmMethod)T4_myMethods.UpdateColor,
-                (MmMessageType)T4_myMsgTypes.Color,
-                new MmMetadataBlock(MmLevelFilter.Parent)));
+                new T4_ColorMessage(
+                    Color.green,
+                    new MmMetadataBlock(MmLevelFilter.Parent)));
+
+            Debug.Log("[T4] Key '2': Green to all");
         }
+        // Press '3': Blue to children, Red to parents
         else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             GetRelayNode().MmInvoke(
-                new T4_ColorMessage(new Color(0, 0, 1, 1),
-                (MmMethod)T4_myMethods.UpdateColor,
-                (MmMessageType)T4_myMsgTypes.Color,
-                new MmMetadataBlock(MmLevelFilter.Child)));
+                new T4_ColorMessage(
+                    Color.blue,
+                    new MmMetadataBlock(MmLevelFilter.Child)));
 
             GetRelayNode().MmInvoke(
-                new T4_ColorMessage(new Color(1, 0, 0, 1),
-                (MmMethod)T4_myMethods.UpdateColor,
-                (MmMessageType)T4_myMsgTypes.Color,
-                new MmMetadataBlock(MmLevelFilter.Parent)));
-        }
+                new T4_ColorMessage(
+                    Color.red,
+                    new MmMetadataBlock(MmLevelFilter.Parent)));
 
+            Debug.Log("[T4] Key '3': Blue to children, Red to parents");
+        }
     }
 }

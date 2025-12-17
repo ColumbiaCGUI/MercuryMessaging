@@ -28,7 +28,8 @@ Thank you for your interest in contributing to the MercuryMessaging framework! T
 
 Optional dependencies MUST be isolated outside the core framework with conditional compilation:
 
-- ✅ **Photon Unity Networking** - Wrapped in `#if PHOTON_AVAILABLE`
+- ✅ **FishNet** - Wrapped in `#if FISH_NET`
+- ✅ **Photon Fusion 2** - Wrapped in `#if FUSION_WEAVER`
 
 ### Adding New Dependencies
 
@@ -36,28 +37,26 @@ If you need to add a new external dependency, you MUST:
 
 1. Justify it as essential to core functionality
 2. Wrap all usage in conditional compilation directives
-3. Include auto-detection script in `MmThirdPartyUtils.cs`
-4. Ensure framework gracefully degrades when dependency is missing
+3. Ensure framework gracefully degrades when dependency is missing
 
 **Example:**
 
 ```csharp
-#if PHOTON_AVAILABLE
-using Photon.Pun;
-using Photon.Realtime;
+#if FISH_NET
+using FishNet;
+using FishNet.Managing;
 #endif
 
-namespace MercuryMessaging
+namespace MercuryMessaging.Network.Backends
 {
-    public class MmNetworkResponderPhoton : MmNetworkResponder
+    public class FishNetBackend : IMmNetworkBackend
     {
-#if PHOTON_AVAILABLE
-        // Implementation using Photon
+#if FISH_NET
+        // Implementation using FishNet
+        public bool IsConnected => InstanceFinder.IsServerStarted || InstanceFinder.IsClientStarted;
 #else
-        protected override void Awake()
-        {
-            Debug.LogWarning("Photon Unity Networking not available. Install PUN to enable network features.");
-        }
+        public bool IsConnected => false;
+        // Graceful degradation when FishNet not available
 #endif
     }
 }
@@ -454,7 +453,7 @@ Brief description of what this PR accomplishes.
 ## Getting Help
 
 - **Documentation**: See [CLAUDE.md](CLAUDE.md) for framework overview
-- **File Reference**: See [FILE_REFERENCE.md](FILE_REFERENCE.md) for key files
+- **File Reference**: See [FILE_REFERENCE.md](Documentation/FILE_REFERENCE.md) for key files
 - **Workflow**: See [dev/WORKFLOW.md](dev/WORKFLOW.md) for development processes
 - **Technical Debt**: See [dev/TECHNICAL_DEBT.md](dev/TECHNICAL_DEBT.md) for known issues
 - **Issues**: Report bugs at https://github.com/yourrepo/mercurymessaging/issues

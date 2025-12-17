@@ -14,7 +14,9 @@ namespace UserStudy.SmartHome.Mercury
         [SerializeField] private float heatingRate = 0.5f;
 
         private bool isHeating = true;
+        #pragma warning disable CS0414
         private bool isNightMode = false;
+        #pragma warning restore CS0414
 
         // Visual feedback components
         private TMPro.TextMeshPro tempDisplay;
@@ -46,7 +48,7 @@ namespace UserStudy.SmartHome.Mercury
                 visualRenderer.material = idleMaterial;
         }
 
-        void Update()
+        new void Update()
         {
             // Update temperature display in real-time
             if (tempDisplay != null)

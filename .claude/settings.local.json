@@ -13,7 +13,10 @@
       "mcp__UnityMCP__manage_asset",
       "mcp__UnityMCP__set_active_instance",
       "mcp__UnityMCP__execute_menu_item",
-      "mcp__UnityMCP__run_tests"
+      "mcp__UnityMCP__run_tests",
+      "Bash(git merge-base:*)",
+      "Bash(FILTER_BRANCH_SQUELCH_WARNING=1 git filter-branch:*)",
+      "Bash(git push:*)"
     ],
     "deny": [],
     "ask": []

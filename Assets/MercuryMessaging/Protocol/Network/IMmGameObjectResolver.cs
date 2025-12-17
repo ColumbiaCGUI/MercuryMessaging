@@ -1,4 +1,4 @@
-// Copyright (c) 2017-2025, Columbia University
+﻿// Copyright (c) 2017-2025, Columbia University
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -27,7 +27,7 @@
 //
 // =============================================================
 // Authors:
-// Carmine Elvezio, Mengu Sukan, Steven Feiner, [Contributors]
+// Ben Yang, Carmine Elvezio, Mengu Sukan, Steven Feiner, [Contributors]
 // =============================================================
 //
 
@@ -39,9 +39,8 @@ namespace MercuryMessaging.Network
     /// Interface for resolving network IDs to GameObjects and vice versa.
     ///
     /// Each networking backend has its own ID scheme:
-    /// - PUN2: PhotonView.ViewID
     /// - FishNet: NetworkObject.ObjectId
-    /// - Fusion: NetworkObject.Id.Raw
+    /// - Fusion 2: NetworkObject.Id.Raw
     ///
     /// Implementations translate between these backend-specific IDs
     /// and Unity GameObjects, enabling MmMessageGameObject to work

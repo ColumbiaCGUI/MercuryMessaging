@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<test-run id="1" name="MercuryMessaging" fullname="MercuryMessaging" result="Passed" total="1" passed="1" failed="0" skipped="0" duration="1.378" start-time="2025-12-17T17:07:01.6782333Z" end-time="2025-12-17T17:07:03.0566797Z">
+  <test-suite name="MercuryMessaging" fullname="MercuryMessaging" result="Passed" duration="1.378">
+    <test-suite name="MercuryMessaging.Tests.dll" fullname="C:/Users/yangb/Research/MercuryMessaging/Library/ScriptAssemblies/MercuryMessaging.Tests.dll" result="Passed" duration="1.318">
+      <test-suite name="MercuryMessaging" fullname="MercuryMessaging" result="Passed" duration="1.299">
+        <test-suite name="Tests" fullname="MercuryMessaging.Tests" result="Passed" duration="1.251">
+          <test-suite name="FluentApiPerformanceTests" fullname="MercuryMessaging.Tests.FluentApiPerformanceTests" result="Passed" duration="1.235">
+            <test-case name="Benchmark_CompareOverhead_SimpleMessage" fullname="MercuryMessaging.Tests.FluentApiPerformanceTests.Benchmark_CompareOverhead_SimpleMessage" result="Passed" duration="1.189">
+              <output>
+=================================================================
+DSL vs Traditional API Performance Comparison
+=================================================================
+Traditional API:     29837.27 ns/message
+Fluent DSL:          77697.09 ns/message
+Overhead:            160.4%
+=================================================================
+Iterations: 10,000
+Target: &lt;2% overhead (or negative = DSL faster)
+=================================================================
+
+</output>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

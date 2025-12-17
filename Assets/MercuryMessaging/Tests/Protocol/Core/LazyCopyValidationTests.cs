@@ -1,4 +1,7 @@
-// Copyright (c) 2017-2019, Columbia University
+﻿// Suppress MM analyzer warnings - test code intentionally uses patterns that trigger warnings
+#pragma warning disable MM002, MM005, MM006, MM008, MM014, MM015
+
+// Copyright (c) 2017-2025, Columbia University
 // All rights reserved.
 //
 // QW-2: Lazy Message Copying Tests
@@ -40,14 +43,22 @@ namespace MercuryMessaging.Tests
         public void SetUp()
         {
             MessageReceiveCounter.receiveCount = 0;
+            MessageTypeCounter.typesReceived = 0;
         }
 
         [TearDown]
         public void TearDown()
         {
-            // Unity automatically cleans up GameObjects between tests
-            // Reset static counter only
+            // Reset static counters
             MessageReceiveCounter.receiveCount = 0;
+            MessageTypeCounter.typesReceived = 0;
+
+            // Clean up GameObjects
+            if (testNode != null)
+            {
+                Object.DestroyImmediate(testNode);
+                testNode = null;
+            }
         }
 
         /// <summary>

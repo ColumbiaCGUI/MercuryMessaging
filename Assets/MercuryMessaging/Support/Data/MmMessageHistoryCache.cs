@@ -1,4 +1,4 @@
-// Copyright (c) 2017-2019, Columbia University
+﻿// Copyright (c) 2017-2025, Columbia University
 // All rights reserved.
 //
 // Routing Optimization - Message History Cache
@@ -241,8 +241,10 @@ namespace MercuryMessaging.Data
             {
                 var oldestEntry = _evictionQueue.First.Value;
 
-                // Stop when we hit entry within window
-                if (oldestEntry.Timestamp >= evictionThreshold)
+                // Stop when we hit entry strictly within window
+                // Use > (not >=) so that entries at exactly the threshold are evicted
+                // This ensures 0ms window evicts all entries immediately
+                if (oldestEntry.Timestamp > evictionThreshold)
                     break;
 
                 // Remove from all data structures

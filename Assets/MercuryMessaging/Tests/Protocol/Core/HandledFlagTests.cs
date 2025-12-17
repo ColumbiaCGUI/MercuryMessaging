@@ -1,4 +1,4 @@
-// Copyright (c) 2017-2019, Columbia University
+﻿// Copyright (c) 2017-2025, Columbia University
 // All rights reserved.
 //
 // E1-E3: Handled Flag Early Termination Tests
@@ -184,35 +184,30 @@ namespace MercuryMessaging.Tests
         [UnityTest]
         public IEnumerator HandledFlag_ToChildren_StopsPropagation()
         {
-            // Arrange - Create parent with children
-            rootNode = new GameObject("Root");
-            testObjects.Add(rootNode);
-            var relay = rootNode.AddComponent<MmRelayNode>();
+            // Arrange - Create parent with children using MmTestHierarchy
+            using var hierarchy = MmTestHierarchy.Build("Root")
+                .AddChild<HandledTestResponder>("Child_0")
+                .Parent()
+                .AddChild<HandledTestResponder>("Child_1")
+                .Parent()
+                .AddChild<HandledTestResponder>("Child_2")
+                .Build();
 
-            // Create child nodes
-            var childRelays = new List<MmRelayNode>();
-            for (int i = 0; i < 3; i++)
-            {
-                var child = new GameObject($"Child_{i}");
-                child.transform.SetParent(rootNode.transform);
-                var childRelay = child.AddComponent<MmRelayNode>();
-                var responder = child.AddComponent<HandledTestResponder>();
-                responder.responderId = i;
-                responder.shouldHandle = (i == 0); // First child handles
-                testObjects.Add(child);
-                childRelays.Add(childRelay);
+            var relay = hierarchy.Root;
 
-                // CRITICAL: Register child relay with parent's routing table for ToChildren() to work
-                relay.MmAddToRoutingTable(childRelay, MmLevelFilter.Child);
-                childRelay.AddParent(relay);
-            }
+            // Configure responders - first child handles the message
+            var resp0 = hierarchy.GetResponder<HandledTestResponder>("Child_0");
+            resp0.responderId = 0;
+            resp0.shouldHandle = true;
 
-            yield return null;
-            // Refresh child relays to register their responders
-            foreach (var childRelay in childRelays)
-            {
-                childRelay.MmRefreshResponders();
-            }
+            var resp1 = hierarchy.GetResponder<HandledTestResponder>("Child_1");
+            resp1.responderId = 1;
+            resp1.shouldHandle = false;
+
+            var resp2 = hierarchy.GetResponder<HandledTestResponder>("Child_2");
+            resp2.responderId = 2;
+            resp2.shouldHandle = false;
+
             yield return null;
 
             // Act
@@ -285,8 +280,9 @@ namespace MercuryMessaging.Tests
 
         /// <summary>
         /// Test responder that optionally sets Handled=true
+        /// Internal for MmTestHierarchy.AddChild compatibility
         /// </summary>
-        private class HandledTestResponder : MmBaseResponder
+        internal class HandledTestResponder : MmBaseResponder
         {
             public static int invokeCount = 0;
             public static List<int> invokeOrder = new List<int>();

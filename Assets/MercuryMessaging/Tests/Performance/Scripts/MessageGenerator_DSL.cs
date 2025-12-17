@@ -129,11 +129,11 @@ namespace MercuryMessaging.Tests.Performance
             // Find test harnesses if not set
             if (testHarness == null)
             {
-                testHarness = FindObjectOfType<PerformanceTestHarness>();
+                testHarness = FindFirstObjectByType<PerformanceTestHarness>();
             }
             if (comparisonHarness == null)
             {
-                comparisonHarness = FindObjectOfType<ComparisonTestHarness>();
+                comparisonHarness = FindFirstObjectByType<ComparisonTestHarness>();
             }
 
             // Calculate interval

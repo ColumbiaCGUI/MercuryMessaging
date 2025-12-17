@@ -1,3 +1,6 @@
+// Suppress MM015: Filter equality checks are intentional for exact match routing logic
+#pragma warning disable MM015
+
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;

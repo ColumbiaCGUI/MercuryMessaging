@@ -562,6 +562,61 @@ When encountering errors:
 
 ---
 
+## Running and Checking Tests
+
+### Running Tests via Unity MCP
+
+```
+# Run PlayMode tests (most common)
+mcp__UnityMCP__run_tests mode=PlayMode
+
+# Check for completion
+mcp__UnityMCP__read_console action=get count=5
+```
+
+### Automated Test Result Export
+
+Test results are **automatically exported** to `dev/test-results/` after each test run:
+
+- `TestResults_YYYYMMDD_HHMMSS.xml` - Full NUnit-compatible XML
+- `TestResults_YYYYMMDD_HHMMSS_summary.txt` - Quick summary with failed tests
+
+**To check latest test results:**
+
+```bash
+# Find latest test result file
+find dev/test-results -name "*.xml" -type f | sort -r | head -1
+
+# Read the summary file
+cat dev/test-results/TestResults_*_summary.txt | head -20
+
+# Search for failed tests
+grep -A5 "result=\"Failed\"" dev/test-results/TestResults_*.xml | head -50
+```
+
+### Common Test Patterns
+
+**Creating test hierarchies:** Use `MmTestHierarchy` for clean test setup:
+
+```csharp
+// Simple single node with responder
+using var hierarchy = MmTestHierarchy.CreateSingle<TestResponder>("TestNode");
+
+// Complex hierarchy with builder pattern
+using var hierarchy = MmTestHierarchy.Build("Root")
+    .WithResponder<TestResponder>()
+    .AddChild<TestResponder>("Child")
+    .Build();
+
+// Access nodes and responders
+var relay = hierarchy.Root;
+var responder = hierarchy.GetRootResponder<TestResponder>();
+```
+
+**Important:** `MmBaseResponder` has `[RequireComponent(typeof(MmRelayNode))]`, so responders always have a relay node automatically added.
+
+---
+
 ## Questions to Ask Yourself
 
 Before making changes:
@@ -584,6 +639,159 @@ Before marking a task complete:
 
 ---
 
-**Last Updated:** 2025-11-20
+## Editor Menu Structure
+
+**IMPORTANT:** All editor menus should be consolidated under the `MercuryMessaging/` top-level menu. Do NOT create separate tabs like "Mercury", "UserStudy", etc.
+
+### Centralized Menu Definition
+
+All editor menus are defined in: `Assets/MercuryMessaging/Editor/MmEditorMenus.cs`
+
+### Current Menu Structure (as of 2025-12-12)
+
+```
+MercuryMessaging/
+├── Validation/
+│   ├── Validate Hierarchy          (MmHierarchyValidator.cs)
+│   └── Validate Selected           (MmHierarchyValidator.cs)
+├── Network Tests/
+│   ├── Build Fusion 2 Test Scene   (MmEditorMenus.cs) - Creates complete Fusion 2 test scene
+│   ├── Build FishNet Test Scene    (MmEditorMenus.cs) - Creates FishNet test scene
+│   ├── Build Test Hierarchy        (MmEditorMenus.cs) - Builds hierarchy in current scene
+│   └── Verify Hierarchy            (MmEditorMenus.cs) - Validates network test setup
+└── Performance/
+    └── Build Test Scenes           (PerformanceSceneBuilder.cs)
+```
+
+---
+
+## Fusion 2 Integration Setup
+
+**IMPORTANT:** Setting up Fusion 2 requires several configuration steps beyond installing the package.
+
+### Prerequisites
+
+1. Install Photon Fusion 2 via Package Manager
+2. Install ParrelSync for multi-editor testing (optional but recommended)
+
+### Required Configuration Steps
+
+#### Step 1: Add MercuryMessaging Assembly to Fusion Weaver
+
+Fusion 2 uses IL weaving for NetworkBehaviour. MercuryMessaging must be registered:
+
+1. Open `Assets/Photon/Fusion/Resources/NetworkProjectConfig.asset`
+2. Find **Assemblies to Weave** section
+3. Add `MercuryMessaging` to the list
+
+Without this step, you'll get: `InvalidOperationException: Type MmFusion2Bridge has not been weaved`
+
+#### Step 2: Enable Unsafe Code (Already Done)
+
+The `MercuryMessaging.asmdef` has `allowUnsafeCode: true` which is required for Fusion IL weaving.
+
+#### Step 3: Create MmFusion2Bridge Prefab
+
+A spawnable NetworkObject prefab is required for Fusion 2 RPCs:
+
+1. Create empty GameObject
+2. Add `NetworkObject` component
+3. Add `MmFusion2Bridge` component
+4. Save as prefab in `MercuryMessaging/Examples/MmFusion2Bridge.prefab`
+5. Assign prefab to `Fusion2TestManager.mmFusion2BridgePrefab` field
+
+### Test Scene Structure (Fusion2Test.unity)
+
+```
+Scene Hierarchy:
+├── NetworkRunner (NetworkRunner + NetworkSceneManagerDefault)
+├── MmNetworkBridge (MmNetworkBridge + Fusion2BridgeSetup)
+├── TestRoot (MmRelayNode)
+│   ├── ChildA (MmRelayNode + NetworkTestResponder)
+│   │   └── GrandchildA1 (MmRelayNode + NetworkTestResponder)
+│   └── ChildB (MmRelayNode + NetworkTestResponder)
+│       └── GrandchildB1 (MmRelayNode + NetworkTestResponder)
+└── Fusion2TestManager (Fusion2TestManager - Test GUI)
+```
+
+### Testing with ParrelSync
+
+1. Open ParrelSync: `ParrelSync > Clones Manager`
+2. Create a clone if none exists
+3. Open clone in separate Unity Editor
+4. In main editor: Click "Start Host" button in game view
+5. In clone editor: Click "Start Client" button in game view
+6. Use GUI buttons to send messages between host and client
+
+### Key Differences from FishNet
+
+| Feature | FishNet | Fusion 2 |
+|---------|---------|----------|
+| Message Transport | Broadcasts (stateless) | RPCs on NetworkBehaviour |
+| Requires NetworkObject | No | Yes (for MmFusion2Bridge) |
+| Host Initialization | OnServerStarted callback | Auto-detect in Update() |
+| Client Initialization | OnClientStarted callback | OnConnectedToServer callback |
+| IL Weaving | Not required | Required (NetworkProjectConfig) |
+
+### Troubleshooting
+
+**"Type has not been weaved"**
+→ Add MercuryMessaging to NetworkProjectConfig assemblies
+
+**"Assembly does not allow unsafe code"**
+→ Set `allowUnsafeCode: true` in MercuryMessaging.asmdef
+
+**"RpcSendToServer - no backend connected"**
+→ MmFusion2Bridge couldn't find Fusion2Backend. Ensure:
+- MmNetworkBridge has Fusion2BridgeSetup component
+- Fusion2BridgeSetup.Configure() was called (auto on Start)
+- MmFusion2Bridge prefab is spawned after network starts
+
+**Host shows "Not connected" when sending**
+→ Host doesn't receive OnConnectedToServer. Fixed by auto-init in Update() when runner is running.
+
+### Adding New Menu Items
+
+When adding new editor functionality:
+
+1. **Add to MmEditorMenus.cs** for new menus
+2. **Use consistent paths**: Always start with `MercuryMessaging/`
+3. **Group logically**: Use submenus for related functionality
+4. **Use priority values**: Lower numbers appear higher in menu
+
+```csharp
+// Example: Adding a new menu item
+[MenuItem("MercuryMessaging/Tools/My New Tool", false, 100)]
+public static void MyNewTool()
+{
+    // Implementation
+}
+```
+
+### Menu Files Reference
+
+| File | Menu Items |
+|------|------------|
+| `Editor/MmEditorMenus.cs` | Network test scene builders, test hierarchy |
+| `Editor/MmHierarchyValidator.cs` | Hierarchy validation tools |
+| `Tests/Performance/Editor/PerformanceSceneBuilder.cs` | Performance test scene builder |
+
+### DO NOT Create New Top-Level Menus
+
+❌ **Wrong:**
+```csharp
+[MenuItem("Mercury/Something")]
+[MenuItem("UserStudy/Something")]
+[MenuItem("Framework/Something")]
+```
+
+✅ **Correct:**
+```csharp
+[MenuItem("MercuryMessaging/Category/Something")]
+```
+
+---
+
+**Last Updated:** 2025-12-12
 **Maintained By:** Framework Team
 **Applies To:** All AI assistants working on MercuryMessaging

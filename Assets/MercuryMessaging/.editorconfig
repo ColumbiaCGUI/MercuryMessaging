@@ -1,0 +1,100 @@
+# MercuryMessaging EditorConfig
+# https://editorconfig.org
+#
+# This file travels with the MercuryMessaging framework and configures
+# analyzer severity for framework code, tests, and examples.
+
+root = true
+
+# ============================================================================
+# Default settings for all C# files
+# ============================================================================
+[*.cs]
+
+# Unity-specific: Suppress warnings for serialized fields that appear "unused"
+# CS0649: Field is never assigned to (Unity assigns via Inspector/serialization)
+dotnet_diagnostic.CS0649.severity = silent
+
+# CS0414: Field assigned but never used (common for debug/inspector fields)
+dotnet_diagnostic.CS0414.severity = suggestion
+
+# IDE0044: Make field readonly (Unity serialized fields can't be readonly)
+dotnet_diagnostic.IDE0044.severity = suggestion
+
+# IDE0051: Remove unused private member (Unity uses reflection for callbacks)
+dotnet_diagnostic.IDE0051.severity = suggestion
+
+# IDE0052: Remove unread private member
+dotnet_diagnostic.IDE0052.severity = suggestion
+
+# MM001: Suggest fluent DSL - info only, not a warning
+dotnet_diagnostic.MM001.severity = suggestion
+# MM004: Suggest broadcast methods - info only
+dotnet_diagnostic.MM004.severity = suggestion
+# MM011: Suggest MmExtendableResponder - info only
+dotnet_diagnostic.MM011.severity = suggestion
+# MM013: Responder without relay - info only (often parent has relay)
+dotnet_diagnostic.MM013.severity = suggestion
+
+# ============================================================================
+# Suppress ALL MercuryMessaging analyzers in Test files
+# Tests intentionally use patterns that would be flagged in production code
+# ============================================================================
+[Tests/**/*.cs]
+dotnet_diagnostic.MM001.severity = none
+dotnet_diagnostic.MM002.severity = none
+dotnet_diagnostic.MM003.severity = none
+dotnet_diagnostic.MM004.severity = none
+dotnet_diagnostic.MM005.severity = none
+dotnet_diagnostic.MM006.severity = none
+dotnet_diagnostic.MM007.severity = none
+dotnet_diagnostic.MM008.severity = none
+dotnet_diagnostic.MM009.severity = none
+dotnet_diagnostic.MM010.severity = none
+dotnet_diagnostic.MM011.severity = none
+dotnet_diagnostic.MM012.severity = none
+dotnet_diagnostic.MM013.severity = none
+dotnet_diagnostic.MM014.severity = none
+dotnet_diagnostic.MM015.severity = none
+dotnet_diagnostic.MMG001.severity = none
+dotnet_diagnostic.MMG002.severity = none
+dotnet_diagnostic.MMG003.severity = none
+dotnet_diagnostic.MMG004.severity = none
+
+# ============================================================================
+# Suppress MercuryMessaging analyzers in Example/Tutorial files
+# Examples may demonstrate specific patterns that trigger warnings
+# ============================================================================
+[Examples/**/*.cs]
+dotnet_diagnostic.MM001.severity = none
+dotnet_diagnostic.MM002.severity = none
+dotnet_diagnostic.MM003.severity = none
+dotnet_diagnostic.MM004.severity = none
+dotnet_diagnostic.MM005.severity = none
+dotnet_diagnostic.MM006.severity = none
+dotnet_diagnostic.MM007.severity = none
+dotnet_diagnostic.MM008.severity = none
+dotnet_diagnostic.MM009.severity = none
+dotnet_diagnostic.MM010.severity = none
+dotnet_diagnostic.MM011.severity = none
+dotnet_diagnostic.MM012.severity = none
+dotnet_diagnostic.MM013.severity = none
+dotnet_diagnostic.MM014.severity = none
+dotnet_diagnostic.MM015.severity = none
+
+[Tutorials/**/*.cs]
+dotnet_diagnostic.MM001.severity = none
+dotnet_diagnostic.MM002.severity = none
+dotnet_diagnostic.MM003.severity = none
+dotnet_diagnostic.MM004.severity = none
+dotnet_diagnostic.MM005.severity = none
+dotnet_diagnostic.MM006.severity = none
+dotnet_diagnostic.MM007.severity = none
+dotnet_diagnostic.MM008.severity = none
+dotnet_diagnostic.MM009.severity = none
+dotnet_diagnostic.MM010.severity = none
+dotnet_diagnostic.MM011.severity = none
+dotnet_diagnostic.MM012.severity = none
+dotnet_diagnostic.MM013.severity = none
+dotnet_diagnostic.MM014.severity = none
+dotnet_diagnostic.MM015.severity = none

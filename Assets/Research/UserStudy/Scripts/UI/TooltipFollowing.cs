@@ -1,3 +1,7 @@
+// Suppress MM008: This class manages UI line rendering, not MercuryMessaging responders
+// SetParent is used for Unity hierarchy organization, not MM routing
+#pragma warning disable MM008
+
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;

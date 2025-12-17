@@ -1,0 +1,59 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="Node000000" href="$class_mercury_messaging_1_1_mm_message.html" title="Base class for messages passed through MmInvoke." alt="" coords="5,849,216,875"/>
+<area shape="rect" id="Node000001" href="$class_mercury_messaging_1_1_mm_message_bool.html" title="MmMessage with bool payload." alt="" coords="269,5,506,31"/>
+<area shape="poly" id="edge69_Node000000_Node000001" title=" " alt="" coords="110,835,120,674,145,435,165,311,190,198,223,105,241,69,262,41,279,29,282,33,266,45,246,71,227,107,196,199,170,312,151,436,126,674,116,836"/>
+<area shape="rect" id="Node000002" href="$class_mercury_messaging_1_1_mm_message_byte_array.html" title="MmMessage with byte array payload." alt="" coords="282,55,493,95"/>
+<area shape="poly" id="edge70_Node000000_Node000002" title=" " alt="" coords="111,835,123,686,151,466,171,353,196,249,226,164,243,131,262,105,280,91,284,95,266,109,248,134,231,166,201,251,176,354,156,467,129,686,116,836"/>
+<area shape="rect" id="Node000003" href="$class_mercury_messaging_1_1_mm_message_float.html" title="MmMessage with float payload." alt="" coords="282,119,493,159"/>
+<area shape="poly" id="edge71_Node000000_Node000003" title=" " alt="" coords="112,836,126,697,155,497,175,394,199,300,228,222,245,192,262,169,280,156,283,160,266,173,249,195,233,225,204,302,180,396,160,498,131,698,117,836"/>
+<area shape="rect" id="Node000004" href="$class_mercury_messaging_1_1_mm_message_game_object.html" title="MmMessage with MmMessageGameObject payload." alt="" coords="282,183,493,223"/>
+<area shape="poly" id="edge72_Node000000_Node000004" title=" " alt="" coords="112,835,128,708,159,527,179,435,203,350,231,281,246,254,262,233,280,220,283,224,266,237,250,257,236,283,208,352,184,436,164,528,134,709,118,836"/>
+<area shape="rect" id="Node000005" href="$class_mercury_messaging_1_1_mm_message_int.html" title="MmMessage with int payload." alt="" coords="275,248,500,273"/>
+<area shape="poly" id="edge73_Node000000_Node000005" title=" " alt="" coords="113,835,130,717,161,551,182,466,205,389,232,327,247,302,262,284,280,271,283,276,266,288,251,305,237,329,210,391,187,468,166,552,135,718,118,836"/>
+<area shape="rect" id="Node000006" href="$class_mercury_messaging_1_1_mm_message_quaternion.html" title="MmMessage with Quaternion payload." alt="" coords="282,298,493,338"/>
+<area shape="poly" id="edge74_Node000000_Node000006" title=" " alt="" coords="109,835,112,743,119,681,132,612,151,541,178,471,214,405,262,348,280,335,284,339,266,352,219,408,183,473,156,543,137,613,125,681,118,744,114,836"/>
+<area shape="rect" id="Node000007" href="$class_mercury_messaging_1_1_mm_message_serializable.html" title="MmMessage that sends a serialized object as payload You need to assign your implementation of the IMS..." alt="" coords="282,362,493,402"/>
+<area shape="poly" id="edge75_Node000000_Node000007" title=" " alt="" coords="110,835,118,753,126,698,140,639,159,578,185,517,219,461,262,412,280,399,283,403,266,416,224,464,190,520,164,579,145,640,132,699,123,754,115,835"/>
+<area shape="rect" id="Node000008" href="$class_mercury_messaging_1_1_mm_message_string.html" title="MmMessage with string payload." alt="" coords="282,426,493,466"/>
+<area shape="poly" id="edge76_Node000000_Node000008" title=" " alt="" coords="112,835,123,763,148,667,168,615,193,564,224,517,262,476,280,463,283,468,266,480,228,520,197,567,173,617,153,668,128,764,117,836"/>
+<area shape="rect" id="Node000009" href="$class_mercury_messaging_1_1_mm_message_transform.html" title="MmMessage with MmTransform payload." alt="" coords="282,490,493,530"/>
+<area shape="poly" id="edge77_Node000000_Node000009" title=" " alt="" coords="114,836,129,775,157,695,176,653,200,611,229,573,262,540,281,528,284,532,266,544,233,577,204,614,181,655,161,697,134,776,119,837"/>
+<area shape="rect" id="Node000010" href="$class_mercury_messaging_1_1_mm_message_transform_list.html" title="MmMessage with Transform List payload." alt="" coords="282,554,493,594"/>
+<area shape="poly" id="edge78_Node000000_Node000010" title=" " alt="" coords="117,835,136,786,166,723,208,659,233,629,262,604,283,592,285,596,266,608,237,633,212,662,170,726,141,788,122,837"/>
+<area shape="rect" id="Node000011" href="$class_mercury_messaging_1_1_mm_message_vector3.html" title="MmMessage with Vector3 payload." alt="" coords="282,618,493,658"/>
+<area shape="poly" id="edge79_Node000000_Node000011" title=" " alt="" coords="122,836,144,798,176,753,215,707,263,668,285,656,288,661,265,672,219,711,180,756,149,801,127,838"/>
+<area shape="rect" id="Node000012" href="$class_mercury_messaging_1_1_mm_message_vector4.html" title="MmMessage with Vector4 payload." alt="" coords="282,682,493,722"/>
+<area shape="poly" id="edge80_Node000000_Node000012" title=" " alt="" coords="131,837,187,784,223,756,263,732,291,720,293,725,265,736,226,760,190,788,134,841"/>
+<area shape="rect" id="Node000013" href="$class_mercury_messaging_1_1_standard_library_1_1_input_1_1_mm_input6_d_o_f_message.html" title="6DOF (Six Degrees of Freedom) input message." alt="" coords="270,746,505,786"/>
+<area shape="poly" id="edge81_Node000000_Node000013" title=" " alt="" coords="150,841,263,795,302,784,304,789,265,801,152,846"/>
+<area shape="rect" id="Node000014" href="$class_mercury_messaging_1_1_standard_library_1_1_input_1_1_mm_input_axis_message.html" title="Axis input message." alt="" coords="274,810,501,850"/>
+<area shape="poly" id="edge82_Node000000_Node000014" title=" " alt="" coords="229,846,273,840,274,846,230,851"/>
+<area shape="rect" id="Node000015" href="$class_mercury_messaging_1_1_standard_library_1_1_input_1_1_mm_input_button_message.html" title="Button input message." alt="" coords="268,874,507,914"/>
+<area shape="poly" id="edge83_Node000000_Node000015" title=" " alt="" coords="230,873,268,878,267,883,230,878"/>
+<area shape="rect" id="Node000016" href="$class_mercury_messaging_1_1_standard_library_1_1_input_1_1_mm_input_controller_state_message.html" title="Controller connection state message." alt="" coords="286,939,489,993"/>
+<area shape="poly" id="edge84_Node000000_Node000016" title=" " alt="" coords="154,878,265,924,300,936,298,941,263,928,152,883"/>
+<area shape="rect" id="Node000017" href="$class_mercury_messaging_1_1_standard_library_1_1_input_1_1_mm_input_gaze_message.html" title="Eye tracking gaze message." alt="" coords="272,1018,503,1058"/>
+<area shape="poly" id="edge85_Node000000_Node000017" title=" " alt="" coords="132,883,188,943,225,975,265,1002,295,1016,292,1020,263,1007,222,979,184,947,128,887"/>
+<area shape="rect" id="Node000018" href="$class_mercury_messaging_1_1_standard_library_1_1_input_1_1_mm_input_gesture_message.html" title="Hand gesture recognition message." alt="" coords="264,1082,511,1122"/>
+<area shape="poly" id="edge86_Node000000_Node000018" title=" " alt="" coords="126,887,147,927,178,976,218,1026,266,1068,287,1079,284,1084,262,1072,214,1030,173,979,142,930,121,889"/>
+<area shape="rect" id="Node000019" href="$class_mercury_messaging_1_1_standard_library_1_1_input_1_1_mm_input_haptic_message.html" title="Haptic feedback request message." alt="" coords="269,1146,506,1186"/>
+<area shape="poly" id="edge87_Node000000_Node000019" title=" " alt="" coords="122,887,139,940,168,1006,210,1074,236,1105,266,1132,285,1144,282,1148,262,1136,232,1109,206,1077,164,1008,134,942,117,889"/>
+<area shape="rect" id="Node000020" href="$class_mercury_messaging_1_1_standard_library_1_1_input_1_1_mm_input_touch_message.html" title="Touch surface input message." alt="" coords="270,1210,505,1250"/>
+<area shape="poly" id="edge88_Node000000_Node000020" title=" " alt="" coords="119,887,132,950,159,1034,179,1078,203,1121,232,1161,266,1196,283,1208,280,1212,262,1200,227,1165,198,1124,174,1081,154,1036,127,952,113,888"/>
+<area shape="rect" id="Node000021" href="$class_mercury_messaging_1_1_standard_library_1_1_u_i_1_1_mm_u_i_cancel_message.html" title="UI cancel message." alt="" coords="283,1274,491,1314"/>
+<area shape="poly" id="edge89_Node000000_Node000021" title=" " alt="" coords="117,888,127,962,151,1062,170,1116,195,1169,227,1218,266,1260,284,1273,281,1277,262,1264,223,1221,191,1171,165,1118,146,1064,121,963,111,889"/>
+<area shape="rect" id="Node000022" href="$class_mercury_messaging_1_1_standard_library_1_1_u_i_1_1_mm_u_i_click_message.html" title="UI click/tap message." alt="" coords="289,1338,486,1378"/>
+<area shape="poly" id="edge90_Node000000_Node000022" title=" " alt="" coords="115,888,122,973,130,1029,143,1090,162,1154,188,1216,222,1274,266,1324,290,1340,287,1345,262,1328,218,1277,183,1218,157,1156,138,1092,125,1030,116,973,110,889"/>
+<area shape="rect" id="Node000023" href="$class_mercury_messaging_1_1_standard_library_1_1_u_i_1_1_mm_u_i_drag_message.html" title="UI drag message." alt="" coords="290,1402,485,1442"/>
+<area shape="poly" id="edge91_Node000000_Node000023" title=" " alt="" coords="114,889,117,983,123,1047,135,1118,154,1191,181,1263,218,1330,240,1360,266,1388,291,1405,288,1409,262,1392,236,1364,213,1333,176,1265,149,1192,130,1119,118,1048,111,984,108,889"/>
+<area shape="rect" id="Node000024" href="$class_mercury_messaging_1_1_standard_library_1_1_u_i_1_1_mm_u_i_focus_message.html" title="UI focus message." alt="" coords="285,1466,489,1506"/>
+<area shape="poly" id="edge92_Node000000_Node000024" title=" " alt="" coords="118,888,135,1009,166,1179,187,1266,210,1344,237,1409,251,1434,266,1452,287,1467,284,1472,262,1456,247,1437,232,1411,205,1346,182,1267,161,1180,130,1010,113,889"/>
+<area shape="rect" id="Node000025" href="$class_mercury_messaging_1_1_standard_library_1_1_u_i_1_1_mm_u_i_hover_message.html" title="UI hover message." alt="" coords="287,1530,487,1570"/>
+<area shape="poly" id="edge93_Node000000_Node000025" title=" " alt="" coords="117,888,133,1020,162,1210,182,1307,207,1395,234,1468,250,1495,266,1516,288,1532,285,1537,262,1520,245,1498,230,1470,202,1397,177,1308,157,1211,127,1021,112,889"/>
+<area shape="rect" id="Node000026" href="$class_mercury_messaging_1_1_standard_library_1_1_u_i_1_1_mm_u_i_scroll_message.html" title="UI scroll message." alt="" coords="287,1594,488,1634"/>
+<area shape="poly" id="edge94_Node000000_Node000026" title=" " alt="" coords="117,888,130,1032,158,1240,178,1348,203,1446,232,1526,248,1557,266,1580,288,1596,285,1601,262,1584,244,1560,227,1528,198,1447,173,1349,153,1241,125,1032,111,889"/>
+<area shape="rect" id="Node000027" href="$class_mercury_messaging_1_1_standard_library_1_1_u_i_1_1_mm_u_i_select_message.html" title="UI selection message." alt="" coords="285,1658,490,1698"/>
+<area shape="poly" id="edge95_Node000000_Node000027" title=" " alt="" coords="116,888,128,1043,154,1271,174,1388,199,1496,230,1585,247,1619,266,1644,286,1659,283,1664,262,1648,243,1621,225,1587,194,1498,169,1389,149,1271,122,1043,111,889"/>
+<area shape="rect" id="Node000028" href="$class_mercury_messaging_1_1_standard_library_1_1_u_i_1_1_mm_u_i_submit_message.html" title="UI submit message." alt="" coords="283,1722,492,1762"/>
+<area shape="poly" id="edge96_Node000000_Node000028" title=" " alt="" coords="116,888,125,1054,150,1301,170,1429,195,1547,227,1643,246,1680,266,1708,284,1722,281,1727,262,1712,241,1683,222,1645,190,1548,165,1430,145,1302,120,1054,110,889"/>
+</map>
