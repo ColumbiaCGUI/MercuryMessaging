@@ -1,0 +1,17 @@
+<map id="MercuryMessaging.MmRelayNode" name="MercuryMessaging.MmRelayNode">
+<area shape="rect" id="Node000001" title="Base routing node of Mercury XM." alt="" coords="544,63,765,88"/>
+<area shape="rect" id="Node000006" href="$class_mercury_messaging_1_1_mm_quick_node.html" title="Modification of the standard MmRelayNode that allows skipping of standard checks to allow for faster ..." alt="" coords="813,5,1036,31"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="728,57,864,28,865,33,729,62"/>
+<area shape="rect" id="Node000007" href="$class_mercury_messaging_1_1_mm_relay_app_state_node.html" title="MmRelayNode for handling MmAppStateResponder." alt="" coords="829,55,1020,95"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="779,73,829,73,829,78,779,78"/>
+<area shape="rect" id="Node000008" href="$class_mercury_messaging_1_1_mm_relay_switch_node.html" title="an MmRelayNode with an FSM to allow for limited MmResponder selection in the MmRelayNode&#39;s MmRoutingT..." alt="" coords="829,119,1020,159"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="723,89,840,117,839,122,722,94"/>
+<area shape="rect" id="Node000002" href="$class_mercury_messaging_1_1_mm_responder.html" title="Base implmentation of IMmResponder." alt="" coords="276,37,496,63"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="510,59,544,62,543,68,509,64"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="61,13,172,39"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="186,29,276,38,275,43,186,35"/>
+<area shape="rect" id="Node000004" href="$interface_mercury_messaging_1_1_i_mm_responder.html" title="The core of MercuryMessaging." alt="" coords="5,63,228,88"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="241,61,276,58,276,63,242,66"/>
+<area shape="rect" id="Node000005" href="$interface_mercury_messaging_1_1_i_mm_node.html" title="Defines methods required by an MmResponder &amp; utility methods making invocation MmMethods with built&#45;i..." alt="" coords="291,87,481,112"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="495,87,544,83,544,88,495,92"/>
+</map>

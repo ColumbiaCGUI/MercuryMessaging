@@ -1,0 +1,9 @@
+<map id="MercuryMessaging.MmTemporalRunner" name="MercuryMessaging.MmTemporalRunner">
+<area shape="rect" id="Node000001" title="MonoBehaviour that runs temporal coroutines." alt="" coords="5,191,216,231"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="50,5,161,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="109,45,113,190,107,190,103,45"/>
+<area shape="rect" id="Node000003" href="$class_mercury_messaging_1_1_mm_temporal_runner.html" title="MonoBehaviour that runs temporal coroutines." alt="" coords="127,80,337,120"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="137,36,204,78,201,82,134,40"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="203,131,134,192,130,188,199,127"/>
+<area shape="poly" id="edge4_Node000003_Node000003" title=" " alt="" coords="352,92,364,100,356,107,338,110,337,104,354,102,359,100,350,97"/>
+</map>

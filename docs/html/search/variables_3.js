@@ -1,7 +1,29 @@
 var searchData=
 [
-  ['data',['Data',['../class_mercury_messaging_1_1_support_1_1_data_1_1_mm_data_handler_file.html#aea4fb036a338fa2d6cead6fdbb4d305d',1,'MercuryMessaging::Support::Data::MmDataHandlerFile']]],
-  ['dataitems',['dataItems',['../class_mercury_messaging_1_1_support_1_1_data_1_1_mm_data_collector.html#a3eb0c1959c3a0596340f217283307aa1',1,'MercuryMessaging::Support::Data::MmDataCollector']]],
-  ['distance',['distance',['../class_mercury_messaging_1_1_task_1_1_mm_transformation_task_responder.html#a4823f70ca6e58e30271958e93a6be960',1,'MercuryMessaging::Task::MmTransformationTaskResponder']]],
-  ['distancethreshold',['DistanceThreshold',['../class_mercury_messaging_1_1_task_1_1_mm_transform_task_threshold.html#adb45ba6318a722522a910756f5ed8039',1,'MercuryMessaging::Task::MmTransformTaskThreshold']]]
+  ['cansend_0',['CanSend',['../class_mercury_messaging_1_1_mm_transform_responder.html#acd3e88a7fba6f1035cc6ec71ea1013a7',1,'MercuryMessaging::MmTransformResponder']]],
+  ['canvas_1',['Canvas',['../class_mercury_messaging_1_1_mm_gui_handler.html#a183405a99e00c9ed1763e0c6bb61a2ca',1,'MercuryMessaging::MmGuiHandler']]],
+  ['changedfields_2',['ChangedFields',['../class_mercury_messaging_1_1_network_1_1_mm_state_delta.html#a3d852b858d98869427cd1fa86031cf55',1,'MercuryMessaging::Network::MmStateDelta']]],
+  ['clickcount_3',['ClickCount',['../class_mercury_messaging_1_1_standard_library_1_1_u_i_1_1_mm_u_i_click_message.html#adac21bcf2777d333f7a3ec9aafa4762f',1,'MercuryMessaging::StandardLibrary::UI::MmUIClickMessage']]],
+  ['clone_4',['Clone',['../class_mercury_messaging_1_1_mm_routing_table_item.html#aad38b216d66d5972b4e9142edd928746',1,'MercuryMessaging::MmRoutingTableItem']]],
+  ['clutchabortresponse_5',['ClutchAbortResponse',['../class_mercury_messaging_1_1_standard_library_1_1_input_1_1_keyboard_handler_1_1_entry.html#ae38e77973fdcdbe05aa1e804496bcb8e',1,'MercuryMessaging::StandardLibrary::Input::KeyboardHandler::Entry']]],
+  ['clutchreleaseresponse_6',['ClutchReleaseResponse',['../class_mercury_messaging_1_1_standard_library_1_1_input_1_1_keyboard_handler_1_1_entry.html#a90e078feb44b732b52e40b27f971a785',1,'MercuryMessaging::StandardLibrary::Input::KeyboardHandler::Entry']]],
+  ['collection_5fcheck_7',['COLLECTION_CHECK',['../class_mercury_messaging_1_1_mm_hash_set_pool.html#a4938787a2ae577f9ddc9fb0193e729a6',1,'MercuryMessaging.MmHashSetPool.COLLECTION_CHECK'],['../class_mercury_messaging_1_1_mm_message_pool.html#a6c3076c4ac26cb95adb5e8f4bc68cb62',1,'MercuryMessaging.MmMessagePool.COLLECTION_CHECK']]],
+  ['componenttype_8',['ComponentType',['../struct_mercury_messaging_1_1_mm_predicate.html#a183e5c8193567b333259c3528282aa3f',1,'MercuryMessaging::MmPredicate']]],
+  ['compressedpacketmarker_9',['CompressedPacketMarker',['../class_mercury_messaging_1_1_network_1_1_mm_compression.html#a0c151d9b07e7160e9be19b0c92801e20',1,'MercuryMessaging::Network::MmCompression']]],
+  ['confidence_10',['Confidence',['../class_mercury_messaging_1_1_standard_library_1_1_input_1_1_mm_input_gesture_message.html#aae2c6af25bad2b327e7ba1f9c46570fe',1,'MercuryMessaging.StandardLibrary.Input.MmInputGestureMessage.Confidence'],['../class_mercury_messaging_1_1_standard_library_1_1_input_1_1_mm_input_gaze_message.html#a3a6712b345e9a29b171a959fdb7e9d20',1,'MercuryMessaging.StandardLibrary.Input.MmInputGazeMessage.Confidence']]],
+  ['connectedclients_11',['connectedClients',['../class_mercury_messaging_1_1_network_1_1_backends_1_1_fusion2_test_manager.html#ab30f3b05f80620af7b6efb569a394d75',1,'MercuryMessaging::Network::Backends::Fusion2TestManager']]],
+  ['controllertype_12',['ControllerType',['../class_mercury_messaging_1_1_standard_library_1_1_input_1_1_mm_input_controller_state_message.html#aeb81a702e186eeb1b7a3ec1986aa742a',1,'MercuryMessaging::StandardLibrary::Input::MmInputControllerStateMessage']]],
+  ['coroutine_13',['coroutine',['../class_mercury_messaging_1_1_standard_library_1_1_animation_1_1_interpolator-1-g.html#a6bc97179aec6cd0ba1b64f1986bb0249',1,'MercuryMessaging::StandardLibrary::Animation::Interpolator-1-g']]],
+  ['correctionsmoothing_14',['CorrectionSmoothing',['../class_mercury_messaging_1_1_network_1_1_mm_client_prediction.html#ac3639421f4d866568a0dac63df0a6636',1,'MercuryMessaging::Network::MmClientPrediction']]],
+  ['countdown_15',['CountDown',['../class_mercury_messaging_1_1_standard_library_1_1_input_1_1_keyboard_handler_1_1_entry.html#a89feb7c1665a51c16076a5300250807c',1,'MercuryMessaging::StandardLibrary::Input::KeyboardHandler::Entry']]],
+  ['currentsize_16',['CurrentSize',['../struct_mercury_messaging_1_1_data_1_1_mm_message_history_cache_1_1_cache_statistics.html#a4e4e7660a53697b6bf7f20ea68629e47',1,'MercuryMessaging::Data::MmMessageHistoryCache::CacheStatistics']]],
+  ['currenttaskinfo_17',['currentTaskInfo',['../class_mercury_messaging_1_1_task_1_1_mm_task_manager-1-g.html#a4e376614db847b360c1cff5a535e9a4f',1,'MercuryMessaging::Task::MmTaskManager-1-g']]],
+  ['cursequenceindex_18',['curSequenceIndex',['../class_mercury_messaging_1_1_task_1_1_mm_task_info_collection_file_loader-1-g.html#af934a2bf68bf16ccb9078ccf47cdb863',1,'MercuryMessaging::Task::MmTaskInfoCollectionFileLoader-1-g']]],
+  ['customdata_19',['CustomData',['../struct_mercury_messaging_1_1_network_1_1_mm_input_snapshot.html#a9887cdb40ae4843b5b30dc024500d784',1,'MercuryMessaging::Network::MmInputSnapshot']]],
+  ['customfilter_20',['CustomFilter',['../class_mercury_messaging_1_1_mm_routing_options.html#a7f7609039f23d04c585072b9f7c14152',1,'MercuryMessaging::MmRoutingOptions']]],
+  ['customfunc_21',['CustomFunc',['../struct_mercury_messaging_1_1_mm_predicate.html#a5ba25a905011611981c254b7b9f2457a',1,'MercuryMessaging::MmPredicate']]],
+  ['customhandlers_22',['customHandlers',['../class_mercury_messaging_1_1_mm_extendable_responder.html#a7ddbcd3fb668a3864ceea0deea40ce4a',1,'MercuryMessaging::MmExtendableResponder']]],
+  ['customname_23',['CustomName',['../class_mercury_messaging_1_1_standard_library_1_1_input_1_1_mm_input_gesture_message.html#a9d16e93f515a770f366d6d91aca38c7e',1,'MercuryMessaging::StandardLibrary::Input::MmInputGestureMessage']]],
+  ['customrelayfunc_24',['CustomRelayFunc',['../struct_mercury_messaging_1_1_mm_predicate.html#a35a196c260e53ecc235e06b30e617ab6',1,'MercuryMessaging::MmPredicate']]],
+  ['customstate_25',['CustomState',['../struct_mercury_messaging_1_1_network_1_1_mm_state_snapshot.html#a3004f98dddda5fc60048e9439c1ff059',1,'MercuryMessaging::Network::MmStateSnapshot']]]
 ];

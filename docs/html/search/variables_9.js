@@ -1,9 +1,23 @@
 var searchData=
 [
-  ['name',['Name',['../class_mercury_messaging_1_1_mm_routing_table_item.html#a402be215baf61f73044907b5a652771f',1,'MercuryMessaging.MmRoutingTableItem.Name()'],['../class_mercury_messaging_1_1_support_1_1_data_1_1_mm_data_collection_item.html#a38a893062310512e87660b810eff67bb',1,'MercuryMessaging.Support.Data.MmDataCollectionItem.Name()']]],
-  ['netid',['NetId',['../class_mercury_messaging_1_1_mm_message.html#a605d6073caf84b2314b9bc004ef80e05',1,'MercuryMessaging::MmMessage']]],
-  ['networkclient',['NetworkClient',['../class_mercury_messaging_1_1_mm_network_manager.html#a92d30d2f0d32609f8563321416247b33',1,'MercuryMessaging::MmNetworkManager']]],
-  ['networkfilter',['NetworkFilter',['../class_mercury_messaging_1_1_mm_metadata_block.html#a62c2628f3fb96348ff04090a0902226c',1,'MercuryMessaging::MmMetadataBlock']]],
-  ['networksendinterval',['NetworkSendInterval',['../class_mercury_messaging_1_1_mm_transform_responder.html#a3a8c68fbefaab7414ebfcbf62837cfe0',1,'MercuryMessaging::MmTransformResponder']]],
-  ['nodenames',['nodeNames',['../class_mercury_messaging_1_1_mm_test_manager.html#a12a91da3d8cd4049e4a94e698287b9b4',1,'MercuryMessaging::MmTestManager']]]
+  ['includesequenceid_0',['IncludeSequenceID',['../class_mercury_messaging_1_1_data_1_1_mm_task_user_configurator.html#ab4a5b226ffdfa262abdf852857457752',1,'MercuryMessaging::Data::MmTaskUserConfigurator']]],
+  ['initialized_1',['Initialized',['../class_mercury_messaging_1_1_mm_relay_node.html#a8f9be309b9a238613af1a44fe71d09cf',1,'MercuryMessaging::MmRelayNode']]],
+  ['initialrto_2',['InitialRTO',['../class_mercury_messaging_1_1_network_1_1_mm_reliability_manager.html#a7efb3493b60ecae1a19338936af4290a',1,'MercuryMessaging::Network::MmReliabilityManager']]],
+  ['initialstate_3',['InitialState',['../class_mercury_messaging_1_1_mm_switch_responder.html#a9f0c023237e7881ef9d84838ea2e9230',1,'MercuryMessaging::MmSwitchResponder']]],
+  ['inlcudetaskinfodata_4',['InlcudeTaskInfoData',['../class_mercury_messaging_1_1_task_1_1_mm_transformation_task_info.html#a5e49fe6fd89a1446e87011a417f69048',1,'MercuryMessaging::Task::MmTransformationTaskInfo']]],
+  ['intensity_5',['Intensity',['../class_mercury_messaging_1_1_standard_library_1_1_input_1_1_mm_input_haptic_message.html#a732f560c685045c5126cc377bdffeb7d',1,'MercuryMessaging::StandardLibrary::Input::MmInputHapticMessage']]],
+  ['interpolationdelay_6',['InterpolationDelay',['../class_mercury_messaging_1_1_network_1_1_mm_state_interpolator.html#aa083a6858455f88f5e348f2ca56aaa4a',1,'MercuryMessaging::Network::MmStateInterpolator']]],
+  ['interpolators_7',['interpolators',['../class_mercury_messaging_1_1_standard_library_1_1_animation_1_1_material_changer-2-g.html#aaf2b7fbae38cad9cc0715b9fedd996a2',1,'MercuryMessaging::StandardLibrary::Animation::MaterialChanger-2-g']]],
+  ['isallowed_8',['IsAllowed',['../class_mercury_messaging_1_1_standard_library_1_1_input_1_1_keyboard_handler_1_1_entry.html#a6457980cdc3c1816db3326784fec93b2',1,'MercuryMessaging::StandardLibrary::Input::KeyboardHandler::Entry']]],
+  ['isclient_9',['isClient',['../class_mercury_messaging_1_1_network_1_1_backends_1_1_fusion2_test_manager.html#a93deb868ff936372f1ae57af76b8a37a',1,'MercuryMessaging::Network::Backends::Fusion2TestManager']]],
+  ['isconfigured_10',['isConfigured',['../class_mercury_messaging_1_1_network_1_1_backends_1_1_fusion2_bridge_setup.html#ae7f38a425506e349cecdb608c52941b2',1,'MercuryMessaging::Network::Backends::Fusion2BridgeSetup']]],
+  ['isconnected_11',['IsConnected',['../class_mercury_messaging_1_1_standard_library_1_1_input_1_1_mm_input_controller_state_message.html#aa433b418f6a9c8fb19c5e54071ed4988',1,'MercuryMessaging::StandardLibrary::Input::MmInputControllerStateMessage']]],
+  ['isenter_12',['IsEnter',['../class_mercury_messaging_1_1_standard_library_1_1_u_i_1_1_mm_u_i_hover_message.html#adf89abc8e7c6bb54ff21cb07ce834764',1,'MercuryMessaging::StandardLibrary::UI::MmUIHoverMessage']]],
+  ['isfocused_13',['IsFocused',['../class_mercury_messaging_1_1_standard_library_1_1_u_i_1_1_mm_u_i_focus_message.html#acea11d02d3590673a44211607449c0cf',1,'MercuryMessaging::StandardLibrary::UI::MmUIFocusMessage']]],
+  ['isfullsnapshot_14',['IsFullSnapshot',['../class_mercury_messaging_1_1_network_1_1_mm_state_delta.html#a18cc087f841bd8f3fc6101da53afa141',1,'MercuryMessaging::Network::MmStateDelta']]],
+  ['ishitting_15',['IsHitting',['../class_mercury_messaging_1_1_standard_library_1_1_input_1_1_mm_input_gaze_message.html#a019bcd7b8caedc74fda13d7f965d7675',1,'MercuryMessaging::StandardLibrary::Input::MmInputGazeMessage']]],
+  ['isinitialized_16',['isInitialized',['../class_mercury_messaging_1_1_network_1_1_backends_1_1_fusion2_bridge_setup.html#aaa4353c8adb99410573eaec09c169a2d',1,'MercuryMessaging.Network.Backends.Fusion2BridgeSetup.isInitialized'],['../class_mercury_messaging_1_1_network_1_1_backends_1_1_fusion2_test_manager.html#a25e20260de33480f0c8a6677601f7655',1,'MercuryMessaging.Network.Backends.Fusion2TestManager.isInitialized']]],
+  ['isserver_17',['isServer',['../class_mercury_messaging_1_1_network_1_1_backends_1_1_fusion2_test_manager.html#a3c391288ad46e27507a952161ae2fc3a',1,'MercuryMessaging::Network::Backends::Fusion2TestManager']]],
+  ['istracked_18',['IsTracked',['../class_mercury_messaging_1_1_standard_library_1_1_input_1_1_mm_input6_d_o_f_message.html#a694d3219e2de562e448fbf6b0b2ee871',1,'MercuryMessaging::StandardLibrary::Input::MmInput6DOFMessage']]],
+  ['istransitioning_19',['isTransitioning',['../class_mercury_messaging_1_1_finite_state_machine-1-g.html#abdf35ed518da2347d3675ee69fe64995',1,'MercuryMessaging::FiniteStateMachine-1-g']]]
 ];

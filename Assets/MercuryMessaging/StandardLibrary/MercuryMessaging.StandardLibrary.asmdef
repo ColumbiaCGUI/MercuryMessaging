@@ -1,0 +1,16 @@
+{
+    "name": "MercuryMessaging.StandardLibrary",
+    "rootNamespace": "MercuryMessaging.StandardLibrary",
+    "references": [
+        "MercuryMessaging"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

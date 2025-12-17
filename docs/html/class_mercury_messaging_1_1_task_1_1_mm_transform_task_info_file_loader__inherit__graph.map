@@ -1,0 +1,9 @@
+<map id="MercuryMessaging.Task.MmTransformTaskInfoFileLoader" name="MercuryMessaging.Task.MmTransformTaskInfoFileLoader">
+<area shape="rect" id="Node000001" title="This is a basic&#45;straight derivation of MmTaskInfoCollectionFileLoader for MmTransformationTaskInfo." alt="" coords="55,181,245,221"/>
+<area shape="rect" id="Node000002" href="$class_mercury_messaging_1_1_task_1_1_mm_task_info_collection_file_loader-1-g.html" title="Base implementation of IMmTaskInfoCollectionLoader, specifically for use in loading from file." alt="" coords="40,93,260,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="153,147,153,181,147,181,147,147"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,13,116,38"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="84,46,132,91,128,95,81,49"/>
+<area shape="rect" id="Node000004" href="$interface_mercury_messaging_1_1_task_1_1_i_mm_task_info_collection_loader-1-g.html" title="Defines interfaces for loading Task Info collections." alt="" coords="140,5,339,45"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="211,57,172,95,168,91,208,53"/>
+</map>

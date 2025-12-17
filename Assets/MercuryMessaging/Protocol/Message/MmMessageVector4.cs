@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2017-2019, Columbia University
+﻿// Copyright (c) 2017-2025, Columbia University
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -27,12 +27,12 @@
 //  
 // =============================================================
 // Authors: 
-// Carmine Elvezio, Mengu Sukan, Samuel Silverman, Steven Feiner
+// Ben Yang, Carmine Elvezio, Mengu Sukan, Samuel Silverman, Steven Feiner
 // =============================================================
 //  
 //  
+using System;
 using UnityEngine;
-using System.Linq;
 
 namespace MercuryMessaging
 {
@@ -120,9 +120,21 @@ namespace MercuryMessaging
         public override object[] Serialize()
 		{
 			object[] baseSerialized = base.Serialize();
-            object[] thisSerialized = new object[] { value.x, value.y, value.z, value.w };
-            object[] combinedSerialized = baseSerialized.Concat(thisSerialized).ToArray();
-            return combinedSerialized;
+
+            // Pre-allocate combined array: base + 4 payload (x, y, z, w)
+            object[] result = new object[baseSerialized.Length + 4];
+
+            // Copy base data using Array.Copy (no LINQ)
+            Array.Copy(baseSerialized, 0, result, 0, baseSerialized.Length);
+
+            // Fill payload directly
+            int idx = baseSerialized.Length;
+            result[idx++] = value.x;
+            result[idx++] = value.y;
+            result[idx++] = value.z;
+            result[idx] = value.w;
+
+            return result;
 		}
     }
 }

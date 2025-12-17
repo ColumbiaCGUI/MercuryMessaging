@@ -1,0 +1,37 @@
+var class_mercury_messaging_1_1_network_1_1_mm_loopback_backend =
+[
+    [ "LoopbackMode", "class_mercury_messaging_1_1_network_1_1_mm_loopback_backend.html#ae73452db38247e4a18dfa0dc6257cc84", [
+      [ "Echo", "class_mercury_messaging_1_1_network_1_1_mm_loopback_backend.html#ae73452db38247e4a18dfa0dc6257cc84ad31ef811301c6b4111380dda959d6125", null ],
+      [ "Server", "class_mercury_messaging_1_1_network_1_1_mm_loopback_backend.html#ae73452db38247e4a18dfa0dc6257cc84a9aa1b03934893d7134a660af4204f2a9", null ],
+      [ "Client", "class_mercury_messaging_1_1_network_1_1_mm_loopback_backend.html#ae73452db38247e4a18dfa0dc6257cc84a577d7068826de925ea2aec01dbadf5e4", null ]
+    ] ],
+    [ "ClearSentMessages", "class_mercury_messaging_1_1_network_1_1_mm_loopback_backend.html#a3a1a4b8759b46edf730b3e6784b35ca5", null ],
+    [ "DeliverMessage", "class_mercury_messaging_1_1_network_1_1_mm_loopback_backend.html#a581d7b73f02a0c829e1d16c9d0af0d13", null ],
+    [ "FlushMessages", "class_mercury_messaging_1_1_network_1_1_mm_loopback_backend.html#a9bf58f23a013c0a68877c7c652c556cc", null ],
+    [ "Initialize", "class_mercury_messaging_1_1_network_1_1_mm_loopback_backend.html#ab08668ca2780bba6e2526a9f00b15b00", null ],
+    [ "ProcessPendingMessages", "class_mercury_messaging_1_1_network_1_1_mm_loopback_backend.html#a37e1567342b47adb1362a628a5d2db19", null ],
+    [ "Reset", "class_mercury_messaging_1_1_network_1_1_mm_loopback_backend.html#abb2bc4fed00da9bc2e59eba0bec0e6e6", null ],
+    [ "SendToAllClients", "class_mercury_messaging_1_1_network_1_1_mm_loopback_backend.html#a5f3d6c42111c9bc0d27ca5f31711d7bb", null ],
+    [ "SendToClient", "class_mercury_messaging_1_1_network_1_1_mm_loopback_backend.html#a9d2ec9f791958373fefb8373fbcbc9a4", null ],
+    [ "SendToOtherClients", "class_mercury_messaging_1_1_network_1_1_mm_loopback_backend.html#af224ad96b9f8746da646c7cc48bf56cb", null ],
+    [ "SendToServer", "class_mercury_messaging_1_1_network_1_1_mm_loopback_backend.html#a2edb8a4ae1ebcc300e06749ac4e2460e", null ],
+    [ "Shutdown", "class_mercury_messaging_1_1_network_1_1_mm_loopback_backend.html#a271c41088f5957edf49eb9334ffb4f49", null ],
+    [ "_isInitialized", "class_mercury_messaging_1_1_network_1_1_mm_loopback_backend.html#aae0ce8032c959f102278b999deec0919", null ],
+    [ "_messageQueue", "class_mercury_messaging_1_1_network_1_1_mm_loopback_backend.html#a0fdc54b6461a5394256f34d1b526e5be", null ],
+    [ "BackendName", "class_mercury_messaging_1_1_network_1_1_mm_loopback_backend.html#a7c4cb118327f94fec2410a194902b558", null ],
+    [ "IsClient", "class_mercury_messaging_1_1_network_1_1_mm_loopback_backend.html#a3a795f00ab530f9765f807f95295d0d3", null ],
+    [ "IsConnected", "class_mercury_messaging_1_1_network_1_1_mm_loopback_backend.html#af8b0275af75d79177b9c5240cb4a0e53", null ],
+    [ "IsServer", "class_mercury_messaging_1_1_network_1_1_mm_loopback_backend.html#a22e68e47013597aad8e8226d7636a7d0", null ],
+    [ "LocalClientId", "class_mercury_messaging_1_1_network_1_1_mm_loopback_backend.html#a154deae6974dd5f4fe4d5d08217785d4", null ],
+    [ "Mode", "class_mercury_messaging_1_1_network_1_1_mm_loopback_backend.html#aae3bd40b89f2247d702a920e290646e1", null ],
+    [ "PendingMessageCount", "class_mercury_messaging_1_1_network_1_1_mm_loopback_backend.html#a9660e4267d4c3004db46bf2c281deb70", null ],
+    [ "RecordSentMessages", "class_mercury_messaging_1_1_network_1_1_mm_loopback_backend.html#afab8126b7400ddf5ca2a5afe5e6778d9", null ],
+    [ "SentMessages", "class_mercury_messaging_1_1_network_1_1_mm_loopback_backend.html#a27a526c6611727999101502082d8d411", null ],
+    [ "SimulatedLatencyMs", "class_mercury_messaging_1_1_network_1_1_mm_loopback_backend.html#a6c31a28e287a74de9173fd87d9cf339e", null ],
+    [ "UseMessageQueue", "class_mercury_messaging_1_1_network_1_1_mm_loopback_backend.html#a31d26d7046f5cdd285b13c5c41202d47", null ],
+    [ "OnClientConnected", "class_mercury_messaging_1_1_network_1_1_mm_loopback_backend.html#aa87fce8303345ef133244276553607d9", null ],
+    [ "OnClientDisconnected", "class_mercury_messaging_1_1_network_1_1_mm_loopback_backend.html#a11cc917621f5a667b7830d7ed021de70", null ],
+    [ "OnConnectedToServer", "class_mercury_messaging_1_1_network_1_1_mm_loopback_backend.html#a7eb00ab381538e15670140c631ccd4bd", null ],
+    [ "OnDisconnectedFromServer", "class_mercury_messaging_1_1_network_1_1_mm_loopback_backend.html#a42f01197a324d6b8f5f3ba45de074b44", null ],
+    [ "OnMessageReceived", "class_mercury_messaging_1_1_network_1_1_mm_loopback_backend.html#a22773661875007cf9f1d59bf8822ff32", null ]
+];

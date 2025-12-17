@@ -1,0 +1,5 @@
+<map id="MercuryMessaging.IMmNetworkResponder" name="MercuryMessaging.IMmNetworkResponder">
+<area shape="rect" id="Node000001" title="Implement this interface to utilize your chosen Networking framework with Mercury XM." alt="" coords="5,5,213,45"/>
+<area shape="rect" id="Node000002" href="$class_mercury_messaging_1_1_mm_network_responder.html" title=" " alt="" coords="7,93,212,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="112,59,112,93,107,93,107,59"/>
+</map>

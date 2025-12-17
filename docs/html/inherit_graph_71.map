@@ -1,0 +1,5 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="Node000000" href="$interface_mercury_messaging_1_1_network_1_1_i_mm_poolable.html" title="Poolable message wrapper that tracks pool origin." alt="" coords="5,5,192,45"/>
+<area shape="rect" id="Node000001" href="$class_mercury_messaging_1_1_network_1_1_mm_pooled_message.html" title="Pooled wrapper for MmMessage objects." alt="" coords="240,5,427,45"/>
+<area shape="poly" id="edge103_Node000000_Node000001" title=" " alt="" coords="205,23,240,23,240,28,205,28"/>
+</map>

@@ -1,0 +1,27 @@
+var class_mercury_messaging_1_1_standard_library_1_1_u_i_1_1_mm_u_i_click_message =
+[
+    [ "MmUIClickMessage", "class_mercury_messaging_1_1_standard_library_1_1_u_i_1_1_mm_u_i_click_message.html#aebbaa10b81eedcc3e10c4a3e6635ba14", null ],
+    [ "MmUIClickMessage", "class_mercury_messaging_1_1_standard_library_1_1_u_i_1_1_mm_u_i_click_message.html#aa503d8d3c6b4fb9a74d01dca0ee7cb32", null ],
+    [ "MmUIClickMessage", "class_mercury_messaging_1_1_standard_library_1_1_u_i_1_1_mm_u_i_click_message.html#accfa374a195450014e5b94776866dab1", null ],
+    [ "Copy", "class_mercury_messaging_1_1_standard_library_1_1_u_i_1_1_mm_u_i_click_message.html#a16ce3d6e0a625d09974cf9a0f4eb7781", null ],
+    [ "Deserialize", "class_mercury_messaging_1_1_standard_library_1_1_u_i_1_1_mm_u_i_click_message.html#a5e90709888dc9a3b88d8c4fa2cc49097", null ],
+    [ "Serialize", "class_mercury_messaging_1_1_standard_library_1_1_u_i_1_1_mm_u_i_click_message.html#a3575beeaaec3f7fd0faaebd8e12fc1bb", null ],
+    [ "_isPooled", "class_mercury_messaging_1_1_standard_library_1_1_u_i_1_1_mm_u_i_click_message.html#a002e742c30dd9d358fd86da1c86ecd7a", null ],
+    [ "BASE_SERIALIZED_SIZE", "class_mercury_messaging_1_1_standard_library_1_1_u_i_1_1_mm_u_i_click_message.html#a63e7eb420f5c1acd878af15b6af6108c", null ],
+    [ "Button", "class_mercury_messaging_1_1_standard_library_1_1_u_i_1_1_mm_u_i_click_message.html#aca5bde51a5d73cad8fee37eb245de3f8", null ],
+    [ "ClickCount", "class_mercury_messaging_1_1_standard_library_1_1_u_i_1_1_mm_u_i_click_message.html#adac21bcf2777d333f7a3ec9aafa4762f", null ],
+    [ "HopCount", "class_mercury_messaging_1_1_standard_library_1_1_u_i_1_1_mm_u_i_click_message.html#a77add6deb349507f793d41dfade789eb", null ],
+    [ "MAX_HOPS_DEFAULT", "class_mercury_messaging_1_1_standard_library_1_1_u_i_1_1_mm_u_i_click_message.html#ab81aa0765f7db79a3a4b8db5bccccc90", null ],
+    [ "MetadataBlock", "class_mercury_messaging_1_1_standard_library_1_1_u_i_1_1_mm_u_i_click_message.html#a72a5153cda9de1eea4a5a4d48a9c085b", null ],
+    [ "MmMessageType", "class_mercury_messaging_1_1_standard_library_1_1_u_i_1_1_mm_u_i_click_message.html#a1667c425c939ec54c5f37703a139965a", null ],
+    [ "MmMethod", "class_mercury_messaging_1_1_standard_library_1_1_u_i_1_1_mm_u_i_click_message.html#ae65ffc2606c0dfa83bd5b20b1136b9fb", null ],
+    [ "NetId", "class_mercury_messaging_1_1_standard_library_1_1_u_i_1_1_mm_u_i_click_message.html#a605d6073caf84b2314b9bc004ef80e05", null ],
+    [ "Position", "class_mercury_messaging_1_1_standard_library_1_1_u_i_1_1_mm_u_i_click_message.html#a57d34ec44f0965039f95caa82dc7b4d0", null ],
+    [ "root", "class_mercury_messaging_1_1_standard_library_1_1_u_i_1_1_mm_u_i_click_message.html#ae714e44a3e14deafb1f232a4865342a2", null ],
+    [ "TimeStamp", "class_mercury_messaging_1_1_standard_library_1_1_u_i_1_1_mm_u_i_click_message.html#a37d05fdfaccb95a8aa72f1adf92de968", null ],
+    [ "VisitedNodes", "class_mercury_messaging_1_1_standard_library_1_1_u_i_1_1_mm_u_i_click_message.html#a1b8930dc1853a661e809ee7a44fdd150", null ],
+    [ "Handled", "class_mercury_messaging_1_1_standard_library_1_1_u_i_1_1_mm_u_i_click_message.html#aaa26d29dc816c3f750118996e99c0f89", null ],
+    [ "IsDeserialized", "class_mercury_messaging_1_1_standard_library_1_1_u_i_1_1_mm_u_i_click_message.html#a47b3c4e8e7ee649012a5751b1543ce20", null ],
+    [ "IsDoubleClick", "class_mercury_messaging_1_1_standard_library_1_1_u_i_1_1_mm_u_i_click_message.html#a7e3b94536e463984a39bea5c52552c33", null ],
+    [ "IsRightClick", "class_mercury_messaging_1_1_standard_library_1_1_u_i_1_1_mm_u_i_click_message.html#a2c0e67fc634be176aae489ff819606cc", null ]
+];

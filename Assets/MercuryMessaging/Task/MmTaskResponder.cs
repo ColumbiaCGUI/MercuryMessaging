@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2017-2019, Columbia University
+﻿// Copyright (c) 2017-2025, Columbia University
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -27,11 +27,12 @@
 //  
 // =============================================================
 // Authors: 
-// Carmine Elvezio, Mengu Sukan, Steven Feiner
+// Ben Yang, Carmine Elvezio, Mengu Sukan, Steven Feiner
 // =============================================================
-//  
-//  
-using MercuryMessaging.Support.FiniteStateMachine;
+//
+//
+// Suppress MM014: InitializeCompletionFSM is a setup method, not a message handler
+#pragma warning disable MM014
 
 namespace MercuryMessaging.Task
 {

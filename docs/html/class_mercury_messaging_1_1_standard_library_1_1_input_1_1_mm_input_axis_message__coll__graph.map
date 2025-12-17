@@ -1,0 +1,9 @@
+<map id="MercuryMessaging.StandardLibrary.Input.MmInputAxisMessage" name="MercuryMessaging.StandardLibrary.Input.MmInputAxisMessage">
+<area shape="rect" id="Node000001" title="Axis input message." alt="" coords="5,301,232,341"/>
+<area shape="rect" id="Node000002" href="$class_mercury_messaging_1_1_mm_message.html" title="Base class for messages passed through MmInvoke." alt="" coords="13,227,224,252"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="121,266,121,301,116,301,116,266"/>
+<area shape="rect" id="Node000003" href="$class_mercury_messaging_1_1_mm_metadata_block.html" title="MmMetadataBlock is a collection of settings allowing you to specify the precise invocation path of an..." alt="" coords="13,116,225,156"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="121,170,121,227,116,227,116,170"/>
+<area shape="rect" id="Node000004" href="$class_mercury_messaging_1_1_mm_routing_options.html" title="Configuration options for advanced message routing behavior." alt="" coords="17,5,220,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="121,59,121,116,116,116,116,59"/>
+</map>

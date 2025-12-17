@@ -1,3 +1,6 @@
+// Suppress MM analyzer warnings - test code intentionally uses patterns that trigger warnings
+#pragma warning disable MM002, MM005, MM006, MM008, MM014, MM015
+
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -17,7 +20,7 @@ namespace MercuryMessaging.Tests.Performance.Editor
         private bool createMediumScale = true;
         private bool createLargeScale = true;
 
-        [MenuItem("Mercury/Performance/Build Test Scenes")]
+        [MenuItem("MercuryMessaging/Performance/Build Test Scenes")]
         public static void ShowWindow()
         {
             GetWindow<PerformanceSceneBuilder>("Build Performance Scenes");
@@ -88,7 +91,6 @@ namespace MercuryMessaging.Tests.Performance.Editor
             harness.testDuration = 60f;
             harness.autoStart = false;
             harness.exportPath = "performance-results/smallscale_results.csv";
-            harness.exportToDevFolder = true;
             harness.relayNode = rootRelay;
 
             // Add MessageGenerator
@@ -156,7 +158,6 @@ namespace MercuryMessaging.Tests.Performance.Editor
             harness.testDuration = 60f;
             harness.autoStart = false;
             harness.exportPath = "performance-results/mediumscale_results.csv";
-            harness.exportToDevFolder = true;
             harness.relayNode = rootRelay;
 
             // Add MessageGenerator
@@ -257,7 +258,6 @@ namespace MercuryMessaging.Tests.Performance.Editor
             harness.testDuration = 60f;
             harness.autoStart = false;
             harness.exportPath = "performance-results/largescale_results.csv";
-            harness.exportToDevFolder = true;
             harness.relayNode = rootRelay;
 
             // Add MessageGenerator
@@ -449,6 +449,8 @@ namespace MercuryMessaging.Tests.Performance.Editor
                 {
                     Debug.Log($"[PerformanceSceneBuilder] {relay.gameObject.name}: Registered {addedCount} TestResponder(s)");
                 }
+                // CRITICAL: Mark relay node dirty for serialization
+                EditorUtility.SetDirty(relay);
             }
 
             // Step 2: Register child relay nodes in each parent's routing table
@@ -472,6 +474,8 @@ namespace MercuryMessaging.Tests.Performance.Editor
                         }
                     }
                 }
+                // CRITICAL: Mark relay node dirty after adding children
+                EditorUtility.SetDirty(relay);
             }
 
             // Step 3: Establish parent-child relationships starting from root
@@ -482,9 +486,22 @@ namespace MercuryMessaging.Tests.Performance.Editor
                 rootRelay.RefreshParents();
                 int afterParents = rootRelay.RoutingTable.Count;
                 Debug.Log($"[PerformanceSceneBuilder] Root: RefreshParents completed (routing table: {afterParents} items)");
+                // CRITICAL: Mark root dirty after RefreshParents
+                EditorUtility.SetDirty(rootRelay);
             }
 
-            Debug.Log($"[PerformanceSceneBuilder] ✓ Complete: {allRelayNodes.Length} relay nodes, {totalTestResponders} responders, {totalChildNodes} child nodes registered");
+            // Step 4: Final verification and dirty marking
+            int totalRoutingItems = 0;
+            foreach (var relay in allRelayNodes)
+            {
+                totalRoutingItems += relay.RoutingTable.Count;
+                // Ensure all relay nodes are marked dirty for serialization
+                EditorUtility.SetDirty(relay);
+                EditorUtility.SetDirty(relay.gameObject);
+            }
+
+            Debug.Log($"[PerformanceSceneBuilder] ✓ Complete: {allRelayNodes.Length} relay nodes, {totalTestResponders} responders, {totalChildNodes} child nodes, {totalRoutingItems} total routing table items");
+            Debug.Log($"[PerformanceSceneBuilder] ✓ All objects marked dirty for serialization");
         }
 
         #endregion

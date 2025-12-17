@@ -1,5 +1,7 @@
 using System.Collections;
+using System.Diagnostics;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 namespace MercuryMessaging.Tests.Performance
 {
@@ -41,6 +43,9 @@ namespace MercuryMessaging.Tests.Performance
         [Tooltip("Performance test harness to notify (optional)")]
         public PerformanceTestHarness testHarness;
 
+        [Tooltip("Comparison test harness to notify (optional)")]
+        public ComparisonTestHarness comparisonHarness;
+
         [Header("Runtime Info")]
         [Tooltip("Total messages sent this session")]
         public int totalMessagesSent = 0;
@@ -49,6 +54,21 @@ namespace MercuryMessaging.Tests.Performance
         private float _messageInterval = 0f;
         private int _messageCounter = 0;
         private float _messageAccumulator = 0f;
+
+        // Per-message timing for accurate overhead calculation
+        private Stopwatch _sendTimer = new Stopwatch();
+        private long _totalSendTicks = 0;
+        private int _timedMessageCount = 0;
+
+        /// <summary>
+        /// Get average ticks per message for performance comparison.
+        /// </summary>
+        public double AverageTicksPerMessage => _timedMessageCount > 0 ? (double)_totalSendTicks / _timedMessageCount : 0;
+
+        /// <summary>
+        /// Get average nanoseconds per message.
+        /// </summary>
+        public double AverageNanosecondsPerMessage => AverageTicksPerMessage * (1_000_000_000.0 / Stopwatch.Frequency);
 
         private void Update()
         {
@@ -101,10 +121,14 @@ namespace MercuryMessaging.Tests.Performance
                 }
             }
 
-            // Find test harness if not set
+            // Find test harnesses if not set
             if (testHarness == null)
             {
-                testHarness = FindObjectOfType<PerformanceTestHarness>();
+                testHarness = FindFirstObjectByType<PerformanceTestHarness>();
+            }
+            if (comparisonHarness == null)
+            {
+                comparisonHarness = FindFirstObjectByType<ComparisonTestHarness>();
             }
 
             // Calculate interval
@@ -132,6 +156,8 @@ namespace MercuryMessaging.Tests.Performance
             totalMessagesSent = 0;
             _messageCounter = 0;
             _messageAccumulator = 0f;
+            _totalSendTicks = 0;
+            _timedMessageCount = 0;
 
             // Use coroutine only if frame-based generation is disabled
             if (!useFrameBasedGeneration)
@@ -185,6 +211,9 @@ namespace MercuryMessaging.Tests.Performance
                 MmNetworkFilter.Local
             );
 
+            // Start timing the API call
+            _sendTimer.Restart();
+
             // Send appropriate message type
             switch (messageMethod)
             {
@@ -218,12 +247,22 @@ namespace MercuryMessaging.Tests.Performance
                     break;
             }
 
+            // Stop timing and record
+            _sendTimer.Stop();
+            long elapsedTicks = _sendTimer.ElapsedTicks;
+            _totalSendTicks += elapsedTicks;
+            _timedMessageCount++;
+
             totalMessagesSent++;
 
-            // Notify test harness
+            // Notify test harnesses
             if (testHarness != null)
             {
                 testHarness.OnMessageSent();
+            }
+            if (comparisonHarness != null)
+            {
+                comparisonHarness.OnTraditionalMessageSent(elapsedTicks);
             }
         }
 
