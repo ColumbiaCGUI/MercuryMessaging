@@ -7,7 +7,7 @@
       "dependencies": {
         "com.unity.nuget.newtonsoft-json": "3.0.2"
       },
-      "hash": "8fe73be7aee3667f3d317ebf467f57f478e6d04b"
+      "hash": "4c9beaffdefadee03c07f00eb3e3b6c5294fc99d"
     },
     "com.firstgeargames.fishnet": {
       "version": "https://github.com/FirstGearGames/FishNet.git?path=Assets/FishNet",
