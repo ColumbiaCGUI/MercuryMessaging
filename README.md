@@ -8,7 +8,7 @@
 ![License](https://img.shields.io/badge/License-BSD--3--Clause-blue)
 [![DOI](https://img.shields.io/badge/DOI-10.1145%2F3173574.3174162-blue)](https://doi.org/10.1145/3173574.3174162)
 
-Developed by **[Columbia University CGUI Lab](https://cgui.cs.columbia.edu/)**
+Developed by **[Columbia University CGUI Lab](https://graphics.cs.columbia.edu/)**
 
 ---
 
