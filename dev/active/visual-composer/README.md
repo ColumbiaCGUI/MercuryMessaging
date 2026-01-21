@@ -190,6 +190,76 @@ public class MmIntrospectionHook {
 
 ---
 
+## Literature Analysis (2020-2025)
+
+### Competing/Related Work
+
+| Paper | Year | Venue | Focus | Limitation | Mercury Differentiation |
+|-------|------|-------|-------|------------|-------------------------|
+| Unreal Blueprints Study | 2025 | MSR | Visual scripting patterns | Static visualization only, no live introspection | Live message path visualization during gameplay |
+| Narrui | 2025 | IEEE CoG | NL→dialogue graph | Dialogue-specific domain | General hierarchical message routing |
+| DreamGarden | 2024 | CHI | NL→Unreal code generation | AI planning tree focus, not runtime | Bi-directional editing, runtime manipulation |
+| Dbux-PDG | 2022 | VISSOFT | JavaScript event flow debugging | JavaScript/web only, not game engines | Unity/C# game engine focus |
+| JIVE | 2020 | SPE | Java FSM extraction from traces | Java-only, post-hoc analysis | Real-time hierarchical message systems |
+| VisNeed | 2025 | SE4GAMES | Game AI decision tree visualization | Static decision trees only | Live message propagation with blockage indicators |
+
+### Literature Gap Analysis
+
+**What exists:**
+- Static visual scripting (Blueprints, Bolt) - no live introspection
+- Post-hoc trace analysis (JIVE, Dbux) - not real-time
+- Domain-specific editors (Narrui for dialogue) - not general message systems
+- AI planning visualization - not message routing
+
+**What doesn't exist:**
+- Live message path visualization during gameplay
+- Bi-directional editing (graph ↔ scene synchronization)
+- Blockage indicator debugging ("WHY did message stop?")
+- Runtime topology manipulation in game engines
+
+### Novelty Claims
+
+1. **FIRST** bi-directional visual authoring tool for hierarchical message-passing systems in game engines
+2. **FIRST** live introspection environment for runtime message flow with blockage indicators
+3. **FIRST** runtime topology manipulation capability for message networks during gameplay
+4. **FIRST** integration of visual debugging with Unity's scene graph hierarchy
+
+### Key Citations
+
+```bibtex
+@inproceedings{blueprints2025,
+  title={Understanding Visual Scripting Patterns in Game Development},
+  booktitle={Mining Software Repositories (MSR)},
+  year={2025}
+}
+
+@inproceedings{narrui2025,
+  title={Narrui: Natural Language to Narrative Graph for Interactive Storytelling},
+  booktitle={IEEE Conference on Games (CoG)},
+  year={2025}
+}
+
+@inproceedings{dreamgarden2024,
+  title={DreamGarden: A Generative AI System for Game Development},
+  booktitle={CHI Conference on Human Factors in Computing Systems},
+  year={2024}
+}
+
+@article{dbuxpdg2022,
+  title={Dbux-PDG: Program Dependence Graph Visualization for JavaScript Debugging},
+  booktitle={IEEE Working Conference on Software Visualization (VISSOFT)},
+  year={2022}
+}
+
+@article{jive2020,
+  title={JIVE: Java Interactive Visualization Environment for FSM Extraction},
+  journal={Software: Practice and Experience (SPE)},
+  year={2020}
+}
+```
+
+---
+
 ## Implementation Goals (Updated 2025-12-01)
 
 ### Phase 1: Editor Tools (216h)

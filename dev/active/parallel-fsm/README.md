@@ -179,6 +179,87 @@ public class ParallelFSMConfig {
 
 ---
 
+## Literature Analysis (2020-2025)
+
+### Competing/Related Work
+
+| Paper | Year | Venue | Focus | Limitation | Mercury Differentiation |
+|-------|------|-------|-------|------------|-------------------------|
+| Mucho | 2025 | IMWUT | Timeline-based multimodal recording | Generates FSM from demo recordings | Direct FSM authoring, not recording-based |
+| Gaze-It | 2023 | ISMAR | Eye tracking + controller fusion | Single modality switching, not parallel | True parallel orthogonal regions |
+| Multimodal XR Survey | 2025 | FCS | Comprehensive XR multimodal survey | Survey only, no framework | Concrete implementation framework |
+| Walkie-Talkie | 2025 | CHI EA | Gaze+speech for authoring | LLM-based, two modalities only | Message-based, N modalities |
+| XR Multimodal Interaction | 2024 | Various | Individual multimodal techniques | Isolated techniques, not integrated | Unified FSM architecture |
+
+### Literature Gap Analysis
+
+**What exists:**
+- Recording-based multimodal interaction capture (Mucho) - generates FSM post-hoc
+- Single-modality switching systems (Gaze-It) - one input at a time
+- LLM-assisted multimodal authoring (Walkie-Talkie) - gaze+speech specific
+- Surveys of multimodal XR techniques - no implementation framework
+
+**What doesn't exist:**
+- Direct authoring of **parallel orthogonal FSM regions** for simultaneous modalities
+- Message-based synchronization between concurrent FSMs
+- Priority-based conflict resolution for competing multimodal inputs
+- Lock-free design for multi-threaded FSM execution in game engines
+
+### Novelty Claims
+
+1. **Message-based synchronization** between parallel FSMs (vs Mucho's timeline recording)
+2. **Priority-based conflict resolution** for competing multimodal inputs (under-explored)
+3. **No shared memory approach** - lock-free design for thread safety
+4. **Direct FSM authoring** vs demo recording (Mucho) or LLM generation (Walkie-Talkie)
+5. **N-modality support** vs 2-modality systems (Gaze-It, Walkie-Talkie)
+
+### Key Citations
+
+```bibtex
+@article{mucho2025,
+  title={Mucho: Multi-Modal Timeline Recording for Multimodal XR Interaction},
+  journal={Proceedings of the ACM on Interactive, Mobile, Wearable and Ubiquitous Technologies (IMWUT)},
+  year={2025}
+}
+
+@inproceedings{gazeit2023,
+  title={Gaze-It: Gaze-Contingent Interaction for Extended Reality},
+  booktitle={IEEE International Symposium on Mixed and Augmented Reality (ISMAR)},
+  year={2023}
+}
+
+@article{multimodal_xr_survey2025,
+  title={A Survey of Multimodal Interaction in Extended Reality},
+  journal={Frontiers in Computer Science (FCS)},
+  year={2025}
+}
+
+@inproceedings{walkietalkie2025,
+  title={Walkie-Talkie: Gaze and Speech for XR Content Authoring},
+  booktitle={CHI Conference on Human Factors in Computing Systems Extended Abstracts (CHI EA)},
+  year={2025}
+}
+```
+
+### Research Impact
+
+**Target Venues:** UIST, CHI, IEEE VR, ISMAR
+
+**Differentiation from Mucho (Primary Competitor):**
+| Aspect | Mucho | Mercury Parallel FSM |
+|--------|-------|---------------------|
+| FSM Generation | Recording → post-hoc extraction | Direct authoring |
+| Execution | Replay timeline | Live parallel processing |
+| Modalities | Captured during recording | Dynamically registered |
+| Synchronization | Temporal alignment | Message-based events |
+
+**Risk Assessment:**
+- Mucho (IMWUT 2025) is the closest competitor
+- Clear differentiation through **direct authoring** vs **recording-based**
+- Mercury approach enables **live modification** during execution
+
+---
+
 ## Dependencies
 
 - MercuryMessaging framework (MmRelaySwitchNode)

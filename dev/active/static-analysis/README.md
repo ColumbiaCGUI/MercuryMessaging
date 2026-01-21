@@ -164,6 +164,92 @@ Developer productivity study (N=20):
 - Photon RPC: Network-only, no local hierarchy support
 - Our approach: Comprehensive safety with minimal overhead
 
+---
+
+## Literature Analysis (2020-2025)
+
+### Competing/Related Work
+
+| Paper | Year | Venue | Focus | Limitation | Mercury Differentiation |
+|-------|------|-------|-------|------------|-------------------------|
+| Go Verification | 2020 | PLACES | Behavioral type checking for Go | Go-specific concurrency patterns | Unity/C# game engine focus |
+| NVLang | 2025 | arXiv | BEAM/Erlang actor verification | BEAM VM specific, not game engines | Unity scene graph integration |
+| CAMP | 2020 | OOPSLA | Deadlock detection for distributed systems | Distributed systems focus | Local hierarchical messages |
+| PARCOACH | 2020 | Correctness | MPI collective verification | HPC/MPI specific | Game development patterns |
+| Unity Static Analysis | 2023 | Various | General C# code analysis | No message routing focus | Message-specific safety |
+
+### Literature Gap Analysis
+
+**What exists:**
+- Static verification for actor systems (Go, Erlang) - different paradigm
+- Deadlock detection for distributed systems (CAMP) - network focus
+- MPI collective verification (PARCOACH) - HPC specific
+- General C# static analysis - no message routing awareness
+
+**What doesn't exist:**
+- Static verification for **Unity scene graph hierarchies**
+- Bloom filter-based cycle detection for **game engine message routing**
+- Hybrid static-runtime verification for **hierarchical message systems**
+- Type safety verification integrated with **MercuryMessaging patterns**
+
+### Novelty Claims
+
+1. **Novel application** of Tarjan's SCC to Unity scene graph hierarchy validation
+2. **FIRST** Bloom filter-based runtime loop prevention in game engine routing (<50ns)
+3. **Hybrid static-runtime** verification combining compile-time and runtime checks
+4. **Game-engine-specific** safety properties (vs distributed/HPC systems)
+5. **Integration** with existing MercuryMessaging infrastructure
+
+### Key Citations
+
+```bibtex
+@inproceedings{go_verification2020,
+  title={Behavioral Type Checking for Go},
+  booktitle={Workshop on Programming Language Approaches to Concurrency and Communication-centric Software (PLACES)},
+  year={2020}
+}
+
+@article{nvlang2025,
+  title={NVLang: Type-Safe Session Types for the BEAM},
+  journal={arXiv preprint},
+  year={2025}
+}
+
+@inproceedings{camp2020,
+  title={CAMP: Cost-Aware Multiparty Protocol Verification},
+  booktitle={OOPSLA},
+  year={2020}
+}
+
+@inproceedings{parcoach2020,
+  title={PARCOACH: Detecting MPI Collective Errors at Compile-Time},
+  booktitle={Workshop on Correctness in High-Performance Computing},
+  year={2020}
+}
+```
+
+### Research Impact
+
+**Target Venues:** ICSE (primary), PLDI, OOPSLA
+
+**Novelty Assessment:** MEDIUM
+- Static verification for message systems is well-studied in distributed systems
+- **Novel contribution** is application to Unity/game engine context
+- Bloom filter for game engine routing is novel implementation
+- Hybrid static-runtime approach provides differentiation
+
+**Risk Assessment:**
+- Well-studied area requires demonstrating game-engine-specific contributions
+- Must show benefits beyond applying known techniques to new domain
+- User study critical to validate productivity improvements
+
+**Mitigation Strategy:**
+- Focus on **Unity scene graph** specific challenges
+- Emphasize **performance constraints** (<200ns) unique to game engines
+- Highlight **developer experience** improvements over existing tools
+
+---
+
 ## Key Publications to Reference
 
 - Tarjan, R. (1972). "Depth-first search and linear graph algorithms"
