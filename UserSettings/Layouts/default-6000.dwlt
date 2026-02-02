@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1536
     height: 772.8
   m_ShowMode: 4
-  m_Title: Scene
+  m_Title: Console
   m_RootView: {fileID: 6}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -48,7 +48,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 112}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 40
+  controlID: 80
   draggingID: 0
 --- !u!114 &3
 MonoBehaviour:
@@ -69,8 +69,8 @@ MonoBehaviour:
     y: 0
     width: 412
     height: 716.8
-  m_MinSize: {x: 276, y: 76}
-  m_MaxSize: {x: 4001, y: 4026}
+  m_MinSize: {x: 275, y: 50}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 16}
   m_Panes:
   - {fileID: 16}
@@ -95,8 +95,8 @@ MonoBehaviour:
     y: 0
     width: 232.8
     height: 372.8
-  m_MinSize: {x: 201, y: 226}
-  m_MaxSize: {x: 4001, y: 4026}
+  m_MinSize: {x: 200, y: 200}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 17}
   m_Panes:
   - {fileID: 17}
@@ -272,8 +272,8 @@ MonoBehaviour:
     y: 0
     width: 891.2
     height: 372.8
-  m_MinSize: {x: 202, y: 226}
-  m_MaxSize: {x: 4002, y: 4026}
+  m_MinSize: {x: 200, y: 200}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 18}
   m_Panes:
   - {fileID: 18}
@@ -16761,27 +16761,27 @@ MonoBehaviour:
       m_Data: 113558
     m_ExpandedIDs:
     - m_Data: 0
-    - m_Data: 49940
-    - m_Data: 49942
-    - m_Data: 49944
-    - m_Data: 49946
-    - m_Data: 49948
-    - m_Data: 49950
-    - m_Data: 49952
-    - m_Data: 49954
-    - m_Data: 49956
-    - m_Data: 49958
-    - m_Data: 49960
-    - m_Data: 49962
-    - m_Data: 49964
-    - m_Data: 49966
-    - m_Data: 49968
-    - m_Data: 49970
-    - m_Data: 49972
-    - m_Data: 49974
-    - m_Data: 49976
-    - m_Data: 49978
-    - m_Data: 49980
+    - m_Data: 50062
+    - m_Data: 50064
+    - m_Data: 50066
+    - m_Data: 50068
+    - m_Data: 50070
+    - m_Data: 50072
+    - m_Data: 50074
+    - m_Data: 50076
+    - m_Data: 50078
+    - m_Data: 50080
+    - m_Data: 50082
+    - m_Data: 50084
+    - m_Data: 50086
+    - m_Data: 50088
+    - m_Data: 50090
+    - m_Data: 50092
+    - m_Data: 50094
+    - m_Data: 50096
+    - m_Data: 50098
+    - m_Data: 50100
+    - m_Data: 50102
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -16814,27 +16814,27 @@ MonoBehaviour:
       m_Data: 0
     m_ExpandedIDs:
     - m_Data: 0
-    - m_Data: 49940
-    - m_Data: 49942
-    - m_Data: 49944
-    - m_Data: 49946
-    - m_Data: 49948
-    - m_Data: 49950
-    - m_Data: 49952
-    - m_Data: 49954
-    - m_Data: 49956
-    - m_Data: 49958
-    - m_Data: 49960
-    - m_Data: 49962
-    - m_Data: 49964
-    - m_Data: 49966
-    - m_Data: 49968
-    - m_Data: 49970
-    - m_Data: 49972
-    - m_Data: 49974
-    - m_Data: 49976
-    - m_Data: 49978
-    - m_Data: 49980
+    - m_Data: 50062
+    - m_Data: 50064
+    - m_Data: 50066
+    - m_Data: 50068
+    - m_Data: 50070
+    - m_Data: 50072
+    - m_Data: 50074
+    - m_Data: 50076
+    - m_Data: 50078
+    - m_Data: 50080
+    - m_Data: 50082
+    - m_Data: 50084
+    - m_Data: 50086
+    - m_Data: 50088
+    - m_Data: 50090
+    - m_Data: 50092
+    - m_Data: 50094
+    - m_Data: 50096
+    - m_Data: 50098
+    - m_Data: 50100
+    - m_Data: 50102
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -16989,7 +16989,8 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: []
+      m_SelectedIDs:
+      - m_Data: -2548
       m_LastClickedID:
         m_Data: 0
       m_ExpandedIDs:
