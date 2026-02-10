@@ -7,7 +7,7 @@
       "dependencies": {
         "com.unity.nuget.newtonsoft-json": "3.0.2"
       },
-      "hash": "ac7f4a30999c947636fbae8133de56f47977d466"
+      "hash": "0fbf38976e3c56c44977b87b7efbae2ef69960a1"
     },
     "com.firstgeargames.fishnet": {
       "version": "https://github.com/FirstGearGames/FishNet.git?path=Assets/FishNet",
@@ -84,7 +84,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.collab-proxy": {
-      "version": "2.10.2",
+      "version": "2.11.3",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -110,7 +110,7 @@
       "dependencies": {}
     },
     "com.unity.ide.rider": {
-      "version": "3.0.38",
+      "version": "3.0.39",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -119,16 +119,16 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.visualstudio": {
-      "version": "2.0.25",
+      "version": "2.0.26",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.unity.test-framework": "1.1.31"
+        "com.unity.test-framework": "1.1.33"
       },
       "url": "https://packages.unity.com"
     },
     "com.unity.inputsystem": {
-      "version": "1.17.0",
+      "version": "1.18.0",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -187,7 +187,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.services.analytics": {
-      "version": "6.1.1",
+      "version": "6.2.0",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -238,7 +238,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.timeline": {
-      "version": "1.8.9",
+      "version": "1.8.10",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -268,7 +268,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.xr.interaction.toolkit": {
-      "version": "3.3.0",
+      "version": "3.3.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
