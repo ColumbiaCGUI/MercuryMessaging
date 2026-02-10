@@ -79,15 +79,16 @@
   <Project Path="Unity.XR.Management.csproj" />
   <Project Path="Unity.Mathematics.Editor.csproj" />
   <Project Path="MercuryMessaging.Editor.csproj" />
+  <Project Path="UnityEditor.UI.Analytics.csproj" />
   <Project Path="EPODemo.csproj" />
   <Project Path="Unity.Services.Core.Threading.csproj" />
   <Project Path="Unity.InputSystem.TestFramework.csproj" />
-  <Project Path="Unity.CollabProxy.Editor.csproj" />
   <Project Path="UnityEditor.XR.LegacyInputHelpers.csproj" />
   <Project Path="Unity.ShaderGraph.Utilities.csproj" />
   <Project Path="ParrelSync.csproj" />
   <Project Path="Unity.Services.Core.Device.csproj" />
   <Project Path="Unity.Services.Core.Analytics.csproj" />
+  <Project Path="Unity.CollabProxy.Editor.csproj" />
   <Project Path="ALINEEditor.csproj" />
   <Project Path="UnityEngine.SpatialTracking.csproj" />
   <Project Path="Unity.Services.Core.Registration.csproj" />
