@@ -2,3 +2,10 @@ fileFormatVersion: 2
 guid: 1d46b322d3caa1a4ca2226576dbcf4ad
 NativeFormatImporter:
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 18005
+  packageName: Modern City Pack
+  packageVersion: 1.07
+  assetPath: Assets/Plugins/AssetStore/ModularCityProps/Street Props/- Prefabs/mcp_traffic_lights_01_night_LOD_1.prefab
+  uploadId: 245393

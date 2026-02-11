@@ -10,3 +10,10 @@ AudioImporter:
   useHardware: 0
   loopable: 0
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 18005
+  packageName: Modern City Pack
+  packageVersion: 1.07
+  assetPath: Assets/Plugins/AssetStore/ModularCityProps/Demo/sound/trash_can_lid_fall.wav
+  uploadId: 245393

@@ -2,3 +2,10 @@ fileFormatVersion: 2
 guid: 22170820897e73843a3522be0312649a
 NativeFormatImporter:
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 18005
+  packageName: Modern City Pack
+  packageVersion: 1.07
+  assetPath: Assets/Plugins/AssetStore/ModularCityProps/Roads/- Prefabs/mcp_sidewalk_tile_01.prefab
+  uploadId: 245393

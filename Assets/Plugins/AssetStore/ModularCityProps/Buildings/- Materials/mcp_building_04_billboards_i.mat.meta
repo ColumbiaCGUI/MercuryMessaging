@@ -2,3 +2,10 @@ fileFormatVersion: 2
 guid: 55d1973f962e885429ae40dcd6d6d970
 NativeFormatImporter:
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 18005
+  packageName: Modern City Pack
+  packageVersion: 1.07
+  assetPath: Assets/Plugins/AssetStore/ModularCityProps/Buildings/- Materials/mcp_building_04_billboards_i.mat
+  uploadId: 245393

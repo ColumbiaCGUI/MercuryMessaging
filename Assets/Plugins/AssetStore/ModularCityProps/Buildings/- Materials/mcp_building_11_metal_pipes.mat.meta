@@ -2,3 +2,10 @@ fileFormatVersion: 2
 guid: 74d570d02fa109b46bdcf0ebc5d65a3e
 NativeFormatImporter:
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 18005
+  packageName: Modern City Pack
+  packageVersion: 1.07
+  assetPath: Assets/Plugins/AssetStore/ModularCityProps/Buildings/- Materials/mcp_building_11_metal_pipes.mat
+  uploadId: 245393

@@ -62,3 +62,10 @@ ModelImporter:
   animationType: 0
   additionalBone: 0
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 18005
+  packageName: Modern City Pack
+  packageVersion: 1.07
+  assetPath: Assets/Plugins/AssetStore/ModularCityProps/Street Props/- Meshes/mcp_pay_phone_01_LOD_1.FBX
+  uploadId: 245393

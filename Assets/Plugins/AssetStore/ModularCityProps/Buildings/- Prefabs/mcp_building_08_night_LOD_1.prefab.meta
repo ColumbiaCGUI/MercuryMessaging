@@ -2,3 +2,10 @@ fileFormatVersion: 2
 guid: 669d2824ddadc9140bcbd52e24bd68bf
 NativeFormatImporter:
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 18005
+  packageName: Modern City Pack
+  packageVersion: 1.07
+  assetPath: Assets/Plugins/AssetStore/ModularCityProps/Buildings/- Prefabs/mcp_building_08_night_LOD_1.prefab
+  uploadId: 245393

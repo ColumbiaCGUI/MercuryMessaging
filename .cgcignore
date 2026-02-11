@@ -1,0 +1,19 @@
+# Unity generated directories
+Library/
+Temp/
+Logs/
+obj/
+UserSettings/
+
+# Build output
+Builds/
+Build/
+
+# Data / non-code
+ExperimentData/
+Documentation/
+docs/
+
+# IDE
+.vs/
+.idea/

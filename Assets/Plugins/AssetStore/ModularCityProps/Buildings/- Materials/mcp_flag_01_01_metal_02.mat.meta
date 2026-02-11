@@ -2,3 +2,10 @@ fileFormatVersion: 2
 guid: 7fa45f90756c3e54bb9bf3f4f647b6e2
 NativeFormatImporter:
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 18005
+  packageName: Modern City Pack
+  packageVersion: 1.07
+  assetPath: Assets/Plugins/AssetStore/ModularCityProps/Buildings/- Materials/mcp_flag_01_01_metal_02.mat
+  uploadId: 245393

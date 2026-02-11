@@ -3,3 +3,10 @@ guid: 27c2647cbe88e2447a82b7c1998d011f
 ShaderImporter:
   defaultTextures: []
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 18005
+  packageName: Modern City Pack
+  packageVersion: 1.07
+  assetPath: Assets/Plugins/AssetStore/ModularCityProps/Demo/shaders/glass_02.shader
+  uploadId: 245393

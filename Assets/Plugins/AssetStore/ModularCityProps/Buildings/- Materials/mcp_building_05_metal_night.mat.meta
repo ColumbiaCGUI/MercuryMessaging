@@ -2,3 +2,10 @@ fileFormatVersion: 2
 guid: 43427d6dbedbfa140876c76d0cbb9704
 NativeFormatImporter:
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 18005
+  packageName: Modern City Pack
+  packageVersion: 1.07
+  assetPath: Assets/Plugins/AssetStore/ModularCityProps/Buildings/- Materials/mcp_building_05_metal_night.mat
+  uploadId: 245393

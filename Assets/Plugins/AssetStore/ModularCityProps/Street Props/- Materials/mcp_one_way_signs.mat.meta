@@ -2,3 +2,10 @@ fileFormatVersion: 2
 guid: 1fa179c151fda9642a65ffe0b6622222
 NativeFormatImporter:
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 18005
+  packageName: Modern City Pack
+  packageVersion: 1.07
+  assetPath: Assets/Plugins/AssetStore/ModularCityProps/Street Props/- Materials/mcp_one_way_signs.mat
+  uploadId: 245393

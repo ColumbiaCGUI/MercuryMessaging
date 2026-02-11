@@ -6,3 +6,10 @@ MonoImporter:
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 18005
+  packageName: Modern City Pack
+  packageVersion: 1.07
+  assetPath: Assets/Plugins/AssetStore/ModularCityProps/Demo/shaders/Vintage/Vintage.cs
+  uploadId: 245393

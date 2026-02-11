@@ -2,3 +2,10 @@ fileFormatVersion: 2
 guid: fc38118027628184a943aa98d33a754f
 NativeFormatImporter:
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 18005
+  packageName: Modern City Pack
+  packageVersion: 1.07
+  assetPath: Assets/Plugins/AssetStore/ModularCityProps/Buildings/- Materials/mcp_building_17_tile.mat
+  uploadId: 245393

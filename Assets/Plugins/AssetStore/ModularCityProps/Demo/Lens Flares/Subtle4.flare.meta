@@ -2,3 +2,10 @@ fileFormatVersion: 2
 guid: fd7cb871930ba40b398d61cf4a3cd04d
 NativeFormatImporter:
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 18005
+  packageName: Modern City Pack
+  packageVersion: 1.07
+  assetPath: Assets/Plugins/AssetStore/ModularCityProps/Demo/Lens Flares/Subtle4.flare
+  uploadId: 245393

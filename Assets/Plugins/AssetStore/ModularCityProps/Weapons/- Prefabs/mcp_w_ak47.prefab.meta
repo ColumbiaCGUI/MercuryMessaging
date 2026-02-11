@@ -2,3 +2,10 @@ fileFormatVersion: 2
 guid: ae22e4c65daa8374ab2bbbde26ef0780
 NativeFormatImporter:
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 18005
+  packageName: Modern City Pack
+  packageVersion: 1.07
+  assetPath: Assets/Plugins/AssetStore/ModularCityProps/Weapons/- Prefabs/mcp_w_ak47.prefab
+  uploadId: 245393

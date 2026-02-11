@@ -69,3 +69,10 @@ ModelImporter:
   animationType: 0
   additionalBone: 1
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 18005
+  packageName: Modern City Pack
+  packageVersion: 1.07
+  assetPath: Assets/Plugins/AssetStore/ModularCityProps/Street Props/- Meshes/mcp_street_light_pole_01_LOD_0.FBX
+  uploadId: 245393

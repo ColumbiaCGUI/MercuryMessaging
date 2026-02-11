@@ -2,3 +2,10 @@ fileFormatVersion: 2
 guid: eb09df7fc2788e449a5a60b485cad0eb
 NativeFormatImporter:
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 18005
+  packageName: Modern City Pack
+  packageVersion: 1.07
+  assetPath: Assets/Plugins/AssetStore/ModularCityProps/Street Props/- Materials/mcp_traffic_lights_01_01_yellow_i.mat
+  uploadId: 245393

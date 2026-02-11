@@ -2,3 +2,10 @@ fileFormatVersion: 2
 guid: 05a2c53a3038e13488361171b8ef80aa
 NativeFormatImporter:
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 18005
+  packageName: Modern City Pack
+  packageVersion: 1.07
+  assetPath: Assets/Plugins/AssetStore/ModularCityProps/Street Props/- Prefabs/mcp_cardboard_box_01_LOD_0.prefab
+  uploadId: 245393

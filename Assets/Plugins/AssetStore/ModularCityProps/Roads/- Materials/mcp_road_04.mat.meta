@@ -2,3 +2,10 @@ fileFormatVersion: 2
 guid: dba5ada21d98d6a49b67d2e5bc75d1b6
 NativeFormatImporter:
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 18005
+  packageName: Modern City Pack
+  packageVersion: 1.07
+  assetPath: Assets/Plugins/AssetStore/ModularCityProps/Roads/- Materials/mcp_road_04.mat
+  uploadId: 245393

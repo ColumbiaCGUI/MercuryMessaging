@@ -2,3 +2,10 @@ fileFormatVersion: 2
 guid: 09fe219e7ce8cd44da63f831e2798101
 NativeFormatImporter:
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 18005
+  packageName: Modern City Pack
+  packageVersion: 1.07
+  assetPath: Assets/Plugins/AssetStore/ModularCityProps/Street Props/- Prefabs/mcp_street_fence_03_LOD_0.prefab
+  uploadId: 245393

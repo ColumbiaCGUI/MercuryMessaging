@@ -2,3 +2,10 @@ fileFormatVersion: 2
 guid: e138f4624c9abb742a982925a38640f4
 NativeFormatImporter:
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 18005
+  packageName: Modern City Pack
+  packageVersion: 1.07
+  assetPath: Assets/Plugins/AssetStore/ModularCityProps/Roads/- Prefabs/mcp_ground_tile_03.prefab
+  uploadId: 245393
