@@ -16737,7 +16737,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/MercuryMessaging/Examples/Tutorials/Tutorial1
+    - Packages/com.coplaydev.unity-mcp
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
@@ -16747,41 +16747,41 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/MercuryMessaging/Examples/Tutorials/Tutorial1
+  - Packages/com.coplaydev.unity-mcp
   m_LastFoldersGridSize: 16
   m_LastProjectPath: C:\Users\yangb\Research\MercuryMessaging
   m_LockTracker:
     m_IsLocked: 0
   m_LastLocalAssetsSearchArea: 1
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 95}
+    scrollPos: {x: 0, y: 918}
     m_SelectedIDs:
-    - m_Data: 113558
+    - m_Data: 50566
     m_LastClickedID:
-      m_Data: 113558
+      m_Data: 50566
     m_ExpandedIDs:
     - m_Data: 0
-    - m_Data: 110614
-    - m_Data: 110616
-    - m_Data: 110618
-    - m_Data: 110620
-    - m_Data: 110622
-    - m_Data: 110624
-    - m_Data: 110626
-    - m_Data: 110628
-    - m_Data: 110630
-    - m_Data: 110632
-    - m_Data: 110634
-    - m_Data: 110636
-    - m_Data: 110638
-    - m_Data: 110640
-    - m_Data: 110642
-    - m_Data: 110644
-    - m_Data: 110646
-    - m_Data: 110648
-    - m_Data: 110650
-    - m_Data: 110652
-    - m_Data: 110654
+    - m_Data: 196952
+    - m_Data: 196954
+    - m_Data: 196956
+    - m_Data: 196958
+    - m_Data: 196960
+    - m_Data: 196962
+    - m_Data: 196964
+    - m_Data: 196966
+    - m_Data: 196968
+    - m_Data: 196970
+    - m_Data: 196972
+    - m_Data: 196974
+    - m_Data: 196976
+    - m_Data: 196978
+    - m_Data: 196980
+    - m_Data: 196982
+    - m_Data: 196984
+    - m_Data: 196986
+    - m_Data: 196988
+    - m_Data: 196990
+    - m_Data: 196992
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -16814,27 +16814,27 @@ MonoBehaviour:
       m_Data: 0
     m_ExpandedIDs:
     - m_Data: 0
-    - m_Data: 110614
-    - m_Data: 110616
-    - m_Data: 110618
-    - m_Data: 110620
-    - m_Data: 110622
-    - m_Data: 110624
-    - m_Data: 110626
-    - m_Data: 110628
-    - m_Data: 110630
-    - m_Data: 110632
-    - m_Data: 110634
-    - m_Data: 110636
-    - m_Data: 110638
-    - m_Data: 110640
-    - m_Data: 110642
-    - m_Data: 110644
-    - m_Data: 110646
-    - m_Data: 110648
-    - m_Data: 110650
-    - m_Data: 110652
-    - m_Data: 110654
+    - m_Data: 196952
+    - m_Data: 196954
+    - m_Data: 196956
+    - m_Data: 196958
+    - m_Data: 196960
+    - m_Data: 196962
+    - m_Data: 196964
+    - m_Data: 196966
+    - m_Data: 196968
+    - m_Data: 196970
+    - m_Data: 196972
+    - m_Data: 196974
+    - m_Data: 196976
+    - m_Data: 196978
+    - m_Data: 196980
+    - m_Data: 196982
+    - m_Data: 196984
+    - m_Data: 196986
+    - m_Data: 196988
+    - m_Data: 196990
+    - m_Data: 196992
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -16861,10 +16861,9 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs:
-    - m_Data: 50754
-    m_LastClickedInstanceID: 50754
-    m_HadKeyboardFocusLastEvent: 1
+    m_SelectedInstanceIDs: []
+    m_LastClickedInstanceID: 0
+    m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs: []
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -16993,6 +16992,7 @@ MonoBehaviour:
       m_LastClickedID:
         m_Data: 0
       m_ExpandedIDs:
+      - m_Data: -279972
       - m_Data: -1316
       m_RenameOverlay:
         m_UserAcceptedRename: 0
