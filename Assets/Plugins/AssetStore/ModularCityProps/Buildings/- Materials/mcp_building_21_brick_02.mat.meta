@@ -2,3 +2,10 @@ fileFormatVersion: 2
 guid: 205bb03ebfdc1554c8db38ef1465fedf
 NativeFormatImporter:
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 18005
+  packageName: Modern City Pack
+  packageVersion: 1.07
+  assetPath: Assets/Plugins/AssetStore/ModularCityProps/Buildings/- Materials/mcp_building_21_brick_02.mat
+  uploadId: 245393

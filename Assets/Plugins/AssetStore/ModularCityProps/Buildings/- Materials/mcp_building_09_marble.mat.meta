@@ -2,3 +2,10 @@ fileFormatVersion: 2
 guid: fb9f526b51fcda045b310f44b1b61df0
 NativeFormatImporter:
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 18005
+  packageName: Modern City Pack
+  packageVersion: 1.07
+  assetPath: Assets/Plugins/AssetStore/ModularCityProps/Buildings/- Materials/mcp_building_09_marble.mat
+  uploadId: 245393

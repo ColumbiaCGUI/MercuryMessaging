@@ -3,3 +3,10 @@ guid: 095d8ee13d9dd8743a9af0ac03f599a1
 ShaderImporter:
   defaultTextures: []
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 18005
+  packageName: Modern City Pack
+  packageVersion: 1.07
+  assetPath: Assets/Plugins/AssetStore/ModularCityProps/Demo/shaders/Chromatic/AdvancedCA.shader
+  uploadId: 245393

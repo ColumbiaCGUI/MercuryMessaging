@@ -43,3 +43,10 @@ TextureImporter:
     sprites: []
   spritePackingTag: 
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 18005
+  packageName: Modern City Pack
+  packageVersion: 1.07
+  assetPath: Assets/Plugins/AssetStore/ModularCityProps/Buildings/- Textures/mcp_plastic_d.jpg
+  uploadId: 245393

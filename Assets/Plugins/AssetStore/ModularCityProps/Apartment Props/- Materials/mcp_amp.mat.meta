@@ -2,3 +2,10 @@ fileFormatVersion: 2
 guid: e10901553f72a704e94bc4ee0d47563c
 NativeFormatImporter:
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 18005
+  packageName: Modern City Pack
+  packageVersion: 1.07
+  assetPath: Assets/Plugins/AssetStore/ModularCityProps/Apartment Props/- Materials/mcp_amp.mat
+  uploadId: 245393

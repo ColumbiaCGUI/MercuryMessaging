@@ -2,3 +2,10 @@ fileFormatVersion: 2
 guid: a2a2e8e99d4fef44db258e9e943e961b
 NativeFormatImporter:
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 18005
+  packageName: Modern City Pack
+  packageVersion: 1.07
+  assetPath: Assets/Plugins/AssetStore/ModularCityProps/Decals/Posters/mcp_decals_posters_01.mat
+  uploadId: 245393

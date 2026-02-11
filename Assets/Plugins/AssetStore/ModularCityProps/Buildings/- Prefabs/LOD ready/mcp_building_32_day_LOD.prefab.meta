@@ -2,3 +2,10 @@ fileFormatVersion: 2
 guid: 59d34a54e7b084c4fafade180c8a2f9c
 NativeFormatImporter:
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 18005
+  packageName: Modern City Pack
+  packageVersion: 1.07
+  assetPath: Assets/Plugins/AssetStore/ModularCityProps/Buildings/- Prefabs/LOD ready/mcp_building_32_day_LOD.prefab
+  uploadId: 245393

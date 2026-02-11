@@ -2,3 +2,11 @@ fileFormatVersion: 2
 guid: 26ad16dbf75d5ef4b8c008e10feafaf9
 NativeFormatImporter:
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 18005
+  packageName: Modern City Pack
+  packageVersion: 1.07
+  assetPath: Assets/Plugins/AssetStore/ModularCityProps/Street Props/- Prefabs/LOD
+    ready/mcp_manhole_square_01_LOD.prefab
+  uploadId: 245393

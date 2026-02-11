@@ -2,3 +2,10 @@ fileFormatVersion: 2
 guid: 4bca4860a86e0c2459830883146f33f3
 NativeFormatImporter:
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 18005
+  packageName: Modern City Pack
+  packageVersion: 1.07
+  assetPath: Assets/Plugins/AssetStore/ModularCityProps/Demo/skybox/day/mcp_skybox_day.mat
+  uploadId: 245393

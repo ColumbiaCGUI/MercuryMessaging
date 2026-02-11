@@ -2,3 +2,10 @@ fileFormatVersion: 2
 guid: 18d911d707339b246b49f8c20fb97ed2
 NativeFormatImporter:
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 18005
+  packageName: Modern City Pack
+  packageVersion: 1.07
+  assetPath: Assets/Plugins/AssetStore/ModularCityProps/Buildings/- Materials/mcp_building_07_doors.mat
+  uploadId: 245393

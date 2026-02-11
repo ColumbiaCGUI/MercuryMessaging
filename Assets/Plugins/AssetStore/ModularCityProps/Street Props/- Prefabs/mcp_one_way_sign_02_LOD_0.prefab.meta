@@ -2,3 +2,10 @@ fileFormatVersion: 2
 guid: 31950af2b61dc78479b07dbb2ef8cb71
 NativeFormatImporter:
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 18005
+  packageName: Modern City Pack
+  packageVersion: 1.07
+  assetPath: Assets/Plugins/AssetStore/ModularCityProps/Street Props/- Prefabs/mcp_one_way_sign_02_LOD_0.prefab
+  uploadId: 245393

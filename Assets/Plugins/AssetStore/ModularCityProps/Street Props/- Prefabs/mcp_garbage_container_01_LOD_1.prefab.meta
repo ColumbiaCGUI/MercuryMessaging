@@ -2,3 +2,10 @@ fileFormatVersion: 2
 guid: c6f5d74e15577ea4d9870e4dd8da4b2d
 NativeFormatImporter:
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 18005
+  packageName: Modern City Pack
+  packageVersion: 1.07
+  assetPath: Assets/Plugins/AssetStore/ModularCityProps/Street Props/- Prefabs/mcp_garbage_container_01_LOD_1.prefab
+  uploadId: 245393

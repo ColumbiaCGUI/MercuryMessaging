@@ -63,3 +63,10 @@ ModelImporter:
   animationType: 0
   additionalBone: 0
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 18005
+  packageName: Modern City Pack
+  packageVersion: 1.07
+  assetPath: Assets/Plugins/AssetStore/ModularCityProps/Decals/Meshes/mcp_decal_sign_02.FBX
+  uploadId: 245393

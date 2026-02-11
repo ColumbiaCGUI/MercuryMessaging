@@ -2,3 +2,10 @@ fileFormatVersion: 2
 guid: b97d11bad9a49f344927e2294511cba0
 NativeFormatImporter:
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 18005
+  packageName: Modern City Pack
+  packageVersion: 1.07
+  assetPath: Assets/Plugins/AssetStore/ModularCityProps/Decals/Prefabs/mcp_graffiti_06.prefab
+  uploadId: 245393

@@ -2,3 +2,10 @@ fileFormatVersion: 2
 guid: b664d9be1a6f39c4e9091934c8e87dbe
 NativeFormatImporter:
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 18005
+  packageName: Modern City Pack
+  packageVersion: 1.07
+  assetPath: Assets/Plugins/AssetStore/ModularCityProps/Demo/animations/vent_rotation.anim
+  uploadId: 245393

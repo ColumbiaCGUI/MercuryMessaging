@@ -2,3 +2,10 @@ fileFormatVersion: 2
 guid: d5b70a78e2db41346baff31a2ae3eeb6
 NativeFormatImporter:
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 18005
+  packageName: Modern City Pack
+  packageVersion: 1.07
+  assetPath: Assets/Plugins/AssetStore/ModularCityProps/Demo/particles/Materials/mcp_smoke_01.mat
+  uploadId: 245393

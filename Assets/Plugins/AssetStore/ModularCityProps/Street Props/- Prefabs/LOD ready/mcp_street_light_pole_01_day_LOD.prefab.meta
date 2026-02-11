@@ -2,3 +2,11 @@ fileFormatVersion: 2
 guid: fc29cdba0875f1b47bd414992f339cff
 NativeFormatImporter:
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 18005
+  packageName: Modern City Pack
+  packageVersion: 1.07
+  assetPath: Assets/Plugins/AssetStore/ModularCityProps/Street Props/- Prefabs/LOD
+    ready/mcp_street_light_pole_01_day_LOD.prefab
+  uploadId: 245393

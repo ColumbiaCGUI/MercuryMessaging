@@ -2,3 +2,10 @@ fileFormatVersion: 2
 guid: a5983b762b0a45b47b33909e74704735
 DefaultImporter:
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 18005
+  packageName: Modern City Pack
+  packageVersion: 1.07
+  assetPath: Assets/Plugins/AssetStore/ModularCityProps/Demo/Scenes/mcp_day.unity
+  uploadId: 245393

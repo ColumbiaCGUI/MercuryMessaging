@@ -2,3 +2,10 @@ fileFormatVersion: 2
 guid: 0111345a1e53b1d4d81051022587b1be
 NativeFormatImporter:
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 18005
+  packageName: Modern City Pack
+  packageVersion: 1.07
+  assetPath: Assets/Plugins/AssetStore/ModularCityProps/Roads/- Prefabs/mcp_roads_cross_01.prefab
+  uploadId: 245393

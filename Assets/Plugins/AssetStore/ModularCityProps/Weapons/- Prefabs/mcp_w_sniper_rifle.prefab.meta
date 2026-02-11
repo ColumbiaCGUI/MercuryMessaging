@@ -2,3 +2,10 @@ fileFormatVersion: 2
 guid: 55d7c461883253d48bdcd37f9dd770ec
 NativeFormatImporter:
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 18005
+  packageName: Modern City Pack
+  packageVersion: 1.07
+  assetPath: Assets/Plugins/AssetStore/ModularCityProps/Weapons/- Prefabs/mcp_w_sniper_rifle.prefab
+  uploadId: 245393

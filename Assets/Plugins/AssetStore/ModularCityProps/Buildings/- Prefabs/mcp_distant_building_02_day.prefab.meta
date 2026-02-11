@@ -2,3 +2,10 @@ fileFormatVersion: 2
 guid: 2263579a4b22bcc4dbee79ff2d51cee4
 NativeFormatImporter:
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 18005
+  packageName: Modern City Pack
+  packageVersion: 1.07
+  assetPath: Assets/Plugins/AssetStore/ModularCityProps/Buildings/- Prefabs/mcp_distant_building_02_day.prefab
+  uploadId: 245393

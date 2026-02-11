@@ -62,3 +62,10 @@ ModelImporter:
   animationType: 2
   additionalBone: 0
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 18005
+  packageName: Modern City Pack
+  packageVersion: 1.07
+  assetPath: Assets/Plugins/AssetStore/ModularCityProps/Street Props/- Meshes/mcp_boeing_747.FBX
+  uploadId: 245393

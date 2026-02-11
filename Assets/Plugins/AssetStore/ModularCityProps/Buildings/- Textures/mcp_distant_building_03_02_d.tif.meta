@@ -43,3 +43,10 @@ TextureImporter:
     sprites: []
   spritePackingTag: 
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 18005
+  packageName: Modern City Pack
+  packageVersion: 1.07
+  assetPath: Assets/Plugins/AssetStore/ModularCityProps/Buildings/- Textures/mcp_distant_building_03_02_d.tif
+  uploadId: 245393

@@ -2,3 +2,10 @@ fileFormatVersion: 2
 guid: 5dc4cc4e1e457394880531e44dcdc12b
 NativeFormatImporter:
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 18005
+  packageName: Modern City Pack
+  packageVersion: 1.07
+  assetPath: Assets/Plugins/AssetStore/ModularCityProps/Buildings/- Materials/mcp_building_18_wall_03.mat
+  uploadId: 245393
