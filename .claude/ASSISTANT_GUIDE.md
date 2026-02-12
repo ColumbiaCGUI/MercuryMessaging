@@ -347,7 +347,7 @@ If the actual implementation differs from the plan, document why:
 ### Code Changes
 
 1. **Read Before Writing**: Always read existing code before making changes
-2. **Consult Error Reference**: Check [`dev/FREQUENT_ERRORS.md`](../dev/FREQUENT_ERRORS.md) for:
+2. **Consult Error Reference**: Check [`Documentation/FREQUENT_ERRORS.md`](../Documentation/FREQUENT_ERRORS.md) for:
    - Level filter transformation patterns
    - Routing table registration requirements
    - Runtime component addition patterns
@@ -493,7 +493,7 @@ public void TestSomething()
 When encountering errors:
 
 1. **Check Frequent Errors Reference**
-   - **FIRST**, consult [`dev/FREQUENT_ERRORS.md`](../dev/FREQUENT_ERRORS.md)
+   - **FIRST**, consult [`Documentation/FREQUENT_ERRORS.md`](../Documentation/FREQUENT_ERRORS.md)
    - Check if error matches known bugs (5 documented patterns)
    - Review debugging checklists for your error type
    - Apply known fixes before investigating further

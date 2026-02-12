@@ -454,8 +454,8 @@ Brief description of what this PR accomplishes.
 
 - **Documentation**: See [CLAUDE.md](CLAUDE.md) for framework overview
 - **File Reference**: See [FILE_REFERENCE.md](Documentation/FILE_REFERENCE.md) for key files
-- **Workflow**: See [dev/WORKFLOW.md](dev/WORKFLOW.md) for development processes
-- **Technical Debt**: See [dev/TECHNICAL_DEBT.md](dev/TECHNICAL_DEBT.md) for known issues
+- **Workflow**: See [Documentation/WORKFLOW.md](Documentation/WORKFLOW.md) for development processes
+- **Project Planning**: See [.planning/ROADMAP.md](.planning/ROADMAP.md) for current roadmap (GSD)
 - **Issues**: Report bugs at https://github.com/yourrepo/mercurymessaging/issues
 
 ---

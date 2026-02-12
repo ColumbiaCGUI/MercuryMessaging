@@ -4,7 +4,7 @@ This document covers testing, debugging, common gotchas, and tutorial resources.
 
 ## Frequent Errors & Debugging Reference
 
-**CRITICAL:** When working with message routing, ALWAYS consult [`dev/FREQUENT_ERRORS.md`](../dev/FREQUENT_ERRORS.md) to avoid common mistakes.
+**CRITICAL:** When working with message routing, ALWAYS consult [`Documentation/FREQUENT_ERRORS.md`](FREQUENT_ERRORS.md) to avoid common mistakes.
 
 ### Top 3 Critical Patterns (Must Follow)
 
@@ -45,7 +45,7 @@ yield return null; // Extra frame for safety
 - [ ] Responder refreshed after runtime addition? (`MmRefreshResponders` called?)
 - [ ] Tag matching correct? (Check `TagCheckEnabled` and tag bits)
 
-**See [`dev/FREQUENT_ERRORS.md`](../dev/FREQUENT_ERRORS.md) for complete bug reference, code patterns, and debugging guides.**
+**See [`Documentation/FREQUENT_ERRORS.md`](FREQUENT_ERRORS.md) for complete bug reference, code patterns, and debugging guides.**
 
 ---
 

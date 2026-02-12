@@ -1,5 +1,7 @@
 # MercuryMessaging Development Workflow
 
+> **Note (2026-02):** Project planning has migrated to the GSD system (`.planning/` folder). The `dev/active/` task folder workflow described below is superseded by `/gsd:plan-phase` and `/gsd:execute-phase`. See `.planning/ROADMAP.md` for the current project roadmap. The reference patterns below remain useful for code standards and testing workflows.
+
 This document describes the development workflows for the MercuryMessaging framework.
 
 ---

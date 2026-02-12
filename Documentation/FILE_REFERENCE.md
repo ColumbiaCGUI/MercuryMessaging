@@ -209,9 +209,8 @@ Project documentation files.
 | [CLAUDE.md](../CLAUDE.md) | Main framework documentation. Architecture, workflows, performance characteristics. |
 | [CONTRIBUTING.md](../CONTRIBUTING.md) | Development standards and guidelines. Dependency policy, naming conventions, testing standards. |
 | [FILE_REFERENCE.md](FILE_REFERENCE.md) | This file. Quick reference to important files. |
-| [dev/WORKFLOW.md](../dev/WORKFLOW.md) | Development workflow documentation. Feature development, bug fixes, testing, releases. |
-| [dev/IMPROVEMENT_TRACKER.md](../dev/IMPROVEMENT_TRACKER.md) | Framework improvements tracker. Completed work, active development, research opportunities. |
-| [dev/FREQUENT_ERRORS.md](../dev/FREQUENT_ERRORS.md) | **Frequent errors & bug reference.** Common mistakes, debugging checklists, code patterns. CONSULT BEFORE WRITING ROUTING CODE. |
+| [Documentation/WORKFLOW.md](WORKFLOW.md) | Development workflow documentation. Feature development, bug fixes, testing, releases. |
+| [Documentation/FREQUENT_ERRORS.md](FREQUENT_ERRORS.md) | **Frequent errors & bug reference.** Common mistakes, debugging checklists, code patterns. CONSULT BEFORE WRITING ROUTING CODE. |
 | [.claude/ASSISTANT_GUIDE.md](../.claude/ASSISTANT_GUIDE.md) | AI assistant guidelines. Git commit policy, task management for AI assistants. |
 
 ---
