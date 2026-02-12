@@ -30,11 +30,13 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. A developer following the wiki step-by-step for any tutorial reproduces the documented behavior (keyboard controls, console output, visual results)
   3. All code examples from the wiki compile as-is when pasted into a fresh script file
   4. A validation report exists listing pass/fail per tutorial with GitHub issues filed for every failure
-**Plans**: TBD
+**Plans**: 4 plans
 
 Plans:
-- [ ] 01-01: TBD
-- [ ] 01-02: TBD
+- [ ] 01-01-PLAN.md — Environment setup + static pre-analysis of all 12 tutorials + user mismatch decisions
+- [ ] 01-02-PLAN.md — Apply fixes and validate tutorials 1-5 (Introduction, Routing, Responders, Messages, DSL)
+- [ ] 01-03-PLAN.md — Apply fixes and validate tutorials 6-7 (FishNet, Fusion 2 networking)
+- [ ] 01-04-PLAN.md — Apply fixes and validate tutorials 8-12 + stubs 13-14 + compile VALIDATION_REPORT.md
 
 ### Phase 2: Spatial Indexing
 **Goal**: Spatial queries (radius, frustum, cone, ray, k-NN) execute in O(log n) time via an adaptive octree, replacing linear scans in the fluent DSL predicates and strengthening paper contribution C2
@@ -118,7 +120,7 @@ Note: Phase 1 is the sole prerequisite. After Phase 1, Phases 2, 3, and 5 are in
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Tutorial Validation | 0/2 | Not started | - |
+| 1. Tutorial Validation | 0/4 | Planning complete | - |
 | 2. Spatial Indexing | 0/3 | Not started | - |
 | 3. Distributed Messaging | 0/1 | Not started | - |
 | 4. Asymmetry Analysis | 0/1 | Not started | - |
