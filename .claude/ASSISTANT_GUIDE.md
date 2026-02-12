@@ -184,28 +184,20 @@ Changes:
 
 When working on a large task that requires planning:
 
-### 1. Create Task Directory
+### 1. Use GSD Planning System
 
-```bash
-mkdir -p ~/git/project/dev/active/[task-name]/
-```
-
-### 2. Create Three Documents
-
-**Required files:**
-
-- `[task-name]-plan.md` - The overall plan/approach
-- `[task-name]-context.md` - Technical context, key files, design decisions
-- `[task-name]-tasks.md` - Detailed checklist of work items
-
-**Example structure:**
+Project planning uses the GSD system in `.planning/`:
 
 ```
-dev/active/thread-safety/
-├── README.md              # Executive summary
-├── thread-safety-context.md   # Technical details
-└── thread-safety-tasks.md     # Implementation checklist
+.planning/
+├── PROJECT.md        # Project context
+├── ROADMAP.md        # Phase structure
+├── REQUIREMENTS.md   # Scoped requirements
+├── STATE.md          # Current state
+└── research/         # Domain research
 ```
+
+Use `/gsd:plan-phase N` to plan a phase and `/gsd:execute-phase N` to execute it.
 
 ### 3. Update Regularly
 
@@ -289,14 +281,9 @@ List of unresolved questions.
 
 When resuming work on an existing task:
 
-### 1. Check `/dev/active/` for Existing Tasks
+### 1. Check GSD Roadmap for Current Phase
 
-```bash
-ls dev/active/
-```
-
-Look for task folders that match your work:
-- `thread-safety/` - Thread safety improvements
+Review `.planning/ROADMAP.md` and `.planning/STATE.md` for the current phase and task status.
 - `routing-optimization/` - Routing table performance
 - `network-performance/` - Network message optimization
 - `custom-method-extensibility/` - Custom method system
@@ -576,23 +563,7 @@ mcp__UnityMCP__read_console action=get count=5
 
 ### Automated Test Result Export
 
-Test results are **automatically exported** to `dev/test-results/` after each test run:
-
-- `TestResults_YYYYMMDD_HHMMSS.xml` - Full NUnit-compatible XML
-- `TestResults_YYYYMMDD_HHMMSS_summary.txt` - Quick summary with failed tests
-
-**To check latest test results:**
-
-```bash
-# Find latest test result file
-find dev/test-results -name "*.xml" -type f | sort -r | head -1
-
-# Read the summary file
-cat dev/test-results/TestResults_*_summary.txt | head -20
-
-# Search for failed tests
-grep -A5 "result=\"Failed\"" dev/test-results/TestResults_*.xml | head -50
-```
+Test results are available in the Unity Test Runner window after each run.
 
 ### Common Test Patterns
 

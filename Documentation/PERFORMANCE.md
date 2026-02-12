@@ -23,7 +23,7 @@ Performance optimizations achieved **2-2.2x frame time improvement** and **3-35x
 | Medium | 50 | 5 | 14.29ms avg | 70.0 FPS |
 | Large | 100+ | 7-10 | 17.17ms avg | 58.3 FPS |
 
-*Data validated 2025-11-28. See `dev/performance-results/` for raw data.*
+*Data validated 2025-11-28.*
 
 ### Performance Improvement (After Optimization)
 
@@ -196,7 +196,7 @@ public partial class MyResponder : MmBaseResponder
 
 ## Future Optimization Opportunities
 
-See `dev/archive/framework-analysis/` for Priority 3 tasks:
+Priority 3 tasks (from prior framework analysis):
 - **Routing optimization (420h):** O(1) routing tables, spatial indexing
 - **Network performance (500h):** Delta tracking, compression
 - **Visual composer (360h):** Editor tools for hierarchy design

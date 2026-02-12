@@ -251,7 +251,7 @@ Pedestrian → CrossingZone (MmLevelFilter.Parent)
 
 ## Timeline
 
-**See:** `dev/active/user-study/user-study-tasks.md` for detailed timeline
+**See:** `.planning/ROADMAP.md` Phase 5 for current user study planning
 
 **Critical Milestones:**
 - Week 1-2: Complete 8 intersections
@@ -266,16 +266,15 @@ Pedestrian → CrossingZone (MmLevelFilter.Parent)
 
 ## Related Documentation
 
-- **`dev/active/user-study/user-study-context.md`** - Comprehensive context and planning
-- **`dev/active/user-study/user-study-tasks.md`** - Detailed task breakdown
-- **`dev/active/uist-paper/uist-paper-context.md`** - UIST paper planning
+- **`.planning/ROADMAP.md`** - Project roadmap with user study phase
+- **`.planning/REQUIREMENTS.md`** - Requirements (USTY-01..05)
 - **`CLAUDE.md`** - MercuryMessaging framework documentation
 
 ---
 
 ## Questions or Issues?
 
-- Check `/dev/active/user-study/` for detailed planning docs
+- Check `.planning/ROADMAP.md` for current planning
 - Review MercuryMessaging documentation in `/CLAUDE.md`
 - Contact Columbia CGUI Lab for research questions
 

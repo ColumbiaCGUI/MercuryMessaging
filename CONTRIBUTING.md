@@ -384,11 +384,10 @@ Comprehensive documentation created with 3 solution options, technical
 design, and 4-phase implementation checklist.
 
 Files:
-- dev/active/thread-safety/README.md (executive summary)
-- dev/active/thread-safety/thread-safety-context.md (technical design)
-- dev/active/thread-safety/thread-safety-tasks.md (implementation checklist)
+- .planning/ROADMAP.md (project roadmap)
+- .planning/REQUIREMENTS.md (requirements specification)
 
-Status: Ready for implementation when async/await support is needed"
+Status: Ready for implementation via /gsd:plan-phase"
 ```
 
 ### What NOT to Include

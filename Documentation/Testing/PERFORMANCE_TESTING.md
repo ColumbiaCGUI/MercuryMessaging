@@ -29,7 +29,7 @@ This folder contains automated performance testing infrastructure for the Mercur
 4. Watch the real-time metrics display on screen
 
 5. Results automatically export to:
-   - `dev/performance-results/*.csv`
+   - `Assets/Resources/performance-results/*.csv`
 
 ---
 
@@ -47,8 +47,8 @@ Main test orchestration component.
 - `Test Duration`: How long to run test (seconds)
 - `Auto Start`: Start test automatically on scene load
 - `Export To CSV`: Enable CSV export
-- `Export Path`: CSV file path (relative to project dev/ folder)
-- `Export To Dev Folder`: Also export to dev/performance-results/
+- `Export Path`: CSV file path (relative to Assets/Resources/)
+- `Export To Dev Folder`: Also export to Assets/Resources/performance-results/
 
 **Metrics Tracked:**
 - Frame time (ms) - avg, min, max
@@ -189,31 +189,31 @@ Execute,1000,X,X,X,X
    - Enable Auto Start on both MessageGenerator and PerformanceTestHarness
    - Play scene
    - Wait 60 seconds
-   - Check `dev/performance-results/smallscale_results.csv`
+   - Check `Assets/Resources/performance-results/smallscale_results.csv`
 
 3. **Run MediumScale test:**
    - Open MediumScale.unity
    - Enable Auto Start on both components
    - Play scene
    - Wait 60 seconds
-   - Check `dev/performance-results/mediumscale_results.csv`
+   - Check `Assets/Resources/performance-results/mediumscale_results.csv`
 
 4. **Run LargeScale test:**
    - Open LargeScale.unity
    - Enable Auto Start on both components
    - Play scene
    - Wait 60 seconds
-   - Check `dev/performance-results/largescale_results.csv`
+   - Check `Assets/Resources/performance-results/largescale_results.csv`
 
 5. **Run InvocationComparison:**
    - Open SimpleScene.unity
    - Find GameObject with InvocationComparison component
    - Enable `exportToCSV` and `autoRunTests`
    - Play scene
-   - Check `dev/performance-results/invocation_comparison.csv`
+   - Check `Assets/Resources/performance-results/invocation_comparison.csv`
 
 6. **Analyze results:**
-   - All CSV files are in `dev/performance-results/`
+   - All CSV files are in `Assets/Resources/performance-results/`
    - Use Python/Excel to create graphs
    - Generate performance report
 
@@ -230,7 +230,7 @@ To get additional metrics:
 5. Let test run
 6. Stop recording
 7. Take screenshots or export data
-8. Save to `dev/performance-results/profiler/`
+8. Save to `Assets/Resources/performance-results/profiler/`
 
 ---
 
@@ -246,7 +246,7 @@ To get additional metrics:
 - Enable `logMessages` on TestResponder to see message flow
 
 ### CSV export failed
-- Check `dev/performance-results/` folder exists
+- Check `Assets/Resources/performance-results/` folder exists
 - Verify write permissions
 - Check Unity Console for error messages
 
@@ -281,7 +281,7 @@ Assets/MercuryMessaging/Tests/Performance/
 Assets/Resources/performance-results/
 └── *.csv (Test results - exported here)
 
-dev/performance-results/
+Assets/Resources/performance-results/
 ├── *.csv (Test results - also exported here)
 ├── profiler/ (Unity Profiler screenshots)
 └── graphs/ (Performance graphs)
@@ -299,7 +299,7 @@ After collecting test data:
 4. **Test Existing Scenes** (SimpleScene, TrafficLights, Tutorials)
 5. **Update CLAUDE.md** (add Performance Characteristics section)
 
-See `dev/archive/performance-analysis/` for historical analysis data.
+Historical analysis data is available in the project archive.
 
 ---
 

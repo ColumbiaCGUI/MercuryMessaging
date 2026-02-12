@@ -259,7 +259,7 @@ Project documentation files.
 
 ### "I want to contribute code"
 → Read [CONTRIBUTING.md](../CONTRIBUTING.md) first
-→ Follow [dev/WORKFLOW.md](../dev/WORKFLOW.md) for development process
+→ Follow [Documentation/WORKFLOW.md](WORKFLOW.md) for development process
 
 ---
 
@@ -286,8 +286,8 @@ See [CONTRIBUTING.md](../CONTRIBUTING.md) for complete naming convention policy.
 
 - **General Documentation**: [CLAUDE.md](../CLAUDE.md)
 - **Development Standards**: [CONTRIBUTING.md](../CONTRIBUTING.md)
-- **Development Workflow**: [dev/WORKFLOW.md](../dev/WORKFLOW.md)
-- **Improvement Tracker**: [dev/IMPROVEMENT_TRACKER.md](../dev/IMPROVEMENT_TRACKER.md)
+- **Development Workflow**: [Documentation/WORKFLOW.md](WORKFLOW.md)
+- **Project Roadmap**: [.planning/ROADMAP.md](../.planning/ROADMAP.md)
 - **AI Assistant Guide**: [.claude/ASSISTANT_GUIDE.md](../.claude/ASSISTANT_GUIDE.md)
 
 ---

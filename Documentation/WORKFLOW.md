@@ -1,6 +1,6 @@
 # MercuryMessaging Development Workflow
 
-> **Note (2026-02):** Project planning has migrated to the GSD system (`.planning/` folder). The `dev/active/` task folder workflow described below is superseded by `/gsd:plan-phase` and `/gsd:execute-phase`. See `.planning/ROADMAP.md` for the current project roadmap. The reference patterns below remain useful for code standards and testing workflows.
+> **Note (2026-02):** Project planning has migrated to the GSD system (`.planning/` folder). The `.planning/phases/` task folder workflow described below is superseded by `/gsd:plan-phase` and `/gsd:execute-phase`. See `.planning/ROADMAP.md` for the current project roadmap. The reference patterns below remain useful for code standards and testing workflows.
 
 This document describes the development workflows for the MercuryMessaging framework.
 
@@ -22,12 +22,12 @@ This document describes the development workflows for the MercuryMessaging frame
 ### 1. Planning Phase
 
 **For Small Features (< 2 hours):**
-- Create issue or document in dev/IMPROVEMENT_TRACKER.md
+- Create issue or document in .planning/REQUIREMENTS.md
 - Skip feature branch, work on current branch
 - Single commit when complete
 
 **For Large Features (> 2 hours):**
-- Create task folder: `dev/active/[feature-name]/`
+- Create task folder: `.planning/phases/[feature-name]/`
 - Create three documents:
   - `README.md` - Executive summary
   - `[feature-name]-context.md` - Technical design
@@ -121,7 +121,7 @@ namespace MercuryMessaging.Tests
 # 2. Update CLAUDE.md if architecture changed
 # 3. Update CONTRIBUTING.md if new patterns added
 # 4. Update Documentation/FILE_REFERENCE.md if new important files added
-# 5. Update dev/IMPROVEMENT_TRACKER.md if tracking new work
+# 5. Update .planning/REQUIREMENTS.md if tracking new work
 
 # Commit documentation separately
 git add CLAUDE.md
@@ -282,7 +282,7 @@ public void EditorFeature_Scenario_ExpectedBehavior()
 
 ### Automated Test Result Export
 
-**Location:** Test results are automatically exported to `dev/test-results/`
+**Location:** Test results are automatically exported to `Assets/Resources/test-results/`
 
 **Files Generated:**
 - `TestResults_YYYYMMDD_HHMMSS.xml` - Full NUnit-compatible XML results
@@ -299,13 +299,13 @@ The `MmTestResultExporter` class automatically:
 To check test results programmatically:
 ```bash
 # Find latest test results
-find dev/test-results -name "*.xml" -type f | sort -r | head -1
+find Assets/Resources/test-results -name "*.xml" -type f | sort -r | head -1
 
 # Read summary file
-cat dev/test-results/TestResults_*_summary.txt | head -20
+cat Assets/Resources/test-results/TestResults_*_summary.txt | head -20
 
 # Search for failed tests in XML
-grep -A5 "result=\"Failed\"" dev/test-results/TestResults_*.xml | head -50
+grep -A5 "result=\"Failed\"" Assets/Resources/test-results/TestResults_*.xml | head -50
 ```
 
 **Via Unity MCP:**
@@ -358,13 +358,13 @@ mcp__UnityMCP__read_console action=get count=5
 - Task management files
 - Support system files
 
-**dev/IMPROVEMENT_TRACKER.md** (Roadmap & Tracking)
+**.planning/REQUIREMENTS.md** (Roadmap & Tracking)
 - Track 1: Production Engineering (performance, networking)
 - Track 2: User Study planning
 - Track 3: Research publications
 - Completed Improvements log
 
-**dev/WORKFLOW.md** (This Document)
+**Documentation/WORKFLOW.md** (This Document)
 - Feature development workflow
 - Bug fix workflow
 - Testing workflow
@@ -414,7 +414,7 @@ Files:
 ### Active Tasks Directory Structure
 
 ```
-dev/active/
+.planning/phases/
 ├── [task-name]/
 │   ├── README.md              # Executive summary
 │   ├── [task-name]-context.md # Technical details
@@ -425,10 +425,10 @@ dev/active/
 
 ```bash
 # 1. Create task folder
-mkdir -p dev/active/[task-name]/
+mkdir -p .planning/phases/[task-name]/
 
 # 2. Create README.md (executive summary)
-cat > dev/active/[task-name]/README.md <<EOF
+cat > .planning/phases/[task-name]/README.md <<EOF
 # [Task Name]
 
 **Status:** Ready to Start
@@ -463,22 +463,22 @@ EOF
 
 ```bash
 # 1. List active tasks
-ls dev/active/
+ls .planning/phases/
 
 # 2. Read task documentation
-cat dev/active/[task-name]/README.md
-cat dev/active/[task-name]/[task-name]-context.md
-cat dev/active/[task-name]/[task-name]-tasks.md
+cat .planning/phases/[task-name]/README.md
+cat .planning/phases/[task-name]/[task-name]-context.md
+cat .planning/phases/[task-name]/[task-name]-tasks.md
 
 # 3. Update task checklist as you work
 # Mark items as complete: [x] instead of [ ]
 
 # 4. Commit progress regularly
-git add dev/active/[task-name]/[task-name]-tasks.md
+git add .planning/phases/[task-name]/[task-name]-tasks.md
 git commit -m "docs: Update [task-name] progress (Phase X complete)"
 
-# 5. When complete, move to dev/archive/
-mv dev/active/[task-name]/ dev/archive/[task-name]/
+# 5. When complete, move to archive/
+mv .planning/phases/[task-name]/ archive/[task-name]/
 ```
 
 ### Archiving Completed Tasks
@@ -488,10 +488,10 @@ mv dev/active/[task-name]/ dev/archive/[task-name]/
 # 2. Update final status in README.md
 # 3. Move to archive
 
-mkdir -p dev/archive/
-mv dev/active/[task-name]/ dev/archive/[task-name]/
+mkdir -p archive/
+mv .planning/phases/[task-name]/ archive/[task-name]/
 
-git add dev/active/ dev/archive/
+git add .planning/phases/ archive/
 git commit -m "docs: Archive [task-name] (complete)"
 
 # 4. Update IMPROVEMENT_TRACKER.md to mark task as complete
@@ -599,7 +599,7 @@ git commit -m "feat: [description]"
 ### Scenario 3: Large Feature (> 2 hours)
 
 ```bash
-# 1. Create task folder (dev/active/[feature]/)
+# 1. Create task folder (.planning/phases/[feature]/)
 # 2. Create README, context, tasks documents
 # 3. Create feature branch
 # 4. Implement incrementally (commit every 30-60 min)
@@ -672,7 +672,7 @@ If you're unsure about any workflow:
    - [IMPROVEMENT_TRACKER.md](IMPROVEMENT_TRACKER.md) - Roadmap & tracking
 
 2. **Check Active Tasks:**
-   - `ls dev/active/` - See what's being worked on
+   - `ls .planning/phases/` - See what's being worked on
    - Read task documentation for similar work
 
 3. **Review Commit History:**

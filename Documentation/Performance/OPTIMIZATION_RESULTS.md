@@ -13,7 +13,7 @@
 > - Medium: 14.29ms / 70.0 FPS / 500 msg/sec
 > - Large: 17.17ms / 58.3 FPS / 1000 msg/sec
 >
-> See `dev/performance-results/` for raw data.
+> Raw data archived in `archive/2026-02-gsd-migration/performance-results/`.
 
 ---
 

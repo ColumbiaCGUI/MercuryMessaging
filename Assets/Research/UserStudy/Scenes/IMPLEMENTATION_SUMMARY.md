@@ -421,9 +421,8 @@ Pilot test with 2 developers:
 4. Restart Unity Editor if needed
 
 **For user study questions:**
-- See `dev/active/user-study/README.md`
-- See `dev/active/user-study/user-study-plan.md`
-- See `dev/active/user-study/user-study-tasks.md`
+- See `.planning/ROADMAP.md` Phase 5 (User Study)
+- See `.planning/REQUIREMENTS.md` (USTY-01..05)
 
 ---
 

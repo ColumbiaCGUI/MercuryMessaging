@@ -10,9 +10,9 @@
 
 > **DATA VALIDITY WARNING (2025-11-28)**
 >
-> This report uses baseline data from `dev/archive/performance-analysis-baseline/` which had a throughput bug (~30 msg/sec cap). The throughput values in this report are artificially low.
+> This report uses baseline data which had a throughput bug (~30 msg/sec cap). The throughput values in this report are artificially low.
 >
-> For validated current performance data, see `dev/performance-results/` (2025-11-28):
+> Validated current performance data (2025-11-28):
 > - Small: 14.54ms / 68.8 FPS / 100 msg/sec
 > - Medium: 14.29ms / 70.0 FPS / 500 msg/sec
 > - Large: 17.17ms / 58.3 FPS / 1000 msg/sec
@@ -473,7 +473,7 @@ Based on test results and code analysis:
 
 ### 7.3 Long-term Improvements
 
-See `dev/archive/framework-analysis/` for:
+Long-term improvement areas (from prior framework analysis):
 - **Routing optimization (420h)** - Advanced filters, O(1) routing tables, spatial indexing
 - **Network performance (500h)** - Delta state tracking, compression, bandwidth optimization
 - **Visual composer (360h)** - Editor tools for hierarchy design and message flow visualization
