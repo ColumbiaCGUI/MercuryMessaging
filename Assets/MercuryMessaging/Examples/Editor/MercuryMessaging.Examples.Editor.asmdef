@@ -1,0 +1,17 @@
+{
+    "name": "MercuryMessaging.Examples.Editor",
+    "rootNamespace": "MercuryMessaging.Examples.Editor",
+    "references": [
+        "MercuryMessaging",
+        "MercuryMessaging.Examples"
+    ],
+    "includePlatforms": ["Editor"],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
