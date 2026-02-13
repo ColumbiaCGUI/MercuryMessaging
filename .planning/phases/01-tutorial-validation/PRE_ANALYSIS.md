@@ -1,6 +1,7 @@
 # Tutorial Pre-Analysis Report
 
 **Generated:** 2026-02-13
+**Decisions Resolved:** 2026-02-13
 **Method:** Static comparison of wiki code blocks against actual tutorial scripts
 **Scope:** Tutorials 1-12 (full analysis) + Tutorials 13-14 (stub verification)
 
@@ -82,10 +83,10 @@ Wiki and code are well-aligned. The wiki uses generic names as pedagogical examp
 
 ### Issues Found
 
-1. **Key 3 mismatch** -- Wiki says Alpha3 triggers `BroadcastRefresh()`, code triggers `BroadcastValue(42)`. The R key in code does BroadcastRefresh. DECISION NEEDED: Update wiki to match code (Alpha3 = BroadcastValue, R = Refresh)?
+1. **Key 3 mismatch** -- Wiki says Alpha3 triggers `BroadcastRefresh()`, code triggers `BroadcastValue(42)`. The R key in code does BroadcastRefresh. DECISION NEEDED: Update wiki to match code (Alpha3 = BroadcastValue, R = Refresh)? **RESOLVED: Update wiki to match code. Alpha3 = BroadcastValue(42), R = BroadcastRefresh(). Code is ground truth.**
 2. **Console output format** -- Wiki shows `ChildResponder: Got string 'x'`, code shows `[T1_Child] Received string: x`. AUTO-FIX: Update wiki to show actual output format.
 3. **Prerequisites** -- Wiki says "Unity 2021.3 or later". AUTO-FIX: Update to "Unity 6000.3 or later (Unity 6)".
-4. **T1_SceneController.cs** -- Exists in code but is not documented in the wiki at all. It handles Space key for SetActive toggle. DECISION NEEDED: Document in wiki or remove from scene?
+4. **T1_SceneController.cs** -- Exists in code but is not documented in the wiki at all. It handles Space key for SetActive toggle. DECISION NEEDED: Document in wiki or remove from scene? **RESOLVED: Add to wiki. Study participants need accurate docs.**
 
 ---
 
@@ -110,7 +111,7 @@ Wiki is primarily conceptual/reference and the actual scripts implement the docu
 
 | Aspect | Wiki Says | Code Says | Match? | Decision Needed? |
 |--------|-----------|-----------|--------|------------------|
-| `relay.To.Children.Send("Hello")` | Documented | Not in tutorial code | N/A | YES -- Wiki documents property-based routing (`relay.To.X`), but does this API actually exist in the framework? If not, it should be removed from wiki. |
+| `relay.To.Children.Send("Hello")` | Documented | Not in tutorial code | N/A | YES -- Wiki documents property-based routing (`relay.To.X`), but does this API actually exist in the framework? If not, it should be removed from wiki. **RESOLVED: API EXISTS. Keep in wiki.** |
 
 ### Wiki: Menu System Example
 
@@ -134,7 +135,7 @@ Wiki is primarily conceptual/reference and the actual scripts implement the docu
 ### Issues Found
 
 1. **No keyboard controls section in wiki** -- Wiki describes routing conceptually but does not list specific keyboard shortcuts. The actual T2_RoutingExamples.cs has C/P/D/A/S/F keys. AUTO-FIX: Add keyboard controls section to wiki.
-2. **Property-based routing API** -- Wiki shows `relay.To.Children.Send("Hello")` syntax. DECISION NEEDED: Does this API exist in the framework? If not, remove from wiki. If yes, no action needed.
+2. **Property-based routing API** -- Wiki shows `relay.To.Children.Send("Hello")` syntax. DECISION NEEDED: Does this API exist in the framework? If not, remove from wiki. If yes, no action needed. **RESOLVED: EXISTS. `MmRelayNode.To` property (line 228) returns `MmRoutingBuilder` struct with `Children`/`Parents`/`Descendants` etc. `responder.To()` extension method also exists. Keep in wiki with correct signatures -- showcases framework breadth (strengthens C3).**
 
 ---
 
@@ -194,7 +195,7 @@ Code and wiki are well-aligned. Both approaches (MmBaseResponder and MmExtendabl
 
 ### Issues Found
 
-1. **Method constant values mismatch** -- Wiki defines ChangeColor=1000, TakeDamage=1001. Code defines TakeDamage=1000, ChangeColor=1001. DECISION NEEDED: Update wiki to match code values, or update code to match wiki values?
+1. **Method constant values mismatch** -- Wiki defines ChangeColor=1000, TakeDamage=1001. Code defines TakeDamage=1000, ChangeColor=1001. DECISION NEEDED: Update wiki to match code values, or update code to match wiki values? **RESOLVED: Update wiki to match code. Code is ground truth: TakeDamage=1000, ChangeColor=1001.**
 2. **Extra keyboard shortcuts** -- Code has G (gravity), H (heal), I (initialize) not in wiki. AUTO-FIX: Add to wiki keyboard controls section.
 
 ---
@@ -252,7 +253,7 @@ Code closely matches wiki. Custom message class implementation is functionally i
 
 ### Issues Found
 
-1. **Wiki Serialize/Deserialize inconsistency** -- Wiki Step 2 shows object[] pattern for ColorIntensityMessage but Example 2 (EnemyStateMessage) shows MmWriter/MmReader pattern. DECISION NEEDED: Which serialization API is correct? The actual code uses object[] pattern. If MmWriter/MmReader does not exist, remove those examples from wiki.
+1. **Wiki Serialize/Deserialize inconsistency** -- Wiki Step 2 shows object[] pattern for ColorIntensityMessage but Example 2 (EnemyStateMessage) shows MmWriter/MmReader pattern. DECISION NEEDED: Which serialization API is correct? The actual code uses object[] pattern. If MmWriter/MmReader does not exist, remove those examples from wiki. **RESOLVED: Both APIs EXIST. MmWriter (Protocol/Network/MmWriter.cs) and MmReader (Protocol/Network/MmReader.cs) are real classes. Wiki to match code (object[] pattern) as primary, and document MmWriter/MmReader as alternative for binary serialization.**
 2. **Extra keyboard shortcuts** -- Code has W, 0, I not documented. AUTO-FIX: Add to wiki.
 
 ---
@@ -280,7 +281,7 @@ The DSL demo scene setup and responder match wiki documentation closely.
 
 | Aspect | Wiki Says | Code Says | Match? | Decision Needed? |
 |--------|-----------|-----------|--------|------------------|
-| `this.To().Parents.Send("done")` | Documented | Not tested in demo code | N/A | YES -- Same question as Tutorial 2: does `this.To()` API exist? |
+| `this.To().Parents.Send("done")` | Documented | Not tested in demo code | N/A | YES -- Same question as Tutorial 2: does `this.To()` API exist? **RESOLVED: EXISTS. Keep in wiki.** |
 
 ### Keyboard Controls
 
@@ -297,9 +298,9 @@ The DSL demo scene setup and responder match wiki documentation closely.
 
 ### Issues Found
 
-1. **Wiki shows `relay.After()`, `relay.Every()`, `relay.When()` temporal methods** -- Code uses coroutines instead. DECISION NEEDED: Do `After()`, `Every()`, `When()` extension methods exist in the framework? If not, wiki should show the coroutine approach the code actually uses.
+1. **Wiki shows `relay.After()`, `relay.Every()`, `relay.When()` temporal methods** -- Code uses coroutines instead. DECISION NEEDED: Do `After()`, `Every()`, `When()` extension methods exist in the framework? If not, wiki should show the coroutine approach the code actually uses. **RESOLVED: ALL EXIST. `After()`, `Every()`, `When()` are in MmTemporalExtensions.cs with multiple overloads. Keep in wiki with correct signatures. Tutorial code uses coroutines as a manual approach -- wiki can note both options.**
 2. **T5_SceneController.cs** exists in Scripts/ subfolder but is not documented. Need to check its content during runtime validation.
-3. **Property-based routing** -- Wiki shows `relay.To.Children.Send("Hello")` and `this.To().Parents.Send("done")`. DECISION NEEDED: Does this API exist in the framework? (Affects Tutorials 2, 5)
+3. **Property-based routing** -- Wiki shows `relay.To.Children.Send("Hello")` and `this.To().Parents.Send("done")`. DECISION NEEDED: Does this API exist in the framework? (Affects Tutorials 2, 5) **RESOLVED: EXISTS. Both `relay.To.Children` (property on MmRelayNode) and `responder.To().Children` (extension method on MmBaseResponder) exist. Keep in wiki.**
 
 ---
 
@@ -313,7 +314,7 @@ Wiki structure matches code pattern but several wiki-described APIs may not exis
 | Aspect | Wiki Says | Code Says | Match? | Decision Needed? |
 |--------|-----------|-----------|--------|------------------|
 | Class name | `NetworkSetup` | `T6_NetworkSetup` | NO | NO -- T6_ prefix expected |
-| MmNetworkBridge.Instance usage | `bridge.SetBackend(new FishNetBackend())` | Need to verify at runtime | UNKNOWN | YES -- Does MmNetworkBridge, FishNetBackend, FishNetResolver exist? |
+| MmNetworkBridge.Instance usage | `bridge.SetBackend(new FishNetBackend())` | Need to verify at runtime | UNKNOWN | YES -- Does MmNetworkBridge, FishNetBackend, FishNetResolver exist? **RESOLVED: ALL EXIST.** |
 
 ### Wiki: NetworkGameController
 
@@ -336,7 +337,7 @@ Wiki structure matches code pattern but several wiki-described APIs may not exis
 
 ### Issues Found
 
-1. **Network API existence** -- Wiki documents `MmNetworkBridge`, `FishNetBackend`, `FishNetResolver`, `IMmNetworkBackend`, `IMmGameObjectResolver`. DECISION NEEDED: Do these classes exist in the framework? They are critical for Tutorials 6, 7, 11. Must verify during runtime validation.
+1. **Network API existence** -- Wiki documents `MmNetworkBridge`, `FishNetBackend`, `FishNetResolver`, `IMmNetworkBackend`, `IMmGameObjectResolver`. DECISION NEEDED: Do these classes exist in the framework? They are critical for Tutorials 6, 7, 11. Must verify during runtime validation. **RESOLVED: ALL EXIST. MmNetworkBridge (Protocol/Network/), FishNetBackend (Protocol/Network/Backends/), FishNetResolver (Protocol/Network/Backends/), Fusion2Backend (Protocol/Network/Backends/), MmFusion2Bridge (Protocol/Network/Backends/), MmLoopbackBackend (Protocol/Network/), IMmNetworkBackend (Protocol/Network/), IMmGameObjectResolver (Protocol/Network/). Keep in wiki with correct signatures.**
 2. **Conditional compilation** -- Code uses `#if FISHNET_AVAILABLE` guards. AUTO-FIX: Wiki should mention this requirement.
 3. **`H` key for Host and `C` key for Client** -- Research inventory says H/C/D/WASD are controls but actual code has S/I/R. The research inventory may be wrong. Need runtime verification.
 
@@ -352,7 +353,7 @@ Same pattern as Tutorial 6 -- wiki documents APIs that need runtime verification
 | Aspect | Wiki Says | Code Says | Match? | Decision Needed? |
 |--------|-----------|-----------|--------|------------------|
 | Class name | `Fusion2Setup` | `T7_Fusion2Setup` | NO | NO -- T7_ prefix expected |
-| MmFusion2Bridge | Documented as spawned NetworkBehaviour | Need to verify existence | UNKNOWN | YES -- Does MmFusion2Bridge exist? |
+| MmFusion2Bridge | Documented as spawned NetworkBehaviour | Need to verify existence | UNKNOWN | YES -- Does MmFusion2Bridge exist? **RESOLVED: EXISTS.** |
 
 ### Wiki: GameController
 
@@ -364,7 +365,7 @@ Same pattern as Tutorial 6 -- wiki documents APIs that need runtime verification
 
 ### Issues Found
 
-1. **Same network API concerns as Tutorial 6** -- MmNetworkBridge, Fusion2Backend, MmFusion2Bridge existence needs verification.
+1. **Same network API concerns as Tutorial 6** -- MmNetworkBridge, Fusion2Backend, MmFusion2Bridge existence needs verification. **RESOLVED: ALL EXIST (see Tutorial 6 resolution).**
 2. **Photon AppId confirmed** -- `09716863-7e85-417f-a092-4878c1c088d2` is configured, so Fusion 2 connectivity should work.
 
 ---
@@ -429,7 +430,7 @@ Wiki describes the conceptual pattern well, but actual code implementation diffe
 | Aspect | Wiki Says | Code Says | Match? | Decision Needed? |
 |--------|-----------|-----------|--------|------------------|
 | Class name | `JsonTaskLoader` | `T9_JsonTaskLoader` | NO | NO -- T9_ prefix expected |
-| Interface | `IMmTaskInfoCollectionLoader<MyTaskInfo>` | Need to verify | UNKNOWN | YES -- Does this interface exist? |
+| Interface | `IMmTaskInfoCollectionLoader<MyTaskInfo>` | Need to verify | UNKNOWN | YES -- Does this interface exist? **RESOLVED: EXISTS.** |
 
 ### Keyboard Controls
 
@@ -442,9 +443,9 @@ Wiki describes the conceptual pattern well, but actual code implementation diffe
 
 ### Issues Found
 
-1. **MmTaskManager<T> API** -- Wiki describes `AdvanceToNextTask()` but code uses custom `GoToNextTask()`. DECISION NEEDED: Does MmTaskManager have an `AdvanceToNextTask()` method, or is the code's approach correct?
-2. **MmDataCollector** -- Wiki documents SetHeaders/AddRow/SaveToFile API. DECISION NEEDED: Does MmDataCollector class exist in the framework? If not, wiki examples need updating.
-3. **IMmTaskInfoCollectionLoader<T>** -- DECISION NEEDED: Does this interface exist?
+1. **MmTaskManager<T> API** -- Wiki describes `AdvanceToNextTask()` but code uses custom `GoToNextTask()`. DECISION NEEDED: Does MmTaskManager have an `AdvanceToNextTask()` method, or is the code's approach correct? **RESOLVED: Framework has `ProceedToNextTask()` (MmTaskManager.cs:200) and `GoToNext()` extension (MmTaskManagerExtensions.cs:52). No `AdvanceToNextTask()` exists. Wiki should show `GoToNextTask()` to match tutorial code pattern (which wraps `ProceedToNextTask()`).**
+2. **MmDataCollector** -- Wiki documents SetHeaders/AddRow/SaveToFile API. DECISION NEEDED: Does MmDataCollector class exist in the framework? If not, wiki examples need updating. **RESOLVED: EXISTS but with DIFFERENT API. MmDataCollector uses `Add(name, Func<string>)` / `Write()` / `OpenTag()` / `CloseTag()` pattern, plus fluent extensions (`Configure()` / `QuickCsv()` / `AddData()` / `StartRecording()` / `StopRecording()`). No SetHeaders/AddRow/SaveToFile methods. Wiki must be updated to show actual API.**
+3. **IMmTaskInfoCollectionLoader<T>** -- DECISION NEEDED: Does this interface exist? **RESOLVED: EXISTS. `IMmTaskInfoCollectionLoader<U>` at Task/IMmTaskInfoCollectionLoader.cs:42. Also verified: `IMmTaskInfo`, `MmTaskUserConfigurator`, `MmTaskManager<U>` all exist. Keep in wiki.**
 
 ---
 
@@ -457,7 +458,7 @@ Code implements the documented pattern closely.
 
 | Aspect | Wiki Says | Code Says | Match? | Decision Needed? |
 |--------|-----------|-----------|--------|------------------|
-| Class name | `MyAppController` (extends MmSwitchResponder) | `T10_MyAppController` (extends MmAppStateSwitchResponder) | NO | YES -- Wiki base class is `MmSwitchResponder`, code base class is `MmAppStateSwitchResponder`. Which is correct? |
+| Class name | `MyAppController` (extends MmSwitchResponder) | `T10_MyAppController` (extends MmAppStateSwitchResponder) | NO | YES -- Wiki base class is `MmSwitchResponder`, code base class is `MmAppStateSwitchResponder`. Which is correct? **RESOLVED: Update wiki to `MmAppStateSwitchResponder`.** |
 | State switching | `SwitchTo(name)` calling `MmRelaySwitchNode.MmInvoke(Switch, name)` | Same pattern | YES | |
 | Initial state | `InitialState = "MainMenu"` | `InitialState = startState` (serialized field defaulting to "MainMenu") | YES | |
 | SetupAppStates | Override documented | Override present | YES | |
@@ -480,8 +481,8 @@ Code implements the documented pattern closely.
 
 ### Issues Found
 
-1. **Base class discrepancy** -- Wiki says `MmSwitchResponder`, code extends `MmAppStateSwitchResponder`. DECISION NEEDED: Are both valid? Does `MmAppStateSwitchResponder` exist? Which should wiki document?
-2. **`MmAppStateResponder` existence** -- Wiki documents this class for state behaviors. DECISION NEEDED: Does it exist in the framework?
+1. **Base class discrepancy** -- Wiki says `MmSwitchResponder`, code extends `MmAppStateSwitchResponder`. DECISION NEEDED: Are both valid? Does `MmAppStateSwitchResponder` exist? Which should wiki document? **RESOLVED: BOTH EXIST. `MmAppStateSwitchResponder` extends `MmSwitchResponder` extends `MmBaseResponder`. Wiki should match code: use `MmAppStateSwitchResponder` as the documented base class for app state controllers (it's the more specific/correct class for this use case).**
+2. **`MmAppStateResponder` existence** -- Wiki documents this class for state behaviors. DECISION NEEDED: Does it exist in the framework? **RESOLVED: EXISTS. `MmAppStateResponder` at Protocol/AppState/MmAppStateResponder.cs:40, extends `MmBaseResponder`. Keep in wiki.**
 
 ---
 
@@ -514,9 +515,9 @@ Code is a simple loopback demo; wiki covers much broader network architecture.
 
 ### Issues Found
 
-1. **MmLoopbackBackend** -- Code uses it. DECISION NEEDED: Does this class exist in the framework?
+1. **MmLoopbackBackend** -- Code uses it. DECISION NEEDED: Does this class exist in the framework? **RESOLVED: EXISTS. MmLoopbackBackend at Protocol/Network/MmLoopbackBackend.cs:51. Keep in wiki.**
 2. **Wiki breadth vs code simplicity** -- Wiki covers full network architecture but tutorial code is a simple loopback demo. This is acceptable (wiki is reference), but wiki should note the tutorial is a simplified introduction.
-3. **MmBinarySerializer, MmWriter, MmReader** -- Wiki documents these in detail. DECISION NEEDED: Do they exist? (Affects Tutorials 4, 11)
+3. **MmBinarySerializer, MmWriter, MmReader** -- Wiki documents these in detail. DECISION NEEDED: Do they exist? (Affects Tutorials 4, 11) **RESOLVED: ALL EXIST. MmBinarySerializer (Protocol/Network/MmBinarySerializer.cs:61), MmWriter (Protocol/Network/MmWriter.cs:29), MmReader (Protocol/Network/MmReader.cs:24). Keep in wiki with correct signatures.**
 
 ---
 
@@ -530,16 +531,16 @@ Code is a self-contained Go/No-Go task controller that works with keyboard fallb
 | Aspect | Wiki Says | Code Says | Match? | Decision Needed? |
 |--------|-----------|-----------|--------|------------------|
 | Class name | `ExperimentController` | `T12_GoNoGoController` | NO | NO -- different naming convention |
-| Uses MmTaskManager | Yes (wiki hierarchy) | No -- standalone MonoBehaviour | NO | YES -- Wiki shows MmTaskManager-based hierarchy, code is self-contained. Which approach should tutorial teach? |
-| VR Input | XR Interaction Toolkit InputActionReference | `#if UNITY_XR_AVAILABLE` with legacy XR API | NO | YES -- Wiki shows modern XRI InputSystem approach, code uses legacy `InputDevices.GetDeviceAtXRNode`. Which is correct? |
+| Uses MmTaskManager | Yes (wiki hierarchy) | No -- standalone MonoBehaviour | NO | YES -- Wiki shows MmTaskManager-based hierarchy, code is self-contained. Which approach should tutorial teach? **RESOLVED: Wiki matches code (monolithic) for now. Flag for Phase 5.** |
+| VR Input | XR Interaction Toolkit InputActionReference | `#if UNITY_XR_AVAILABLE` with legacy XR API | NO | YES -- Wiki shows modern XRI InputSystem approach, code uses legacy `InputDevices.GetDeviceAtXRNode`. Which is correct? **RESOLVED: Wiki matches code (legacy) + note XRI alternative.** |
 | Keyboard fallback | Not documented | Space key for response | N/A | AUTO-FIX: Document keyboard fallback |
 
 ### Wiki: StimulusController / VRInputHandler
 
 | Aspect | Wiki Says | Code Says | Match? | Decision Needed? |
 |--------|-----------|-----------|--------|------------------|
-| StimulusController | Separate class with message-based control | Inline stimulus control in T12_GoNoGoController | NO | YES -- Wiki separates concerns via messaging, code is monolithic. |
-| VRInputHandler | Separate class with InputActionReference | Inline input handling | NO | YES -- Same issue |
+| StimulusController | Separate class with message-based control | Inline stimulus control in T12_GoNoGoController | NO | YES -- Wiki separates concerns via messaging, code is monolithic. **RESOLVED: Wiki matches code for now.** |
+| VRInputHandler | Separate class with InputActionReference | Inline input handling | NO | YES -- Same issue. **RESOLVED: Wiki matches code for now.** |
 | DataLogger | Separate MmDataCollector-based export | T12_DataLogger exists (need to read) | UNKNOWN | |
 
 ### Keyboard Controls
@@ -551,8 +552,8 @@ Code is a self-contained Go/No-Go task controller that works with keyboard fallb
 
 ### Issues Found
 
-1. **Architecture mismatch** -- Wiki shows MmTaskManager + separate StimulusController + VRInputHandler + MmDataCollector. Code is a single monolithic T12_GoNoGoController. DECISION NEEDED: Should wiki be updated to match the simpler code approach, or should code be refactored to match the wiki's message-based architecture?
-2. **VR input approach** -- Wiki uses XRI InputActionReference (modern), code uses `#if UNITY_XR_AVAILABLE` with legacy XR API. DECISION NEEDED: Update code to use modern XRI approach, or update wiki?
+1. **Architecture mismatch** -- Wiki shows MmTaskManager + separate StimulusController + VRInputHandler + MmDataCollector. Code is a single monolithic T12_GoNoGoController. DECISION NEEDED: Should wiki be updated to match the simpler code approach, or should code be refactored to match the wiki's message-based architecture? **RESOLVED: Wiki matches code for now (monolithic). Flagged as potential code update during Phase 5 user study prep -- refactoring to message-based architecture would strengthen C3 (DSL) but is not blocking for Tutorial Validation.**
+2. **VR input approach** -- Wiki uses XRI InputActionReference (modern), code uses `#if UNITY_XR_AVAILABLE` with legacy XR API. DECISION NEEDED: Update code to use modern XRI approach, or update wiki? **RESOLVED: Wiki matches code (legacy InputDevices) + add note about XRI alternative. Legacy approach works for tutorial scope; XRI migration is separate work.**
 3. **XR Device Simulator** -- Not imported. Must be imported before runtime validation.
 4. **MmDataCollector** -- Wiki uses it extensively. Need to verify existence.
 
@@ -586,8 +587,8 @@ Code is a self-contained Go/No-Go task controller that works with keyboard fallb
 
 ### Issues Found (Stubs)
 
-1. **Tutorial 13 temporal methods** -- `After()`, `Every()`, `When()` are listed as "Available" but Tutorial 5 code uses coroutines instead. DECISION NEEDED: Do these temporal extension methods actually exist in the framework? If not, status should be "Planned".
-2. **Tutorial 14 source generators** -- `[MmGenerateDispatch]` and `[MmHandler]` are listed as "Available". Need to verify they exist.
+1. **Tutorial 13 temporal methods** -- `After()`, `Every()`, `When()` are listed as "Available" but Tutorial 5 code uses coroutines instead. DECISION NEEDED: Do these temporal extension methods actually exist in the framework? If not, status should be "Planned". **RESOLVED: ALL EXIST in MmTemporalExtensions.cs. Status "Available" is CORRECT. Tutorial 5 code uses coroutines as manual alternative but the DSL temporal methods are available. Spatial methods (.Within, .InCone, .InBounds) are correctly marked as "Planned". Throttle/Debounce are correctly "Planned".**
+2. **Tutorial 14 source generators** -- `[MmGenerateDispatch]` and `[MmHandler]` are listed as "Available". Need to verify they exist. **VERIFIED: EXIST. `MmGenerateDispatchAttribute` at Protocol/Attributes/MmGenerateDispatchAttribute.cs, `MmHandlerAttribute` at Protocol/Attributes/MmHandlerAttribute.cs. Status "Available" is correct.**
 
 ---
 
@@ -598,38 +599,70 @@ Code is a self-contained Go/No-Go task controller that works with keyboard fallb
 **Question:** Does the property-based routing API (`relay.To.Children.Send("Hello")`) exist in the framework?
 **Impact:** If it does not exist, these wiki sections document non-existent API and will confuse users.
 **Recommendation:** Grep framework source for `public.*To ` property on MmRelayNode. If absent, remove from wiki.
+**VERIFIED: EXISTS.** `MmRelayNode.To` property (MmRelayNode.cs:228) returns `MmRoutingBuilder` struct. `MmRoutingBuilder` has `Children`, `Parents`, `Descendants`, `Ancestors`, `Siblings`, `SelfAndChildren`, `All` properties, plus `Active`, `Selected`, `OverNetwork`, `WithTag()` filters, plus terminal `Send()`, `Initialize()`, `Refresh()`, `Complete()`, `SetActive()`, `Switch()` methods. `MmBaseResponder` has `To()` extension method (MmResponderExtensions.cs:169). **Action: Keep in wiki with correct signatures.**
 
 ### Issue B: Network API Classes
 **Affected tutorials:** 6, 7, 11
 **Question:** Do these classes exist: MmNetworkBridge, FishNetBackend, FishNetResolver, Fusion2Backend, MmFusion2Bridge, MmLoopbackBackend, MmBinarySerializer, IMmNetworkBackend, IMmGameObjectResolver?
 **Impact:** If they don't exist, network tutorials are teaching against non-existent API.
 **Recommendation:** Verify during runtime validation. If classes don't exist, major wiki rewrite needed.
+**VERIFIED: ALL EXIST.**
+- `MmNetworkBridge` -- Protocol/Network/MmNetworkBridge.cs:56
+- `FishNetBackend` -- Protocol/Network/Backends/FishNetBackend.cs:79
+- `FishNetResolver` -- Protocol/Network/Backends/FishNetResolver.cs:56
+- `Fusion2Backend` -- Protocol/Network/Backends/Fusion2Backend.cs:73
+- `MmFusion2Bridge` -- Protocol/Network/Backends/MmFusion2Bridge.cs:60
+- `MmLoopbackBackend` -- Protocol/Network/MmLoopbackBackend.cs:51
+- `MmBinarySerializer` -- Protocol/Network/MmBinarySerializer.cs:61
+- `IMmNetworkBackend` -- Protocol/Network/IMmNetworkBackend.cs:109
+- `IMmGameObjectResolver` -- Protocol/Network/IMmGameObjectResolver.cs:49
+**Action: Keep all in wiki with correct signatures.**
 
 ### Issue C: Data Collection API
 **Affected tutorials:** 9, 12
 **Question:** Does `MmDataCollector` exist with SetHeaders/AddRow/SaveToFile API?
 **Impact:** If it doesn't exist, experiment tutorials document unavailable functionality.
+**VERIFIED: EXISTS but DIFFERENT API.** `MmDataCollector` (Support/Data/MmDataCollector.cs:46) uses `Add(name, Func<string>)` / `Write()` / `OpenTag()` / `CloseTag()` / `CreateDataHandler()` pattern. Fluent extensions via `MmDataCollectorExtensions` add: `Configure()`, `QuickCsv()`, `AddData()`, `StartRecording()`, `StopRecording()`, `PauseRecording()`, `ResumeRecording()`. **NO SetHeaders/AddRow/SaveToFile methods exist.** **Action: Wiki must be updated to show actual API.**
 
 ### Issue D: Temporal Extensions
 **Affected tutorials:** 5, 13
 **Question:** Do `relay.After()`, `relay.Every()`, `relay.When()` extension methods exist?
 **Impact:** Tutorial 5 code uses coroutines as a workaround; Tutorial 13 lists them as "Available".
+**VERIFIED: ALL EXIST.** `MmTemporalExtensions.cs` in Protocol/DSL/ provides:
+- `After()` -- 7 overloads (delay + method, delay + method + metadata, delay + method + bool/int/float/string, delay + message)
+- `Every()` -- 5 overloads (interval + method, interval + method + metadata, interval + method + bool/int, interval + message)
+- `When()` -- 3 overloads (condition + method, condition + message, condition + action)
+- Also `MmTemporalBuilder` with fluent `After()` / `Every()` chaining.
+**Action: Keep as "Available" in Tutorial 13. Tutorial 5 wiki can note both coroutine and DSL temporal approaches.**
 
 ### Issue E: MmWriter/MmReader Binary API
 **Affected tutorials:** 4, 11
 **Question:** Do `MmWriter`/`MmReader` classes exist for binary serialization?
 **Impact:** Tutorial 4 wiki Example 2 (EnemyStateMessage) and Tutorial 11 use these for serialization.
 **Note:** Tutorial 4 actual code uses the object[] pattern, not MmWriter/MmReader.
+**VERIFIED: EXIST.** `MmWriter` (Protocol/Network/MmWriter.cs:29, sealed class, IDisposable) and `MmReader` (Protocol/Network/MmReader.cs:24, sealed class). **Action: Wiki shows object[] as primary (matching code), MmWriter/MmReader as alternative for binary serialization.**
 
 ### Issue F: Task System Classes
 **Affected tutorials:** 9
 **Question:** Do `MmTaskManager<T>`, `MmTaskUserConfigurator`, `IMmTaskInfo`, `IMmTaskInfoCollectionLoader<T>` exist?
 **Impact:** Tutorial 9 code extends MmTaskManager, so it likely exists. Sub-interfaces need verification.
+**VERIFIED: ALL EXIST.**
+- `MmTaskManager<U>` -- Task/MmTaskManager.cs:51, has `ProceedToNextTask()` (line 200), `NextTaskInfo` property
+- `MmTaskUserConfigurator` -- Task/MmTaskUserConfigurator.cs:41
+- `IMmTaskInfo` -- Task/IMmTaskInfo.cs:40
+- `IMmTaskInfoCollectionLoader<U>` -- Task/IMmTaskInfoCollectionLoader.cs:42
+- Extension methods: `GoToNext()`, `HasNextTask()`, `HasPreviousTask()` via MmTaskManagerExtensions.cs
+**Action: Keep in wiki. Note: No `AdvanceToNextTask()` -- use `GoToNextTask()` (tutorial code) which wraps `ProceedToNextTask()` (framework).**
 
 ### Issue G: App State Classes
 **Affected tutorials:** 10
 **Question:** Do `MmSwitchResponder`, `MmAppStateSwitchResponder`, `MmAppStateResponder` exist?
 **Impact:** Tutorial 10 code extends MmAppStateSwitchResponder, so it likely exists.
+**VERIFIED: ALL EXIST.**
+- `MmSwitchResponder` -- Protocol/Responders/MmSwitchResponder.cs:44 (base class)
+- `MmAppStateSwitchResponder` -- Protocol/AppState/MmAppStateSwitchResponder.cs:41 (extends MmSwitchResponder)
+- `MmAppStateResponder` -- Protocol/AppState/MmAppStateResponder.cs:40 (extends MmBaseResponder)
+**Action: Wiki should use `MmAppStateSwitchResponder` (matching code) as the base class for app state controllers.**
 
 ---
 
@@ -653,33 +686,33 @@ Code is a self-contained Go/No-Go task controller that works with keyboard fallb
 | 14: Stub | N/A | 0 | 0 |
 | **Total** | | **33** | **20** |
 
-### Decision Summary
+### Decision Summary -- ALL RESOLVED (2026-02-13)
 
-The 20 decisions needed fall into these categories:
+All 20 decisions have been resolved. Source code verification completed for all 7 API existence questions.
 
-**Category 1: API Existence Verification (7 decisions)**
-These will be resolved during runtime validation by checking if classes/methods exist:
-- A: Property-based routing API (`relay.To.X`)
-- B: Network API classes (MmNetworkBridge, etc.)
-- C: MmDataCollector
-- D: Temporal extensions (After/Every/When)
-- E: MmWriter/MmReader
-- F: Task system interfaces
-- G: App state classes
+**Category 1: API Existence Verification (7 decisions) -- ALL VERIFIED**
+All APIs exist in the framework source code:
+- A: Property-based routing API (`relay.To.X`) -- **EXISTS** (MmRelayNode.To property + MmRoutingBuilder)
+- B: Network API classes -- **ALL 9 EXIST** (MmNetworkBridge, FishNetBackend, FishNetResolver, Fusion2Backend, MmFusion2Bridge, MmLoopbackBackend, MmBinarySerializer, IMmNetworkBackend, IMmGameObjectResolver)
+- C: MmDataCollector -- **EXISTS but different API** (uses Add/Write/OpenTag, not SetHeaders/AddRow/SaveToFile)
+- D: Temporal extensions (After/Every/When) -- **ALL EXIST** (MmTemporalExtensions.cs, 15+ overloads)
+- E: MmWriter/MmReader -- **EXIST** (Protocol/Network/)
+- F: Task system interfaces -- **ALL EXIST** (MmTaskManager<U>, IMmTaskInfo, IMmTaskInfoCollectionLoader<U>, MmTaskUserConfigurator)
+- G: App state classes -- **ALL EXIST** (MmSwitchResponder, MmAppStateSwitchResponder, MmAppStateResponder)
 
-**Category 2: Wiki-vs-Code Direction (8 decisions)**
-User must decide which side to fix:
-- T1: Key 3 mapping (wiki=Refresh, code=BroadcastValue)
-- T1: T1_SceneController documentation
-- T3: Method constant values (wiki ChangeColor=1000, code TakeDamage=1000)
-- T4: Serialization API pattern (object[] vs MmWriter/MmReader)
-- T9: MmTaskManager.AdvanceToNextTask() vs custom navigation
-- T10: Base class (MmSwitchResponder vs MmAppStateSwitchResponder)
-- T12: Monolithic vs message-based architecture
-- T12: VR input approach (legacy vs XRI)
+**Category 2: Wiki-vs-Code Direction (8 decisions) -- ALL RESOLVED: Wiki matches code**
+User decision: "Code is ground truth. Study participants need accurate docs."
+- T1: Key 3 mapping -- **Wiki to show BroadcastValue(42) for Alpha3, BroadcastRefresh() for R**
+- T1: T1_SceneController -- **Add to wiki**
+- T3: Method constant values -- **Wiki to match code: TakeDamage=1000, ChangeColor=1001**
+- T4: Serialization API -- **Wiki shows object[] (matching code), MmWriter/MmReader as alternative**
+- T9: Navigation API -- **Wiki shows GoToNextTask() (matching code pattern)**
+- T10: Base class -- **Wiki to use MmAppStateSwitchResponder (matching code)**
+- T12: Architecture -- **Wiki matches code (monolithic) for now. Flagged for potential Phase 5 refactor.**
+- T12: VR input -- **Wiki matches code (legacy InputDevices) + note XRI alternative**
 
-**Category 3: Temporal Features Status (1 decision)**
-- T13: Are After/Every/When truly "Available"?
+**Category 3: Temporal Features Status (1 decision) -- RESOLVED**
+- T13: After/Every/When are truly "Available" -- **CONFIRMED. All exist in MmTemporalExtensions.cs.**
 
 **Category 4: Class Name Convention (0 decisions)**
 All tutorials use T{N}_ prefix consistently. Wiki uses generic pedagogical names. This is the expected pattern and requires NO user decision -- wiki should use generic names for teaching, and note the actual filename with T{N}_ prefix.
