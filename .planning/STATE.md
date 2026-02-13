@@ -10,28 +10,28 @@ See: .planning/PROJECT.md (updated 2026-02-11)
 ## Current Position
 
 Phase: 1 of 6 (Tutorial Validation)
-Plan: 0 of 2 in current phase
-Status: Ready to plan
-Last activity: 2026-02-12 -- Roadmap revised: 5 phases restructured to 6. Parallel FSM cut, Distributed Messaging added, User Study split from Paper Polish.
+Plan: 1 of 4 in current phase
+Status: Executing
+Last activity: 2026-02-13 -- Completed Plan 01-01 (Pre-Analysis). All 20 decisions resolved via source code verification.
 
-Progress: [░░░░░░░░░░] 0%
+Progress: [█░░░░░░░░░] 4%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 0
-- Average duration: -
-- Total execution time: 0 hours
+- Total plans completed: 1
+- Average duration: ~50min (includes prior session Task 1)
+- Total execution time: ~1 hour
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| - | - | - | - |
+| 01-tutorial-validation | 1/4 | ~50min | ~50min |
 
 **Recent Trend:**
-- Last 5 plans: -
-- Trend: -
+- Last 5 plans: 01-01 (~50min)
+- Trend: First plan completed
 
 *Updated after each plan completion*
 
@@ -48,6 +48,10 @@ Recent decisions affecting current work:
 - [Roadmap]: Old POLSH-04 (visual tool comparison) REPLACED by USTY-01..05 (Mercury DSL vs Unity Events)
 - [Roadmap]: User Study and Paper Polish split into separate phases (5 and 6)
 - [Roadmap]: Phases 2, 3, 5 can execute in parallel after Phase 1; Phase 4 benefits from Phase 3
+- [01-01]: All 7 cross-tutorial APIs verified to exist in framework source code (relay.To, network classes, MmDataCollector, temporal extensions, MmWriter/MmReader, task system, app state)
+- [01-01]: Wiki-vs-code direction: code is ground truth; wiki updated to match code for all 8 Category 2 decisions
+- [01-01]: MmDataCollector API differs from wiki (uses Add/Write/OpenTag, not SetHeaders/AddRow/SaveToFile) -- wiki must be rewritten
+- [01-01]: Tutorial 12 monolithic architecture accepted for now; flagged for potential Phase 5 refactor to strengthen C3
 
 ### Pending Todos
 
@@ -61,6 +65,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-12
-Stopped at: Roadmap revised from 5 to 6 phases, ready to plan Phase 1
+Last session: 2026-02-13
+Stopped at: Completed 01-01-PLAN.md (Pre-Analysis). Ready for 01-02-PLAN.md execution.
 Resume file: None
