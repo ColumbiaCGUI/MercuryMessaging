@@ -18,6 +18,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [ ] **Phase 4: Asymmetry Analysis** - Benchmark framework for graph asymmetry across networked peers
 - [ ] **Phase 5: User Study** - Mercury/Cascade DSL vs Unity Events within-subjects comparison (N=20)
 - [ ] **Phase 6: Paper Polish** - Profiler integration, Olsen framework evaluation, submission-ready draft
+- [ ] **Phase 7: VR Visual Composer** - Immersive VR debugging and editing of Mercury networks with blockage indicators
 
 ## Phase Details
 
@@ -111,12 +112,36 @@ Plans:
 - [ ] 06-02: TBD
 - [ ] 06-03: TBD
 
+### Phase 7: VR Visual Composer
+**Goal**: A progressive visualization and editing tool (2D → 3D Scene View → VR) for viewing, debugging, and bi-directionally editing MercuryMessaging networks, with blockage indicators explaining WHY messages were filtered and responder capability introspection showing what each component can handle
+**Depends on**: Phase 1 (validated tutorials for user study training); can run in PARALLEL with Phases 2-6
+**Requirements**: VCOMP-01 (introspection), VCOMP-02 (2D editor), VCOMP-03 (3D scene view), VCOMP-04 (VR rendering), VCOMP-05 (VR editing), VCOMP-06 (time-travel), VCOMP-07 (user study)
+**Design Doc**: [docs/plans/2026-02-19-vr-visual-composer-design.md](../../docs/plans/2026-02-19-vr-visual-composer-design.md)
+**Success Criteria** (what must be TRUE):
+  1. Introspection subsystem captures 6 event streams (routing decisions with full filter audit, topology changes, FSM transitions, network events, per-node metrics, responder capabilities) with zero overhead when MmIntrospectionMode is off
+  2. 2D graph editor window shows the Mercury network topology with live message animation, blockage indicators, responder capability badges, and bi-directional editing (graph changes update scene and vice versa)
+  3. 3D Scene View renders connection lines between MmRelayNodes overlaid on actual GameObjects with message flow animation and blockage markers
+  4. In VR, a developer can see the network as scene-anchored overlays with a detachable overview graph, live message particles, and spatial blockage explanation cards
+  5. A developer can create/delete nodes, wire connections, change filters/tags, and fire test messages entirely in VR, with changes reflected in the Unity scene
+  6. Timeline scrubber replays recorded message history with historical blockage state, FSM transitions, and topology changes
+  7. User study (N>=12) shows measurable improvement in debugging task completion time vs Inspector-only workflow
+**Plans**: 7 sub-phases (rendering ladder)
+
+Plans:
+- [ ] 07-01-PLAN.md — Introspection Subsystem: 6 event streams, MmIntrospectionBus, MmMessageRecorder, MmTopologySnapshot, responder capability reflection
+- [ ] 07-02-PLAN.md — 2D Graph Editor: GraphViewBase editor window, node-link graph, live animation, blockage indicators, capability badges, bi-directional editing, search/filter
+- [ ] 07-03-PLAN.md — 3D Scene View: GL/ALINE connection lines in Scene View, message particles, blockage markers, node labels
+- [ ] 07-04-PLAN.md — VR Rendering: scene-anchored overlays, overview graph, VR blockage cards, capability cards, message particles
+- [ ] 07-05-PLAN.md — VR Interaction & Editing: tool belt, wire/create/delete tools, test message tool, undo system, search
+- [ ] 07-06-PLAN.md — Time-Travel & Timeline: scrubber UI, playback modes, historical state replay, session export
+- [ ] 07-07-PLAN.md — Polish & User Study: performance optimization, user study (N=20), paper figures
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 (parallel with 3, 5) -> 3 (parallel with 2, 5) -> 4 (benefits from 3) -> 5 (parallel with 2, 3, 4) -> 6
+Phases execute in numeric order: 1 -> 2 (parallel with 3, 5, 7) -> 3 (parallel with 2, 5, 7) -> 4 (benefits from 3) -> 5 (parallel with 2, 3, 4, 7) -> 6 -> 7 user study last
 
-Note: Phase 1 is the sole prerequisite. After Phase 1, Phases 2, 3, and 5 are independent and can execute in parallel. Phase 4 can start after Phase 1 but benefits from Phase 3 completing first. Phase 6 waits for all data-producing phases (2, 3, 4, 5).
+Note: Phase 1 is the sole prerequisite. After Phase 1, Phases 2, 3, 5, and 7 are independent and can execute in parallel. Phase 4 can start after Phase 1 but benefits from Phase 3 completing first. Phase 6 waits for all data-producing phases (2, 3, 4, 5). Phase 7 (VR Visual Composer) can begin after Phase 1 and runs in parallel with Phases 2-6; its user study sub-phase (07-05) should run after the core tool is complete.
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -126,7 +151,8 @@ Note: Phase 1 is the sole prerequisite. After Phase 1, Phases 2, 3, and 5 are in
 | 4. Asymmetry Analysis | 0/1 | Not started | - |
 | 5. User Study | 0/2 | Not started | - |
 | 6. Paper Polish | 0/3 | Not started | - |
+| 7. VR Visual Composer | 0/7 | Design complete (Rev 2) | - |
 
 ---
 *Roadmap created: 2026-02-11*
-*Last updated: 2026-02-12*
+*Last updated: 2026-02-19*
