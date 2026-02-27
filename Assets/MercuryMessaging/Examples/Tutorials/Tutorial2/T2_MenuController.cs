@@ -26,16 +26,16 @@ public class T2_MenuController : MmBaseResponder
     public void ShowMainMenu()
     {
         // Deactivate all menus first
-        relay.Send(false).ToChildren().Execute();
+        relay.BroadcastSetActive(false);
         // Then activate MainMenu specifically (by tag)
-        relay.Send(true).ToChildren().WithTag(MmTag.Tag0).Execute();
+        relay.Send(MmMethod.SetActive, true).ToChildren().WithTag(MmTag.Tag0).Execute();
         Debug.Log("[MenuController] Showing MainMenu");
     }
 
     public void ShowSettings()
     {
-        relay.Send(false).ToChildren().Execute();
-        relay.Send(true).ToChildren().WithTag(MmTag.Tag1).Execute();
+        relay.BroadcastSetActive(false);
+        relay.Send(MmMethod.SetActive, true).ToChildren().WithTag(MmTag.Tag1).Execute();
         Debug.Log("[MenuController] Showing SettingsMenu");
     }
 

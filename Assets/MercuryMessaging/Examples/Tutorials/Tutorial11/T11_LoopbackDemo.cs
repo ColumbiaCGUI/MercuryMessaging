@@ -32,9 +32,15 @@ namespace MercuryMessaging.Examples.Tutorial11
             // Create a loopback backend for local testing
             _loopbackBackend = new MmLoopbackBackend();
 
+            // Wire the loopback backend to the network bridge
+            // so that .OverNetwork() messages are routed through it
+            var bridge = MmNetworkBridge.Instance;
+            bridge.Configure(_loopbackBackend, new MmRegistryResolver());
+            bridge.Initialize();
+
             if (enableDebugLogging)
             {
-                Debug.Log("[T11] Loopback backend initialized.");
+                Debug.Log("[T11] Loopback backend initialized and wired to MmNetworkBridge.");
             }
 
             Debug.Log("[T11] Press SPACE to send a test message.");

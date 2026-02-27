@@ -10,6 +10,11 @@ namespace MercuryMessaging.Examples.Tutorial12
     /// <summary>
     /// Go/No-Go task controller for behavioral experiments.
     /// Supports both VR controller input and keyboard fallback.
+    ///
+    /// NOTE: VR input requires the UNITY_XR_AVAILABLE scripting define symbol.
+    /// Add it in Project Settings > Player > Scripting Define Symbols when XR
+    /// packages (com.unity.xr.management, com.unity.xr.interaction.toolkit) are installed.
+    /// Without this define, only keyboard input (Space bar) is available.
     /// </summary>
     public class T12_GoNoGoController : MonoBehaviour
     {
@@ -77,7 +82,12 @@ namespace MercuryMessaging.Examples.Tutorial12
 
             Debug.Log("[T12] Go/No-Go Task Ready");
             Debug.Log("[T12] Press SPACE to START the experiment");
+#if UNITY_XR_AVAILABLE
             Debug.Log("[T12] During trials: Press SPACE or VR trigger for 'Go' response");
+#else
+            Debug.Log("[T12] During trials: Press SPACE for 'Go' response");
+            Debug.Log("[T12] VR input disabled — add UNITY_XR_AVAILABLE to Scripting Define Symbols for VR support");
+#endif
         }
 
         private void Update()
