@@ -3,6 +3,8 @@
     "rootNamespace": "MercuryMessaging.Tests",
     "references": [
         "MercuryMessaging",
+        "MercuryMessaging.Task",
+        "MercuryMessaging.Support",
         "MercuryMessaging.StandardLibrary",
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
