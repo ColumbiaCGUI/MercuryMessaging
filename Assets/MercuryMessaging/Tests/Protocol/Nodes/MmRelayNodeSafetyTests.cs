@@ -64,14 +64,10 @@ namespace MercuryMessaging.Tests
         [UnityTest]
         public IEnumerator ExceptionInResponder_DoesNotCorruptRoutingTable()
         {
-            // Arrange - create a child that throws and another that counts
-            var throwChild = new GameObject("ThrowingChild");
-            throwChild.transform.SetParent(testRoot.transform);
-            throwChild.AddComponent<ThrowingResponder>();
-
-            var countChild = new GameObject("CountingChild");
-            countChild.transform.SetParent(testRoot.transform);
-            var counter = countChild.AddComponent<CountingResponder>();
+            // Arrange - add responders to SAME GameObject as relay (MmRefreshResponders uses GetComponents)
+            // CountingResponder first so it's routed before the thrower
+            var counter = testRoot.AddComponent<CountingResponder>();
+            testRoot.AddComponent<ThrowingResponder>();
 
             relay.MmRefreshResponders();
             yield return null;

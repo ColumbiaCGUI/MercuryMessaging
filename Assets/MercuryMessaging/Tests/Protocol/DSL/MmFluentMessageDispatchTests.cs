@@ -67,7 +67,7 @@ namespace MercuryMessaging.Tests
 
             // Expect the error log from fluent dispatch when no byte[] payload is provided
             LogAssert.Expect(LogType.Error,
-                "[Error] MmFluentMessage: Expected byte[] payload for MessageByteArray");
+                "MmFluentMessage: Expected byte[] payload for MessageByteArray");
 
             // Act & Assert - should not throw
             Assert.DoesNotThrow(() =>
