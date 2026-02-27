@@ -122,7 +122,7 @@ public class T9_ExperimentManager : MmTaskManager<T9_MyTaskInfo>
         // Send task info to current state via traditional API
         // (TaskInfo requires MmMessageSerializable with the task data)
         var taskMsg = new MmMessageSerializable(CurrentTaskInfo,
-            MmMethod.TaskInfo, MmMessageType.MmSerializable,
+            MmMethod.TaskInfo,
             new MmMetadataBlock(MmLevelFilterHelper.SelfAndChildren,
                 MmActiveFilter.All, MmSelectedFilter.Selected, MmNetworkFilter.Local));
         TasksNode.MmInvoke(taskMsg);

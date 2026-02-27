@@ -108,11 +108,11 @@ namespace MercuryMessaging.Tests
         {
             // Arrange - all metadata fields set to non-default values
             var metadata = new MmMetadataBlock(
+                MmTag.Tag3,
                 MmLevelFilter.Ancestors,
                 MmActiveFilter.All,
                 MmSelectedFilter.Selected,
-                MmNetworkFilter.All,
-                MmTag.Tag3
+                MmNetworkFilter.All
             );
             var original = new MmMessageBool(true, MmMethod.Initialize, metadata);
             original.NetId = 1;
