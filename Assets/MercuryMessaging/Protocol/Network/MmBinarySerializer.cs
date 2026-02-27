@@ -307,22 +307,22 @@ namespace MercuryMessaging.Network
         }
 
         /// <summary>
-        /// Pack metadata block into 3 bytes (stored as uint, only 18 bits used).
-        /// Bits 0-3:   LevelFilter (4 bits)
-        /// Bits 4-5:   ActiveFilter (2 bits)
-        /// Bits 6-7:   SelectedFilter (2 bits)
-        /// Bits 8-9:   NetworkFilter (2 bits)
-        /// Bits 10-17: Tag (8 bits - supports Tag0-Tag7, where Tag7 = 0x80)
+        /// Pack metadata block into a uint (22 bits used).
+        /// Bits 0-7:   LevelFilter (8 bits - supports advanced routing: Descendants, Ancestors, Cousins, etc.)
+        /// Bits 8-9:   ActiveFilter (2 bits)
+        /// Bits 10-11: SelectedFilter (2 bits)
+        /// Bits 12-13: NetworkFilter (2 bits)
+        /// Bits 14-21: Tag (8 bits)
+        /// Total: 22 bits, fits in uint32
         /// </summary>
         private static uint PackMetadata(MmMetadataBlock metadata)
         {
             uint packed = 0;
-            packed |= ((uint)metadata.LevelFilter & 0x0F);
-            packed |= ((uint)metadata.ActiveFilter & 0x03) << 4;
-            packed |= ((uint)metadata.SelectedFilter & 0x03) << 6;
-            packed |= ((uint)metadata.NetworkFilter & 0x03) << 8;
-            // Tag uses 8 bits (supports Tag0-Tag7, where Tag7 = 0x80)
-            packed |= ((uint)metadata.Tag & 0xFF) << 10;
+            packed |= ((uint)metadata.LevelFilter & 0xFF);        // 8 bits (was 4) - supports Descendants(32), Ancestors(64), etc.
+            packed |= ((uint)metadata.ActiveFilter & 0x03) << 8;  // was << 4
+            packed |= ((uint)metadata.SelectedFilter & 0x03) << 10; // was << 6
+            packed |= ((uint)metadata.NetworkFilter & 0x03) << 12;  // was << 8
+            packed |= ((uint)metadata.Tag & 0xFF) << 14;            // was << 10
             return packed;
         }
 
@@ -436,6 +436,7 @@ namespace MercuryMessaging.Network
                 MmMessage message = CreateMessage(messageType, metadata);
                 message.MmMethod = method;
                 message.NetId = netId;
+                message.IsDeserialized = true;
 
                 // Read type-specific payload
                 ReadPayload(reader, message);
@@ -488,6 +489,7 @@ namespace MercuryMessaging.Network
             MmMessage message = CreateMessage(messageType, metadata);
             message.MmMethod = method;
             message.NetId = netId;
+            message.IsDeserialized = true;
 
             // Read type-specific payload
             ReadPayloadPooled(reader, message);
@@ -675,11 +677,11 @@ namespace MercuryMessaging.Network
         /// </summary>
         private static MmMetadataBlock UnpackMetadata(uint packed)
         {
-            var level = (MmLevelFilter)(packed & 0x0F);
-            var active = (MmActiveFilter)((packed >> 4) & 0x03);
-            var selected = (MmSelectedFilter)((packed >> 6) & 0x03);
-            var network = (MmNetworkFilter)((packed >> 8) & 0x03);
-            var tag = (MmTag)((packed >> 10) & 0xFF); // 8 bits for all Tag0-Tag7
+            var level = (MmLevelFilter)(packed & 0xFF);             // 8 bits (was 4)
+            var active = (MmActiveFilter)((packed >> 8) & 0x03);    // was >> 4
+            var selected = (MmSelectedFilter)((packed >> 10) & 0x03); // was >> 6
+            var network = (MmNetworkFilter)((packed >> 12) & 0x03); // was >> 8
+            var tag = (MmTag)((packed >> 14) & 0xFF);               // was >> 10
 
             return new MmMetadataBlock(tag, level, active, selected, network);
         }

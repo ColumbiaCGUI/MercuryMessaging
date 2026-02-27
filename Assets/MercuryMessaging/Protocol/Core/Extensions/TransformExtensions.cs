@@ -274,7 +274,7 @@ namespace MercuryMessaging
         /// <returns>Formatted string.</returns>
         public static string ToCSV(this Vector2 v, char delim = ',', string format = "0.0000")
         {
-            return string.Format("{0}{3}{1}{3}{2}",
+            return string.Format("{0}{2}{1}",
                 v.x.ToString(format),
                 v.y.ToString(format),
                 delim);

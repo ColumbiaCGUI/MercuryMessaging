@@ -190,9 +190,16 @@ namespace MercuryMessaging
 			new List<MmRelayNode>(); 
 
         /// <summary>
-        /// Flag to protect priority list from being modified while it's being iterated over
+        /// Reentrancy depth counter – non-zero while MmInvoke is iterating
+        /// over the routing table, preventing concurrent modification.
         /// </summary>
-		public bool doNotModifyRoutingTable;
+		private int _invokeDepth;
+
+        /// <summary>
+        /// Flag to protect priority list from being modified while it's being iterated over.
+        /// Now backed by a reentrancy depth counter for safe nested invocations.
+        /// </summary>
+		public bool doNotModifyRoutingTable => _invokeDepth > 0;
 
         /// <summary>
         /// Does the node convert the message to a local message from networked 
@@ -864,7 +871,9 @@ namespace MercuryMessaging
                 message.VisitedNodes.Add(nodeInstanceId);
             }
 
-            doNotModifyRoutingTable = true;
+            _invokeDepth++;
+            try
+            {
             MmNetworkFilter networkFilter = message.MetadataBlock.NetworkFilter;
             
             //	If an MmNetworkResponder is attached to this object, and the MmMessage has not already been deserialized
@@ -1054,27 +1063,34 @@ namespace MercuryMessaging
 			//    dirty = false;
 			//}
 
-            doNotModifyRoutingTable = false;
-
-            // Process queued responders (replaced Any() with Count for performance)
-            while (MmRespondersToAdd.Count > 0)
+            }
+            finally
             {
-                var routingTableItem = MmRespondersToAdd.Dequeue();
+                _invokeDepth--;
+            }
 
-                MmAddToRoutingTable(routingTableItem.Responder, routingTableItem.Level);
-
-                // Skip responders that don't want handled messages
-                if (message.Handled && !routingTableItem.Responder.ReceiveHandledMessages)
-                    continue;
-
-                if (ResponderCheck(levelFilter, activeFilter, selectedFilter, networkFilter,
-                    routingTableItem, message))
+            // Process queued responders only when fully unwound (no nested invocations)
+            if (_invokeDepth == 0)
+            {
+                while (MmRespondersToAdd.Count > 0)
                 {
-                    // Phase 5: Delegate dispatch optimization
-                    if (routingTableItem.Handler != null)
-                        routingTableItem.Handler(message);
-                    else
-                        routingTableItem.Responder.MmInvoke(message);
+                    var routingTableItem = MmRespondersToAdd.Dequeue();
+
+                    MmAddToRoutingTable(routingTableItem.Responder, routingTableItem.Level);
+
+                    // Skip responders that don't want handled messages
+                    if (message.Handled && !routingTableItem.Responder.ReceiveHandledMessages)
+                        continue;
+
+                    if (ResponderCheck(levelFilter, activeFilter, selectedFilter, networkFilter,
+                        routingTableItem, message))
+                    {
+                        // Phase 5: Delegate dispatch optimization
+                        if (routingTableItem.Handler != null)
+                            routingTableItem.Handler(message);
+                        else
+                            routingTableItem.Responder.MmInvoke(message);
+                    }
                 }
             }
         }

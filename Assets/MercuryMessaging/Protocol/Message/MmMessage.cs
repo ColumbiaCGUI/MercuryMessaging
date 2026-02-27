@@ -64,7 +64,7 @@ namespace MercuryMessaging
         /// <summary>
         /// Utilized by Mercury serialization/deserialization systems.
         /// </summary>
-		public bool IsDeserialized { get; private set; }
+		public bool IsDeserialized { get; internal set; }
 
         /// <summary>
         /// Deprecated - remove in next version
