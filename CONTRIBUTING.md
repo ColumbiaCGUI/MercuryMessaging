@@ -29,7 +29,7 @@ Thank you for your interest in contributing to the MercuryMessaging framework! T
 Optional dependencies MUST be isolated outside the core framework with conditional compilation:
 
 - ✅ **FishNet** - Wrapped in `#if FISH_NET`
-- ✅ **Photon Fusion 2** - Wrapped in `#if FUSION_WEAVER`
+- ✅ **Photon Fusion 2** - Wrapped in `#if FUSION2_AVAILABLE`
 
 ### Adding New Dependencies
 

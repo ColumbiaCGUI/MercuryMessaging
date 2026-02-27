@@ -47,7 +47,6 @@ using System.Collections;
 using System.Runtime.CompilerServices;
 
 
-using MercuryMessaging.Data;
 using MercuryMessaging.Task;
 using UnityEngine;
 
@@ -190,9 +189,16 @@ namespace MercuryMessaging
 			new List<MmRelayNode>(); 
 
         /// <summary>
-        /// Flag to protect priority list from being modified while it's being iterated over
+        /// Reentrancy depth counter – non-zero while MmInvoke is iterating
+        /// over the routing table, preventing concurrent modification.
         /// </summary>
-		public bool doNotModifyRoutingTable;
+		private int _invokeDepth;
+
+        /// <summary>
+        /// Flag to protect priority list from being modified while it's being iterated over.
+        /// Now backed by a reentrancy depth counter for safe nested invocations.
+        /// </summary>
+		public bool doNotModifyRoutingTable => _invokeDepth > 0;
 
         /// <summary>
         /// Does the node convert the message to a local message from networked 
@@ -864,7 +870,9 @@ namespace MercuryMessaging
                 message.VisitedNodes.Add(nodeInstanceId);
             }
 
-            doNotModifyRoutingTable = true;
+            _invokeDepth++;
+            try
+            {
             MmNetworkFilter networkFilter = message.MetadataBlock.NetworkFilter;
             
             //	If an MmNetworkResponder is attached to this object, and the MmMessage has not already been deserialized
@@ -1054,27 +1062,40 @@ namespace MercuryMessaging
 			//    dirty = false;
 			//}
 
-            doNotModifyRoutingTable = false;
-
-            // Process queued responders (replaced Any() with Count for performance)
-            while (MmRespondersToAdd.Count > 0)
+            }
+            finally
             {
-                var routingTableItem = MmRespondersToAdd.Dequeue();
+                _invokeDepth--;
+            }
 
-                MmAddToRoutingTable(routingTableItem.Responder, routingTableItem.Level);
+            // Process queued responders only when fully unwound (no nested invocations)
+            if (_invokeDepth == 0 && MmRespondersToAdd.Count > 0)
+            {
+                // Re-extract filters from message (original locals are out of scope after try/finally)
+                MmLevelFilter queuedLevelFilter = message.MetadataBlock.LevelFilter;
+                MmActiveFilter queuedActiveFilter = message.MetadataBlock.ActiveFilter;
+                MmSelectedFilter queuedSelectedFilter = message.MetadataBlock.SelectedFilter;
+                MmNetworkFilter queuedNetworkFilter = message.MetadataBlock.NetworkFilter;
 
-                // Skip responders that don't want handled messages
-                if (message.Handled && !routingTableItem.Responder.ReceiveHandledMessages)
-                    continue;
-
-                if (ResponderCheck(levelFilter, activeFilter, selectedFilter, networkFilter,
-                    routingTableItem, message))
+                while (MmRespondersToAdd.Count > 0)
                 {
-                    // Phase 5: Delegate dispatch optimization
-                    if (routingTableItem.Handler != null)
-                        routingTableItem.Handler(message);
-                    else
-                        routingTableItem.Responder.MmInvoke(message);
+                    var routingTableItem = MmRespondersToAdd.Dequeue();
+
+                    MmAddToRoutingTable(routingTableItem.Responder, routingTableItem.Level);
+
+                    // Skip responders that don't want handled messages
+                    if (message.Handled && !routingTableItem.Responder.ReceiveHandledMessages)
+                        continue;
+
+                    if (ResponderCheck(queuedLevelFilter, queuedActiveFilter, queuedSelectedFilter, queuedNetworkFilter,
+                        routingTableItem, message))
+                    {
+                        // Phase 5: Delegate dispatch optimization
+                        if (routingTableItem.Handler != null)
+                            routingTableItem.Handler(message);
+                        else
+                            routingTableItem.Responder.MmInvoke(message);
+                    }
                 }
             }
         }
@@ -1467,22 +1488,6 @@ namespace MercuryMessaging
         #endregion
 
         #region Support Methods 
-
-        /// <summary>
-        /// If the level filter is designated 'Child', then it is recorded locally, 
-        /// but converted to a 'Child+Self' for use by the RoutingTable 
-        /// (which need to pass the message on to all children, but still need to be able
-        /// to execute the message on their own responders, otherwise, it just goes
-        /// to the terminal points of the graph without ever executing).
-        /// </summary>
-        /// <param name="message">MmMessage to be adjusted.</param>
-        /// <param name="direction">Intended direction of message</param>
-        /// <returns>Base implementation returns messages's level filter.</returns>
-        protected virtual MmLevelFilter LevelFilterAdjust(ref MmMessage message, 
-            MmLevelFilter direction)
-		{
-            return message.MetadataBlock.LevelFilter;
-        }
 
         /// <summary>
         /// Allows modification of active filter in message

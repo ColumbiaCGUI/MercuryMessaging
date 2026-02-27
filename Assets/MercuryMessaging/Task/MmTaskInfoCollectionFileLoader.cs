@@ -112,22 +112,25 @@ namespace MercuryMessaging.Task
             if (!File.Exists(Path.Combine(MmTaskUserData.DirPath, PartialDataFile)))
                 return 0;
 
-            var reader = new StreamReader(Path.Combine(MmTaskUserData.DirPath, 
-                PartialDataFile), 
-                Encoding.UTF8);
-
-            string line = reader.ReadLine();
-            if (line == null)
+            using (var reader = new StreamReader(Path.Combine(MmTaskUserData.DirPath,
+                PartialDataFile),
+                Encoding.UTF8))
             {
-                MmLogger.LogError("Partial Sequence File Empty");
-                return -1;
+                string line = reader.ReadLine();
+                if (line == null)
+                {
+                    MmLogger.LogError("Partial Sequence File Empty");
+                    return -1;
+                }
+
+                if (!int.TryParse(line.Split(',')[1], out int curSequenceIndex))
+                {
+                    MmLogger.LogError("Failed to parse sequence index from partial data file");
+                    return -1;
+                }
+
+                return curSequenceIndex;
             }
-
-            var curSequenceIndex = int.Parse(line.Split(',')[1]);
-
-            reader.Close();
-
-            return curSequenceIndex;
         }
 
         /// <summary>
@@ -176,13 +179,11 @@ namespace MercuryMessaging.Task
         /// <param name="seqVal">Current Sequence index value.</param>
         public virtual void SaveCurrentTaskSequenceValue(int seqVal)
         {
-            var writer = new StreamWriter(Path.Combine(MmTaskUserData.DirPath, PartialDataFile), 
-                false, Encoding.Unicode);
-            
-            writer.WriteLine("Current Sequence ID," + seqVal); 
-            //TODO: Check if UserSequence is the right variable to write
-
-            writer.Close();
+            using (var writer = new StreamWriter(Path.Combine(MmTaskUserData.DirPath, PartialDataFile),
+                false, Encoding.Unicode))
+            {
+                writer.WriteLine("Current Sequence ID," + seqVal);
+            }
         }
 
     }

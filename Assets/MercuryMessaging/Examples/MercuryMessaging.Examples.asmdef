@@ -3,6 +3,8 @@
     "rootNamespace": "MercuryMessaging.Examples",
     "references": [
         "MercuryMessaging",
+        "MercuryMessaging.Task",
+        "MercuryMessaging.Support",
         "MercuryMessaging.StandardLibrary",
         "Unity.XR.Interaction.Toolkit",
         "Unity.InputSystem"

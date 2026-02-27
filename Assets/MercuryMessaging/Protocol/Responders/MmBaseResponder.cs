@@ -140,8 +140,8 @@ namespace MercuryMessaging
                     ReceivedMessage((MmMessageQuaternion)msg);
                     break;
                 default:
-                    Debug.Log(msg.MmMethod.ToString());
-                    throw new ArgumentOutOfRangeException();
+                    Debug.LogWarning($"MmBaseResponder: Unhandled method {msg.MmMethod} ({(int)msg.MmMethod}) on {gameObject.name}");
+                    return;
             }
         }
 

@@ -111,6 +111,9 @@ public class T3_GameController : MonoBehaviour
         {
             // Add a simple responder to receive messages
             responder = gameObject.AddComponent<T3_GameControllerResponder>();
+            // Refresh routing table after runtime component addition
+            var relay = GetComponent<MmRelayNode>();
+            if (relay != null) relay.MmRefreshResponders();
         }
     }
 }

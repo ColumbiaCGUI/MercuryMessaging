@@ -41,11 +41,6 @@ namespace MercuryMessaging
     public class MmAppStateSwitchResponder : MmSwitchResponder
     {
         /// <summary>
-        /// Collection of MmAppStateResponder.
-        /// </summary>
-        private Dictionary<string, MmAppStateResponder> mmAppStateResponders;
-
-        /// <summary>
         /// Handle to associated MmGuiHandler.
         /// </summary>
         public MmGuiHandler MmGuiHandler;
@@ -74,7 +69,6 @@ namespace MercuryMessaging
         /// </summary>
         public virtual void SetupAppStates()
         {
-            //Todo: Remove
             MmGuiHandler = MmGuiHandler.Instance;
 
             MmLogger.LogApplication(gameObject.name + ": Initializing Application States.");

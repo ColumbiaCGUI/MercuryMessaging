@@ -1,0 +1,17 @@
+{
+    "name": "MercuryMessaging.Task",
+    "rootNamespace": "MercuryMessaging.Task",
+    "references": [
+        "MercuryMessaging",
+        "MercuryMessaging.Support"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

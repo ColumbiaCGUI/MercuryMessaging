@@ -131,9 +131,9 @@ namespace MercuryMessaging
                 // Initialize cache
                 UpdateCurrentCache();
             }
-            catch
+            catch (System.Exception ex)
             {
-                MmLogger.LogError(gameObject.name + ": Failed building FSM. Missing Node?");
+                MmLogger.LogError(gameObject.name + ": Failed building FSM. Missing Node? " + ex);
             }
 
             base.Awake();
@@ -195,9 +195,9 @@ namespace MercuryMessaging
                 // Update cache after rebuild
                 UpdateCurrentCache();
             }
-            catch
+            catch (System.Exception ex)
             {
-                MmLogger.LogError(gameObject.name + ": Failed rebuilding FSM. Missing Node?");
+                MmLogger.LogError(gameObject.name + ": Failed rebuilding FSM. Missing Node? " + ex);
             }
         }
 

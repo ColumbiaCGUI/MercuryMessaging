@@ -19,8 +19,9 @@ public class T3_EnemyResponder : MmBaseResponder
     /// </summary>
     public override void MmInvoke(MmMessage message)
     {
-        // CRITICAL: Always call base first for standard methods!
-        base.MmInvoke(message);
+        // Call base for standard methods only (custom methods >= 1000 would log a warning)
+        if ((int)message.MmMethod < 1000)
+            base.MmInvoke(message);
 
         // Handle custom methods via switch
         switch ((int)message.MmMethod)

@@ -160,6 +160,9 @@ namespace MercuryMessaging.Data
             }
             Writer = t.AppendText();
             MmLogger.LogApplication("File opened: " + FileName);
+#else
+            Debug.LogWarning("MmDataHandlerFile: File I/O not supported on this platform. Data will not be recorded.");
+            Writer = null;
 #endif
 
             return newItem;

@@ -91,11 +91,26 @@ namespace MercuryMessaging.Task
         {
             var words = str.Split(',');
             
-            RecordId = int.Parse(words[0]);
-            UserId = int.Parse(words[1]);
-            UserSequence = int.Parse(words[2]);
-            TaskId = int.Parse(words[3]);
-            DoNotRecordData = bool.Parse(words[4]);
+            if (!int.TryParse(words[0], out int recordId))
+                Debug.LogWarning($"MmTaskInfo.Parse: Failed to parse RecordId from '{words[0]}'");
+            RecordId = recordId;
+
+            if (!int.TryParse(words[1], out int userId))
+                Debug.LogWarning($"MmTaskInfo.Parse: Failed to parse UserId from '{words[1]}'");
+            UserId = userId;
+
+            if (!int.TryParse(words[2], out int userSeq))
+                Debug.LogWarning($"MmTaskInfo.Parse: Failed to parse UserSequence from '{words[2]}'");
+            UserSequence = userSeq;
+
+            if (!int.TryParse(words[3], out int taskId))
+                Debug.LogWarning($"MmTaskInfo.Parse: Failed to parse TaskId from '{words[3]}'");
+            TaskId = taskId;
+
+            if (!bool.TryParse(words[4], out bool doNotRecord))
+                Debug.LogWarning($"MmTaskInfo.Parse: Failed to parse DoNotRecordData from '{words[4]}'");
+            DoNotRecordData = doNotRecord;
+
             TaskName = words[5];
 
             return 6;
