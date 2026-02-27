@@ -1069,8 +1069,14 @@ namespace MercuryMessaging
             }
 
             // Process queued responders only when fully unwound (no nested invocations)
-            if (_invokeDepth == 0)
+            if (_invokeDepth == 0 && MmRespondersToAdd.Count > 0)
             {
+                // Re-extract filters from message (original locals are out of scope after try/finally)
+                MmLevelFilter queuedLevelFilter = message.MetadataBlock.LevelFilter;
+                MmActiveFilter queuedActiveFilter = message.MetadataBlock.ActiveFilter;
+                MmSelectedFilter queuedSelectedFilter = message.MetadataBlock.SelectedFilter;
+                MmNetworkFilter queuedNetworkFilter = message.MetadataBlock.NetworkFilter;
+
                 while (MmRespondersToAdd.Count > 0)
                 {
                     var routingTableItem = MmRespondersToAdd.Dequeue();
@@ -1081,7 +1087,7 @@ namespace MercuryMessaging
                     if (message.Handled && !routingTableItem.Responder.ReceiveHandledMessages)
                         continue;
 
-                    if (ResponderCheck(levelFilter, activeFilter, selectedFilter, networkFilter,
+                    if (ResponderCheck(queuedLevelFilter, queuedActiveFilter, queuedSelectedFilter, queuedNetworkFilter,
                         routingTableItem, message))
                     {
                         // Phase 5: Delegate dispatch optimization
