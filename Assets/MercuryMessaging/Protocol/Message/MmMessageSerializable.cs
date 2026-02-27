@@ -120,8 +120,6 @@ namespace MercuryMessaging
             Type type = Type.GetType((string) data[index++]);
             var serializable = (IMmSerializable) Activator.CreateInstance(type);
             value = serializable;
-            Debug.Log(index);
-            Debug.Log(data.Length);
             index = serializable.Deserialize(data, index);
             return index;
         }

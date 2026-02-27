@@ -206,6 +206,12 @@ namespace MercuryMessaging.Task
 			        ? TaskInfos.First
 			        : currentTaskInfo.Next;
 
+	        if (currentTaskInfo == null)
+	        {
+	            MmLogger.LogApplication("Task sequence complete — no more tasks.");
+	            return;
+	        }
+
 	        if (ShouldTriggerSwitch())
 	        {
 	            TasksNode.MmInvoke(MmMethod.Switch, CurrentTaskInfo.TaskName,

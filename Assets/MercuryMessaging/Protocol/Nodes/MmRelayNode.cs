@@ -1485,22 +1485,6 @@ namespace MercuryMessaging
         #region Support Methods 
 
         /// <summary>
-        /// If the level filter is designated 'Child', then it is recorded locally, 
-        /// but converted to a 'Child+Self' for use by the RoutingTable 
-        /// (which need to pass the message on to all children, but still need to be able
-        /// to execute the message on their own responders, otherwise, it just goes
-        /// to the terminal points of the graph without ever executing).
-        /// </summary>
-        /// <param name="message">MmMessage to be adjusted.</param>
-        /// <param name="direction">Intended direction of message</param>
-        /// <returns>Base implementation returns messages's level filter.</returns>
-        protected virtual MmLevelFilter LevelFilterAdjust(ref MmMessage message, 
-            MmLevelFilter direction)
-		{
-            return message.MetadataBlock.LevelFilter;
-        }
-
-        /// <summary>
         /// Allows modification of active filter in message
         /// as it gets passed between MmRelayNodes.
         /// </summary>

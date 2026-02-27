@@ -234,6 +234,8 @@ namespace MercuryMessaging.Network
             }
 
             // Legacy path: IMmSerializable with object[] (fallback)
+            // Write NullTypeId sentinel so ReadSerializableDataPooled knows to use legacy path
+            writer.WriteUShort(MmTypeRegistry.NullTypeId);
             string typeName = msg.value?.GetType().AssemblyQualifiedName ?? "";
             writer.WriteString(typeName);
 
