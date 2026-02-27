@@ -3,7 +3,9 @@
     "rootNamespace": "MercuryMessaging.Examples.Editor",
     "references": [
         "MercuryMessaging",
-        "MercuryMessaging.Examples"
+        "MercuryMessaging.Examples",
+        "MercuryMessaging.Task",
+        "MercuryMessaging.Support"
     ],
     "includePlatforms": ["Editor"],
     "excludePlatforms": [],
