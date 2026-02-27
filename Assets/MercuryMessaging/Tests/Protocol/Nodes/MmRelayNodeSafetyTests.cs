@@ -170,7 +170,7 @@ namespace MercuryMessaging.Tests
         /// </summary>
         private class ThrowingResponder : MmBaseResponder
         {
-            protected override void ReceivedInitialize()
+            public override void Initialize()
             {
                 throw new System.Exception("Test exception from ThrowingResponder");
             }
@@ -184,7 +184,7 @@ namespace MercuryMessaging.Tests
         {
             public int InitCount;
 
-            protected override void ReceivedInitialize()
+            public override void Initialize()
             {
                 InitCount++;
             }
@@ -198,7 +198,7 @@ namespace MercuryMessaging.Tests
         {
             public MmRelayNode RelayToCall;
 
-            protected override void ReceivedInitialize()
+            public override void Initialize()
             {
                 if (RelayToCall != null)
                 {

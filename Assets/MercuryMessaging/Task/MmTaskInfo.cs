@@ -34,6 +34,8 @@
 // Suppress CS0618: IMmSerializable is obsolete - kept for backward compatibility
 #pragma warning disable CS0618
 
+using UnityEngine;
+
 namespace MercuryMessaging.Task
 {
     /// <summary>

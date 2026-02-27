@@ -30,7 +30,7 @@ public class T7_Fusion2PlayerResponder :
     [SerializeField] private int score = 0;
     [SerializeField] private string playerName = "Player";
 
-    protected override void Start()
+    public override void Start()
     {
         base.Start();
         // Verify NetworkObject is present (required for Fusion 2)
