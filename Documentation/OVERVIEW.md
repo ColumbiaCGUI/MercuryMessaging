@@ -17,7 +17,7 @@
 
 ### Optional Dependencies (Properly Isolated)
 - **FishNet** (optional) - Wrapped in `#if FISH_NET` for network features
-- **Photon Fusion 2** (optional) - Wrapped in `#if FUSION_WEAVER` for network features
+- **Photon Fusion 2** (optional) - Wrapped in `#if FUSION2_AVAILABLE` for network features
 
 **Policy:** The core framework must remain dependency-free to ensure maximum portability and minimal breaking changes.
 

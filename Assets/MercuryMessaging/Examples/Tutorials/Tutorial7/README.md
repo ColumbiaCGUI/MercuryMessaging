@@ -5,7 +5,7 @@ Scene setup instructions for Tutorial 7 Photon Fusion 2 integration.
 ## Prerequisites
 
 - Photon Fusion 2 package installed (optional - fallback mode available)
-- Define `FUSION_WEAVER` symbol if Fusion is installed
+- Define `FUSION2_AVAILABLE` symbol if Fusion is installed
 - Photon App ID configured in PhotonAppSettings
 
 ## Scene Hierarchy
