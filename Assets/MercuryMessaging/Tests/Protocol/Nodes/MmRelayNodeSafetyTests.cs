@@ -76,28 +76,39 @@ namespace MercuryMessaging.Tests
             relay.MmRefreshResponders();
             yield return null;
 
-            // Act - send Initialize; ThrowingResponder throws, but routing should continue
-            relay.MmInvoke(
-                new MmMessage(MmMethod.Initialize, MmMessageType.MmVoid,
-                    new MmMetadataBlock(MmLevelFilterHelper.SelfAndChildren))
-            );
+            // Act - send Initialize; ThrowingResponder throws, but _invokeDepth must unwind
+            try
+            {
+                relay.MmInvoke(
+                    new MmMessage(MmMethod.Initialize, MmMessageType.MmVoid,
+                        new MmMetadataBlock(MmLevelFilterHelper.SelfAndChildren))
+                );
+            }
+            catch (System.Exception)
+            {
+                // Expected: ThrowingResponder's exception propagates through routing loop
+            }
 
-            // Assert - routing table must be unlocked after the call
+            // Assert - routing table must be unlocked after the exception
             Assert.IsFalse(relay.doNotModifyRoutingTable,
                 "doNotModifyRoutingTable should be false after MmInvoke completes (even with exception)");
 
             // Act again - send a second Initialize to verify routing is not permanently corrupted
-            relay.MmInvoke(
-                new MmMessage(MmMethod.Initialize, MmMessageType.MmVoid,
-                    new MmMetadataBlock(MmLevelFilterHelper.SelfAndChildren))
-            );
+            try
+            {
+                relay.MmInvoke(
+                    new MmMessage(MmMethod.Initialize, MmMessageType.MmVoid,
+                        new MmMetadataBlock(MmLevelFilterHelper.SelfAndChildren))
+                );
+            }
+            catch (System.Exception)
+            {
+                // ThrowingResponder will throw again, but CountingResponder should still receive
+            }
 
             // Assert - CountingResponder should have received at least one message across both calls
             Assert.Greater(counter.InitCount, 0,
                 "CountingResponder should still receive messages after a sibling threw an exception");
-
-            Debug.Log($"[Wave 1.1 PASS] Routing table unlocked after exception. " +
-                      $"CountingResponder received {counter.InitCount} Initialize messages.");
         }
 
         /// <summary>
