@@ -1,11 +1,14 @@
 // Suppress MM002: Self-only filter is intentional for recursive routing to prevent double-delivery
 // Suppress MM015: Filter equality checks are intentional for exact match routing logic
+// Suppress CS0618: IMmSerializable is obsolete - kept for backward compatibility
 #pragma warning disable MM002
 #pragma warning disable MM015
+#pragma warning disable CS0618
 
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using MercuryMessaging.Task;
 using UnityEngine;
 
 namespace MercuryMessaging
@@ -767,8 +770,10 @@ namespace MercuryMessaging
                 case MmMethod.Switch:
                     if (_payload is string switchName)
                         _relay.MmInvoke(_method, switchName, metadata);
+                    else if (_payload is int switchIndex)
+                        _relay.MmInvoke(_method, switchIndex.ToString(), metadata);
                     else
-                        Debug.LogError($"MmFluentMessage: Expected string payload for {_method}");
+                        Debug.LogError($"MmFluentMessage: Expected string or int payload for {_method}");
                     break;
 
                 case MmMethod.MessageInt:
@@ -827,8 +832,48 @@ namespace MercuryMessaging
                         Debug.LogError($"MmFluentMessage: Expected GameObject payload for {_method}");
                     break;
 
+                case MmMethod.TaskInfo:
+                    if (_payload is IMmSerializable taskSerializable)
+                        _relay.MmInvoke(MmMethod.TaskInfo, taskSerializable, metadata);
+                    else
+                    {
+                        var msg = new MmMessage(MmMethod.TaskInfo, MmMessageType.MmVoid, metadata);
+                        _relay.MmInvoke(msg);
+                    }
+                    break;
+
+                case MmMethod.MessageByteArray:
+                    if (_payload is byte[] byteArray)
+                        _relay.MmInvoke(_method, byteArray, metadata);
+                    else
+                        Debug.LogError($"MmFluentMessage: Expected byte[] payload for {_method}");
+                    break;
+
+                case MmMethod.MessageSerializable:
+                    if (_payload is IMmSerializable serializable)
+                        _relay.MmInvoke(_method, serializable, metadata);
+                    else
+                        Debug.LogError($"MmFluentMessage: Expected IMmSerializable payload for {_method}");
+                    break;
+
+                case MmMethod.MessageTransformList:
+                    if (_payload is List<MmTransform> transformList)
+                        _relay.MmInvoke(_method, transformList, metadata);
+                    else
+                        Debug.LogError($"MmFluentMessage: Expected List<MmTransform> payload for {_method}");
+                    break;
+
                 default:
-                    Debug.LogError($"MmFluentMessage: Unsupported method {_method} or invalid payload");
+                    if ((int)_method >= 1000)
+                    {
+                        // Custom method - invoke via traditional API
+                        var msg = new MmMessage(_method, MmMessageType.MmVoid, metadata);
+                        _relay.MmInvoke(msg);
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"MmFluentMessage: Unsupported method {_method} or invalid payload");
+                    }
                     break;
             }
         }
@@ -840,38 +885,46 @@ namespace MercuryMessaging
         /// </summary>
         private void ExecuteWithPredicates(MmMetadataBlock metadata)
         {
-            // Collect all potential targets based on level filter
-            var targets = CollectTargets();
-
-            // Apply predicates and send to matching targets
-            foreach (var targetRelay in targets)
+            try
             {
-                if (targetRelay == null || targetRelay.gameObject == null)
-                    continue;
+                // Collect all potential targets based on level filter
+                var targets = CollectTargets();
 
-                // Check if target passes all predicates
-                if (!_predicates.EvaluateAll(_relay, targetRelay.gameObject))
-                    continue;
-
-                // Create Self metadata - responders are registered with Level=Self so this works
-                // Using Self (not SelfAndChildren) prevents double-delivery
-                MmMetadataBlock targetMetadata;
-                if (_tag != MmTagHelper.Everything)
+                // Apply predicates and send to matching targets
+                foreach (var targetRelay in targets)
                 {
-                    targetMetadata = new MmMetadataBlock(_tag, MmLevelFilter.Self, _activeFilter, _selectedFilter, _networkFilter);
-                }
-                else
-                {
-                    targetMetadata = new MmMetadataBlock(MmLevelFilter.Self, _activeFilter, _selectedFilter, _networkFilter);
-                }
+                    if (targetRelay == null || targetRelay.gameObject == null)
+                        continue;
 
-                // Send message to this specific target
-                SendToTarget(targetRelay, targetMetadata);
+                    // Check if target passes all predicates
+                    if (!_predicates.EvaluateAll(_relay, targetRelay.gameObject))
+                        continue;
+
+                    // Create Self metadata - responders are registered with Level=Self so this works
+                    // Using Self (not SelfAndChildren) prevents double-delivery
+                    MmMetadataBlock targetMetadata;
+                    if (_tag != MmTagHelper.Everything)
+                    {
+                        targetMetadata = new MmMetadataBlock(_tag, MmLevelFilter.Self, _activeFilter, _selectedFilter, _networkFilter);
+                    }
+                    else
+                    {
+                        targetMetadata = new MmMetadataBlock(MmLevelFilter.Self, _activeFilter, _selectedFilter, _networkFilter);
+                    }
+
+                    // Send message to this specific target
+                    SendToTarget(targetRelay, targetMetadata);
+                }
             }
-
-            // Return predicate list to pool
-            MmPredicateListPool.Return(_predicates);
-            _predicates = null;
+            finally
+            {
+                // Return predicate list to pool
+                if (_predicates != null)
+                {
+                    MmPredicateListPool.Return(_predicates);
+                    _predicates = null;
+                }
+            }
         }
 
         /// <summary>
@@ -1040,6 +1093,8 @@ namespace MercuryMessaging
                 case MmMethod.Switch:
                     if (_payload is string switchName)
                         target.MmInvoke(_method, switchName, metadata);
+                    else if (_payload is int switchIndex)
+                        target.MmInvoke(_method, switchIndex.ToString(), metadata);
                     break;
 
                 case MmMethod.MessageInt:
@@ -1080,6 +1135,43 @@ namespace MercuryMessaging
                 case MmMethod.MessageGameObject:
                     if (_payload is GameObject gameObjectValue)
                         target.MmInvoke(_method, gameObjectValue, metadata);
+                    break;
+
+                case MmMethod.TaskInfo:
+                    if (_payload is IMmSerializable taskSerializable)
+                        target.MmInvoke(MmMethod.TaskInfo, taskSerializable, metadata);
+                    else
+                    {
+                        var msg = new MmMessage(MmMethod.TaskInfo, MmMessageType.MmVoid, metadata);
+                        target.MmInvoke(msg);
+                    }
+                    break;
+
+                case MmMethod.MessageByteArray:
+                    if (_payload is byte[] byteArr)
+                        target.MmInvoke(_method, byteArr, metadata);
+                    break;
+
+                case MmMethod.MessageSerializable:
+                    if (_payload is IMmSerializable serializable)
+                        target.MmInvoke(_method, serializable, metadata);
+                    break;
+
+                case MmMethod.MessageTransformList:
+                    if (_payload is List<MmTransform> transformList)
+                        target.MmInvoke(_method, transformList, metadata);
+                    break;
+
+                default:
+                    if ((int)_method >= 1000)
+                    {
+                        var msg = new MmMessage(_method, MmMessageType.MmVoid, metadata);
+                        target.MmInvoke(msg);
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"MmFluentMessage.SendToTarget: Unsupported method {_method}");
+                    }
                     break;
             }
         }

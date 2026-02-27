@@ -138,6 +138,7 @@ namespace MercuryMessaging
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void BroadcastInitialize(this MmBaseResponder responder)
         {
+            if (responder == null) return;
             var relay = responder.GetRelayNode();
             if (relay != null) relay.Send(MmMethod.Initialize).Execute();
         }
@@ -149,6 +150,7 @@ namespace MercuryMessaging
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void BroadcastRefresh(this MmBaseResponder responder)
         {
+            if (responder == null) return;
             var relay = responder.GetRelayNode();
             if (relay != null) relay.Send(MmMethod.Refresh).Execute();
         }
@@ -157,6 +159,7 @@ namespace MercuryMessaging
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void BroadcastSetActive(this MmBaseResponder responder, bool active)
         {
+            if (responder == null) return;
             var relay = responder.GetRelayNode();
             if (relay != null) relay.Send(MmMethod.SetActive, active).Execute();
         }
@@ -165,6 +168,7 @@ namespace MercuryMessaging
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void BroadcastSwitch(this MmBaseResponder responder, string state)
         {
+            if (responder == null) return;
             var relay = responder.GetRelayNode();
             if (relay != null) relay.Send(MmMethod.Switch, state).Execute();
         }
@@ -173,6 +177,7 @@ namespace MercuryMessaging
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void BroadcastValue(this MmBaseResponder responder, bool value)
         {
+            if (responder == null) return;
             var relay = responder.GetRelayNode();
             if (relay != null) relay.Send(value).Execute();
         }
@@ -181,6 +186,7 @@ namespace MercuryMessaging
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void BroadcastValue(this MmBaseResponder responder, int value)
         {
+            if (responder == null) return;
             var relay = responder.GetRelayNode();
             if (relay != null) relay.Send(value).Execute();
         }
@@ -189,6 +195,7 @@ namespace MercuryMessaging
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void BroadcastValue(this MmBaseResponder responder, float value)
         {
+            if (responder == null) return;
             var relay = responder.GetRelayNode();
             if (relay != null) relay.Send(value).Execute();
         }
@@ -197,6 +204,7 @@ namespace MercuryMessaging
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void BroadcastValue(this MmBaseResponder responder, string value)
         {
+            if (responder == null) return;
             var relay = responder.GetRelayNode();
             if (relay != null) relay.Send(value).Execute();
         }
@@ -212,6 +220,7 @@ namespace MercuryMessaging
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void NotifyComplete(this MmBaseResponder responder)
         {
+            if (responder == null) return;
             var relay = responder.GetRelayNode();
             if (relay != null) relay.Send(MmMethod.Complete, true).ToParents().Execute();
         }
@@ -220,6 +229,7 @@ namespace MercuryMessaging
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void NotifyValue(this MmBaseResponder responder, bool value)
         {
+            if (responder == null) return;
             var relay = responder.GetRelayNode();
             if (relay != null) relay.Send(value).ToParents().Execute();
         }
@@ -228,6 +238,7 @@ namespace MercuryMessaging
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void NotifyValue(this MmBaseResponder responder, int value)
         {
+            if (responder == null) return;
             var relay = responder.GetRelayNode();
             if (relay != null) relay.Send(value).ToParents().Execute();
         }
@@ -236,6 +247,7 @@ namespace MercuryMessaging
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void NotifyValue(this MmBaseResponder responder, float value)
         {
+            if (responder == null) return;
             var relay = responder.GetRelayNode();
             if (relay != null) relay.Send(value).ToParents().Execute();
         }
@@ -244,6 +256,7 @@ namespace MercuryMessaging
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void NotifyValue(this MmBaseResponder responder, string value)
         {
+            if (responder == null) return;
             var relay = responder.GetRelayNode();
             if (relay != null) relay.Send(value).ToParents().Execute();
         }
@@ -264,6 +277,7 @@ namespace MercuryMessaging
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static MmFluentMessage Send(this MmBaseResponder responder, object payload)
         {
+            if (responder == null) return default;
             var relay = responder.GetRelayNode();
             if (relay == null)
             {
@@ -285,6 +299,7 @@ namespace MercuryMessaging
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static MmFluentMessage Send(this MmBaseResponder responder, MmMethod method)
         {
+            if (responder == null) return default;
             var relay = responder.GetRelayNode();
             if (relay == null)
             {
@@ -307,6 +322,7 @@ namespace MercuryMessaging
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static MmFluentMessage Send(this MmBaseResponder responder, MmMethod method, object payload)
         {
+            if (responder == null) return default;
             var relay = responder.GetRelayNode();
             if (relay == null)
             {
