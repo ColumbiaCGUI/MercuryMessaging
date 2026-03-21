@@ -1,4 +1,7 @@
-﻿// Copyright (c) 2017-2019, Columbia University
+﻿// Suppress MM analyzer warnings - tutorial code intentionally uses these patterns
+#pragma warning disable MM002
+
+// Copyright (c) 2017-2019, Columbia University
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without

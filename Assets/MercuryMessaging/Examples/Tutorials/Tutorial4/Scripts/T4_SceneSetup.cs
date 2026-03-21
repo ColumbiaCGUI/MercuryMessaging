@@ -1,3 +1,6 @@
+// Suppress MM analyzer warnings - tutorial code intentionally uses these patterns
+#pragma warning disable MM006, MM008
+
 // Copyright (c) 2017-2025, Columbia University
 // Tutorial 4: Custom Messages - Scene Setup
 // Creates the tutorial scene hierarchy at runtime.

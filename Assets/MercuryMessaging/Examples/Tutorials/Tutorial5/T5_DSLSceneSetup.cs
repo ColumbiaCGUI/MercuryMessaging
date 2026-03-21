@@ -1,3 +1,6 @@
+// Suppress MM analyzer warnings - tutorial code intentionally uses these patterns
+#pragma warning disable MM006, MM008
+
 using UnityEngine;
 using MercuryMessaging;
 using System.Collections;
