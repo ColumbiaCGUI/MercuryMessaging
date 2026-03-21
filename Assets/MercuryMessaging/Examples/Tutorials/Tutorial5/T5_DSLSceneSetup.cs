@@ -20,7 +20,6 @@ public class T5_DSLSceneSetup : MonoBehaviour
 {
     private MmRelayNode relay;
     private bool conditionalReady = false;
-    private int colorIndex = 0;
     private Color[] cycleColors = { Color.red, Color.green, Color.blue, Color.yellow };
 
     [Header("Debug Options")]

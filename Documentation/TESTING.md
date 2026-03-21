@@ -92,7 +92,6 @@ MmRelayNode includes visual debugging:
 - Message history tracking (`messageInList`, `messageOutList`)
 - Visual node connections with colors
 - Signal animation for message flow
-- Integration with EPOOutline for highlights
 - ALINE path drawing for message paths
 
 Enable/disable in MmLogger:

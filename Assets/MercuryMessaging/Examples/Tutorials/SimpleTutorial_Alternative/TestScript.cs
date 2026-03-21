@@ -53,8 +53,8 @@ namespace MercuryMessaging.Tutorials.Tutorial1
                     MmActiveFilter.All));
         }
 	
-        // Update is called once per frame
-        void Update () {
+        public override void Update () {
+            base.Update();
             if(Input.GetKeyDown(KeyCode.Space))
             {
                 Debug.Log("Space");

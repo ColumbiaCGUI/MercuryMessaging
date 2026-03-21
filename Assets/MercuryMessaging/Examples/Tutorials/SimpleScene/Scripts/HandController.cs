@@ -53,12 +53,9 @@ public class HandController : MmBaseResponder {
 
 	public bool boxTriggered = true;
 
-	void Start()
+	public override void Start()
 	{
-		// ------------------------ save for later use --------------------------------------------------
-		// playerInput = GameObject.Find("GameManager").GetComponent<GameManager>().playerInput;
-		// signalAction = playerInput.FindActionMap("XRI RightHand Interaction").FindAction("Signal");
-		// signalAction.Enable();
+		base.Start();
 	}
 	public override void Update()
 	{

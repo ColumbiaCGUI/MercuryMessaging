@@ -24,6 +24,7 @@
   <Project Path="Unity.Services.Core.Environments.Editor.csproj" />
   <Project Path="ALINE.csproj" />
   <Project Path="Fusion.Unity.Editor.csproj" />
+  <Project Path="ShapesRuntime.csproj" />
   <Project Path="Unity.XR.Interaction.Toolkit.csproj" />
   <Project Path="Unity.Services.Analytics.csproj" />
   <Project Path="Unity.VisualStudio.Editor.csproj" />
@@ -41,6 +42,7 @@
   <Project Path="Unity.UnifiedRayTracing.Runtime.csproj" />
   <Project Path="MercuryMessaging.StandardLibrary.csproj" />
   <Project Path="Unity.AI.Navigation.Editor.ConversionSystem.csproj" />
+  <Project Path="ShapesEditor.csproj" />
   <Project Path="Unity.Services.Core.Editor.csproj" />
   <Project Path="Unity.Burst.CodeGen.csproj" />
   <Project Path="Unity.Services.Core.csproj" />
@@ -76,6 +78,7 @@
   <Project Path="Unity.XR.Management.csproj" />
   <Project Path="Unity.Mathematics.Editor.csproj" />
   <Project Path="MercuryMessaging.Editor.csproj" />
+  <Project Path="ShapesSamples.csproj" />
   <Project Path="UnityEditor.UI.Analytics.csproj" />
   <Project Path="Unity.Services.Core.Threading.csproj" />
   <Project Path="MercuryMessaging.Task.csproj" />

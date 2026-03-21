@@ -21,7 +21,9 @@ namespace MercuryMessaging.Examples.Tutorial12
         [Header("Task Configuration")]
         [SerializeField] private int totalTrials = 20;
         [SerializeField] private float goTrialRatio = 0.7f; // 70% Go trials
+#pragma warning disable CS0414 // Set via Inspector
         [SerializeField] private float stimulusDuration = 1.5f;
+#pragma warning restore CS0414
         [SerializeField] private float interTrialInterval = 1.0f;
         [SerializeField] private float responseWindow = 2.0f;
 

@@ -7,7 +7,6 @@ This folder contains all third-party plugins, libraries, and Asset Store package
 ### Plugins/
 Third-party plugins and libraries:
 - **ALINE/** - Debug drawing library for Unity
-- **EasyPerformantOutline/** - Performant outline effect system
 - **QuickOutline/** - Quick outline effect
 - **MKGlowFree/** - Glow effect system
 - **Photon/** - Photon Fusion networking framework
@@ -16,7 +15,6 @@ Third-party plugins and libraries:
 
 ### AssetStore/
 Unity Asset Store purchases:
-- **ModularCityProps/** - Modular city building props (formerly MCP)
 - **PBR_TrafficLightsEU/** - PBR European traffic lights
 - **TrafficLightsSystem/** - Complete traffic light system with editor tools
 - **Skybox/** - Skybox assets
