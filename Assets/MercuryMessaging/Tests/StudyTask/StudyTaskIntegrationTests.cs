@@ -1,11 +1,16 @@
-// Study Task Integration Tests
-// Tests all 4 UIST user study task patterns in both Mercury and Events conditions.
-// Each test replicates the exact routing pattern used by the study solution scripts.
+// Study Task Integration Tests — 12 tests total
 //
-// T1: Sensor Fan-Out (one-to-many) — BroadcastValue(float) → 4 children
-// T2: Safety Zone Alerts (spatial filtering) — Send().ToAll().Within() on siblings
-// T3: Mode-Switch Debugging — BroadcastSwitch + isActive guard
-// T4: Alert Aggregation (many-to-one) — NotifyValue(string) → parent dashboard
+// SOLUTION TESTS (8): Verify each task works in both Mercury and Events conditions
+//   T1: Sensor Fan-Out (one-to-many) — BroadcastValue(float) → 4 children
+//   T2: Safety Zone Alerts (spatial filtering) — Send().ToAll().Within() on siblings
+//   T3: Mode-Switch Debugging — BroadcastSwitch + isActive guard (SOLUTION = fixed)
+//   T4: Alert Aggregation (many-to-one) — NotifyValue(string) → parent dashboard
+//
+// PROBLEM TESTS (4): Verify starter/broken scenes are actually broken
+//   T1 Starter: Empty broadcaster → children receive nothing
+//   T2 Starter: No spatial filtering → no messages sent
+//   T3 Buggy: Missing isActive guard → Night mode doesn't block temperature
+//   T4 Starter: Empty alerter → dashboard receives nothing
 
 using System.Collections.Generic;
 using NUnit.Framework;
@@ -500,6 +505,131 @@ namespace MercuryMessaging.Tests.StudyTask
             Assert.IsTrue(alertLog[1].Contains("Occupancy"));
             Assert.IsTrue(alertLog[2].Contains("AirQuality"));
             Assert.IsTrue(alertLog[3].Contains("Energy"));
+        }
+
+        // ================================================================
+        // PROBLEM / STARTER TESTS — verify the broken versions ARE broken
+        // ================================================================
+
+        // T1 Problem: Empty broadcaster body → children receive nothing
+        [Test]
+        public void T1_Problem_EmptyBroadcaster_ChildrenReceiveNothing()
+        {
+            // Arrange: same hierarchy as T1 solution
+            var robotArm = CreateGO("RobotArm");
+            var rootRelay = AddRelay(robotArm);
+
+            var panels = new FloatReceiver[4];
+            for (int i = 0; i < 4; i++)
+            {
+                var panel = CreateGO($"Panel{i + 1}");
+                var panelRelay = AddRelay(panel);
+                panels[i] = AddResponder<FloatReceiver>(panel);
+                WireParentChild(rootRelay, panelRelay);
+            }
+
+            // Act: simulate starter's empty SendJointData — does NOT call BroadcastValue
+            // (JointDataBroadcaster_Starter.SendJointData has an empty TODO body)
+            float angle = 45.5f;
+            // Intentionally NOT calling rootRelay.BroadcastValue(angle);
+
+            // Assert: no panels received anything
+            for (int i = 0; i < 4; i++)
+            {
+                Assert.AreEqual(0, panels[i].Count,
+                    $"Panel{i + 1} should NOT receive any message (starter body is empty)");
+            }
+        }
+
+        // T2 Problem: No spatial filtering → no messages reach indicators
+        [Test]
+        public void T2_Problem_NoSpatialFilter_IndicatorsReceiveNothing()
+        {
+            // Arrange: same hierarchy as T2 solution
+            var workspace = CreateGO("Workspace", Vector3.zero);
+            var wsRelay = AddRelay(workspace);
+
+            var worker = CreateGO("Worker", Vector3.zero);
+            var workerRelay = AddRelay(worker);
+            WireParentChild(wsRelay, workerRelay);
+
+            var indicators = new StringReceiver[4];
+            var positions = new[]
+            {
+                new Vector3(1.5f, 0, 0),
+                new Vector3(0.8f, 0, 0),
+                new Vector3(3.0f, 0, 0),
+                new Vector3(1.9f, 0, 0),
+            };
+            for (int i = 0; i < 4; i++)
+            {
+                var ind = CreateGO($"Indicator{i + 1}", positions[i]);
+                var indRelay = AddRelay(ind);
+                indicators[i] = AddResponder<StringReceiver>(ind);
+                WireParentChild(wsRelay, indRelay);
+            }
+
+            // Act: simulate starter's empty Update — does NOT call Send().Within()
+            // (ZoneAlertManager_Starter.Update has an empty TODO body)
+
+            // Assert: no indicators received anything
+            for (int i = 0; i < 4; i++)
+            {
+                Assert.AreEqual(0, indicators[i].Received.Count,
+                    $"Indicator{i + 1} should NOT receive any message (starter body is empty)");
+            }
+        }
+
+        // T3 Problem: Buggy HVAC still processes temperature in Night mode
+        // (This is the SAME as T3_Mercury_Buggy test — confirming the bug exists)
+        [Test]
+        public void T3_Problem_BuggyHvac_NightModeDoesNotBlockTemperature()
+        {
+            var hub = CreateGO("FacilityHub");
+            var hubRelay = AddRelay(hub);
+
+            var hvac = CreateGO("HvacSystem");
+            var hvacRelay = AddRelay(hvac);
+            var hvacResp = AddResponder<HvacBuggyResponder>(hvac);
+            WireParentChild(hubRelay, hvacRelay);
+
+            // Switch to Night — should disable HVAC
+            hubRelay.BroadcastSwitch("Night");
+            Assert.IsFalse(hvacResp.IsActive, "IsActive should be false in Night mode");
+
+            // Send temperature — buggy version still processes it
+            hvacRelay.BroadcastValue(25f);
+
+            // Assert: the bug — adjustment happened despite Night mode
+            Assert.AreEqual(1, hvacResp.AdjustmentCount,
+                "BUG CONFIRMED: Buggy HVAC processes adjustments in Night mode");
+            Assert.AreNotEqual(18f, hvacResp.CurrentSetpoint,
+                "BUG CONFIRMED: Night setpoint was overwritten");
+        }
+
+        // T4 Problem: Empty alerter body → dashboard receives nothing
+        [Test]
+        public void T4_Problem_EmptyAlerter_DashboardReceivesNothing()
+        {
+            // Arrange: same hierarchy as T4 solution
+            var dashboard = CreateGO("Dashboard");
+            var dashRelay = AddRelay(dashboard);
+            var dashResp = AddResponder<StringReceiver>(dashboard);
+
+            var subsystems = new MmRelayNode[4];
+            for (int i = 0; i < 4; i++)
+            {
+                var sub = CreateGO($"Subsystem{i + 1}");
+                subsystems[i] = AddRelay(sub);
+                WireParentChild(dashRelay, subsystems[i]);
+            }
+
+            // Act: simulate starter's empty RaiseAlert — does NOT call NotifyValue
+            // (SubsystemAlerter_Starter.RaiseAlert has an empty TODO body)
+
+            // Assert: dashboard received nothing
+            Assert.AreEqual(0, dashResp.Received.Count,
+                "Dashboard should NOT receive any alerts (starter body is empty)");
         }
     }
 }

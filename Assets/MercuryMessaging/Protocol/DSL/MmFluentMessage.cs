@@ -703,32 +703,38 @@ namespace MercuryMessaging
         /// </summary>
         private void ExecuteWithTargetCollection()
         {
-            // Collect all potential targets based on level filter
+            // Collect all potential targets based on level filter (pooled list)
             var targets = CollectTargets();
-
-            // Send to each target with Self metadata
-            // Using Self (not SelfAndChildren) prevents double-delivery:
-            // - We explicitly send to each collected target
-            // - Self reaches responders registered with Level=Self on the target
-            // - SelfAndChildren would cause messages to propagate down, hitting children twice
-            foreach (var targetRelay in targets)
+            try
             {
-                if (targetRelay == null || targetRelay.gameObject == null)
-                    continue;
-
-                // Create Self metadata - responders are registered with Level=Self so this works
-                MmMetadataBlock targetMetadata;
-                if (_tag != MmTagHelper.Everything)
+                // Send to each target with Self metadata
+                // Using Self (not SelfAndChildren) prevents double-delivery:
+                // - We explicitly send to each collected target
+                // - Self reaches responders registered with Level=Self on the target
+                // - SelfAndChildren would cause messages to propagate down, hitting children twice
+                foreach (var targetRelay in targets)
                 {
-                    targetMetadata = new MmMetadataBlock(_tag, MmLevelFilter.Self, _activeFilter, _selectedFilter, _networkFilter);
-                }
-                else
-                {
-                    targetMetadata = new MmMetadataBlock(MmLevelFilter.Self, _activeFilter, _selectedFilter, _networkFilter);
-                }
+                    if (targetRelay == null || targetRelay.gameObject == null)
+                        continue;
 
-                // Send message to this specific target
-                SendToTarget(targetRelay, targetMetadata);
+                    // Create Self metadata - responders are registered with Level=Self so this works
+                    MmMetadataBlock targetMetadata;
+                    if (_tag != MmTagHelper.Everything)
+                    {
+                        targetMetadata = new MmMetadataBlock(_tag, MmLevelFilter.Self, _activeFilter, _selectedFilter, _networkFilter);
+                    }
+                    else
+                    {
+                        targetMetadata = new MmMetadataBlock(MmLevelFilter.Self, _activeFilter, _selectedFilter, _networkFilter);
+                    }
+
+                    // Send message to this specific target
+                    SendToTarget(targetRelay, targetMetadata);
+                }
+            }
+            finally
+            {
+                MmRelayNodeListPool.Return(targets);
             }
         }
 
@@ -885,11 +891,10 @@ namespace MercuryMessaging
         /// </summary>
         private void ExecuteWithPredicates(MmMetadataBlock metadata)
         {
+            // Collect all potential targets based on level filter (pooled list)
+            var targets = CollectTargets();
             try
             {
-                // Collect all potential targets based on level filter
-                var targets = CollectTargets();
-
                 // Apply predicates and send to matching targets
                 foreach (var targetRelay in targets)
                 {
@@ -918,6 +923,9 @@ namespace MercuryMessaging
             }
             finally
             {
+                // Return targets list to pool
+                MmRelayNodeListPool.Return(targets);
+
                 // Return predicate list to pool
                 if (_predicates != null)
                 {
@@ -929,10 +937,12 @@ namespace MercuryMessaging
 
         /// <summary>
         /// Collect potential targets based on level filter.
+        /// Returns a pooled list — the caller is responsible for returning it via
+        /// MmRelayNodeListPool.Return() when done.
         /// </summary>
         private List<MmRelayNode> CollectTargets()
         {
-            var targets = new List<MmRelayNode>();
+            var targets = MmRelayNodeListPool.Get();
 
             // Check if Self is included
             bool includeSelf = (_levelFilter & MmLevelFilter.Self) != 0;

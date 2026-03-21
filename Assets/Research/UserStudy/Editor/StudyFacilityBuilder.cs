@@ -32,6 +32,12 @@ namespace MercuryMessaging.Research.UserStudy.Editor
             }
         }
 
+        [MenuItem("MercuryMessaging/User Study/Build Facility Auto")]
+        public static void BuildSceneNoDialog()
+        {
+            CreateScene();
+        }
+
         private static void CreateScene()
         {
             var scene = EditorSceneManager.NewScene(NewSceneSetup.DefaultGameObjects, NewSceneMode.Single);
@@ -241,13 +247,16 @@ namespace MercuryMessaging.Research.UserStudy.Editor
             GameObject worker = CreateWorker(workspace);
 
             // ── ZoneAlertManager (T2 task scripts) ────────────────────────
-            // Attach to RobotArm (which has MmRelayNode) so spatial filtering works
-            var t2Starter = robotArm.AddComponent<ZoneAlertManager_Starter>();
+            // Attach to WORKER (not RobotArm!) so Within() spatial filter measures
+            // distance from the Worker's position to each indicator.
+            // Worker needs MmRelayNode; indicators are siblings under workspace.
+            worker.AddComponent<MmRelayNode>();
+            var t2Starter = worker.AddComponent<ZoneAlertManager_Starter>();
             SerializedObject t2SO = new SerializedObject(t2Starter);
             t2SO.FindProperty("workerTransform").objectReferenceValue = worker.transform;
             t2SO.ApplyModifiedProperties();
 
-            var t2EventsStarter = robotArm.AddComponent<ZoneAlertManager_Events_Starter>();
+            var t2EventsStarter = worker.AddComponent<ZoneAlertManager_Events_Starter>();
             SerializedObject t2EvSO = new SerializedObject(t2EventsStarter);
             t2EvSO.FindProperty("workerTransform").objectReferenceValue = worker.transform;
             t2EvSO.ApplyModifiedProperties();

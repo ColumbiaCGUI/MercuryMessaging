@@ -244,4 +244,39 @@ namespace MercuryMessaging
             }
         }
     }
+
+    /// <summary>
+    /// Object pool for List&lt;MmRelayNode&gt; to avoid per-call allocations in
+    /// CollectTargets() (used by Descendants / Ancestors / Siblings routing paths).
+    /// </summary>
+    internal static class MmRelayNodeListPool
+    {
+        private static readonly Stack<List<MmRelayNode>> _pool = new Stack<List<MmRelayNode>>(16);
+
+        /// <summary>
+        /// Get a cleared list from the pool or create a new one.
+        /// </summary>
+        public static List<MmRelayNode> Get()
+        {
+            if (_pool.Count > 0)
+            {
+                var list = _pool.Pop();
+                list.Clear();
+                return list;
+            }
+            return new List<MmRelayNode>();
+        }
+
+        /// <summary>
+        /// Return a list to the pool after clearing it.
+        /// </summary>
+        public static void Return(List<MmRelayNode> list)
+        {
+            if (list != null && _pool.Count < 64)
+            {
+                list.Clear();
+                _pool.Push(list);
+            }
+        }
+    }
 }

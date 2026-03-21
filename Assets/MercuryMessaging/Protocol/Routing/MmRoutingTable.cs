@@ -432,12 +432,13 @@ namespace MercuryMessaging
         public List<MmRelayNode> GetOnlyMmRelayNodes()
         {
             // Manual filtering instead of LINQ (removed Where().Select().ToList() for QW-5 consistency)
-            var relayNodes = new List<MmRelayNode>();
+            // Pre-size with the routing table count as an upper-bound to avoid mid-loop resizing.
+            var relayNodes = new List<MmRelayNode>(_list.Count);
             foreach (var item in this)
             {
-                if (item.Responder is MmRelayNode)
+                if (item.Responder is MmRelayNode relay)
                 {
-                    relayNodes.Add((MmRelayNode)item.Responder);
+                    relayNodes.Add(relay);
                 }
             }
             return relayNodes;
