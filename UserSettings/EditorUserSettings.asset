@@ -6,34 +6,34 @@ EditorUserSettings:
   serializedVersion: 4
   m_ConfigSettings:
     RecentlyUsedSceneGuid-0:
-      value: 5652060450575b0e0e575d7540775a43434e1d292a2b71607c7c1b30e6b8673d
-      flags: 0
-    RecentlyUsedSceneGuid-1:
-      value: 0552575700010f0f5e0c5d2145215d44411548787b2a72357a701865b7b1653d
-      flags: 0
-    RecentlyUsedSceneGuid-2:
-      value: 505502515053510855085b2316215c44144f4d292a7d77627b2d1865e0e63539
-      flags: 0
-    RecentlyUsedSceneGuid-3:
       value: 575500550706080a545d0f2045210b444215417b7f7874317e7a4536bab56d69
       flags: 0
-    RecentlyUsedSceneGuid-4:
+    RecentlyUsedSceneGuid-1:
       value: 5555075304565d025b0b0d7412770e44104e1973742b75317c2f1866e6b33161
       flags: 0
-    RecentlyUsedSceneGuid-5:
+    RecentlyUsedSceneGuid-2:
       value: 5a55055f5057505e5d0f5f7749275944464e4a797d7e726329284836b0b8353d
       flags: 0
-    RecentlyUsedSceneGuid-6:
+    RecentlyUsedSceneGuid-3:
       value: 0755065e06530d085f5b5475422759444e164c7b287973607e7d1f67e1b2326d
       flags: 0
-    RecentlyUsedSceneGuid-7:
+    RecentlyUsedSceneGuid-4:
       value: 555403030707500a0b5f082116740e4445164e73757873337e704a31e6b4366a
       flags: 0
-    RecentlyUsedSceneGuid-8:
+    RecentlyUsedSceneGuid-5:
       value: 0057065f57500f03595d5b7043260c44404f1a2b797f70667f7a4b6be4e2303b
       flags: 0
-    RecentlyUsedSceneGuid-9:
+    RecentlyUsedSceneGuid-6:
       value: 0757570506545e0e555f09714921594417151a79787077662e7e1f61b0e5636c
+      flags: 0
+    RecentlyUsedSceneGuid-7:
+      value: 5a0755055556590209565574417b074441154a282e2c77642e7e4b65e6b8356a
+      flags: 0
+    RecentlyUsedSceneGuid-8:
+      value: 550704505c035c0d0e5b5b21437b0f4412161b727b797736292d1830b5b73669
+      flags: 0
+    RecentlyUsedSceneGuid-9:
+      value: 02040d5e56575e0d5f0c5c2344765d4441154b7975787f357a7d4a63b6b7676d
       flags: 0
     RecentlyUsedScenePath-0:
       value: 2242470311464676081c0f37023a72150504192d2526217f193c093cf0e93534f1a805e0ea2a33390a01ea3201713236ff1a050ec5080f051440e80018eb09

@@ -6,7 +6,6 @@
   <Project Path="MCPForUnity.Runtime.csproj" />
   <Project Path="Unity.ShaderGraph.Editor.csproj" />
   <Project Path="MercuryMessaging.Tests.csproj" />
-  <Project Path="EPOURP.csproj" />
   <Project Path="FishNet.Runtime.csproj" />
   <Project Path="Unity.RenderPipelines.Core.Runtime.csproj" />
   <Project Path="Unity.Mathematics.csproj" />
@@ -63,14 +62,11 @@
   <Project Path="Unity.Services.Core.Configuration.csproj" />
   <Project Path="Unity.Multiplayer.Center.Common.csproj" />
   <Project Path="Unity.XR.Interaction.Toolkit.Analytics.Editor.csproj" />
-  <Project Path="EPOUtilities.csproj" />
   <Project Path="Unity.XR.Management.Editor.csproj" />
-  <Project Path="EPOEditor.csproj" />
   <Project Path="Unity.Services.Core.Environments.Internal.csproj" />
   <Project Path="Unity.InputSystem.ForUI.csproj" />
   <Project Path="Fusion.Unity.csproj" />
   <Project Path="Unity.XR.Interaction.Toolkit.CodeSamples.Tests.csproj" />
-  <Project Path="EPO.csproj" />
   <Project Path="Unity.Services.Core.Scheduler.csproj" />
   <Project Path="Unity.AI.Navigation.csproj" />
   <Project Path="Unity.XR.Interaction.Toolkit.Analytics.Hooks.Editor.csproj" />
@@ -81,7 +77,6 @@
   <Project Path="Unity.Mathematics.Editor.csproj" />
   <Project Path="MercuryMessaging.Editor.csproj" />
   <Project Path="UnityEditor.UI.Analytics.csproj" />
-  <Project Path="EPODemo.csproj" />
   <Project Path="Unity.Services.Core.Threading.csproj" />
   <Project Path="MercuryMessaging.Task.csproj" />
   <Project Path="Unity.InputSystem.TestFramework.csproj" />
