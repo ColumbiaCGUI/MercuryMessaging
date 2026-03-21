@@ -129,6 +129,8 @@ GameObject:
   m_Component:
   - component: {fileID: 15293395}
   - component: {fileID: 15293394}
+  - component: {fileID: 15293393}
+  - component: {fileID: 15293392}
   m_Layer: 0
   m_Name: Sphere1Anchor
   m_TagString: Untagged
@@ -136,6 +138,30 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &15293392
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 15293391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2756c251a8363df4f9d4b30ee6414bd9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &15293393
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 15293391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43f86b14a27b52f4f9298c33015b5c26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!54 &15293394
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -288,6 +314,8 @@ GameObject:
   - component: {fileID: 54335786}
   - component: {fileID: 54335785}
   - component: {fileID: 54335784}
+  - component: {fileID: 54335788}
+  - component: {fileID: 54335787}
   - component: {fileID: 54335789}
   - component: {fileID: 54335790}
   m_Layer: 0
@@ -390,6 +418,33 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 54335782}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &54335787
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 54335782}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79f5adb8da4c28a4da17e13fd5aca845, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mmTag: -1
+  tagCheckEnabled: 1
+  receiveHandledMessages: 0
+--- !u!114 &54335788
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 54335782}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4e41b9a66cf3c1499dac468cc944ab7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &54335789
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -432,81 +487,6 @@ MonoBehaviour:
   AutoGrabAttachedResponders: 1
   RoutingTable:
     _list: []
---- !u!1 &55465669
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 55465672}
-  - component: {fileID: 55465671}
-  - component: {fileID: 55465670}
-  m_Layer: 0
-  m_Name: T1_TraditionalExample
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &55465670
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 55465669}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc379c794a9cf974b83d3d1c345cba28, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: MercuryMessaging.Examples::T1_TraditionalApiExample
---- !u!114 &55465671
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 55465669}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2eab7cc3f6f5b47ea9014cdcb6fd92ba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: MercuryMessaging::MercuryMessaging.MmRelayNode
-  _mmTag: -1
-  tagCheckEnabled: 1
-  receiveHandledMessages: 0
-  EnabledChecks: 31
-  nodePosition: {x: 0, y: 0}
-  layer: 0
-  messageHistorySize: 100
-  maxMessageHops: 50
-  enableCycleDetection: 1
-  positionOffset: {fileID: 0}
-  doNotModifyRoutingTable: 0
-  FlipNetworkFlagOnSend: 0
-  AllowNetworkPropagationLocally: 0
-  ReparentClonedRespondersToSelf: 1
-  Initialized: 0
-  AutoGrabAttachedResponders: 1
-  RoutingTable:
-    _list: []
---- !u!4 &55465672
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 55465669}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &163334893
 GameObject:
   m_ObjectHideFlags: 0
@@ -609,6 +589,8 @@ GameObject:
   m_Component:
   - component: {fileID: 226128546}
   - component: {fileID: 226128547}
+  - component: {fileID: 226128548}
+  - component: {fileID: 226128551}
   m_Layer: 0
   m_Name: Cube1Anchor
   m_TagString: Untagged
@@ -659,6 +641,30 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 3
+--- !u!114 &226128548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 226128545}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43f86b14a27b52f4f9298c33015b5c26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &226128551
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 226128545}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2756c251a8363df4f9d4b30ee6414bd9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &794330737
 GameObject:
   m_ObjectHideFlags: 0
@@ -671,6 +677,8 @@ GameObject:
   - component: {fileID: 794330742}
   - component: {fileID: 794330741}
   - component: {fileID: 794330740}
+  - component: {fileID: 794330745}
+  - component: {fileID: 794330744}
   - component: {fileID: 794330746}
   - component: {fileID: 794330747}
   m_Layer: 0
@@ -773,6 +781,33 @@ Transform:
   m_Children: []
   m_Father: {fileID: 798211478}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &794330744
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 794330737}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79f5adb8da4c28a4da17e13fd5aca845, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mmTag: -1
+  tagCheckEnabled: 1
+  receiveHandledMessages: 0
+--- !u!114 &794330745
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 794330737}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4e41b9a66cf3c1499dac468cc944ab7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &794330746
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -825,6 +860,8 @@ GameObject:
   m_Component:
   - component: {fileID: 798211478}
   - component: {fileID: 798211477}
+  - component: {fileID: 798211476}
+  - component: {fileID: 798211475}
   m_Layer: 0
   m_Name: Sphere2Anchor
   m_TagString: Untagged
@@ -832,6 +869,30 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &798211475
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 798211472}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2756c251a8363df4f9d4b30ee6414bd9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &798211476
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 798211472}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43f86b14a27b52f4f9298c33015b5c26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!54 &798211477
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -885,6 +946,8 @@ GameObject:
   m_Component:
   - component: {fileID: 826698384}
   - component: {fileID: 826698385}
+  - component: {fileID: 826698386}
+  - component: {fileID: 826698387}
   m_Layer: 0
   m_Name: Cylinder1Anchor
   m_TagString: Untagged
@@ -935,6 +998,30 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 3
+--- !u!114 &826698386
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 826698383}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43f86b14a27b52f4f9298c33015b5c26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &826698387
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 826698383}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2756c251a8363df4f9d4b30ee6414bd9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1166233062
 GameObject:
   m_ObjectHideFlags: 0
@@ -947,6 +1034,8 @@ GameObject:
   - component: {fileID: 1166233067}
   - component: {fileID: 1166233066}
   - component: {fileID: 1166233065}
+  - component: {fileID: 1166233070}
+  - component: {fileID: 1166233069}
   - component: {fileID: 1166233071}
   - component: {fileID: 1166233072}
   m_Layer: 0
@@ -1049,6 +1138,33 @@ Transform:
   m_Children: []
   m_Father: {fileID: 15293395}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1166233069
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1166233062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e8b2001fa1dbf8489c7f89450007511, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mmTag: -1
+  tagCheckEnabled: 1
+  receiveHandledMessages: 0
+--- !u!114 &1166233070
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1166233062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4e41b9a66cf3c1499dac468cc944ab7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1166233071
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -1103,6 +1219,8 @@ GameObject:
   - component: {fileID: 1296473692}
   - component: {fileID: 1296473691}
   - component: {fileID: 1296473690}
+  - component: {fileID: 1296473693}
+  - component: {fileID: 1296473694}
   - component: {fileID: 1296473696}
   - component: {fileID: 1296473697}
   m_Layer: 0
@@ -1207,6 +1325,33 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1296473688}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1296473693
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1296473688}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4e41b9a66cf3c1499dac468cc944ab7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1296473694
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1296473688}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79f5adb8da4c28a4da17e13fd5aca845, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mmTag: -1
+  tagCheckEnabled: 1
+  receiveHandledMessages: 0
 --- !u!114 &1296473696
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -1258,9 +1403,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1536365333}
+  - component: {fileID: 1536365335}
+  - component: {fileID: 1536365336}
   - component: {fileID: 1536365337}
   - component: {fileID: 1536365338}
-  - component: {fileID: 1536365339}
   m_Layer: 0
   m_Name: SceneController
   m_TagString: Untagged
@@ -1287,6 +1433,33 @@ Transform:
   - {fileID: 826698384}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1536365335
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1536365330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4e41b9a66cf3c1499dac468cc944ab7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1536365336
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1536365330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79f5adb8da4c28a4da17e13fd5aca845, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mmTag: -1
+  tagCheckEnabled: 1
+  receiveHandledMessages: 0
 --- !u!23 &1536365337
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1366,96 +1539,6 @@ MonoBehaviour:
   AutoGrabAttachedResponders: 1
   RoutingTable:
     _list: []
---- !u!114 &1536365339
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1536365330}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5b8c55e0cc18f94a83e33de4a46ef39, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: MercuryMessaging.Examples::T1_SceneController
---- !u!1 &1563977046
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1563977047}
-  - component: {fileID: 1563977049}
-  - component: {fileID: 1563977048}
-  m_Layer: 0
-  m_Name: T1_Child
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1563977047
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1563977046}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2118891885}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1563977048
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1563977046}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4941027bb3859834594faad8bceaad45, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: MercuryMessaging.Examples::T1_ChildResponder
-  _mmTag: -1
-  tagCheckEnabled: 1
-  receiveHandledMessages: 0
---- !u!114 &1563977049
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1563977046}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2eab7cc3f6f5b47ea9014cdcb6fd92ba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: MercuryMessaging::MercuryMessaging.MmRelayNode
-  _mmTag: -1
-  tagCheckEnabled: 1
-  receiveHandledMessages: 0
-  EnabledChecks: 31
-  nodePosition: {x: 0, y: 0}
-  layer: 0
-  messageHistorySize: 100
-  maxMessageHops: 50
-  enableCycleDetection: 1
-  positionOffset: {fileID: 0}
-  doNotModifyRoutingTable: 0
-  FlipNetworkFlagOnSend: 0
-  AllowNetworkPropagationLocally: 0
-  ReparentClonedRespondersToSelf: 1
-  Initialized: 0
-  AutoGrabAttachedResponders: 1
-  RoutingTable:
-    _list: []
 --- !u!1 &2083314622
 GameObject:
   m_ObjectHideFlags: 0
@@ -1465,6 +1548,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2083314624}
+  - component: {fileID: 2083314623}
   m_Layer: 0
   m_Name: GameManager (1)
   m_TagString: Untagged
@@ -1472,6 +1556,18 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &2083314623
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2083314622}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 921c3c3a46b003a4dbfad275c132a041, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &2083314624
 Transform:
   m_ObjectHideFlags: 0
@@ -1485,82 +1581,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2118891882
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2118891885}
-  - component: {fileID: 2118891884}
-  - component: {fileID: 2118891883}
-  m_Layer: 0
-  m_Name: T1_Root
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &2118891883
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2118891882}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68736e32b67de704290d424e567b0dab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: MercuryMessaging.Examples::T1_ParentController
---- !u!114 &2118891884
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2118891882}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2eab7cc3f6f5b47ea9014cdcb6fd92ba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: MercuryMessaging::MercuryMessaging.MmRelayNode
-  _mmTag: -1
-  tagCheckEnabled: 1
-  receiveHandledMessages: 0
-  EnabledChecks: 31
-  nodePosition: {x: 0, y: 0}
-  layer: 0
-  messageHistorySize: 100
-  maxMessageHops: 50
-  enableCycleDetection: 1
-  positionOffset: {fileID: 0}
-  doNotModifyRoutingTable: 0
-  FlipNetworkFlagOnSend: 0
-  AllowNetworkPropagationLocally: 0
-  ReparentClonedRespondersToSelf: 1
-  Initialized: 0
-  AutoGrabAttachedResponders: 1
-  RoutingTable:
-    _list: []
---- !u!4 &2118891885
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2118891882}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1563977047}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2146029311
@@ -1684,5 +1704,3 @@ SceneRoots:
   - {fileID: 2083314624}
   - {fileID: 25053412}
   - {fileID: 163334896}
-  - {fileID: 2118891885}
-  - {fileID: 55465672}

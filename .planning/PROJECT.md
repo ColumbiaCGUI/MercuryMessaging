@@ -16,7 +16,7 @@ Provide the most expressive and debuggable message routing system for Unity, ena
 
 - ✓ Hierarchical message routing through Unity's scene graph — v4.0.0
 - ✓ Multi-level filtering (Level, Active, Tag, Network, Selected) — v4.0.0
-- ✓ Fluent DSL API with 86% code reduction (Send/Broadcast/Notify) — v4.0.0
+- ✓ Fluent DSL API with two-tier design: property routing (relay.To.X.Send) for concise fire-and-forget, fluent chains (relay.Send().ToX().Execute()) for composable spatial filtering — v4.0.0
 - ✓ MmBaseResponder method routing for standard methods (0-18) — v4.0.0
 - ✓ MmExtendableResponder registration-based custom method handling (>1000) — v4.0.0
 - ✓ FishNet networking with automatic serialization (15/15 loopback tests) — v4.0.0
@@ -80,7 +80,7 @@ Provide the most expressive and debuggable message routing system for Unity, ena
 
 - **Tech stack:** Unity 2021.3+ with .NET Standard 2.1 — must maintain backward compatibility
 - **Zero dependencies:** Core framework must have ZERO third-party dependencies (only UnityEngine, System.*)
-- **Optional deps:** FishNet (#if FISH_NET) and Photon Fusion 2 (#if FUSION_WEAVER) wrapped in conditional compilation
+- **Optional deps:** FishNet (#if FISH_NET) and Photon Fusion 2 (#if FUSION2_AVAILABLE) wrapped in conditional compilation
 - **Naming convention:** Core files must use "Mm" prefix (MmRelayNode, MmMessage, etc.)
 - **Testing:** All tests must be fully automated (no manual scenes, no prefab dependencies)
 - **Serialization:** Force Text serialization for all Unity assets
@@ -91,7 +91,7 @@ Provide the most expressive and debuggable message routing system for Unity, ena
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
 | Consolidated namespace (single `using MercuryMessaging`) | 95% of functionality accessible with one import | ✓ Good |
-| Fluent DSL as recommended API | 86% code reduction, zero heap allocations, full type safety | ✓ Good |
+| Fluent DSL as recommended API | Two-tier design (property routing + fluent chains), zero heap allocations, full type safety, IDE-discoverable at each step. Advantage is discoverability + composable spatial filtering, not raw line-count reduction (original API also supports defaults). | ✓ Good |
 | FishNet as primary networking | Open source, well-maintained, good Unity integration | ✓ Good |
 | Separate milestones (UIST vs Pipeline) | UIST 2026 has concrete deadline; other venues are more flexible | — Pending |
 | MacIntyre-inspired distributed patterns | Grounded in established dissertation research from same lab | — Pending |

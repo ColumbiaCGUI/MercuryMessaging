@@ -52,6 +52,7 @@ Recent decisions affecting current work:
 - [01-01]: Wiki-vs-code direction: code is ground truth; wiki updated to match code for all 8 Category 2 decisions
 - [01-01]: MmDataCollector API differs from wiki (uses Add/Write/OpenTag, not SetHeaders/AddRow/SaveToFile) -- wiki must be rewritten
 - [01-01]: Tutorial 12 monolithic architecture accepted for now; flagged for potential Phase 5 refactor to strengthen C3
+- [Paper]: C3 reframed: DSL advantage is discoverability + composable spatial filtering, NOT raw line-count reduction. Original API supports default params (one-line invocation), so "7 lines to 1" comparison was misleading. Paper now shows two-tier DSL design: property routing (relay.To.X.Send) for fire-and-forget, fluent chains (relay.Send().ToX().Execute()) for spatial/complex routing. "86% code reduction" claim removed from paper framing.
 
 ### Pending Todos
 

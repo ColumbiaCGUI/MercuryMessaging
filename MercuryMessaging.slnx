@@ -35,6 +35,7 @@
   <Project Path="Unity.FishNet.Codegen.csproj" />
   <Project Path="Unity.XR.CoreUtils.csproj" />
   <Project Path="Unity.Searcher.Editor.csproj" />
+  <Project Path="MercuryMessaging.Support.csproj" />
   <Project Path="FishNet.Demos.csproj" />
   <Project Path="GameKit.Dependencies.csproj" />
   <Project Path="UnityEditor.TestRunner.csproj" />
@@ -82,6 +83,7 @@
   <Project Path="UnityEditor.UI.Analytics.csproj" />
   <Project Path="EPODemo.csproj" />
   <Project Path="Unity.Services.Core.Threading.csproj" />
+  <Project Path="MercuryMessaging.Task.csproj" />
   <Project Path="Unity.InputSystem.TestFramework.csproj" />
   <Project Path="UnityEditor.XR.LegacyInputHelpers.csproj" />
   <Project Path="Unity.ShaderGraph.Utilities.csproj" />
@@ -94,6 +96,7 @@
   <Project Path="Unity.Services.Core.Registration.csproj" />
   <Project Path="ALINEPackageToolsEditor.csproj" />
   <Project Path="UnityEngine.XR.LegacyInputHelpers.csproj" />
+  <Project Path="MercuryMessaging.Examples.Editor.csproj" />
   <Project Path="Unity.InputSystem.DocCodeSamples.csproj" />
   <Project Path="Unity.RenderPipelines.Core.Runtime.Shared.csproj" />
   <Project Path="Unity.InternalAPIEngineBridge.004.csproj" />

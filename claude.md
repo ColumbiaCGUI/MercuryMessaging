@@ -2,7 +2,7 @@
 
 **MercuryMessaging** is a hierarchical message routing framework for Unity developed by Columbia University's CGUI lab. It enables loosely-coupled communication between GameObjects through a message-based architecture.
 
-*Last Updated: 2025-12-12*
+*Last Updated: 2026-02-11*
 *Framework Version: Based on Unity 2021.3+ with VR/XR support*
 
 ---
@@ -53,7 +53,7 @@ Step-by-step tutorials for learning MercuryMessaging:
 
 @./CONTRIBUTING.md
 
-- [Frequent Errors](dev/FREQUENT_ERRORS.md) - Common bugs & debugging patterns (MUST READ)
+- [Frequent Errors](Documentation/FREQUENT_ERRORS.md) - Common bugs & debugging patterns (MUST READ)
 - [DSL API Guide](Documentation/DSL/API_GUIDE.md) - Comprehensive Fluent API documentation
 - [FILE_REFERENCE.md](Documentation/FILE_REFERENCE.md) - Complete list of important files with descriptions
 - [Source Generators](Documentation/SourceGenerators/README.md) - `[MmGenerateDispatch]` and `[MmHandler]` attributes
@@ -62,9 +62,9 @@ Step-by-step tutorials for learning MercuryMessaging:
 
 ## Development Resources
 
-- [dev/WORKFLOW.md](dev/WORKFLOW.md) - Feature development, bug fixes, testing, release workflows
-- [dev/IMPROVEMENT_TRACKER.md](dev/IMPROVEMENT_TRACKER.md) - Completed improvements, active development, and research opportunities
+- [Documentation/WORKFLOW.md](Documentation/WORKFLOW.md) - Feature development, bug fixes, testing, release workflows
 - [.claude/ASSISTANT_GUIDE.md](.claude/ASSISTANT_GUIDE.md) - Guidelines for AI assistants
+- [.planning/ROADMAP.md](.planning/ROADMAP.md) - UIST 2026 project roadmap (GSD)
 
 ---
 
@@ -84,5 +84,5 @@ For AI assistants working on this project, see [.claude/ASSISTANT_GUIDE.md](.cla
 
 **Critical Policy:**
 - Use Conventional Commits format (`feat:`, `fix:`, `docs:`, etc.)
-- Create task folders in `dev/active/` for large tasks (README, context, tasks)
-- See [dev/WORKFLOW.md](dev/WORKFLOW.md) for development workflow
+- Use `.planning/` (GSD) for project planning and phase execution
+- See [Documentation/WORKFLOW.md](Documentation/WORKFLOW.md) for development workflow
