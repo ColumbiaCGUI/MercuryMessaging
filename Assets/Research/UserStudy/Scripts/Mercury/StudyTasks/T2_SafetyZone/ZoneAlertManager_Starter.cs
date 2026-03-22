@@ -32,11 +32,11 @@ namespace MercuryMessaging.Research.UserStudy
 
             // ============================================
             // YOUR CODE HERE (2 lines of Mercury fluent code)
-            // Line 1: Send "warning" to all descendants within 2 meters
-            // Line 2: Send "emergency" to all descendants within 1 meter
+            // Line 1: Send "warning" to all objects within 2 meters
+            // Line 2: Send "emergency" to all objects within 1 meter
             //
             // Use Mercury's fluent API with spatial filtering:
-            //   relay.Send("message").ToDescendants().Within(radius).Execute();
+            //   relay.Send("message").ToAll().Within(radius).Execute();
             // ============================================
         }
     }

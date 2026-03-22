@@ -242,7 +242,7 @@ namespace MercuryMessaging.Tests
         {
             public bool InitializeCalled = false;
 
-            protected override void ReceivedInitialize()
+            public override void Initialize()
             {
                 InitializeCalled = true;
             }

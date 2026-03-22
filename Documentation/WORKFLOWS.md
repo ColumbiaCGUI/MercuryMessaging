@@ -36,7 +36,7 @@ public class MyCustomResponder : MmBaseResponder
         Debug.Log("Received int: " + message.value);
     }
 
-    protected override void ReceivedSetActive(bool active) {
+    public override void SetActive(bool active) {
         // Handle SetActive message
         gameObject.SetActive(active);
     }

@@ -27,7 +27,7 @@ using MercuryMessaging;
 // 2. Create responders to handle messages
 public class MyComponent : MmBaseResponder
 {
-    protected override void ReceivedInitialize()
+    public override void Initialize()
     {
         Debug.Log("Initialized!");
     }

@@ -169,7 +169,7 @@ Refine which responders receive the message.
 relay.Send("hello").ToDescendants().Active().Execute();
 
 // Include inactive GameObjects
-relay.Send("hello").ToDescendants().All().Execute();
+relay.Send("hello").ToDescendants().IncludeInactive().Execute();
 ```
 
 ### Selected Filter
@@ -179,7 +179,7 @@ relay.Send("hello").ToDescendants().All().Execute();
 relay.Send("hello").ToDescendants().Selected().Execute();
 
 // All responders regardless of FSM state
-relay.Send("hello").ToDescendants().Unselected().Execute();
+relay.Send("hello").ToDescendants().AllSelected().Execute();
 ```
 
 ### Tag Filter
@@ -191,21 +191,21 @@ relay.Send("hello").ToDescendants().WithTag(MmTag.Tag0).Execute();
 // Multiple tags (OR logic)
 relay.Send("hello").ToDescendants().WithTag(MmTag.Tag0 | MmTag.Tag1).Execute();
 
-// Exclude tag
-relay.Send("hello").ToDescendants().WithoutTag(MmTag.Tag2).Execute();
+// Match any tag
+relay.Send("hello").ToDescendants().AnyTag().Execute();
 ```
 
 ### Network Filter
 
 ```csharp
 // Local only (no network propagation)
-relay.Send("hello").ToDescendants().Local().Execute();
+relay.Send("hello").ToDescendants().LocalOnly().Execute();
 
 // Network only
-relay.Send("hello").ToDescendants().Network().Execute();
+relay.Send("hello").ToDescendants().NetworkOnly().Execute();
 
 // Both local and network
-relay.Send("hello").ToDescendants().Networked().Execute();
+relay.Send("hello").ToDescendants().OverNetwork().Execute();
 ```
 
 ### Combining Filters
@@ -216,7 +216,7 @@ relay.Send("hello")
     .Active()
     .Selected()
     .WithTag(MmTag.Tag0)
-    .Local()
+    .LocalOnly()
     .Execute();
 ```
 
@@ -371,7 +371,7 @@ public override void MmInvoke(MmMessage message)
 | `new MmMetadataBlock(LevelFilter.Parent)` | `.ToParents()` |
 | `MmActiveFilter.Active` | `.Active()` |
 | `MmSelectedFilter.Selected` | `.Selected()` |
-| `MmNetworkFilter.All` | `.Networked()` |
+| `MmNetworkFilter.All` | `.OverNetwork()` |
 | `tag: MmTag.Tag0` | `.WithTag(MmTag.Tag0)` |
 
 ### Gradual Migration
@@ -454,7 +454,7 @@ relay.Send(MmMethod.SetActive, true)
 ```csharp
 relay.Send(transform.position)
     .ToDescendants()
-    .Networked()
+    .OverNetwork()
     .Execute();
 ```
 

@@ -15,7 +15,7 @@ MmMessage {
 }
 ```
 
-## MmMethod Enum (Standard Methods 0-18)
+## MmMethod Enum (Standard Methods 0-19)
 
 ```csharp
 NoOp = 0,
@@ -27,16 +27,17 @@ Complete = 5,
 TaskInfo = 6,
 Message = 7,
 MessageBool = 8,
-MessageInt = 9,
+MessageByteArray = 9,
 MessageFloat = 10,
-MessageString = 11,
-MessageVector3 = 12,
-MessageVector4 = 13,
-MessageQuaternion = 14,
-MessageTransform = 15,
-MessageTransformList = 16,
-MessageByteArray = 17,
-MessageGameObject = 18
+MessageInt = 11,
+MessageSerializable = 12,
+MessageString = 13,
+MessageTransform = 14,
+MessageTransformList = 15,
+MessageVector3 = 16,
+MessageVector4 = 17,
+MessageGameObject = 18,
+MessageQuaternion = 19
 // Custom methods: Use values > 1000
 ```
 
@@ -134,10 +135,10 @@ public class MyResponder : MmBaseResponder
     protected override void ReceivedMessage(MmMessageString msg) { }
 
     // Override standard methods
-    protected override void ReceivedSetActive(bool active) { }
-    protected override void ReceivedInitialize() { }
-    protected override void ReceivedSwitch(int stateIndex) { }
-    protected override void ReceivedRefresh() { }
+    public override void SetActive(bool active) { }
+    public override void Initialize() { }
+    protected override void Switch(string stateName) { }
+    protected override void Complete(bool result) { }
 
     // Handle custom methods (>1000)
     public override void MmInvoke(MmMessage message) {
