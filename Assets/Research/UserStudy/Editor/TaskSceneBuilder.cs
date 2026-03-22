@@ -205,19 +205,56 @@ namespace MercuryMessaging.Research.UserStudy.Editor
 
         private static void CreateRobotArmVisual(GameObject parent)
         {
-            var mat = GetOrCreateMat("RobotArmMat", new Color(0.25f, 0.25f, 0.25f));
-            string[] names = { "Base", "Shoulder", "Elbow", "Wrist", "Gripper" };
-            PrimitiveType[] types = { PrimitiveType.Cylinder, PrimitiveType.Capsule, PrimitiveType.Capsule, PrimitiveType.Capsule, PrimitiveType.Cube };
-            Vector3[] positions = { new Vector3(0,0,0), new Vector3(0,0.6f,0), new Vector3(0,1.2f,0), new Vector3(0,1.6f,0), new Vector3(0,1.9f,0) };
-            Vector3[] scales = { new Vector3(0.5f,0.1f,0.5f), new Vector3(0.15f,0.4f,0.15f), new Vector3(0.12f,0.3f,0.12f), new Vector3(0.1f,0.2f,0.1f), new Vector3(0.2f,0.05f,0.15f) };
-            for (int i = 0; i < names.Length; i++)
+            // Try UR5 DAE meshes first; fall back to primitives if not found
+            const string meshDir = "Assets/Research/UserStudy/Models/UR5";
+            string[] meshNames = { "base", "shoulder", "upperarm", "forearm", "wrist1", "wrist2", "wrist3" };
+            // Approximate vertical positions for a neutral upright pose (UR5 URDF origins)
+            Vector3[] positions = {
+                new Vector3(0f, 0f, 0f),       // base
+                new Vector3(0f, 0.089f, 0f),   // shoulder
+                new Vector3(0f, 0.514f, 0f),   // upperarm (0.089 + 0.425)
+                new Vector3(0f, 0.906f, 0f),   // forearm  (0.514 + 0.392)
+                new Vector3(0f, 1.001f, 0f),   // wrist1   (0.906 + 0.095)
+                new Vector3(0f, 1.084f, 0f),   // wrist2   (1.001 + 0.083)
+                new Vector3(0f, 1.166f, 0f),   // wrist3   (1.084 + 0.082)
+            };
+
+            var firstMesh = AssetDatabase.LoadAssetAtPath<GameObject>($"{meshDir}/{meshNames[0]}.dae");
+            if (firstMesh != null)
             {
-                var part = GameObject.CreatePrimitive(types[i]);
-                part.name = $"Arm{names[i]}";
-                part.transform.SetParent(parent.transform);
-                part.transform.localPosition = positions[i];
-                part.transform.localScale = scales[i];
-                part.GetComponent<Renderer>().sharedMaterial = mat;
+                // Use UR5 meshes
+                var armRoot = new GameObject("UR5_Arm");
+                armRoot.transform.SetParent(parent.transform);
+                armRoot.transform.localPosition = Vector3.zero;
+
+                for (int i = 0; i < meshNames.Length; i++)
+                {
+                    var prefab = AssetDatabase.LoadAssetAtPath<GameObject>($"{meshDir}/{meshNames[i]}.dae");
+                    if (prefab == null) continue;
+                    var part = (GameObject)PrefabUtility.InstantiatePrefab(prefab);
+                    part.name = $"UR5_{meshNames[i]}";
+                    part.transform.SetParent(armRoot.transform);
+                    part.transform.localPosition = positions[i];
+                    part.transform.localRotation = Quaternion.identity;
+                }
+            }
+            else
+            {
+                // Fallback: primitive-based arm
+                var mat = GetOrCreateMat("RobotArmMat", new Color(0.25f, 0.25f, 0.25f));
+                string[] names = { "Base", "Shoulder", "Elbow", "Wrist", "Gripper" };
+                PrimitiveType[] types = { PrimitiveType.Cylinder, PrimitiveType.Capsule, PrimitiveType.Capsule, PrimitiveType.Capsule, PrimitiveType.Cube };
+                Vector3[] fallbackPos = { new Vector3(0,0,0), new Vector3(0,0.6f,0), new Vector3(0,1.2f,0), new Vector3(0,1.6f,0), new Vector3(0,1.9f,0) };
+                Vector3[] scales = { new Vector3(0.5f,0.1f,0.5f), new Vector3(0.15f,0.4f,0.15f), new Vector3(0.12f,0.3f,0.12f), new Vector3(0.1f,0.2f,0.1f), new Vector3(0.2f,0.05f,0.15f) };
+                for (int i = 0; i < names.Length; i++)
+                {
+                    var part = GameObject.CreatePrimitive(types[i]);
+                    part.name = $"Arm{names[i]}";
+                    part.transform.SetParent(parent.transform);
+                    part.transform.localPosition = fallbackPos[i];
+                    part.transform.localScale = scales[i];
+                    part.GetComponent<Renderer>().sharedMaterial = mat;
+                }
             }
         }
 
