@@ -19,7 +19,7 @@ public class TutorialSceneFixer : EditorWindow
     private Vector2 scrollPos;
     private List<string> log = new List<string>();
 
-    [MenuItem("Mercury/Tutorials/Fix Tutorial Scene Wiring (Window)")]
+    [MenuItem("MercuryMessaging/Tutorials/Fix Tutorial Scene Wiring (Window)")]
     static void ShowWindow()
     {
         GetWindow<TutorialSceneFixer>("Tutorial Scene Fixer");
@@ -29,7 +29,7 @@ public class TutorialSceneFixer : EditorWindow
     /// Run from menu or batch mode:
     /// Unity.exe -batchmode -projectPath . -executeMethod TutorialSceneFixer.FixAllNow -quit
     /// </summary>
-    [MenuItem("Mercury/Tutorials/Fix ALL Tutorial Scenes Now")]
+    [MenuItem("MercuryMessaging/Tutorials/Fix ALL Tutorial Scenes Now")]
     public static void FixAllNow()
     {
         var fixer = CreateInstance<TutorialSceneFixer>();
