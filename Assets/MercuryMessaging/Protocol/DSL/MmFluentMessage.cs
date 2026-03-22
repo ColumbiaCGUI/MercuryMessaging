@@ -943,37 +943,47 @@ namespace MercuryMessaging
         private List<MmRelayNode> CollectTargets()
         {
             var targets = MmRelayNodeListPool.Get();
+            // Use HashSet for O(1) duplicate detection instead of O(n) List.Contains
+            var seen = MmHashSetPool.Get();
 
-            // Check if Self is included
-            bool includeSelf = (_levelFilter & MmLevelFilter.Self) != 0;
-            if (includeSelf)
+            try
             {
-                targets.Add(_relay);
+                // Check if Self is included
+                bool includeSelf = (_levelFilter & MmLevelFilter.Self) != 0;
+                if (includeSelf)
+                {
+                    targets.Add(_relay);
+                    seen.Add(_relay.gameObject.GetInstanceID());
+                }
+
+                // Check for children/descendants
+                bool includeChildren = (_levelFilter & MmLevelFilter.Child) != 0;
+                bool includeDescendants = (_levelFilter & MmLevelFilter.Descendants) != 0;
+
+                if (includeChildren || includeDescendants)
+                {
+                    CollectChildRelays(_relay, targets, seen, includeDescendants);
+                }
+
+                // Check for parents/ancestors
+                bool includeParents = (_levelFilter & MmLevelFilter.Parent) != 0;
+                bool includeAncestors = (_levelFilter & MmLevelFilter.Ancestors) != 0;
+
+                if (includeParents || includeAncestors)
+                {
+                    CollectParentRelays(_relay, targets, seen, includeAncestors);
+                }
+
+                // Check for siblings
+                bool includeSiblings = (_levelFilter & MmLevelFilter.Siblings) != 0;
+                if (includeSiblings)
+                {
+                    CollectSiblingRelays(_relay, targets, seen);
+                }
             }
-
-            // Check for children/descendants
-            bool includeChildren = (_levelFilter & MmLevelFilter.Child) != 0;
-            bool includeDescendants = (_levelFilter & MmLevelFilter.Descendants) != 0;
-
-            if (includeChildren || includeDescendants)
+            finally
             {
-                CollectChildRelays(_relay, targets, includeDescendants);
-            }
-
-            // Check for parents/ancestors
-            bool includeParents = (_levelFilter & MmLevelFilter.Parent) != 0;
-            bool includeAncestors = (_levelFilter & MmLevelFilter.Ancestors) != 0;
-
-            if (includeParents || includeAncestors)
-            {
-                CollectParentRelays(_relay, targets, includeAncestors);
-            }
-
-            // Check for siblings
-            bool includeSiblings = (_levelFilter & MmLevelFilter.Siblings) != 0;
-            if (includeSiblings)
-            {
-                CollectSiblingRelays(_relay, targets);
+                MmHashSetPool.Return(seen);
             }
 
             return targets;
@@ -982,7 +992,8 @@ namespace MercuryMessaging
         /// <summary>
         /// Collect child relay nodes recursively if needed.
         /// </summary>
-        private void CollectChildRelays(MmRelayNode parent, List<MmRelayNode> targets, bool recursive)
+        private void CollectChildRelays(MmRelayNode parent, List<MmRelayNode> targets,
+            HashSet<int> seen, bool recursive)
         {
             if (parent == null || parent.RoutingTable == null)
                 return;
@@ -993,14 +1004,17 @@ namespace MercuryMessaging
                     continue;
 
                 var childRelay = item.Responder?.GetRelayNode();
-                if (childRelay != null && !targets.Contains(childRelay))
-                {
-                    targets.Add(childRelay);
+                if (childRelay == null) continue;
 
-                    if (recursive)
-                    {
-                        CollectChildRelays(childRelay, targets, true);
-                    }
+                // O(1) HashSet check instead of O(n) List.Contains
+                if (!seen.Add(childRelay.gameObject.GetInstanceID()))
+                    continue;
+
+                targets.Add(childRelay);
+
+                if (recursive)
+                {
+                    CollectChildRelays(childRelay, targets, seen, true);
                 }
             }
         }
@@ -1009,7 +1023,8 @@ namespace MercuryMessaging
         /// Collect parent relay nodes recursively if needed.
         /// Uses RoutingTable entries with Level == Parent.
         /// </summary>
-        private void CollectParentRelays(MmRelayNode child, List<MmRelayNode> targets, bool recursive)
+        private void CollectParentRelays(MmRelayNode child, List<MmRelayNode> targets,
+            HashSet<int> seen, bool recursive)
         {
             if (child == null || child.RoutingTable == null)
                 return;
@@ -1020,14 +1035,16 @@ namespace MercuryMessaging
                     continue;
 
                 var parentRelay = item.Responder?.GetRelayNode();
-                if (parentRelay != null && !targets.Contains(parentRelay))
-                {
-                    targets.Add(parentRelay);
+                if (parentRelay == null) continue;
 
-                    if (recursive)
-                    {
-                        CollectParentRelays(parentRelay, targets, true);
-                    }
+                if (!seen.Add(parentRelay.gameObject.GetInstanceID()))
+                    continue;
+
+                targets.Add(parentRelay);
+
+                if (recursive)
+                {
+                    CollectParentRelays(parentRelay, targets, seen, true);
                 }
             }
         }
@@ -1036,7 +1053,8 @@ namespace MercuryMessaging
         /// Collect sibling relay nodes (children of same parent).
         /// First finds parents via RoutingTable, then collects their children.
         /// </summary>
-        private void CollectSiblingRelays(MmRelayNode node, List<MmRelayNode> targets)
+        private void CollectSiblingRelays(MmRelayNode node, List<MmRelayNode> targets,
+            HashSet<int> seen)
         {
             if (node == null || node.RoutingTable == null)
                 return;
@@ -1058,10 +1076,12 @@ namespace MercuryMessaging
                         continue;
 
                     var siblingRelay = childItem.Responder?.GetRelayNode();
-                    if (siblingRelay != null && siblingRelay != node && !targets.Contains(siblingRelay))
-                    {
-                        targets.Add(siblingRelay);
-                    }
+                    if (siblingRelay == null || siblingRelay == node) continue;
+
+                    if (!seen.Add(siblingRelay.gameObject.GetInstanceID()))
+                        continue;
+
+                    targets.Add(siblingRelay);
                 }
             }
         }

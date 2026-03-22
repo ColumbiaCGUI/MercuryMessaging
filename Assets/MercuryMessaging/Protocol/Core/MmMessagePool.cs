@@ -217,7 +217,8 @@ namespace MercuryMessaging
         private static void ResetMessage(MmMessage msg)
         {
             msg.MmMethod = default;
-            msg.MetadataBlock = new MmMetadataBlock();
+            // Don't allocate — callers always set MetadataBlock after Get()
+            msg.MetadataBlock = null;
             msg.NetId = 0;
             msg.root = true;
             msg.TimeStamp = null;
@@ -245,8 +246,9 @@ namespace MercuryMessaging
             var msg = _messagePool.Get();
             msg.MmMethod = method;
             msg.MmMessageType = MmMessageType.MmVoid;
-            if (metadataBlock != null)
-                msg.MetadataBlock = new MmMetadataBlock(metadataBlock);
+            msg.MetadataBlock = metadataBlock != null
+                ? new MmMetadataBlock(metadataBlock)
+                : new MmMetadataBlock();
             return msg;
         }
 
@@ -259,8 +261,9 @@ namespace MercuryMessaging
             msg.value = value;
             msg.MmMethod = method;
             msg.MmMessageType = MmMessageType.MmBool;
-            if (metadataBlock != null)
-                msg.MetadataBlock = new MmMetadataBlock(metadataBlock);
+            msg.MetadataBlock = metadataBlock != null
+                ? new MmMetadataBlock(metadataBlock)
+                : new MmMetadataBlock();
             return msg;
         }
 
@@ -273,8 +276,9 @@ namespace MercuryMessaging
             msg.value = value;
             msg.MmMethod = method;
             msg.MmMessageType = MmMessageType.MmInt;
-            if (metadataBlock != null)
-                msg.MetadataBlock = new MmMetadataBlock(metadataBlock);
+            msg.MetadataBlock = metadataBlock != null
+                ? new MmMetadataBlock(metadataBlock)
+                : new MmMetadataBlock();
             return msg;
         }
 
@@ -287,8 +291,9 @@ namespace MercuryMessaging
             msg.value = value;
             msg.MmMethod = method;
             msg.MmMessageType = MmMessageType.MmFloat;
-            if (metadataBlock != null)
-                msg.MetadataBlock = new MmMetadataBlock(metadataBlock);
+            msg.MetadataBlock = metadataBlock != null
+                ? new MmMetadataBlock(metadataBlock)
+                : new MmMetadataBlock();
             return msg;
         }
 
@@ -301,8 +306,9 @@ namespace MercuryMessaging
             msg.value = value;
             msg.MmMethod = method;
             msg.MmMessageType = MmMessageType.MmString;
-            if (metadataBlock != null)
-                msg.MetadataBlock = new MmMetadataBlock(metadataBlock);
+            msg.MetadataBlock = metadataBlock != null
+                ? new MmMetadataBlock(metadataBlock)
+                : new MmMetadataBlock();
             return msg;
         }
 
@@ -315,8 +321,9 @@ namespace MercuryMessaging
             msg.value = value;
             msg.MmMethod = method;
             msg.MmMessageType = MmMessageType.MmVector3;
-            if (metadataBlock != null)
-                msg.MetadataBlock = new MmMetadataBlock(metadataBlock);
+            msg.MetadataBlock = metadataBlock != null
+                ? new MmMetadataBlock(metadataBlock)
+                : new MmMetadataBlock();
             return msg;
         }
 
@@ -329,8 +336,9 @@ namespace MercuryMessaging
             msg.value = value;
             msg.MmMethod = method;
             msg.MmMessageType = MmMessageType.MmVector4;
-            if (metadataBlock != null)
-                msg.MetadataBlock = new MmMetadataBlock(metadataBlock);
+            msg.MetadataBlock = metadataBlock != null
+                ? new MmMetadataBlock(metadataBlock)
+                : new MmMetadataBlock();
             return msg;
         }
 
@@ -343,8 +351,9 @@ namespace MercuryMessaging
             msg.value = value;
             msg.MmMethod = method;
             msg.MmMessageType = MmMessageType.MmQuaternion;
-            if (metadataBlock != null)
-                msg.MetadataBlock = new MmMetadataBlock(metadataBlock);
+            msg.MetadataBlock = metadataBlock != null
+                ? new MmMetadataBlock(metadataBlock)
+                : new MmMetadataBlock();
             return msg;
         }
 
@@ -357,8 +366,9 @@ namespace MercuryMessaging
             msg.MmTransform = value;
             msg.MmMethod = method;
             msg.MmMessageType = MmMessageType.MmTransform;
-            if (metadataBlock != null)
-                msg.MetadataBlock = new MmMetadataBlock(metadataBlock);
+            msg.MetadataBlock = metadataBlock != null
+                ? new MmMetadataBlock(metadataBlock)
+                : new MmMetadataBlock();
             return msg;
         }
 
@@ -371,8 +381,9 @@ namespace MercuryMessaging
             msg.transforms = value;
             msg.MmMethod = method;
             msg.MmMessageType = MmMessageType.MmTransformList;
-            if (metadataBlock != null)
-                msg.MetadataBlock = new MmMetadataBlock(metadataBlock);
+            msg.MetadataBlock = metadataBlock != null
+                ? new MmMetadataBlock(metadataBlock)
+                : new MmMetadataBlock();
             return msg;
         }
 
@@ -385,8 +396,9 @@ namespace MercuryMessaging
             msg.byteArr = value;
             msg.MmMethod = method;
             msg.MmMessageType = MmMessageType.MmByteArray;
-            if (metadataBlock != null)
-                msg.MetadataBlock = new MmMetadataBlock(metadataBlock);
+            msg.MetadataBlock = metadataBlock != null
+                ? new MmMetadataBlock(metadataBlock)
+                : new MmMetadataBlock();
             return msg;
         }
 
@@ -399,8 +411,9 @@ namespace MercuryMessaging
             msg.value = value;
             msg.MmMethod = method;
             msg.MmMessageType = MmMessageType.MmSerializable;
-            if (metadataBlock != null)
-                msg.MetadataBlock = new MmMetadataBlock(metadataBlock);
+            msg.MetadataBlock = metadataBlock != null
+                ? new MmMetadataBlock(metadataBlock)
+                : new MmMetadataBlock();
             return msg;
         }
 
@@ -413,8 +426,9 @@ namespace MercuryMessaging
             msg.Value = value;
             msg.MmMethod = method;
             msg.MmMessageType = MmMessageType.MmGameObject;
-            if (metadataBlock != null)
-                msg.MetadataBlock = new MmMetadataBlock(metadataBlock);
+            msg.MetadataBlock = metadataBlock != null
+                ? new MmMetadataBlock(metadataBlock)
+                : new MmMetadataBlock();
             return msg;
         }
 

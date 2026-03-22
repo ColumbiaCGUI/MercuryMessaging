@@ -190,9 +190,9 @@ namespace MercuryMessaging.Research.Benchmarks
                 var subscriber = GlobalMessagePipe.GetSubscriber<string>();
 
                 int counter = 0;
-                var bag = DisposableBag.CreateBuilder();
+                var bag = MessagePipe.DisposableBag.CreateBuilder();
                 for (int i = 0; i < subCount; i++)
-                    subscriber.Subscribe(msg => counter++).AddTo(bag);
+                    MessagePipe.DisposableBag.AddTo(subscriber.Subscribe(msg => counter++), bag);
 
                 var disposable = bag.Build();
 
@@ -225,7 +225,7 @@ namespace MercuryMessaging.Research.Benchmarks
                 GC.TryStartNoGCRegion(32 * 1024 * 1024);
                 gcSuppressed = true;
             }
-            catch (InvalidOperationException) { }
+            catch (Exception) { /* GC.TryStartNoGCRegion not supported on Mono */ }
 
             sw.Start();
             for (int i = 0; i < iterations; i++)
@@ -235,7 +235,7 @@ namespace MercuryMessaging.Research.Benchmarks
             if (gcSuppressed)
             {
                 try { GC.EndNoGCRegion(); }
-                catch (InvalidOperationException) { }
+                catch (Exception) { /* GC.TryStartNoGCRegion not supported on Mono */ }
             }
 
             _results.Add(new Result

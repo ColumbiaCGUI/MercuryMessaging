@@ -198,7 +198,7 @@ namespace MercuryMessaging.Research.Benchmarks
                     GC.TryStartNoGCRegion(32 * 1024 * 1024);
                     gcSuppressed = true;
                 }
-                catch (InvalidOperationException) { }
+                catch (Exception) { /* GC.TryStartNoGCRegion not supported on Mono */ }
 
                 sw.Start();
                 for (int i = 0; i < iterations; i++)
@@ -208,7 +208,7 @@ namespace MercuryMessaging.Research.Benchmarks
                 if (gcSuppressed)
                 {
                     try { GC.EndNoGCRegion(); }
-                    catch (InvalidOperationException) { }
+                    catch (Exception) { /* GC.TryStartNoGCRegion not supported on Mono */ }
                 }
 
                 long memAfter = GC.GetTotalMemory(false);

@@ -126,8 +126,8 @@ namespace MercuryMessaging.Research.Benchmarks
                 int idx = i;
                 unityEvent.AddListener((msg) => eventReceivers[idx].counter++);
 
-                // C# delegate
-                csharpDelegate += (msg) => eventReceivers[i].counter++;
+                // C# delegate (capture idx, not loop variable i)
+                csharpDelegate += (msg) => eventReceivers[idx].counter++;
             }
 
             // Refresh all relay nodes
@@ -217,7 +217,7 @@ namespace MercuryMessaging.Research.Benchmarks
                     GC.TryStartNoGCRegion(32 * 1024 * 1024);
                     gcSuppressed = true;
                 }
-                catch (InvalidOperationException) { }
+                catch (Exception) { /* GC.TryStartNoGCRegion not supported on Mono */ }
 
                 sw.Start();
                 for (int i = 0; i < iterations; i++)
@@ -227,7 +227,7 @@ namespace MercuryMessaging.Research.Benchmarks
                 if (gcSuppressed)
                 {
                     try { GC.EndNoGCRegion(); }
-                    catch (InvalidOperationException) { }
+                    catch (Exception) { /* GC.TryStartNoGCRegion not supported on Mono */ }
                 }
 
                 long memAfter = GC.GetTotalMemory(false);

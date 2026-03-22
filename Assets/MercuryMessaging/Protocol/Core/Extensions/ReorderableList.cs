@@ -51,14 +51,20 @@ namespace MercuryMessaging
 			_list = new List<T>();
 		}
 
-		public IEnumerator<T> GetEnumerator()
+		// Return concrete struct type to avoid boxing the List<T>.Enumerator
+		public List<T>.Enumerator GetEnumerator()
+		{
+			return _list.GetEnumerator();
+		}
+
+		IEnumerator<T> IEnumerable<T>.GetEnumerator()
 		{
 			return _list.GetEnumerator();
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()
 		{
-			return GetEnumerator();
+			return _list.GetEnumerator();
 		}
 
 		#endregion
