@@ -1,6 +1,6 @@
 // Uncomment to enable optional library comparisons:
-// #define HAS_R3
-// #define HAS_MESSAGEPIPE
+#define HAS_R3
+#define HAS_MESSAGEPIPE
 
 using System;
 using System.Collections;
@@ -498,19 +498,17 @@ namespace MercuryMessaging.Research.Benchmarks
 
 #if HAS_R3
         /// <summary>
-        /// T2_R3: R3 Subject&lt;string&gt; publish/subscribe with distance check per receiver.
-        /// Each receiver subscribes; sender publishes after checking distance.
+        /// T2_R3: Per-receiver R3 Subject&lt;string&gt; with sender-side distance check.
+        /// Each receiver has its own Subject — sender iterates and publishes only
+        /// to in-range receivers' subjects. O(N) consistent with other methods.
         /// </summary>
         private IEnumerator RunT2R3(int n, int run)
         {
             var root = new GameObject("T2_R3");
             root.transform.position = Vector3.zero;
 
-            // Two subjects — one per alert level.
-            var warningSubject   = new Subject<string>();
-            var emergencySubject = new Subject<string>();
-
-            var entries = new List<(Transform xf, IDisposable warnSub, IDisposable emergSub)>();
+            var entries = new List<(Transform xf, Subject<string> subject)>();
+            var subscriptions = new List<IDisposable>();
             var rng = new System.Random(42 + run);
             for (int i = 0; i < n; i++)
             {
@@ -522,9 +520,9 @@ namespace MercuryMessaging.Research.Benchmarks
                 float angle = (float)rng.NextDouble() * Mathf.PI * 2f;
                 go.transform.position = new Vector3(Mathf.Cos(angle) * dist, 0, Mathf.Sin(angle) * dist);
                 var recv = go.AddComponent<ScenarioEventReceiver>();
-                var warnSub  = warningSubject.Subscribe(msg  => recv.HandleAlert(msg));
-                var emergSub = emergencySubject.Subscribe(msg => recv.HandleAlert(msg));
-                entries.Add((go.transform, warnSub, emergSub));
+                var subj = new Subject<string>();
+                subscriptions.Add(subj.Subscribe(msg => recv.HandleAlert(msg)));
+                entries.Add((go.transform, subj));
             }
             yield return null;
 
@@ -537,47 +535,44 @@ namespace MercuryMessaging.Research.Benchmarks
             {
                 for (int m = 0; m < mpf; m++)
                 {
-                    // Distance-gate: only publish to subjects whose receivers are in range.
-                    // Because R3 is a broadcast, we iterate and publish only for in-range
-                    // receivers by using per-receiver subjects instead of a shared one.
-                    foreach (var (xf, warnSub, emergSub) in entries)
+                    foreach (var (xf, subj) in entries)
                     {
                         float d = Vector3.Distance(senderPos, xf.position);
-                        if (d <= warningR)   warningSubject.OnNext("warning");
-                        if (d <= emergencyR) emergencySubject.OnNext("emergency");
+                        if (d <= warningR)   subj.OnNext("warning");
+                        if (d <= emergencyR) subj.OnNext("emergency");
                     }
                 }
             }));
 
             RecordResult("T2_R3", n, run);
 
-            foreach (var (_, warnSub, emergSub) in entries) { warnSub.Dispose(); emergSub.Dispose(); }
-            warningSubject.Dispose();
-            emergencySubject.Dispose();
+            foreach (var sub in subscriptions) sub.Dispose();
+            foreach (var (_, subj) in entries) subj.Dispose();
             DestroyImmediate(root);
         }
 #endif
 
 #if HAS_MESSAGEPIPE
         /// <summary>
-        /// T2_MessagePipe: MessagePipe IPublisher/ISubscriber with distance check per receiver.
+        /// T2_MessagePipe: Keyed pub/sub — IPublisher&lt;int, string&gt; where key = receiver index.
+        /// Sender iterates, checks distance, publishes to per-receiver key.
+        /// O(N) consistent with other methods.
         /// </summary>
         private IEnumerator RunT2MessagePipe(int n, int run)
         {
             var root = new GameObject("T2_MessagePipe");
             root.transform.position = Vector3.zero;
 
-            // MessagePipe requires a DI container; use the global provider if configured,
-            // or build a local one for the benchmark.
             var builder = new BuiltinContainerBuilder();
             builder.AddMessagePipe();
+            builder.AddMessageBroker<int, string>();
             var provider = builder.BuildServiceProvider();
 
-            var warningPub   = provider.GetRequiredService<IPublisher<string>>();
-            var emergencyPub = provider.GetRequiredService<IPublisher<string>>();
+            var keyedPub = provider.GetRequiredService<IPublisher<int, string>>();
+            var keyedSub = provider.GetRequiredService<ISubscriber<int, string>>();
 
-            var entries = new List<(Transform xf, IDisposable sub)>();
-            var bag = DisposableBag.CreateBuilder();
+            var transforms = new List<Transform>();
+            var subscriptions = new List<IDisposable>();
             var rng = new System.Random(42 + run);
             for (int i = 0; i < n; i++)
             {
@@ -589,34 +584,33 @@ namespace MercuryMessaging.Research.Benchmarks
                 float angle = (float)rng.NextDouble() * Mathf.PI * 2f;
                 go.transform.position = new Vector3(Mathf.Cos(angle) * dist, 0, Mathf.Sin(angle) * dist);
                 var recv = go.AddComponent<ScenarioEventReceiver>();
-                var sub = provider.GetRequiredService<ISubscriber<string>>()
-                    .Subscribe(msg => recv.HandleAlert(msg)).AddTo(bag);
-                entries.Add((go.transform, sub));
+                subscriptions.Add(keyedSub.Subscribe(i, msg => recv.HandleAlert(msg)));
+                transforms.Add(go.transform);
             }
-            var allSubs = bag.Build();
             yield return null;
 
             Vector3 senderPos = root.transform.position;
             float warningR = t2Radius;
             float emergencyR = t2Radius * 0.5f;
             int mpf = messagesPerFrame;
+            int receiverCount = n;
 
             yield return StartCoroutine(Measure(testDuration, () =>
             {
                 for (int m = 0; m < mpf; m++)
                 {
-                    foreach (var (xf, _) in entries)
+                    for (int i = 0; i < receiverCount; i++)
                     {
-                        float d = Vector3.Distance(senderPos, xf.position);
-                        if (d <= warningR)   warningPub.Publish("warning");
-                        if (d <= emergencyR) emergencyPub.Publish("emergency");
+                        float d = Vector3.Distance(senderPos, transforms[i].position);
+                        if (d <= warningR)   keyedPub.Publish(i, "warning");
+                        if (d <= emergencyR) keyedPub.Publish(i, "emergency");
                     }
                 }
             }));
 
             RecordResult("T2_MessagePipe", n, run);
 
-            allSubs.Dispose();
+            foreach (var sub in subscriptions) sub.Dispose();
             DestroyImmediate(root);
         }
 #endif
