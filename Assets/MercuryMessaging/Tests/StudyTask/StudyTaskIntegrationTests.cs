@@ -1,16 +1,23 @@
-// Study Task Integration Tests — 12 tests total
+// Study Task Integration Tests — 11 tests total
 //
-// SOLUTION TESTS (8): Verify each task works in both Mercury and Events conditions
-//   T1: Sensor Fan-Out (one-to-many) — BroadcastValue(float) → 4 children
-//   T2: Safety Zone Alerts (spatial filtering) — Send().ToAll().Within() on siblings
-//   T3: Mode-Switch Debugging — BroadcastSwitch + isActive guard (SOLUTION = fixed)
-//   T4: Alert Aggregation (many-to-one) — NotifyValue(string) → parent dashboard
+// SOLUTION TESTS (6): Verify each task's solution routing patterns work correctly
+//   T2 Mercury:  Send().ToAll().Within() from Worker; only nearby indicators receive
+//   T2 Events:   Manual Vector3.Distance check correctly classifies each indicator
+//   T3 Mercury:  BroadcastSwitch("Night") + BroadcastValue(25f) → blocked by isActive guard
+//   T3 Events:   Mode change + isActive guard blocks direct callback
+//   T4 Mercury:  4 subsystems call NotifyValue() → parent StringReceiver receives all 4
+//   T4 Events:   4 direct AddAlert() calls populate dashboard list
 //
-// PROBLEM TESTS (4): Verify starter/broken scenes are actually broken
-//   T1 Starter: Empty broadcaster → children receive nothing
-//   T2 Starter: No spatial filtering → no messages sent
-//   T3 Buggy: Missing isActive guard → Night mode doesn't block temperature
-//   T4 Starter: Empty alerter → dashboard receives nothing
+// PROBLEM TESTS (3): Verify starter/broken scenes are actually broken
+//   T2 Problem:  Bare hierarchy, no Send() call → 0 messages to any indicator
+//   T3 Problem:  HvacBuggyResponder processes temperature in Night mode (bug confirmed)
+//   T4 Problem:  Bare hierarchy, no NotifyValue() call → dashboard receives nothing
+//
+// FULL-WORKFLOW TESTS (2): Simulate Mercury participant adding components to bare scenes
+//   T2 FullWorkflow: Add MmRelayNode + StringReceiver to bare GOs, wire routing, then spatial filter
+//   T4 FullWorkflow: Add MmRelayNode + StringReceiver to bare GOs, wire routing, then NotifyValue
+//
+// T1 (Sensor Fan-Out) archived — redundant with T2's broadcast pattern
 
 using System.Collections.Generic;
 using NUnit.Framework;
@@ -168,74 +175,14 @@ namespace MercuryMessaging.Tests.StudyTask
         #endregion
 
         // ================================================================
-        // T1: Sensor Fan-Out (One-to-Many) — Mercury
-        // Pattern: relay.BroadcastValue(angle) → 4 child FloatReceivers
-        // ================================================================
-        [Test]
-        public void T1_Mercury_BroadcastValue_ReachesAllFourChildren()
-        {
-            // Arrange: RobotArm with 4 child display panels
-            var robotArm = CreateGO("RobotArm");
-            var rootRelay = AddRelay(robotArm);
-
-            var panels = new FloatReceiver[4];
-            for (int i = 0; i < 4; i++)
-            {
-                var panel = CreateGO($"Panel{i + 1}");
-                var panelRelay = AddRelay(panel);
-                panels[i] = AddResponder<FloatReceiver>(panel);
-                WireParentChild(rootRelay, panelRelay);
-            }
-
-            // Act: BroadcastValue (same as JointDataBroadcaster_Solution.SendJointData)
-            rootRelay.BroadcastValue(45.5f);
-
-            // Assert: all 4 panels received the float
-            for (int i = 0; i < 4; i++)
-            {
-                Assert.AreEqual(1, panels[i].Count,
-                    $"Panel{i + 1} should receive exactly 1 float message");
-                Assert.AreEqual(45.5f, panels[i].LastValue, 0.001f,
-                    $"Panel{i + 1} should receive value 45.5");
-            }
-        }
-
-        // ================================================================
-        // T1: Sensor Fan-Out (One-to-Many) — Events
-        // Pattern: Direct method calls to 4 receivers
-        // ================================================================
-        [Test]
-        public void T1_Events_DirectCalls_ReachAllFourPanels()
-        {
-            // Arrange: 4 simple receivers (no Mercury components)
-            float[] received = new float[4];
-            int[] counts = new int[4];
-
-            // Act: simulate JointDataBroadcaster_Events_Solution.SendJointData
-            float angle = 45.5f;
-            for (int i = 0; i < 4; i++)
-            {
-                received[i] = angle;
-                counts[i]++;
-            }
-
-            // Assert: all 4 received the value
-            for (int i = 0; i < 4; i++)
-            {
-                Assert.AreEqual(1, counts[i], $"Panel{i + 1} should be called once");
-                Assert.AreEqual(45.5f, received[i], 0.001f,
-                    $"Panel{i + 1} should receive 45.5");
-            }
-        }
-
-        // ================================================================
-        // T2: Safety Zone Alerts (Spatial Filtering) — Mercury
+        // SOLUTION TEST 1 of 6
+        // T2: Safety Zone Alerts (Spatial Filtering) — Mercury Solution
         // Pattern: relay.Send("warning").ToAll().Within(2f).Execute()
         // Hierarchy: Workspace → Worker (sender, sibling of indicators)
         //                      → Indicator1..4 (at various distances)
         // ================================================================
         [Test]
-        public void T2_Mercury_SpatialFiltering_OnlyNearbyIndicatorsReceive()
+        public void T2_Mercury_Solution_SpatialFilteringWorks()
         {
             // Arrange: Workspace with Worker and 4 indicators as siblings
             var workspace = CreateGO("Workspace", Vector3.zero);
@@ -267,25 +214,20 @@ namespace MercuryMessaging.Tests.StudyTask
             // Act: Worker sends warning within 2m (same as ZoneAlertManager_Solution)
             workerRelay.Send("warning").ToAll().Within(2f).Execute();
 
-            // Assert:
-            // Indicator1 (1.5m) — should receive warning
+            // Assert: within-2m indicators receive warning, outside does not
             Assert.IsTrue(indicators[0].Received.Contains("warning"),
                 "Indicator1 at 1.5m should receive warning");
-            // Indicator2 (0.8m) — should receive warning
             Assert.IsTrue(indicators[1].Received.Contains("warning"),
                 "Indicator2 at 0.8m should receive warning");
-            // Indicator3 (3.0m) — should NOT receive warning
             Assert.IsFalse(indicators[2].Received.Contains("warning"),
                 "Indicator3 at 3.0m should NOT receive warning");
-            // Indicator4 (1.9m) — should receive warning
             Assert.IsTrue(indicators[3].Received.Contains("warning"),
                 "Indicator4 at 1.9m should receive warning");
 
             // Act: Worker sends emergency within 1m
             workerRelay.Send("emergency").ToAll().Within(1f).Execute();
 
-            // Assert:
-            // Only Indicator2 (0.8m) should receive emergency
+            // Assert: only Indicator2 at 0.8m receives emergency
             Assert.IsFalse(indicators[0].Received.Contains("emergency"),
                 "Indicator1 at 1.5m should NOT receive emergency");
             Assert.IsTrue(indicators[1].Received.Contains("emergency"),
@@ -297,11 +239,12 @@ namespace MercuryMessaging.Tests.StudyTask
         }
 
         // ================================================================
-        // T2: Safety Zone Alerts (Spatial Filtering) — Events
+        // SOLUTION TEST 2 of 6
+        // T2: Safety Zone Alerts (Spatial Filtering) — Events Solution
         // Pattern: Manual Vector3.Distance checks for each indicator
         // ================================================================
         [Test]
-        public void T2_Events_ManualDistanceCheck_CorrectlyFilters()
+        public void T2_Events_Solution_ManualDistanceCheckWorks()
         {
             // Arrange: positions matching Mercury test
             var workerPos = Vector3.zero;
@@ -328,18 +271,19 @@ namespace MercuryMessaging.Tests.StudyTask
             }
 
             // Assert
-            Assert.AreEqual("warning", alertLevels[0], "1.5m should be warning");
+            Assert.AreEqual("warning",   alertLevels[0], "1.5m should be warning");
             Assert.AreEqual("emergency", alertLevels[1], "0.8m should be emergency");
-            Assert.AreEqual("clear", alertLevels[2], "3.0m should be clear");
-            Assert.AreEqual("warning", alertLevels[3], "1.9m should be warning");
+            Assert.AreEqual("clear",     alertLevels[2], "3.0m should be clear");
+            Assert.AreEqual("warning",   alertLevels[3], "1.9m should be warning");
         }
 
         // ================================================================
-        // T3: Mode-Switch Debugging — Mercury (Solution with fix)
+        // SOLUTION TEST 3 of 6
+        // T3: Mode-Switch Debugging — Mercury Solution (fix in place)
         // Pattern: BroadcastSwitch("Night") → HvacResponder ignores subsequent floats
         // ================================================================
         [Test]
-        public void T3_Mercury_Solution_NightModeBlocksTemperatureAdjustment()
+        public void T3_Mercury_Solution_NightModeBlocksTemperature()
         {
             // Arrange: FacilityHub → HvacSystem
             var hub = CreateGO("FacilityHub");
@@ -357,7 +301,7 @@ namespace MercuryMessaging.Tests.StudyTask
             // Act: switch to Night mode
             hubRelay.BroadcastSwitch("Night");
 
-            // Assert: mode changed, isActive false
+            // Assert: mode changed, isActive false, setpoint at night value
             Assert.AreEqual("Night", hvacResp.CurrentMode);
             Assert.IsFalse(hvacResp.IsActive);
             Assert.AreEqual(18f, hvacResp.CurrentSetpoint, 0.01f);
@@ -365,7 +309,7 @@ namespace MercuryMessaging.Tests.StudyTask
             // Act: send temperature adjustment (should be ignored in Night mode)
             hvacRelay.BroadcastValue(25f);
 
-            // Assert: setpoint should NOT have changed (fix is working)
+            // Assert: setpoint unchanged, no adjustment counted
             Assert.AreEqual(0, hvacResp.AdjustmentCount,
                 "Temperature adjustments should be blocked in Night mode");
             Assert.AreEqual(18f, hvacResp.CurrentSetpoint, 0.01f,
@@ -373,43 +317,14 @@ namespace MercuryMessaging.Tests.StudyTask
         }
 
         // ================================================================
-        // T3: Mode-Switch Debugging — Mercury (Buggy version proves bug exists)
-        // ================================================================
-        [Test]
-        public void T3_Mercury_Buggy_NightModeStillAllowsTemperatureAdjustment()
-        {
-            // Arrange: same hierarchy but with buggy responder
-            var hub = CreateGO("FacilityHub");
-            var hubRelay = AddRelay(hub);
-
-            var hvac = CreateGO("HvacSystem");
-            var hvacRelay = AddRelay(hvac);
-            var hvacResp = AddResponder<HvacBuggyResponder>(hvac);
-            WireParentChild(hubRelay, hvacRelay);
-
-            // Act: switch to Night mode
-            hubRelay.BroadcastSwitch("Night");
-            Assert.AreEqual("Night", hvacResp.CurrentMode);
-            Assert.IsFalse(hvacResp.IsActive);
-
-            // Act: send temperature (bug: this should be blocked but isn't!)
-            hvacRelay.BroadcastValue(25f);
-
-            // Assert: buggy version processes the adjustment
-            Assert.AreEqual(1, hvacResp.AdjustmentCount,
-                "Buggy version incorrectly processes adjustments in Night mode");
-            Assert.AreEqual(25f, hvacResp.CurrentSetpoint, 0.01f,
-                "Buggy version overwrites night setpoint");
-        }
-
-        // ================================================================
-        // T3: Mode-Switch Debugging — Events (Solution)
+        // SOLUTION TEST 4 of 6
+        // T3: Mode-Switch Debugging — Events Solution
         // Pattern: direct method calls with isActive guard
         // ================================================================
         [Test]
-        public void T3_Events_Solution_NightModeBlocksTemperatureCallback()
+        public void T3_Events_Solution_NightModeBlocksTemperature()
         {
-            // Arrange: simulate HvacController_Events_Solution
+            // Arrange: simulate HvacController_Events_Solution state
             string currentMode = "Day";
             float currentSetpoint = 22f;
             bool isActive = true;
@@ -434,14 +349,14 @@ namespace MercuryMessaging.Tests.StudyTask
         }
 
         // ================================================================
-        // T4: Alert Aggregation (Many-to-One) — Mercury
+        // SOLUTION TEST 5 of 6
+        // T4: Alert Aggregation (Many-to-One) — Mercury Solution
         // Pattern: subsystem.NotifyValue(alertData) → parent dashboard receives
         // ================================================================
         [Test]
-        public void T4_Mercury_NotifyValue_ReachesParentDashboard()
+        public void T4_Mercury_Solution_NotifyValueReachesParentDashboard()
         {
             // Arrange: Dashboard → 4 subsystem children
-            // (In actual study, dashboard is parent of subsystems)
             var dashboard = CreateGO("Dashboard");
             var dashRelay = AddRelay(dashboard);
             var dashResp = AddResponder<StringReceiver>(dashboard);
@@ -476,11 +391,12 @@ namespace MercuryMessaging.Tests.StudyTask
         }
 
         // ================================================================
-        // T4: Alert Aggregation (Many-to-One) — Events
+        // SOLUTION TEST 6 of 6
+        // T4: Alert Aggregation (Many-to-One) — Events Solution
         // Pattern: dashboard.AddAlert(alertData) — direct reference
         // ================================================================
         [Test]
-        public void T4_Events_DirectDashboardReference_ReceivesAllAlerts()
+        public void T4_Events_Solution_DirectDashboardReferenceWorks()
         {
             // Arrange: simulate CentralDashboard_Events
             var alertLog = new List<string>();
@@ -508,42 +424,11 @@ namespace MercuryMessaging.Tests.StudyTask
         }
 
         // ================================================================
-        // PROBLEM / STARTER TESTS — verify the broken versions ARE broken
+        // PROBLEM TEST 1 of 3
+        // T2 Problem: No spatial filtering → no messages sent to any indicator
         // ================================================================
-
-        // T1 Problem: Empty broadcaster body → children receive nothing
         [Test]
-        public void T1_Problem_EmptyBroadcaster_ChildrenReceiveNothing()
-        {
-            // Arrange: same hierarchy as T1 solution
-            var robotArm = CreateGO("RobotArm");
-            var rootRelay = AddRelay(robotArm);
-
-            var panels = new FloatReceiver[4];
-            for (int i = 0; i < 4; i++)
-            {
-                var panel = CreateGO($"Panel{i + 1}");
-                var panelRelay = AddRelay(panel);
-                panels[i] = AddResponder<FloatReceiver>(panel);
-                WireParentChild(rootRelay, panelRelay);
-            }
-
-            // Act: simulate starter's empty SendJointData — does NOT call BroadcastValue
-            // (JointDataBroadcaster_Starter.SendJointData has an empty TODO body)
-            float angle = 45.5f;
-            // Intentionally NOT calling rootRelay.BroadcastValue(angle);
-
-            // Assert: no panels received anything
-            for (int i = 0; i < 4; i++)
-            {
-                Assert.AreEqual(0, panels[i].Count,
-                    $"Panel{i + 1} should NOT receive any message (starter body is empty)");
-            }
-        }
-
-        // T2 Problem: No spatial filtering → no messages reach indicators
-        [Test]
-        public void T2_Problem_NoSpatialFilter_IndicatorsReceiveNothing()
+        public void T2_Problem_NoSpatialFilter_NothingSent()
         {
             // Arrange: same hierarchy as T2 solution
             var workspace = CreateGO("Workspace", Vector3.zero);
@@ -570,7 +455,7 @@ namespace MercuryMessaging.Tests.StudyTask
             }
 
             // Act: simulate starter's empty Update — does NOT call Send().Within()
-            // (ZoneAlertManager_Starter.Update has an empty TODO body)
+            // (ZoneAlertManager_Starter.Update has an empty TODO body — nothing happens)
 
             // Assert: no indicators received anything
             for (int i = 0; i < 4; i++)
@@ -580,11 +465,14 @@ namespace MercuryMessaging.Tests.StudyTask
             }
         }
 
+        // ================================================================
+        // PROBLEM TEST 2 of 3
         // T3 Problem: Buggy HVAC still processes temperature in Night mode
-        // (This is the SAME as T3_Mercury_Buggy test — confirming the bug exists)
+        // ================================================================
         [Test]
-        public void T3_Problem_BuggyHvac_NightModeDoesNotBlockTemperature()
+        public void T3_Problem_BuggyHvac_NightModeDoesNotBlock()
         {
+            // Arrange: same hierarchy but with buggy responder
             var hub = CreateGO("FacilityHub");
             var hubRelay = AddRelay(hub);
 
@@ -593,11 +481,11 @@ namespace MercuryMessaging.Tests.StudyTask
             var hvacResp = AddResponder<HvacBuggyResponder>(hvac);
             WireParentChild(hubRelay, hvacRelay);
 
-            // Switch to Night — should disable HVAC
+            // Act: switch to Night — should disable HVAC
             hubRelay.BroadcastSwitch("Night");
             Assert.IsFalse(hvacResp.IsActive, "IsActive should be false in Night mode");
 
-            // Send temperature — buggy version still processes it
+            // Act: send temperature — buggy version still processes it
             hvacRelay.BroadcastValue(25f);
 
             // Assert: the bug — adjustment happened despite Night mode
@@ -607,9 +495,12 @@ namespace MercuryMessaging.Tests.StudyTask
                 "BUG CONFIRMED: Night setpoint was overwritten");
         }
 
+        // ================================================================
+        // PROBLEM TEST 3 of 3
         // T4 Problem: Empty alerter body → dashboard receives nothing
+        // ================================================================
         [Test]
-        public void T4_Problem_EmptyAlerter_DashboardReceivesNothing()
+        public void T4_Problem_EmptyAlerter_DashboardEmpty()
         {
             // Arrange: same hierarchy as T4 solution
             var dashboard = CreateGO("Dashboard");
@@ -630,6 +521,107 @@ namespace MercuryMessaging.Tests.StudyTask
             // Assert: dashboard received nothing
             Assert.AreEqual(0, dashResp.Received.Count,
                 "Dashboard should NOT receive any alerts (starter body is empty)");
+        }
+
+        // ================================================================
+        // FULL-WORKFLOW TEST 1 of 2
+        // T2 Mercury: Simulate participant adding MmRelayNode to bare scene GOs,
+        // wiring parent-child routing, then calling Send().ToAll().Within()
+        // ================================================================
+        [Test]
+        public void T2_Mercury_FullWorkflow_AddComponentsThenSpatialFilter()
+        {
+            // Arrange: bare GameObjects — no MmRelayNode yet (as participant finds them)
+            var workspace  = CreateGO("Workspace", Vector3.zero);
+            var worker     = CreateGO("Worker",    Vector3.zero);
+            var ind1       = CreateGO("Indicator1", new Vector3(1.5f, 0, 0));
+            var ind2       = CreateGO("Indicator2", new Vector3(0.8f, 0, 0));
+            var ind3       = CreateGO("Indicator3", new Vector3(3.0f, 0, 0));
+            var ind4       = CreateGO("Indicator4", new Vector3(1.9f, 0, 0));
+
+            // Act (participant step 1): add MmRelayNode components to each GO
+            var wsRelay     = AddRelay(workspace);
+            var workerRelay = AddRelay(worker);
+            var indRelay1   = AddRelay(ind1);
+            var indRelay2   = AddRelay(ind2);
+            var indRelay3   = AddRelay(ind3);
+            var indRelay4   = AddRelay(ind4);
+
+            // Act (participant step 2): add StringReceiver responders to indicators
+            var recv1 = AddResponder<StringReceiver>(ind1);
+            var recv2 = AddResponder<StringReceiver>(ind2);
+            var recv3 = AddResponder<StringReceiver>(ind3);
+            var recv4 = AddResponder<StringReceiver>(ind4);
+
+            // Act (participant step 3): wire parent-child routing relationships
+            WireParentChild(wsRelay, workerRelay);
+            WireParentChild(wsRelay, indRelay1);
+            WireParentChild(wsRelay, indRelay2);
+            WireParentChild(wsRelay, indRelay3);
+            WireParentChild(wsRelay, indRelay4);
+
+            // Act (participant step 4): send spatial warning from Worker
+            workerRelay.Send("warning").ToAll().Within(2f).Execute();
+
+            // Assert: spatial filtering works correctly through participant-wired hierarchy
+            Assert.IsTrue(recv1.Received.Contains("warning"),
+                "Indicator1 at 1.5m should receive warning after participant wires relay");
+            Assert.IsTrue(recv2.Received.Contains("warning"),
+                "Indicator2 at 0.8m should receive warning after participant wires relay");
+            Assert.IsFalse(recv3.Received.Contains("warning"),
+                "Indicator3 at 3.0m should NOT receive warning after participant wires relay");
+            Assert.IsTrue(recv4.Received.Contains("warning"),
+                "Indicator4 at 1.9m should receive warning after participant wires relay");
+        }
+
+        // ================================================================
+        // FULL-WORKFLOW TEST 2 of 2
+        // T4 Mercury: Simulate participant adding MmRelayNode to bare scene GOs,
+        // wiring parent-child routing, then calling NotifyValue()
+        // ================================================================
+        [Test]
+        public void T4_Mercury_FullWorkflow_AddComponentsThenNotifyValue()
+        {
+            // Arrange: bare GameObjects — no MmRelayNode yet (as participant finds them)
+            var dashboard = CreateGO("Dashboard");
+            var hvac      = CreateGO("HVAC");
+            var occ       = CreateGO("Occupancy");
+            var air       = CreateGO("AirQuality");
+            var energy    = CreateGO("Energy");
+
+            // Act (participant step 1): add MmRelayNode to dashboard and subsystems
+            var dashRelay   = AddRelay(dashboard);
+            var hvacRelay   = AddRelay(hvac);
+            var occRelay    = AddRelay(occ);
+            var airRelay    = AddRelay(air);
+            var energyRelay = AddRelay(energy);
+
+            // Act (participant step 2): add StringReceiver to dashboard
+            var dashResp = AddResponder<StringReceiver>(dashboard);
+
+            // Act (participant step 3): wire subsystems as children of dashboard
+            WireParentChild(dashRelay, hvacRelay);
+            WireParentChild(dashRelay, occRelay);
+            WireParentChild(dashRelay, airRelay);
+            WireParentChild(dashRelay, energyRelay);
+
+            // Act (participant step 4): each subsystem notifies parent dashboard
+            hvacRelay.NotifyValue("[HVAC] SEV-2: Temperature above threshold");
+            occRelay.NotifyValue("[Occupancy] SEV-1: Zone occupied");
+            airRelay.NotifyValue("[AirQuality] SEV-3: CO2 above limit");
+            energyRelay.NotifyValue("[Energy] SEV-2: Peak usage warning");
+
+            // Assert: dashboard received all 4 alerts through participant-wired hierarchy
+            Assert.AreEqual(4, dashResp.Received.Count,
+                "Dashboard should receive all 4 alerts after participant wires relay");
+            Assert.IsTrue(dashResp.Received[0].Contains("HVAC"),
+                "First alert should be from HVAC");
+            Assert.IsTrue(dashResp.Received[1].Contains("Occupancy"),
+                "Second alert should be from Occupancy");
+            Assert.IsTrue(dashResp.Received[2].Contains("AirQuality"),
+                "Third alert should be from AirQuality");
+            Assert.IsTrue(dashResp.Received[3].Contains("Energy"),
+                "Fourth alert should be from Energy");
         }
     }
 }
