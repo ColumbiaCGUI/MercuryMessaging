@@ -9,16 +9,12 @@ namespace MercuryMessaging.Research.UserStudy
     /// Run in Play Mode after participant submits to validate their solution.
     ///
     /// Each task has specific validation criteria:
-    /// T1: All 4 panels receive joint data
     /// T2: Correct zone alerts at 3 test positions (>2m, 1-2m, <1m)
     /// T3: Night mode doesn't fire HVAC adjustments
     /// T4: Dashboard receives alerts from all 4 subsystems
     /// </summary>
     public class CorrectnessChecker : MonoBehaviour
     {
-        [Header("T1 Validation")]
-        public GameObject[] t1Panels; // 4 panels that should receive data
-
         [Header("T2 Validation")]
         public Transform t2Worker;
         public Transform[] t2TestPositions; // 3 positions: far (>2m), mid (1-2m), close (<1m)
@@ -33,48 +29,6 @@ namespace MercuryMessaging.Research.UserStudy
 
         [Header("Output")]
         public TMPro.TextMeshProUGUI resultText;
-
-        /// <summary>
-        /// Validate T1: Check if all panels received data.
-        /// Call this after entering Play Mode with the participant's solution.
-        /// </summary>
-        public void ValidateT1()
-        {
-            int panelsReceiving = 0;
-
-            foreach (var panel in t1Panels)
-            {
-                if (panel == null) continue;
-
-                // Check Mercury version
-                var mmDisplay = panel.GetComponent<JointAngleDisplay>();
-                if (mmDisplay != null)
-                {
-                    var text = mmDisplay.GetComponentInChildren<TMPro.TextMeshProUGUI>();
-                    if (text != null && text.text != "" && text.text != "0.0°")
-                    {
-                        panelsReceiving++;
-                        continue;
-                    }
-                }
-
-                // Check Events version
-                var evDisplay = panel.GetComponent<JointAngleDisplay_Events>();
-                if (evDisplay != null)
-                {
-                    var text = evDisplay.GetComponentInChildren<TMPro.TextMeshProUGUI>();
-                    if (text != null && text.text != "" && text.text != "0.0°")
-                    {
-                        panelsReceiving++;
-                    }
-                }
-            }
-
-            float score = (float)panelsReceiving / t1Panels.Length;
-            string result = $"T1 Correctness: {panelsReceiving}/{t1Panels.Length} panels receiving data (score: {score:F2})";
-            Debug.Log($"[CorrectnessChecker] {result}");
-            if (resultText != null) resultText.text = result;
-        }
 
         /// <summary>
         /// Validate T2: Check zone alerts at test positions.

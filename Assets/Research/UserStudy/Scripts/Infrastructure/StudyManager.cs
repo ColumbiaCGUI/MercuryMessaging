@@ -24,7 +24,7 @@ namespace MercuryMessaging.Research.UserStudy
 
         [Header("Task Configuration")]
         public float taskTimeLimit = 480f; // 8 minutes per task
-        public int totalTasks = 4;
+        public int totalTasks = 3;
 
         [Header("UI References")]
         public TextMeshProUGUI statusText;
@@ -35,9 +35,9 @@ namespace MercuryMessaging.Research.UserStudy
 
         [Header("Task Instruction Texts")]
         [TextArea(3, 10)]
-        public string[] mercuryTaskInstructions = new string[4];
+        public string[] mercuryTaskInstructions = new string[3];
         [TextArea(3, 10)]
-        public string[] eventsTaskInstructions = new string[4];
+        public string[] eventsTaskInstructions = new string[3];
 
         // Study state
         private StudyPhase currentPhase = StudyPhase.Setup;
@@ -48,13 +48,12 @@ namespace MercuryMessaging.Research.UserStudy
         private bool taskRunning;
         private string dataPath;
 
-        // Task order (Latin square counterbalancing)
+        // Task order (Latin square counterbalancing for 3 tasks: T2, T3, T4)
         private int[][] latinSquare = new int[][]
         {
-            new int[] { 0, 1, 2, 3 },
-            new int[] { 1, 0, 3, 2 },
-            new int[] { 2, 3, 0, 1 },
-            new int[] { 3, 2, 1, 0 }
+            new int[] { 0, 1, 2 },
+            new int[] { 1, 2, 0 },
+            new int[] { 2, 0, 1 }
         };
 
         private List<TaskResult> results = new List<TaskResult>();
@@ -138,7 +137,7 @@ namespace MercuryMessaging.Research.UserStudy
             if (taskInstructionText != null && actualTask < instructions.Length)
                 taskInstructionText.text = instructions[actualTask];
 
-            UpdateStatus($"{condition} — Task {currentTaskIndex + 1}/4 (T{actualTask + 1})");
+            UpdateStatus($"{condition} — Task {currentTaskIndex + 1}/{totalTasks} (T{actualTask + 2})");
 
             taskRunning = true;
             taskStartTime = Time.realtimeSinceStartup;
@@ -147,7 +146,7 @@ namespace MercuryMessaging.Research.UserStudy
             if (submitButton != null)
                 submitButton.gameObject.SetActive(true);
 
-            LogEvent("TASK_START", $"condition={condition},task=T{actualTask + 1},index={currentTaskIndex}");
+            LogEvent("TASK_START", $"condition={condition},task=T{actualTask + 2},index={currentTaskIndex}");
         }
 
         void OnSubmitClicked()
@@ -169,7 +168,7 @@ namespace MercuryMessaging.Research.UserStudy
             {
                 participantId = participantId,
                 condition = GetCurrentConditionName(),
-                taskId = $"T{actualTask + 1}",
+                taskId = $"T{actualTask + 2}",
                 taskIndex = currentTaskIndex,
                 completionTime = completionTime,
                 submitted = submitted,

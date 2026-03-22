@@ -99,12 +99,12 @@
   <Project Path="Unity.RenderPipelines.Core.Runtime.Shared.csproj" />
   <Project Path="Unity.InternalAPIEngineBridge.004.csproj" />
   <Project Path="Unity.2D.Sprite.AIIntegration.Editor.csproj" />
-  <Project Path="Assembly-CSharp-Editor.csproj" />
   <Project Path="Unity.RenderPipelines.Core.Editor.Shared.csproj" />
   <Project Path="Unity.Services.Core.Networking.csproj" />
   <Project Path="Assembly-CSharp-Editor-firstpass.csproj" />
   <Project Path="Unity.PlasticSCM.Editor.Entities.csproj" />
   <Project Path="Analytics.csproj" />
+  <Project Path="Assembly-CSharp-Editor.csproj" />
   <Project Path="UnityEditor.SpatialTracking.csproj" />
   <Project Path="Unity.Fusion.CodeGen.csproj" />
   <Project Path="Unity.Rendering.LightTransport.Editor.csproj" />
