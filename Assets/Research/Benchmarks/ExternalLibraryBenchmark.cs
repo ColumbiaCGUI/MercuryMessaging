@@ -1,5 +1,5 @@
-// Uncomment after installing R3 (NuGet core + UPM layer):
-// #define HAS_R3
+// R3 is installed (NuGet core + UPM layer):
+#define HAS_R3
 
 // MessagePipe is installed — enable it:
 #define HAS_MESSAGEPIPE
