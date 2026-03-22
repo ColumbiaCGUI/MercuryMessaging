@@ -1,4 +1,5 @@
 using UnityEngine;
+using TMPro;
 
 namespace MercuryMessaging.Research.UserStudy
 {
@@ -22,6 +23,9 @@ namespace MercuryMessaging.Research.UserStudy
         public float daySetpoint = 22f;
         public float nightSetpoint = 18f;
 
+        [Header("UI")]
+        public TextMeshProUGUI statusText;
+
         private float currentSetpoint;
         private string currentMode = "Day";
         // BUG: This flag is set but never checked in AdjustTemperature
@@ -31,6 +35,13 @@ namespace MercuryMessaging.Research.UserStudy
         {
             base.Start();
             currentSetpoint = daySetpoint;
+            UpdateStatusText();
+        }
+
+        private void UpdateStatusText()
+        {
+            if (statusText != null)
+                statusText.text = $"HVAC: {currentSetpoint:F1}°C ({currentMode})";
         }
 
         protected override void ReceivedMessage(MmMessage message)
@@ -53,6 +64,7 @@ namespace MercuryMessaging.Research.UserStudy
                             currentSetpoint = daySetpoint;
                             isActive = true;
                         }
+                        UpdateStatusText();
                         Debug.Log($"[HVAC] Mode changed to {currentMode}, setpoint: {currentSetpoint}°C");
                     }
                     break;
@@ -76,6 +88,7 @@ namespace MercuryMessaging.Research.UserStudy
         {
             // BUG: Missing check for isActive or currentMode
             currentSetpoint = requestedTemp;
+            UpdateStatusText();
             Debug.Log($"[HVAC] Adjusted setpoint to {currentSetpoint}°C (mode: {currentMode})");
 
             // Notify parent of the change

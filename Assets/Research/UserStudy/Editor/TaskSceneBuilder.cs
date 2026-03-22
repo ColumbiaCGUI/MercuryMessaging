@@ -285,6 +285,8 @@ namespace MercuryMessaging.Research.UserStudy.Editor
                 var si = ind.AddComponent<SafetyZoneIndicator>();
                 var siSO = new SerializedObject(si);
                 siSO.FindProperty("indicatorRenderer").objectReferenceValue = ind.GetComponent<Renderer>();
+                var alertTmp = CreateWorldCanvas(ind, "CLEAR", new Vector3(0, 0.5f, 0), new Vector2(30, 10), 5);
+                siSO.FindProperty("alertText").objectReferenceValue = alertTmp;
                 siSO.ApplyModifiedProperties();
             }
 
@@ -344,6 +346,8 @@ namespace MercuryMessaging.Research.UserStudy.Editor
                 indicators[i] = ind.AddComponent<SafetyZoneIndicator_Events>();
                 var siSO = new SerializedObject(indicators[i]);
                 siSO.FindProperty("indicatorRenderer").objectReferenceValue = ind.GetComponent<Renderer>();
+                var alertTmp = CreateWorldCanvas(ind, "CLEAR", new Vector3(0, 0.5f, 0), new Vector2(30, 10), 5);
+                siSO.FindProperty("alertText").objectReferenceValue = alertTmp;
                 siSO.ApplyModifiedProperties();
             }
 
@@ -388,7 +392,10 @@ namespace MercuryMessaging.Research.UserStudy.Editor
             visual.transform.localScale = new Vector3(0.8f, 1.2f, 0.3f);
             visual.GetComponent<Renderer>().sharedMaterial = GetOrCreateMat("HvacMat", new Color(0.5f, 0.5f, 0.5f));
 
-            CreateWorldCanvas(hvac, "HVAC: 22.0°C (Day)", new Vector3(0, 1.5f, 0), new Vector2(60, 20), 6);
+            var statusTmp = CreateWorldCanvas(hvac, "HVAC: 22.0°C (Day)", new Vector3(0, 1.5f, 0), new Vector2(60, 20), 6);
+            var hvacSO = new SerializedObject(hvac.GetComponent<HvacController_Buggy>());
+            hvacSO.FindProperty("statusText").objectReferenceValue = statusTmp;
+            hvacSO.ApplyModifiedProperties();
 
             // Temperature simulator — sends periodic float values to HVAC
             var tempSimObj = new GameObject("TemperatureSimulator");
@@ -399,13 +406,40 @@ namespace MercuryMessaging.Research.UserStudy.Editor
             tempSimSO.FindProperty("hvacRelay").objectReferenceValue = hvac.GetComponent<MmRelayNode>();
             tempSimSO.ApplyModifiedProperties();
 
-            // Mode toggle button (visual cue)
-            var toggleBtn = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            toggleBtn.name = "ModeToggle";
-            toggleBtn.transform.SetParent(hub.transform);
-            toggleBtn.transform.position = new Vector3(-2f, 1f, 0f);
-            toggleBtn.transform.localScale = new Vector3(0.5f, 0.2f, 0.5f);
-            CreateWorldCanvas(toggleBtn, "DAY/NIGHT\n(click in Inspector)", new Vector3(0, 0.5f, 0), new Vector2(80, 30), 5);
+            // Mode toggle — screen-space button for easy clicking
+            var btnCanvas = new GameObject("ModeToggleCanvas");
+            var btnCanvasComp = btnCanvas.AddComponent<Canvas>();
+            btnCanvasComp.renderMode = RenderMode.ScreenSpaceOverlay;
+            btnCanvasComp.sortingOrder = 100;
+            btnCanvas.AddComponent<CanvasScaler>();
+            btnCanvas.AddComponent<GraphicRaycaster>();
+
+            var btnObj = new GameObject("ToggleButton");
+            btnObj.transform.SetParent(btnCanvas.transform, false);
+            var btnRT = btnObj.AddComponent<RectTransform>();
+            btnRT.anchorMin = new Vector2(0f, 1f);
+            btnRT.anchorMax = new Vector2(0f, 1f);
+            btnRT.pivot = new Vector2(0f, 1f);
+            btnRT.anchoredPosition = new Vector2(10f, -10f);
+            btnRT.sizeDelta = new Vector2(180f, 50f);
+            var btnImg = btnObj.AddComponent<Image>();
+            btnImg.color = new Color(0.2f, 0.3f, 0.5f, 1f);
+            var btn = btnObj.AddComponent<Button>();
+
+            var btnText = new GameObject("Text");
+            btnText.transform.SetParent(btnObj.transform, false);
+            var btnTextRT = btnText.AddComponent<RectTransform>();
+            btnTextRT.anchorMin = Vector2.zero;
+            btnTextRT.anchorMax = Vector2.one;
+            btnTextRT.sizeDelta = Vector2.zero;
+            var btnTmp = btnText.AddComponent<TextMeshProUGUI>();
+            btnTmp.text = "Toggle Day/Night";
+            btnTmp.fontSize = 18;
+            btnTmp.alignment = TextAlignmentOptions.Center;
+            btnTmp.color = Color.white;
+
+            // Wire button → FacilityModeController.ToggleMode
+            UnityEditor.Events.UnityEventTools.AddVoidPersistentListener(btn.onClick, modeCtrl.ToggleMode);
 
             SaveScene(scene, "T3_ModeSwitch_Mercury");
         }
@@ -446,13 +480,40 @@ namespace MercuryMessaging.Research.UserStudy.Editor
             var tempSim = tempSimObj.AddComponent<TemperatureSimulator>();
             WirePersistentListener(tempSim, "OnTemperatureRequest", hvacCtrl, "OnTemperatureRequested");
 
-            // Mode toggle
-            var toggleBtn = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            toggleBtn.name = "ModeToggle";
-            toggleBtn.transform.SetParent(hub.transform);
-            toggleBtn.transform.position = new Vector3(-2f, 1f, 0f);
-            toggleBtn.transform.localScale = new Vector3(0.5f, 0.2f, 0.5f);
-            CreateWorldCanvas(toggleBtn, "DAY/NIGHT\n(click in Inspector)", new Vector3(0, 0.5f, 0), new Vector2(80, 30), 5);
+            // Mode toggle — screen-space button for easy clicking
+            var btnCanvasE = new GameObject("ModeToggleCanvas");
+            var btnCanvasCompE = btnCanvasE.AddComponent<Canvas>();
+            btnCanvasCompE.renderMode = RenderMode.ScreenSpaceOverlay;
+            btnCanvasCompE.sortingOrder = 100;
+            btnCanvasE.AddComponent<CanvasScaler>();
+            btnCanvasE.AddComponent<GraphicRaycaster>();
+
+            var btnObjE = new GameObject("ToggleButton");
+            btnObjE.transform.SetParent(btnCanvasE.transform, false);
+            var btnRTE = btnObjE.AddComponent<RectTransform>();
+            btnRTE.anchorMin = new Vector2(0f, 1f);
+            btnRTE.anchorMax = new Vector2(0f, 1f);
+            btnRTE.pivot = new Vector2(0f, 1f);
+            btnRTE.anchoredPosition = new Vector2(10f, -10f);
+            btnRTE.sizeDelta = new Vector2(180f, 50f);
+            var btnImgE = btnObjE.AddComponent<Image>();
+            btnImgE.color = new Color(0.2f, 0.3f, 0.5f, 1f);
+            var btnE = btnObjE.AddComponent<Button>();
+
+            var btnTextE = new GameObject("Text");
+            btnTextE.transform.SetParent(btnObjE.transform, false);
+            var btnTextRTE = btnTextE.AddComponent<RectTransform>();
+            btnTextRTE.anchorMin = Vector2.zero;
+            btnTextRTE.anchorMax = Vector2.one;
+            btnTextRTE.sizeDelta = Vector2.zero;
+            var btnTmpE = btnTextE.AddComponent<TextMeshProUGUI>();
+            btnTmpE.text = "Toggle Day/Night";
+            btnTmpE.fontSize = 18;
+            btnTmpE.alignment = TextAlignmentOptions.Center;
+            btnTmpE.color = Color.white;
+
+            // Wire button → FacilityModeController.ToggleMode
+            UnityEditor.Events.UnityEventTools.AddVoidPersistentListener(btnE.onClick, modeCtrl.ToggleMode);
 
             SaveScene(scene, "T3_ModeSwitch_Events");
         }
@@ -653,7 +714,11 @@ namespace MercuryMessaging.Research.UserStudy.Editor
                 ind.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
                 ind.GetComponent<Renderer>().sharedMaterial = indicatorMat;
                 // Renderer is present; participant adds MmRelayNode + SafetyZoneIndicator
+                // Canvas label is visual placeholder only — no component to wire alertText to
+                CreateWorldCanvas(ind, "---", new Vector3(0, 0.5f, 0), new Vector2(30, 10), 5);
             }
+
+            AddGoalCanvas("GOAL: Indicators should turn yellow within 2m and red within 1m of the worker.\nMove with WASD / arrow keys.");
 
             SaveScene(scene, "T2_SafetyZone_Mercury_Starter");
         }
@@ -714,7 +779,11 @@ namespace MercuryMessaging.Research.UserStudy.Editor
                 ind.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
                 ind.GetComponent<Renderer>().sharedMaterial = indicatorMat;
                 // Renderer is present; participant adds SafetyZoneIndicator_Events + wires it
+                // Canvas label is visual placeholder only — no component to wire alertText to
+                CreateWorldCanvas(ind, "---", new Vector3(0, 0.5f, 0), new Vector2(30, 10), 5);
             }
+
+            AddGoalCanvas("GOAL: Indicators should turn yellow within 2m and red within 1m of the worker.\nMove with WASD / arrow keys.");
 
             SaveScene(scene, "T2_SafetyZone_Events_Starter");
         }
@@ -748,7 +817,10 @@ namespace MercuryMessaging.Research.UserStudy.Editor
             visual.transform.localScale = new Vector3(0.8f, 1.2f, 0.3f);
             visual.GetComponent<Renderer>().sharedMaterial = GetOrCreateMat("HvacMat", new Color(0.5f, 0.5f, 0.5f));
 
-            CreateWorldCanvas(hvac, "HVAC: 22.0°C (Day)", new Vector3(0, 1.5f, 0), new Vector2(60, 20), 6);
+            var statusTmpStarter = CreateWorldCanvas(hvac, "HVAC: 22.0°C (Day)", new Vector3(0, 1.5f, 0), new Vector2(60, 20), 6);
+            var hvacSOStarter = new SerializedObject(hvac.GetComponent<HvacController_Buggy>());
+            hvacSOStarter.FindProperty("statusText").objectReferenceValue = statusTmpStarter;
+            hvacSOStarter.ApplyModifiedProperties();
 
             var tempSimObj = new GameObject("TemperatureSimulator");
             tempSimObj.transform.SetParent(hub.transform);
@@ -758,12 +830,42 @@ namespace MercuryMessaging.Research.UserStudy.Editor
             tempSimSO.FindProperty("hvacRelay").objectReferenceValue = hvac.GetComponent<MmRelayNode>();
             tempSimSO.ApplyModifiedProperties();
 
-            var toggleBtn = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            toggleBtn.name = "ModeToggle";
-            toggleBtn.transform.SetParent(hub.transform);
-            toggleBtn.transform.position = new Vector3(-2f, 1f, 0f);
-            toggleBtn.transform.localScale = new Vector3(0.5f, 0.2f, 0.5f);
-            CreateWorldCanvas(toggleBtn, "DAY/NIGHT\n(click in Inspector)", new Vector3(0, 0.5f, 0), new Vector2(80, 30), 5);
+            // Mode toggle — screen-space button for easy clicking
+            var btnCanvas = new GameObject("ModeToggleCanvas");
+            var btnCanvasComp = btnCanvas.AddComponent<Canvas>();
+            btnCanvasComp.renderMode = RenderMode.ScreenSpaceOverlay;
+            btnCanvasComp.sortingOrder = 100;
+            btnCanvas.AddComponent<CanvasScaler>();
+            btnCanvas.AddComponent<GraphicRaycaster>();
+
+            var btnObj = new GameObject("ToggleButton");
+            btnObj.transform.SetParent(btnCanvas.transform, false);
+            var btnRT = btnObj.AddComponent<RectTransform>();
+            btnRT.anchorMin = new Vector2(0f, 1f);
+            btnRT.anchorMax = new Vector2(0f, 1f);
+            btnRT.pivot = new Vector2(0f, 1f);
+            btnRT.anchoredPosition = new Vector2(10f, -10f);
+            btnRT.sizeDelta = new Vector2(180f, 50f);
+            var btnImg = btnObj.AddComponent<Image>();
+            btnImg.color = new Color(0.2f, 0.3f, 0.5f, 1f);
+            var btn = btnObj.AddComponent<Button>();
+
+            var btnText = new GameObject("Text");
+            btnText.transform.SetParent(btnObj.transform, false);
+            var btnTextRT = btnText.AddComponent<RectTransform>();
+            btnTextRT.anchorMin = Vector2.zero;
+            btnTextRT.anchorMax = Vector2.one;
+            btnTextRT.sizeDelta = Vector2.zero;
+            var btnTmp = btnText.AddComponent<TextMeshProUGUI>();
+            btnTmp.text = "Toggle Day/Night";
+            btnTmp.fontSize = 18;
+            btnTmp.alignment = TextAlignmentOptions.Center;
+            btnTmp.color = Color.white;
+
+            // Wire button → FacilityModeController.ToggleMode
+            UnityEditor.Events.UnityEventTools.AddVoidPersistentListener(btn.onClick, modeCtrl.ToggleMode);
+
+            AddGoalCanvas("GOAL: Find and fix the bug — HVAC temperature should NOT change during Night mode.\nUse the toggle button to switch modes.");
 
             SaveScene(scene, "T3_ModeSwitch_Mercury_Starter");
         }
@@ -800,12 +902,42 @@ namespace MercuryMessaging.Research.UserStudy.Editor
             var tempSim = tempSimObj.AddComponent<TemperatureSimulator>();
             WirePersistentListener(tempSim, "OnTemperatureRequest", hvacCtrl, "OnTemperatureRequested");
 
-            var toggleBtn = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            toggleBtn.name = "ModeToggle";
-            toggleBtn.transform.SetParent(hub.transform);
-            toggleBtn.transform.position = new Vector3(-2f, 1f, 0f);
-            toggleBtn.transform.localScale = new Vector3(0.5f, 0.2f, 0.5f);
-            CreateWorldCanvas(toggleBtn, "DAY/NIGHT\n(click in Inspector)", new Vector3(0, 0.5f, 0), new Vector2(80, 30), 5);
+            // Mode toggle — screen-space button for easy clicking
+            var btnCanvasES = new GameObject("ModeToggleCanvas");
+            var btnCanvasCompES = btnCanvasES.AddComponent<Canvas>();
+            btnCanvasCompES.renderMode = RenderMode.ScreenSpaceOverlay;
+            btnCanvasCompES.sortingOrder = 100;
+            btnCanvasES.AddComponent<CanvasScaler>();
+            btnCanvasES.AddComponent<GraphicRaycaster>();
+
+            var btnObjES = new GameObject("ToggleButton");
+            btnObjES.transform.SetParent(btnCanvasES.transform, false);
+            var btnRTES = btnObjES.AddComponent<RectTransform>();
+            btnRTES.anchorMin = new Vector2(0f, 1f);
+            btnRTES.anchorMax = new Vector2(0f, 1f);
+            btnRTES.pivot = new Vector2(0f, 1f);
+            btnRTES.anchoredPosition = new Vector2(10f, -10f);
+            btnRTES.sizeDelta = new Vector2(180f, 50f);
+            var btnImgES = btnObjES.AddComponent<Image>();
+            btnImgES.color = new Color(0.2f, 0.3f, 0.5f, 1f);
+            var btnES = btnObjES.AddComponent<Button>();
+
+            var btnTextES = new GameObject("Text");
+            btnTextES.transform.SetParent(btnObjES.transform, false);
+            var btnTextRTES = btnTextES.AddComponent<RectTransform>();
+            btnTextRTES.anchorMin = Vector2.zero;
+            btnTextRTES.anchorMax = Vector2.one;
+            btnTextRTES.sizeDelta = Vector2.zero;
+            var btnTmpES = btnTextES.AddComponent<TextMeshProUGUI>();
+            btnTmpES.text = "Toggle Day/Night";
+            btnTmpES.fontSize = 18;
+            btnTmpES.alignment = TextAlignmentOptions.Center;
+            btnTmpES.color = Color.white;
+
+            // Wire button → FacilityModeController.ToggleMode
+            UnityEditor.Events.UnityEventTools.AddVoidPersistentListener(btnES.onClick, modeCtrl.ToggleMode);
+
+            AddGoalCanvas("GOAL: Find and fix the bug — HVAC temperature should NOT change during Night mode.\nUse the toggle button to switch modes.");
 
             SaveScene(scene, "T3_ModeSwitch_Events_Starter");
         }
@@ -882,6 +1014,8 @@ namespace MercuryMessaging.Research.UserStudy.Editor
                 CreateWorldCanvas(sub, subNames[i], new Vector3(0, 0.8f, 0), new Vector2(60, 15), 6);
             }
 
+            AddGoalCanvas("GOAL: Wire 4 subsystem alerts to the central dashboard.\nAlerts should appear in the dashboard log.");
+
             SaveScene(scene, "T4_AlertAggregation_Mercury_Starter");
         }
 
@@ -942,7 +1076,46 @@ namespace MercuryMessaging.Research.UserStudy.Editor
                 CreateWorldCanvas(sub, subNames[i], new Vector3(0, 0.8f, 0), new Vector2(60, 15), 6);
             }
 
+            AddGoalCanvas("GOAL: Wire 4 subsystem alerts to the central dashboard.\nAlerts should appear in the dashboard log.");
+
             SaveScene(scene, "T4_AlertAggregation_Events_Starter");
+        }
+
+        // ================================================================
+        // GOAL CANVAS HELPER
+        // ================================================================
+
+        private static void AddGoalCanvas(string goalText)
+        {
+            var goalCanvas = new GameObject("GoalCanvas");
+            var canvasComp = goalCanvas.AddComponent<Canvas>();
+            canvasComp.renderMode = RenderMode.ScreenSpaceOverlay;
+            canvasComp.sortingOrder = 99;
+            goalCanvas.AddComponent<CanvasScaler>();
+            goalCanvas.AddComponent<GraphicRaycaster>();
+
+            var panel = new GameObject("GoalPanel");
+            panel.transform.SetParent(goalCanvas.transform, false);
+            var panelRT = panel.AddComponent<RectTransform>();
+            panelRT.anchorMin = new Vector2(0.5f, 1f);
+            panelRT.anchorMax = new Vector2(0.5f, 1f);
+            panelRT.pivot = new Vector2(0.5f, 1f);
+            panelRT.anchoredPosition = new Vector2(0f, -10f);
+            panelRT.sizeDelta = new Vector2(500f, 60f);
+            var panelImg = panel.AddComponent<Image>();
+            panelImg.color = new Color(0.05f, 0.05f, 0.1f, 0.85f);
+
+            var textObj = new GameObject("GoalText");
+            textObj.transform.SetParent(panel.transform, false);
+            var textRT = textObj.AddComponent<RectTransform>();
+            textRT.anchorMin = new Vector2(0.02f, 0.05f);
+            textRT.anchorMax = new Vector2(0.98f, 0.95f);
+            textRT.sizeDelta = Vector2.zero;
+            var tmp = textObj.AddComponent<TextMeshProUGUI>();
+            tmp.text = goalText;
+            tmp.fontSize = 14;
+            tmp.alignment = TextAlignmentOptions.Center;
+            tmp.color = Color.white;
         }
     }
 }
