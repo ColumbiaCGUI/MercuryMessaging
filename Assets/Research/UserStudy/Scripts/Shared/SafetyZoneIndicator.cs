@@ -25,7 +25,7 @@ namespace MercuryMessaging.Research.UserStudy
         private AlertLevel currentLevel = AlertLevel.Normal;
         private float alertCooldown;
 
-        void Update()
+        public override void Update()
         {
             // Reset to normal if no alerts received recently
             alertCooldown -= Time.deltaTime;

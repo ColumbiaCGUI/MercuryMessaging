@@ -44,50 +44,19 @@ namespace MercuryMessaging.Research.UserStudy.Editor
             Debug.Log("[TaskSceneBuilder] All 12 study scenes (T2/T3/T4 × solution+starter × Mercury+Events) built!");
         }
 
-        // Legacy: builds T1 too (archived, not part of active study)
-        [MenuItem("MercuryMessaging/User Study/Build All 8 Task Scenes")]
-        public static void BuildAll8Scenes()
-        {
-            System.IO.Directory.CreateDirectory(ScenesDir);
-            System.IO.Directory.CreateDirectory(MatDir);
-
-            BuildT1Mercury();
-            BuildT1Events();
-            BuildT2Mercury();
-            BuildT2Events();
-            BuildT3Mercury();
-            BuildT3Events();
-            BuildT4Mercury();
-            BuildT4Events();
-
-            Debug.Log("[TaskSceneBuilder] All 8 scenes built successfully!");
-        }
-
-        [MenuItem("MercuryMessaging/User Study/Build All 16 Task Scenes")]
-        public static void BuildAll16Scenes()
-        {
-            System.IO.Directory.CreateDirectory(ScenesDir);
-            System.IO.Directory.CreateDirectory(MatDir);
-
-            BuildAll8Scenes();
-            BuildStarterScenes();
-        }
-
-        [MenuItem("MercuryMessaging/User Study/Build All 8 Starter Scenes")]
+        [MenuItem("MercuryMessaging/User Study/Build All 6 Starter Scenes")]
         public static void BuildStarterScenes()
         {
             System.IO.Directory.CreateDirectory(ScenesDir);
             System.IO.Directory.CreateDirectory(MatDir);
 
-            BuildT1MercuryStarter();
-            BuildT1EventsStarter();
             BuildT2MercuryStarter();
             BuildT2EventsStarter();
             BuildT3MercuryStarter();
             BuildT3EventsStarter();
             BuildT4MercuryStarter();
             BuildT4EventsStarter();
-            Debug.Log("[TaskSceneBuilder] All 8 starter scenes built!");
+            Debug.Log("[TaskSceneBuilder] All 6 starter scenes built!");
         }
 
         // ================================================================
@@ -250,111 +219,6 @@ namespace MercuryMessaging.Research.UserStudy.Editor
                 part.transform.localScale = scales[i];
                 part.GetComponent<Renderer>().sharedMaterial = mat;
             }
-        }
-
-        // ================================================================
-        // T1: SENSOR FAN-OUT
-        // ================================================================
-
-        private static void BuildT1Mercury()
-        {
-            var scene = NewScene("T1_Mercury");
-
-            // RobotArm — root relay + data source + solution broadcaster
-            var robotArm = new GameObject("RobotArm");
-            robotArm.AddComponent<MmRelayNode>();
-            var jds = robotArm.AddComponent<JointDataSource>();
-            var broadcaster = robotArm.AddComponent<JointDataBroadcaster_Solution>();
-            CreateRobotArmVisual(robotArm);
-
-            // Wire JointDataSource → broadcaster
-            WirePersistentListener(jds, "OnJointAngleChanged", broadcaster, "SendJointData");
-
-            // 4 child display panels
-            Vector3[] panelPos = {
-                new Vector3(-1.5f, 1.5f, 1f),
-                new Vector3(1.5f, 1.5f, 1f),
-                new Vector3(-1.5f, 1.5f, -1f),
-                new Vector3(1.5f, 1.5f, -1f)
-            };
-            for (int i = 0; i < 4; i++)
-            {
-                var panel = new GameObject($"JointDisplayPanel{i+1}");
-                panel.transform.SetParent(robotArm.transform);
-                panel.transform.position = panelPos[i];
-                panel.AddComponent<MmRelayNode>();
-                var display = panel.AddComponent<JointAngleDisplay>();
-
-                var tmp = CreateWorldCanvas(panel, "0.0°", Vector3.zero, new Vector2(40, 30));
-                var statusObj = new GameObject("StatusIndicator");
-                statusObj.transform.SetParent(panel.transform.Find("Canvas"), false);
-                var statusRT = statusObj.AddComponent<RectTransform>();
-                statusRT.anchorMin = new Vector2(0.1f, 0.05f);
-                statusRT.anchorMax = new Vector2(0.9f, 0.25f);
-                statusRT.sizeDelta = Vector2.zero;
-                var statusImg = statusObj.AddComponent<Image>();
-                statusImg.color = Color.green;
-
-                var so = new SerializedObject(display);
-                so.FindProperty("angleText").objectReferenceValue = tmp;
-                so.FindProperty("statusIndicator").objectReferenceValue = statusImg;
-                so.ApplyModifiedProperties();
-            }
-
-            SaveScene(scene, "T1_SensorFanOut_Mercury");
-        }
-
-        private static void BuildT1Events()
-        {
-            var scene = NewScene("T1_Events");
-
-            var robotArm = new GameObject("RobotArm");
-            var jds = robotArm.AddComponent<JointDataSource>();
-            var broadcaster = robotArm.AddComponent<JointDataBroadcaster_Events_Solution>();
-            CreateRobotArmVisual(robotArm);
-
-            Vector3[] panelPos = {
-                new Vector3(-1.5f, 1.5f, 1f),
-                new Vector3(1.5f, 1.5f, 1f),
-                new Vector3(-1.5f, 1.5f, -1f),
-                new Vector3(1.5f, 1.5f, -1f)
-            };
-            var panels = new JointAngleDisplay_Events[4];
-            for (int i = 0; i < 4; i++)
-            {
-                var panel = new GameObject($"JointDisplayPanel{i+1}");
-                panel.transform.SetParent(robotArm.transform);
-                panel.transform.position = panelPos[i];
-                panels[i] = panel.AddComponent<JointAngleDisplay_Events>();
-
-                var tmp = CreateWorldCanvas(panel, "0.0°", Vector3.zero, new Vector2(40, 30));
-                var statusObj = new GameObject("StatusIndicator");
-                statusObj.transform.SetParent(panel.transform.Find("Canvas"), false);
-                var statusRT = statusObj.AddComponent<RectTransform>();
-                statusRT.anchorMin = new Vector2(0.1f, 0.05f);
-                statusRT.anchorMax = new Vector2(0.9f, 0.25f);
-                statusRT.sizeDelta = Vector2.zero;
-                var statusImg = statusObj.AddComponent<Image>();
-                statusImg.color = Color.green;
-
-                var so = new SerializedObject(panels[i]);
-                so.FindProperty("angleText").objectReferenceValue = tmp;
-                so.FindProperty("statusIndicator").objectReferenceValue = statusImg;
-                so.ApplyModifiedProperties();
-            }
-
-            // Wire JointDataSource → broadcaster
-            WirePersistentListener(jds, "OnJointAngleChanged", broadcaster, "SendJointData");
-
-            // Wire broadcaster → 4 panels
-            var bSO = new SerializedObject(broadcaster);
-            bSO.FindProperty("panel1").objectReferenceValue = panels[0];
-            bSO.FindProperty("panel2").objectReferenceValue = panels[1];
-            bSO.FindProperty("panel3").objectReferenceValue = panels[2];
-            bSO.FindProperty("panel4").objectReferenceValue = panels[3];
-            bSO.ApplyModifiedProperties();
-
-            SaveScene(scene, "T1_SensorFanOut_Events");
         }
 
         // ================================================================
@@ -716,99 +580,6 @@ namespace MercuryMessaging.Research.UserStudy.Editor
             }
 
             SaveScene(scene, "T4_AlertAggregation_Events");
-        }
-
-        // ================================================================
-        // T1 STARTER: SENSOR FAN-OUT
-        // ================================================================
-
-        private static void BuildT1MercuryStarter()
-        {
-            var scene = NewScene("T1_Mercury_Starter");
-
-            var robotArm = new GameObject("RobotArm");
-            robotArm.AddComponent<MmRelayNode>();
-            var jds = robotArm.AddComponent<JointDataSource>();
-            var broadcaster = robotArm.AddComponent<JointDataBroadcaster_Starter>();
-            CreateRobotArmVisual(robotArm);
-
-            WirePersistentListener(jds, "OnJointAngleChanged", broadcaster, "SendJointData");
-
-            Vector3[] panelPos = {
-                new Vector3(-1.5f, 1.5f, 1f),
-                new Vector3(1.5f, 1.5f, 1f),
-                new Vector3(-1.5f, 1.5f, -1f),
-                new Vector3(1.5f, 1.5f, -1f)
-            };
-            for (int i = 0; i < 4; i++)
-            {
-                var panel = new GameObject($"JointDisplayPanel{i+1}");
-                panel.transform.SetParent(robotArm.transform);
-                panel.transform.position = panelPos[i];
-                panel.AddComponent<MmRelayNode>();
-                var display = panel.AddComponent<JointAngleDisplay>();
-
-                var tmp = CreateWorldCanvas(panel, "0.0°", Vector3.zero, new Vector2(40, 30));
-                var statusObj = new GameObject("StatusIndicator");
-                statusObj.transform.SetParent(panel.transform.Find("Canvas"), false);
-                var statusRT = statusObj.AddComponent<RectTransform>();
-                statusRT.anchorMin = new Vector2(0.1f, 0.05f);
-                statusRT.anchorMax = new Vector2(0.9f, 0.25f);
-                statusRT.sizeDelta = Vector2.zero;
-                var statusImg = statusObj.AddComponent<Image>();
-                statusImg.color = Color.green;
-
-                var so = new SerializedObject(display);
-                so.FindProperty("angleText").objectReferenceValue = tmp;
-                so.FindProperty("statusIndicator").objectReferenceValue = statusImg;
-                so.ApplyModifiedProperties();
-            }
-
-            SaveScene(scene, "T1_SensorFanOut_Mercury_Starter");
-        }
-
-        private static void BuildT1EventsStarter()
-        {
-            var scene = NewScene("T1_Events_Starter");
-
-            var robotArm = new GameObject("RobotArm");
-            var jds = robotArm.AddComponent<JointDataSource>();
-            var broadcaster = robotArm.AddComponent<JointDataBroadcaster_Events_Starter>();
-            CreateRobotArmVisual(robotArm);
-
-            Vector3[] panelPos = {
-                new Vector3(-1.5f, 1.5f, 1f),
-                new Vector3(1.5f, 1.5f, 1f),
-                new Vector3(-1.5f, 1.5f, -1f),
-                new Vector3(1.5f, 1.5f, -1f)
-            };
-            for (int i = 0; i < 4; i++)
-            {
-                var panel = new GameObject($"JointDisplayPanel{i+1}");
-                panel.transform.SetParent(robotArm.transform);
-                panel.transform.position = panelPos[i];
-                var display = panel.AddComponent<JointAngleDisplay_Events>();
-
-                var tmp = CreateWorldCanvas(panel, "0.0°", Vector3.zero, new Vector2(40, 30));
-                var statusObj = new GameObject("StatusIndicator");
-                statusObj.transform.SetParent(panel.transform.Find("Canvas"), false);
-                var statusRT = statusObj.AddComponent<RectTransform>();
-                statusRT.anchorMin = new Vector2(0.1f, 0.05f);
-                statusRT.anchorMax = new Vector2(0.9f, 0.25f);
-                statusRT.sizeDelta = Vector2.zero;
-                var statusImg = statusObj.AddComponent<Image>();
-                statusImg.color = Color.green;
-
-                var so = new SerializedObject(display);
-                so.FindProperty("angleText").objectReferenceValue = tmp;
-                so.FindProperty("statusIndicator").objectReferenceValue = statusImg;
-                so.ApplyModifiedProperties();
-            }
-
-            // Wire JointDataSource → broadcaster (panels not wired: participant's task)
-            WirePersistentListener(jds, "OnJointAngleChanged", broadcaster, "SendJointData");
-
-            SaveScene(scene, "T1_SensorFanOut_Events_Starter");
         }
 
         // ================================================================

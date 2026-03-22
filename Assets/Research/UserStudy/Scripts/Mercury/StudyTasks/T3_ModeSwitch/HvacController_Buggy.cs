@@ -27,8 +27,9 @@ namespace MercuryMessaging.Research.UserStudy
         // BUG: This flag is set but never checked in AdjustTemperature
         private bool isActive = true;
 
-        void Start()
+        public override void Start()
         {
+            base.Start();
             currentSetpoint = daySetpoint;
         }
 

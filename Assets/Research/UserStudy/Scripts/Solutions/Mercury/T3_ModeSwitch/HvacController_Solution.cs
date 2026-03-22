@@ -18,8 +18,9 @@ namespace MercuryMessaging.Research.UserStudy
         private string currentMode = "Day";
         private bool isActive = true;
 
-        void Start()
+        public override void Start()
         {
+            base.Start();
             currentSetpoint = daySetpoint;
         }
 

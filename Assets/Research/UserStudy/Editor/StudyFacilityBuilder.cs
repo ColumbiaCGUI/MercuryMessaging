@@ -61,10 +61,10 @@ namespace MercuryMessaging.Research.UserStudy.Editor
             // ── Environment ──────────────────────────────────────────────
             CreateEnvironment(floorMat, dividerMat);
 
-            // ── Robot Workspace (T1 + T2) ─────────────────────────────────
+            // ── Robot Workspace (T2) ──────────────────────────────────────
             GameObject robotWorkspace = CreateRobotWorkspace(robotArmMat, safetyWarningMat, safetyEmergencyMat, indicatorDefaultMat);
 
-            // ── IoT Area (T3 + T4) ────────────────────────────────────────
+            // ── IoT Area (T3 + T4) ───────────────────────────────────────
             GameObject iotArea = CreateIoTArea(hvacMat, sensorMat, dashboardBgMat);
 
             // ── Study Infrastructure ──────────────────────────────────────
@@ -88,7 +88,7 @@ namespace MercuryMessaging.Research.UserStudy.Editor
                 "Scene Built Successfully",
                 $"Study Facility scene created!\n\nLocation: {scenePath}\n\n" +
                 "Workspaces:\n" +
-                "  Left (x=-8): Robot Teleoperation (T1 + T2)\n" +
+                "  Left (x=-8): Robot Teleoperation (T2)\n" +
                 "  Right (x=+8): IoT Monitoring (T3 + T4)\n\n" +
                 "Next steps:\n" +
                 "1. Open the scene\n" +
@@ -168,7 +168,7 @@ namespace MercuryMessaging.Research.UserStudy.Editor
         }
 
         // ═══════════════════════════════════════════════════════════════
-        // ROBOT WORKSPACE  (T1: Sensor Fan-Out, T2: Safety Zone)
+        // ROBOT WORKSPACE  (T2: Safety Zone)
         // ═══════════════════════════════════════════════════════════════
 
         private static GameObject CreateRobotWorkspace(
@@ -186,43 +186,8 @@ namespace MercuryMessaging.Research.UserStudy.Editor
             robotArm.transform.SetParent(workspace.transform);
             robotArm.transform.localPosition = Vector3.zero;
             robotArm.AddComponent<MmRelayNode>();
-            var jointDataSource = robotArm.AddComponent<JointDataSource>();
 
             CreateRobotArmVisuals(robotArm, robotArmMat);
-
-            // ── Joint Display Panels (T1 targets) ─────────────────────────
-            // Panels are children of RobotArm so Mercury broadcasts reach them
-            Vector3[] panelPositions = new Vector3[]
-            {
-                new Vector3(-9f, 1.5f,  1f),  // Panel1: front-left
-                new Vector3(-7f, 1.5f,  1f),  // Panel2: front-right
-                new Vector3(-9f, 1.5f, -1f),  // Panel3: back-left
-                new Vector3(-7f, 1.5f, -1f),  // Panel4: back-right
-            };
-
-            GameObject[] panels = new GameObject[4];
-            for (int i = 0; i < 4; i++)
-            {
-                panels[i] = CreateJointDisplayPanel(robotArm, $"JointDisplayPanel{i + 1}", panelPositions[i]);
-            }
-
-            // Wire JointDataSource.OnJointAngleChanged → JointDataBroadcaster_Starter.SendJointData
-            // (Participants implement JointDataBroadcaster_Starter.SendJointData, which is already on RobotArm
-            //  via its MmRelayNode. JointDataSource fires the event, starter sends Mercury message.)
-            // We add the starter here; participants fill in SendJointData().
-            var t1Starter = robotArm.AddComponent<JointDataBroadcaster_Starter>();
-            // Wire UnityEvent: JointDataSource.OnJointAngleChanged → t1Starter.SendJointData
-            SerializedObject jdsSO = new SerializedObject(jointDataSource);
-            // UnityEvent wiring via persistent listener
-            UnityEditor.Events.UnityEventTools.AddPersistentListener(
-                jointDataSource.OnJointAngleChanged, t1Starter.SendJointData);
-
-            // Also add Events-condition broadcaster
-            var t1EventsStarter = robotArm.AddComponent<JointDataBroadcaster_Events_Starter>();
-            // Wire event for Events condition too
-            UnityEditor.Events.UnityEventTools.AddPersistentListener(
-                jointDataSource.OnJointAngleChanged, t1EventsStarter.SendJointData);
-            t1EventsStarter.enabled = false; // disabled by default; enable for Events condition
 
             // ── Safety Zones (T2 visual props) ────────────────────────────
             CreateSafetyZones(workspace, safetyWarningMat, safetyEmergencyMat);
@@ -306,83 +271,6 @@ namespace MercuryMessaging.Research.UserStudy.Editor
             gripper.transform.localPosition = new Vector3(0f, 1.9f, 0f);
             gripper.transform.localScale = new Vector3(0.2f, 0.05f, 0.15f);
             if (mat != null) gripper.GetComponent<Renderer>().sharedMaterial = mat;
-        }
-
-        private static GameObject CreateJointDisplayPanel(GameObject parent, string name, Vector3 worldPosition)
-        {
-            // Panel root — holds Mercury + Events components
-            GameObject panelRoot = new GameObject(name);
-            panelRoot.transform.SetParent(parent.transform);
-            panelRoot.transform.position = worldPosition;
-
-            // Mercury components
-            panelRoot.AddComponent<MmRelayNode>();
-            var display = panelRoot.AddComponent<JointAngleDisplay>();
-
-            // Events component (disabled by default)
-            var displayEvents = panelRoot.AddComponent<JointAngleDisplay_Events>();
-            displayEvents.enabled = false;
-
-            // World-space Canvas
-            GameObject canvasObj = new GameObject("Canvas");
-            canvasObj.transform.SetParent(panelRoot.transform);
-            canvasObj.transform.localPosition = Vector3.zero;
-            canvasObj.transform.localRotation = Quaternion.identity;
-            canvasObj.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
-
-            Canvas canvas = canvasObj.AddComponent<Canvas>();
-            canvas.renderMode = RenderMode.WorldSpace;
-            canvasObj.AddComponent<CanvasScaler>();
-            canvasObj.AddComponent<GraphicRaycaster>();
-
-            RectTransform canvasRT = canvasObj.GetComponent<RectTransform>();
-            canvasRT.sizeDelta = new Vector2(40f, 30f); // 0.4m × 0.3m at 0.01 scale
-
-            // Background panel image
-            GameObject bgPanel = new GameObject("Background");
-            bgPanel.transform.SetParent(canvasObj.transform, false);
-            RectTransform bgRT = bgPanel.AddComponent<RectTransform>();
-            bgRT.anchorMin = Vector2.zero;
-            bgRT.anchorMax = Vector2.one;
-            bgRT.sizeDelta = Vector2.zero;
-            Image bgImg = bgPanel.AddComponent<Image>();
-            bgImg.color = new Color(0.1f, 0.1f, 0.15f, 0.9f);
-
-            // Angle text
-            GameObject textObj = new GameObject("AngleText");
-            textObj.transform.SetParent(canvasObj.transform, false);
-            RectTransform textRT = textObj.AddComponent<RectTransform>();
-            textRT.anchorMin = new Vector2(0.1f, 0.4f);
-            textRT.anchorMax = new Vector2(0.9f, 0.9f);
-            textRT.sizeDelta = Vector2.zero;
-            TextMeshProUGUI angleText = textObj.AddComponent<TextMeshProUGUI>();
-            angleText.text = "0.0°";
-            angleText.fontSize = 8;
-            angleText.alignment = TextAlignmentOptions.Center;
-            angleText.color = Color.white;
-
-            // Status indicator image
-            GameObject statusObj = new GameObject("StatusIndicator");
-            statusObj.transform.SetParent(canvasObj.transform, false);
-            RectTransform statusRT = statusObj.AddComponent<RectTransform>();
-            statusRT.anchorMin = new Vector2(0.1f, 0.05f);
-            statusRT.anchorMax = new Vector2(0.9f, 0.35f);
-            statusRT.sizeDelta = Vector2.zero;
-            Image statusImg = statusObj.AddComponent<Image>();
-            statusImg.color = Color.green;
-
-            // Wire UI references to both display components
-            SerializedObject mmSO = new SerializedObject(display);
-            mmSO.FindProperty("angleText").objectReferenceValue = angleText;
-            mmSO.FindProperty("statusIndicator").objectReferenceValue = statusImg;
-            mmSO.ApplyModifiedProperties();
-
-            SerializedObject evSO = new SerializedObject(displayEvents);
-            evSO.FindProperty("angleText").objectReferenceValue = angleText;
-            evSO.FindProperty("statusIndicator").objectReferenceValue = statusImg;
-            evSO.ApplyModifiedProperties();
-
-            return panelRoot;
         }
 
         private static void CreateSafetyZones(GameObject workspace, Material warningMat, Material emergencyMat)
@@ -774,14 +662,6 @@ namespace MercuryMessaging.Research.UserStudy.Editor
             ccObj.transform.SetParent(infrastructure.transform);
             var checker = ccObj.AddComponent<CorrectnessChecker>();
 
-            // Wire T1 panels to CorrectnessChecker
-            var t1Panels = new System.Collections.Generic.List<GameObject>();
-            for (int i = 1; i <= 4; i++)
-            {
-                var panelGO = GameObject.Find($"JointDisplayPanel{i}");
-                if (panelGO != null) t1Panels.Add(panelGO);
-            }
-
             // Wire T2 indicators and worker
             var t2Indicators = new System.Collections.Generic.List<GameObject>();
             for (int i = 1; i <= 4; i++)
@@ -796,12 +676,6 @@ namespace MercuryMessaging.Research.UserStudy.Editor
             GameObject dashboardGO = GameObject.Find("CentralDashboard");
 
             SerializedObject ccSO = new SerializedObject(checker);
-
-            // T1 panels array
-            var t1PanelsProp = ccSO.FindProperty("t1Panels");
-            t1PanelsProp.arraySize = t1Panels.Count;
-            for (int i = 0; i < t1Panels.Count; i++)
-                t1PanelsProp.GetArrayElementAtIndex(i).objectReferenceValue = t1Panels[i];
 
             // T2 worker
             if (workerGO != null)
