@@ -308,9 +308,11 @@ namespace MercuryMessaging.Research.Benchmarks
         }
 
         /// <summary>
-        /// T2_MmInvoke: Mercury old API — relay.MmInvoke with MmMetadataBlock.
-        /// No spatial filter: broadcasts to all children unconditionally.
-        /// This isolates the Mercury framework overhead WITHOUT the Within() predicate cost.
+        /// T2_MmInvoke: Mercury old API — manual distance check + per-receiver MmInvoke.
+        /// This is what a developer using the pre-DSL API would actually write to achieve
+        /// spatial filtering: iterate children, check distance, send to each in-range
+        /// receiver individually via MmInvoke with Self filter.
+        /// Same ~N/2 deliveries as all other T2 methods.
         /// </summary>
         private IEnumerator RunT2MmInvoke(int n, int run)
         {
@@ -318,6 +320,7 @@ namespace MercuryMessaging.Research.Benchmarks
             root.transform.position = Vector3.zero;
             var relay = root.AddComponent<MmRelayNode>();
 
+            var childRelays = new List<MmRelayNode>();
             var rng = new System.Random(42 + run);
             for (int i = 0; i < n; i++)
             {
@@ -332,20 +335,31 @@ namespace MercuryMessaging.Research.Benchmarks
                 go.AddComponent<ScenarioReceiver>();
                 relay.MmAddToRoutingTable(childRelay, MmLevelFilter.Child);
                 childRelay.AddParent(relay);
+                childRelays.Add(childRelay);
             }
             foreach (var r in root.GetComponentsInChildren<MmRelayNode>())
                 r.MmRefreshResponders();
             yield return null;
 
-            var metadata = new MmMetadataBlock(MmLevelFilterHelper.SelfAndChildren);
+            var selfMetadata = new MmMetadataBlock(MmLevelFilterHelper.SelfAndChildren);
+            Vector3 senderPos = root.transform.position;
+            float warningR = t2Radius;
+            float emergencyR = t2Radius * 0.5f;
             int mpf = messagesPerFrame;
+            int childCount = childRelays.Count;
 
             yield return StartCoroutine(Measure(testDuration, () =>
             {
                 for (int m = 0; m < mpf; m++)
                 {
-                    relay.MmInvoke(MmMethod.MessageString, "warning", metadata);
-                    relay.MmInvoke(MmMethod.MessageString, "emergency", metadata);
+                    for (int i = 0; i < childCount; i++)
+                    {
+                        float d = Vector3.Distance(senderPos, childRelays[i].transform.position);
+                        if (d <= warningR)
+                            childRelays[i].MmInvoke(MmMethod.MessageString, "warning", selfMetadata);
+                        if (d <= emergencyR)
+                            childRelays[i].MmInvoke(MmMethod.MessageString, "emergency", selfMetadata);
+                    }
                 }
             }));
 
