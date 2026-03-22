@@ -1,3 +1,9 @@
+// Uncomment after installing R3 (NuGet core + UPM layer):
+// #define HAS_R3
+
+// MessagePipe is installed — enable it:
+#define HAS_MESSAGEPIPE
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -7,11 +13,13 @@ using UnityEngine;
 using MercuryMessaging;
 using Debug = UnityEngine.Debug;
 
-// Uncomment after installing R3:
-// using R3;
+#if HAS_R3
+using R3;
+#endif
 
-// Uncomment after installing MessagePipe:
-// using MessagePipe;
+#if HAS_MESSAGEPIPE
+using MessagePipe;
+#endif
 
 namespace MercuryMessaging.Research.Benchmarks
 {
@@ -38,13 +46,8 @@ namespace MercuryMessaging.Research.Benchmarks
     ///    c. Delete bundled System.*.dll files from MessagePipe plugin if Unity 6 conflicts
     ///    d. Uncomment the MessagePipe sections below and the using MessagePipe directive above
     ///
-    /// After installation, uncomment the #define directives below:
+    /// Enable via #define at top of file after installing.
     /// </summary>
-
-    // Uncomment after installing:
-    // #define HAS_R3
-    // #define HAS_MESSAGEPIPE
-
     public class ExternalLibraryBenchmark : MonoBehaviour
     {
         [Header("Configuration")]
@@ -189,7 +192,7 @@ namespace MercuryMessaging.Research.Benchmarks
                 int counter = 0;
                 var bag = DisposableBag.CreateBuilder();
                 for (int i = 0; i < subCount; i++)
-                    subscriber.Subscribe(msg => counter++).AddTo(ref bag);
+                    subscriber.Subscribe(msg => counter++).AddTo(bag);
 
                 var disposable = bag.Build();
 

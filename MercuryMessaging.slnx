@@ -27,6 +27,7 @@
   <Project Path="ShapesRuntime.csproj" />
   <Project Path="Unity.XR.Interaction.Toolkit.csproj" />
   <Project Path="Unity.Services.Analytics.csproj" />
+  <Project Path="MessagePipe.csproj" />
   <Project Path="Unity.VisualStudio.Editor.csproj" />
   <Project Path="Unity.InputSystem.csproj" />
   <Project Path="MCPForUnity.Editor.csproj" />
@@ -35,6 +36,7 @@
   <Project Path="Unity.FishNet.Codegen.csproj" />
   <Project Path="Unity.XR.CoreUtils.csproj" />
   <Project Path="Assembly-CSharp.csproj" />
+  <Project Path="UniTask.csproj" />
   <Project Path="Unity.Searcher.Editor.csproj" />
   <Project Path="MercuryMessaging.Support.csproj" />
   <Project Path="FishNet.Demos.csproj" />
@@ -49,6 +51,7 @@
   <Project Path="Unity.Services.Core.csproj" />
   <Project Path="Unity.PerformanceTesting.csproj" />
   <Project Path="Unity.TextMeshPro.csproj" />
+  <Project Path="UniTask.Linq.csproj" />
   <Project Path="Unity.TextMeshPro.Editor.csproj" />
   <Project Path="Unity.Services.Analytics.Editor.csproj" />
   <Project Path="Unity.Burst.Editor.csproj" />
@@ -59,6 +62,7 @@
   <Project Path="Unity.Analytics.DataPrivacy.csproj" />
   <Project Path="Unity.2D.Sprite.Editor.csproj" />
   <Project Path="Unity.XR.CoreUtils.Editor.csproj" />
+  <Project Path="NuGetForUnity.csproj" />
   <Project Path="Unity.AI.Navigation.Editor.csproj" />
   <Project Path="Unity.Services.Core.Configuration.Editor.csproj" />
   <Project Path="Unity.Services.Core.Configuration.csproj" />
@@ -80,6 +84,7 @@
   <Project Path="MercuryMessaging.Editor.csproj" />
   <Project Path="ShapesSamples.csproj" />
   <Project Path="UnityEditor.UI.Analytics.csproj" />
+  <Project Path="UniTask.TextMeshPro.csproj" />
   <Project Path="Unity.Services.Core.Threading.csproj" />
   <Project Path="MercuryMessaging.Task.csproj" />
   <Project Path="Unity.InputSystem.TestFramework.csproj" />
@@ -88,7 +93,9 @@
   <Project Path="ParrelSync.csproj" />
   <Project Path="Unity.Services.Core.Device.csproj" />
   <Project Path="Unity.Services.Core.Analytics.csproj" />
+  <Project Path="MessagePipe.Editor.csproj" />
   <Project Path="Unity.CollabProxy.Editor.csproj" />
+  <Project Path="UniTask.Editor.csproj" />
   <Project Path="ALINEEditor.csproj" />
   <Project Path="UnityEngine.SpatialTracking.csproj" />
   <Project Path="Unity.Services.Core.Registration.csproj" />
@@ -106,10 +113,12 @@
   <Project Path="Analytics.csproj" />
   <Project Path="Assembly-CSharp-Editor.csproj" />
   <Project Path="UnityEditor.SpatialTracking.csproj" />
+  <Project Path="UniTask.Addressables.csproj" />
   <Project Path="Unity.Fusion.CodeGen.csproj" />
   <Project Path="Unity.Rendering.LightTransport.Editor.csproj" />
   <Project Path="Unity.Services.Core.Environments.csproj" />
   <Project Path="Unity.Collections.Editor.csproj" />
+  <Project Path="UniTask.DOTween.csproj" />
   <Project Path="Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary.csproj" />
   <Project Path="Unity.RenderPipelines.Core.ShaderLibrary.csproj" />
 </Solution>
