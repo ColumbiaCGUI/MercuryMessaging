@@ -32,6 +32,9 @@ namespace MercuryMessaging.Research.Benchmarks
         [Tooltip("Max placement range for receivers")]
         public float placementRange = 20f;
 
+        [Tooltip("Runs per configuration for mean +/- SD")]
+        public int runs = 3;
+
         [Header("Export")]
         public bool exportCsv = true;
 
@@ -45,10 +48,12 @@ namespace MercuryMessaging.Research.Benchmarks
             public string Method;
             public int ReceiverCount;
             public int ReceiversInRange;
+            public int Run;
             public int Iterations;
             public double TotalMs;
             public double AvgUs;
             public long AvgTicks;
+            public long MemoryDeltaBytes;
         }
 
         [ContextMenu("Run Spatial Filter Benchmark")]
@@ -133,11 +138,20 @@ namespace MercuryMessaging.Research.Benchmarks
             for (int i = 0; i < warmUp; i++)
                 rootRelay.Send("w").ToAll().Within(radius).Execute();
 
-            // ---- Mercury Within() ----
+            // ---- Mercury WITHOUT spatial filter (isolates framework overhead) ----
+            Measure("Mercury NoFilter", count, count, () =>
+            {
+                rootRelay.Send("alert").ToChildren().Execute();
+            });
+
+            // ---- Mercury WITH Within() spatial filter ----
             Measure("Mercury Within()", count, inRangeCount, () =>
             {
                 rootRelay.Send("alert").ToAll().Within(radius).Execute();
             });
+
+            // The delta between "Mercury NoFilter" and "Mercury Within()" is the
+            // ACTUAL spatial filtering cost, isolated from framework overhead.
 
             // ---- Manual Vector3.Distance (what study participants write) ----
             Vector3 senderPos = root.transform.position;
@@ -168,41 +182,54 @@ namespace MercuryMessaging.Research.Benchmarks
 
         private void Measure(string name, int receiverCount, int inRange, Action action)
         {
-            var sw = new Stopwatch();
-
-            bool gcSuppressed = false;
-            try
+            for (int run = 0; run < runs; run++)
             {
-                GC.TryStartNoGCRegion(32 * 1024 * 1024);
-                gcSuppressed = true;
-            }
-            catch (InvalidOperationException) { }
+                // Memory before
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+                GC.Collect();
+                long memBefore = GC.GetTotalMemory(true);
 
-            sw.Start();
-            for (int i = 0; i < iterations; i++)
-                action();
-            sw.Stop();
+                var sw = new Stopwatch();
 
-            if (gcSuppressed)
-            {
-                try { GC.EndNoGCRegion(); }
+                bool gcSuppressed = false;
+                try
+                {
+                    GC.TryStartNoGCRegion(32 * 1024 * 1024);
+                    gcSuppressed = true;
+                }
                 catch (InvalidOperationException) { }
+
+                sw.Start();
+                for (int i = 0; i < iterations; i++)
+                    action();
+                sw.Stop();
+
+                if (gcSuppressed)
+                {
+                    try { GC.EndNoGCRegion(); }
+                    catch (InvalidOperationException) { }
+                }
+
+                long memAfter = GC.GetTotalMemory(false);
+
+                double totalMs = sw.Elapsed.TotalMilliseconds;
+                double avgUs = (totalMs / iterations) * 1000.0;
+                long avgTicks = sw.ElapsedTicks / iterations;
+
+                _results.Add(new Result
+                {
+                    Method = name,
+                    ReceiverCount = receiverCount,
+                    ReceiversInRange = inRange,
+                    Run = run,
+                    Iterations = iterations,
+                    TotalMs = totalMs,
+                    AvgUs = avgUs,
+                    AvgTicks = avgTicks,
+                    MemoryDeltaBytes = memAfter - memBefore
+                });
             }
-
-            double totalMs = sw.Elapsed.TotalMilliseconds;
-            double avgUs = (totalMs / iterations) * 1000.0;
-            long avgTicks = sw.ElapsedTicks / iterations;
-
-            _results.Add(new Result
-            {
-                Method = name,
-                ReceiverCount = receiverCount,
-                ReceiversInRange = inRange,
-                Iterations = iterations,
-                TotalMs = totalMs,
-                AvgUs = avgUs,
-                AvgTicks = avgTicks
-            });
         }
 
         private void PrintResults()
@@ -252,12 +279,12 @@ namespace MercuryMessaging.Research.Benchmarks
         private void ExportCsv()
         {
             var sb = new StringBuilder();
-            sb.AppendLine("method,receiver_count,in_range,iterations,total_ms,avg_us,avg_ticks");
+            sb.AppendLine("method,receiver_count,in_range,run,iterations,total_ms,avg_us,avg_ticks,memory_delta_bytes");
 
             foreach (var r in _results)
             {
                 sb.AppendLine($"{r.Method},{r.ReceiverCount},{r.ReceiversInRange}," +
-                              $"{r.Iterations},{r.TotalMs:F4},{r.AvgUs:F4},{r.AvgTicks}");
+                              $"{r.Run},{r.Iterations},{r.TotalMs:F4},{r.AvgUs:F4},{r.AvgTicks},{r.MemoryDeltaBytes}");
             }
 
             string path = Path.Combine(Application.dataPath,

@@ -165,7 +165,13 @@ namespace MercuryMessaging.Research.Benchmarks
                 subject.Dispose();
             }
 #else
-            Debug.Log("[ExternalLibBenchmark] R3 not installed — skipping. See install instructions in script header.");
+            if (subCount == subscriberCounts[0]) // Log once
+            {
+                Debug.Log("[ExternalLibBenchmark] R3 not installed (Unity 6 compatibility issue with NuGet core).");
+                Debug.Log("  Published numbers (from R3 README, BenchmarkDotNet on .NET 8):");
+                Debug.Log("  R3 Subject.OnNext: ~comparable to raw C# event (zero-alloc)");
+                Debug.Log("  To install: NuGetForUnity > R3 v1.3.0 FIRST, then UPM git URL with #1.3.0 tag");
+            }
 #endif
 
 #if HAS_MESSAGEPIPE
@@ -196,7 +202,13 @@ namespace MercuryMessaging.Research.Benchmarks
                 disposable.Dispose();
             }
 #else
-            Debug.Log("[ExternalLibBenchmark] MessagePipe not installed — skipping. See install instructions in script header.");
+            if (subCount == subscriberCounts[0]) // Log once
+            {
+                Debug.Log("[ExternalLibBenchmark] MessagePipe not installed (requires UniTask, Unity 6 compatibility issue).");
+                Debug.Log("  Published numbers (from MessagePipe README, BenchmarkDotNet):");
+                Debug.Log("  MessagePipe Publish: ~faster than C# event, zero-alloc, 78x faster than Prism EventAggregator");
+                Debug.Log("  Uses BuiltinContainerBuilder (no VContainer/Zenject required for benchmarks)");
+            }
 #endif
         }
 

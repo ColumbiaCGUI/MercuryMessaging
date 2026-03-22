@@ -32,6 +32,9 @@ namespace MercuryMessaging.Research.Benchmarks
         [Tooltip("Spatial filter radius for Within() test")]
         public float withinRadius = 5f;
 
+        [Tooltip("Runs per configuration for mean +/- SD")]
+        public int runs = 3;
+
         [Header("Export")]
         [Tooltip("Export CSV to Assets/Research/Benchmarks/Results/")]
         public bool exportCsv = true;
@@ -45,10 +48,12 @@ namespace MercuryMessaging.Research.Benchmarks
         {
             public string Method;
             public int FanOut;
+            public int Run;
             public int Iterations;
             public double TotalMs;
             public double AvgUs;
             public long AvgTicks;
+            public long MemoryDeltaBytes;
         }
 
         [ContextMenu("Run Unified Benchmark")]
@@ -156,11 +161,16 @@ namespace MercuryMessaging.Research.Benchmarks
                 unityEvent.Invoke("bench");
             });
 
-            // ---- 4. SendMessage (only hits root, not children — documents this limitation) ----
-            Measure("SendMessage", fanOut, () =>
+            // ---- 4. SendMessage (only hits root components, NOT children) ----
+            // Only include at fan-out=1 where it's a fair comparison.
+            // At fan-out>1, SendMessage delivers to 0 children — misleading.
+            if (fanOut == 1)
             {
-                root.SendMessage("HandleMessage", "bench", SendMessageOptions.DontRequireReceiver);
-            });
+                Measure("SendMessage", fanOut, () =>
+                {
+                    root.SendMessage("HandleMessage", "bench", SendMessageOptions.DontRequireReceiver);
+                });
+            }
 
             // ---- 5. BroadcastMessage (propagates down Transform hierarchy) ----
             Measure("BroadcastMessage", fanOut, () =>
@@ -192,40 +202,52 @@ namespace MercuryMessaging.Research.Benchmarks
 
         private void Measure(string name, int fanOut, Action action)
         {
-            var sw = new Stopwatch();
-
-            bool gcSuppressed = false;
-            try
+            for (int run = 0; run < runs; run++)
             {
-                GC.TryStartNoGCRegion(32 * 1024 * 1024);
-                gcSuppressed = true;
-            }
-            catch (InvalidOperationException) { }
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+                GC.Collect();
+                long memBefore = GC.GetTotalMemory(true);
 
-            sw.Start();
-            for (int i = 0; i < iterations; i++)
-                action();
-            sw.Stop();
+                var sw = new Stopwatch();
 
-            if (gcSuppressed)
-            {
-                try { GC.EndNoGCRegion(); }
+                bool gcSuppressed = false;
+                try
+                {
+                    GC.TryStartNoGCRegion(32 * 1024 * 1024);
+                    gcSuppressed = true;
+                }
                 catch (InvalidOperationException) { }
+
+                sw.Start();
+                for (int i = 0; i < iterations; i++)
+                    action();
+                sw.Stop();
+
+                if (gcSuppressed)
+                {
+                    try { GC.EndNoGCRegion(); }
+                    catch (InvalidOperationException) { }
+                }
+
+                long memAfter = GC.GetTotalMemory(false);
+
+                double totalMs = sw.Elapsed.TotalMilliseconds;
+                double avgUs = (totalMs / iterations) * 1000.0;
+                long avgTicks = sw.ElapsedTicks / iterations;
+
+                _results.Add(new Result
+                {
+                    Method = name,
+                    FanOut = fanOut,
+                    Run = run,
+                    Iterations = iterations,
+                    TotalMs = totalMs,
+                    AvgUs = avgUs,
+                    AvgTicks = avgTicks,
+                    MemoryDeltaBytes = memAfter - memBefore
+                });
             }
-
-            double totalMs = sw.Elapsed.TotalMilliseconds;
-            double avgUs = (totalMs / iterations) * 1000.0;
-            long avgTicks = sw.ElapsedTicks / iterations;
-
-            _results.Add(new Result
-            {
-                Method = name,
-                FanOut = fanOut,
-                Iterations = iterations,
-                TotalMs = totalMs,
-                AvgUs = avgUs,
-                AvgTicks = avgTicks
-            });
         }
 
         private void PrintResults()
@@ -280,12 +302,12 @@ namespace MercuryMessaging.Research.Benchmarks
         private void ExportCsv()
         {
             var sb = new StringBuilder();
-            sb.AppendLine("method,fan_out,iterations,total_ms,avg_us,avg_ticks");
+            sb.AppendLine("method,fan_out,run,iterations,total_ms,avg_us,avg_ticks,memory_delta_bytes");
 
             foreach (var r in _results)
             {
-                sb.AppendLine($"{r.Method},{r.FanOut},{r.Iterations}," +
-                              $"{r.TotalMs:F4},{r.AvgUs:F4},{r.AvgTicks}");
+                sb.AppendLine($"{r.Method},{r.FanOut},{r.Run},{r.Iterations}," +
+                              $"{r.TotalMs:F4},{r.AvgUs:F4},{r.AvgTicks},{r.MemoryDeltaBytes}");
             }
 
             string path = Path.Combine(Application.dataPath,
