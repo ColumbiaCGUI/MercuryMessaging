@@ -132,11 +132,9 @@ namespace MercuryMessaging
             {
                 case MmPredicateType.Within:
                     if (source == null) return true;
-                    float distance = Vector3.Distance(
-                        source.transform.position,
-                        target.transform.position
-                    );
-                    return distance <= Radius;
+                    // Use sqrMagnitude to avoid sqrt — same result, ~2x faster
+                    float distSq = (target.transform.position - source.transform.position).sqrMagnitude;
+                    return distSq <= Radius * Radius;
 
                 case MmPredicateType.InDirection:
                     if (source == null) return true;

@@ -195,6 +195,19 @@ namespace MercuryMessaging
 		private int _invokeDepth;
 
         /// <summary>
+        /// Cached instance ID — avoids managed-to-native call on every hop during cycle detection.
+        /// </summary>
+        private int _cachedInstanceId;
+
+        /// <summary>
+        /// Cached routing direction flags — updated when routing table changes,
+        /// avoiding a full routing table scan on every MmInvoke call.
+        /// </summary>
+        private bool _rtNeedsParent;
+        private bool _rtNeedsChild;
+        private bool _rtNeedsSelf;
+
+        /// <summary>
         /// Flag to protect priority list from being modified while it's being iterated over.
         /// Now backed by a reentrancy depth counter for safe nested invocations.
         /// </summary>
@@ -339,6 +352,7 @@ namespace MercuryMessaging
         /// </summary>
 		public override void Awake()
         {
+            _cachedInstanceId = gameObject.GetInstanceID();
             MmNetworkResponder = GetComponent<IMmNetworkResponder>();
 
             // Initialize message history circular buffers with validated size
@@ -469,6 +483,25 @@ namespace MercuryMessaging
         #region IMmResponder Routing Table Management Methods
 
         /// <summary>
+        /// Recomputes cached routing direction flags from the routing table.
+        /// Called after any routing table modification to avoid per-message scanning.
+        /// </summary>
+        private void RecomputeRoutingDirectionFlags()
+        {
+            _rtNeedsParent = false;
+            _rtNeedsChild = false;
+            _rtNeedsSelf = false;
+
+            foreach (var item in RoutingTable)
+            {
+                MmLevelFilter level = item.Level;
+                if ((level & MmLevelFilter.Parent) > 0) _rtNeedsParent = true;
+                else if ((level & MmLevelFilter.Child) > 0) _rtNeedsChild = true;
+                else _rtNeedsSelf = true;
+            }
+        }
+
+        /// <summary>
         /// Add an MmResponder to the MmRoutingTable, with level designation.
         /// </summary>
         /// <param name="mmResponder">MmResponder to be added.</param>
@@ -501,6 +534,7 @@ namespace MercuryMessaging
             else
             {
 				RoutingTable.Add(routingTableItem);
+                RecomputeRoutingDirectionFlags();
             }
 
             return routingTableItem;
@@ -626,6 +660,8 @@ namespace MercuryMessaging
                     RoutingTable.RemoveAt(i);
                 }
             }
+
+            RecomputeRoutingDirectionFlags();
         }
 
         /// <summary>
@@ -817,13 +853,13 @@ namespace MercuryMessaging
             }
 
             // DSL Phase 2.1: Notify listeners before responder dispatch
-            // This allows external components to subscribe to messages without creating responders
-            NotifyListeners(message);
+            // Only call if listeners are registered (avoids virtual call overhead)
+            if (ListenerCount > 0)
+                NotifyListeners(message);
 
-            MmMessageType msgType = message.MmMessageType;
-            //If the MmRelayNode has not been initialized, initialize it here,
-            //  and refresh the parents - to ensure proper routing can occur.
-            InitializeNode();
+            // Initialize lazily only if not yet initialized (moved check out of hot path)
+            if (!Initialized)
+                InitializeNode();
 
             // Check hop limit to prevent infinite loops
             if (maxMessageHops > 0)
@@ -846,7 +882,7 @@ namespace MercuryMessaging
             // Check for cycles if cycle detection is enabled
             if (enableCycleDetection)
             {
-                int nodeInstanceId = gameObject.GetInstanceID();
+                int nodeInstanceId = _cachedInstanceId;
 
                 // Initialize visited nodes set if not already done (use pool for performance)
                 if (message.VisitedNodes == null)
@@ -919,22 +955,10 @@ namespace MercuryMessaging
                                                       MmLevelFilter.Ancestors | MmLevelFilter.Siblings |
                                                       MmLevelFilter.Cousins | MmLevelFilter.Custom)) != 0;
 
-            // First pass: determine which directions are needed
-            bool needsParent = false;
-            bool needsChild = false;
-            bool needsSelf = false;
-
-            foreach (var routingTableItem in RoutingTable)
-            {
-                MmLevelFilter responderLevel = routingTableItem.Level;
-
-                if ((responderLevel & MmLevelFilter.Parent) > 0)
-                    needsParent = true;
-                else if ((responderLevel & MmLevelFilter.Child) > 0)
-                    needsChild = true;
-                else
-                    needsSelf = true;
-            }
+            // Use cached routing direction flags (updated when routing table changes)
+            bool needsParent = _rtNeedsParent;
+            bool needsChild = _rtNeedsChild;
+            bool needsSelf = _rtNeedsSelf;
 
             // Create messages lazily based on what's needed
             MmMessage upwardMessage = null;
@@ -1913,11 +1937,13 @@ namespace MercuryMessaging
         protected virtual void CollectDescendants(List<MmRelayNode> descendants, HashSet<int> visited = null)
         {
             // Initialize visited set on first call
+            bool ownedVisited = false;
             if (visited == null)
             {
                 descendants.Clear();
-                visited = new HashSet<int>();
-                visited.Add(gameObject.GetInstanceID()); // Mark self as visited
+                visited = MmHashSetPool.Get();
+                ownedVisited = true;
+                visited.Add(_cachedInstanceId); // Mark self as visited
             }
 
             // Collect direct children
@@ -1929,7 +1955,7 @@ namespace MercuryMessaging
                 var childNode = routingItem.Responder.GetRelayNode();
                 if (childNode == null) continue;
 
-                int childId = childNode.gameObject.GetInstanceID();
+                int childId = childNode._cachedInstanceId;
                 if (visited.Contains(childId))
                     continue; // Already visited (circular prevention)
 
@@ -1939,6 +1965,9 @@ namespace MercuryMessaging
                 // Recursively collect grandchildren
                 childNode.CollectDescendants(descendants, visited);
             }
+
+            if (ownedVisited)
+                MmHashSetPool.Return(visited);
         }
 
         /// <summary>
@@ -1950,23 +1979,28 @@ namespace MercuryMessaging
         protected virtual void CollectAncestors(List<MmRelayNode> ancestors, HashSet<int> visited = null)
         {
             // Initialize visited set on first call
+            bool ownedVisited = false;
             if (visited == null)
             {
                 ancestors.Clear();
-                visited = new HashSet<int>();
-                visited.Add(gameObject.GetInstanceID()); // Mark self as visited
+                visited = MmHashSetPool.Get();
+                ownedVisited = true;
+                visited.Add(_cachedInstanceId); // Mark self as visited
             }
 
             // If no parents, we're done
             if (MmParentList == null || MmParentList.Count == 0)
+            {
+                if (ownedVisited) MmHashSetPool.Return(visited);
                 return;
+            }
 
             // Collect direct parents
             foreach (var parent in MmParentList)
             {
                 if (parent == null) continue;
 
-                int parentId = parent.gameObject.GetInstanceID();
+                int parentId = parent._cachedInstanceId;
                 if (visited.Contains(parentId))
                     continue; // Already visited (circular prevention)
 
@@ -1976,6 +2010,9 @@ namespace MercuryMessaging
                 // Recursively collect grandparents
                 parent.CollectAncestors(ancestors, visited);
             }
+
+            if (ownedVisited)
+                MmHashSetPool.Return(visited);
         }
 
         /// <summary>
@@ -2020,24 +2057,31 @@ namespace MercuryMessaging
         /// <param name="useDescendants">True for descendants, false for ancestors</param>
         protected virtual void RouteRecursive(MmMessage message, bool useDescendants)
         {
-            List<MmRelayNode> nodes = new List<MmRelayNode>();
+            List<MmRelayNode> nodes = MmRelayNodeListPool.Get();
 
-            if (useDescendants)
-                CollectDescendants(nodes);
-            else
-                CollectAncestors(nodes);
-
-            // Route message to each node with transformed filter
-            foreach (var node in nodes)
+            try
             {
-                if (node != null)
+                if (useDescendants)
+                    CollectDescendants(nodes);
+                else
+                    CollectAncestors(nodes);
+
+                // Route message to each node with transformed filter
+                foreach (var node in nodes)
                 {
-                    // Transform level filter to Self only to prevent re-propagation
-                    // (CollectDescendants/Ancestors already found ALL targets recursively)
-                    var forwardedMessage = message.Copy();
-                    forwardedMessage.MetadataBlock.LevelFilter = MmLevelFilter.Self;
-                    node.MmInvoke(forwardedMessage);
+                    if (node != null)
+                    {
+                        // Transform level filter to Self only to prevent re-propagation
+                        // (CollectDescendants/Ancestors already found ALL targets recursively)
+                        var forwardedMessage = message.Copy();
+                        forwardedMessage.MetadataBlock.LevelFilter = MmLevelFilter.Self;
+                        node.MmInvoke(forwardedMessage);
+                    }
                 }
+            }
+            finally
+            {
+                MmRelayNodeListPool.Return(nodes);
             }
         }
 
