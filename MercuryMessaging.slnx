@@ -26,8 +26,8 @@
   <Project Path="Fusion.Unity.Editor.csproj" />
   <Project Path="ShapesRuntime.csproj" />
   <Project Path="Unity.XR.Interaction.Toolkit.csproj" />
-  <Project Path="Unity.Services.Analytics.csproj" />
   <Project Path="MessagePipe.csproj" />
+  <Project Path="Unity.Services.Analytics.csproj" />
   <Project Path="Unity.VisualStudio.Editor.csproj" />
   <Project Path="Unity.InputSystem.csproj" />
   <Project Path="MCPForUnity.Editor.csproj" />
@@ -60,6 +60,7 @@
   <Project Path="Unity.AI.Navigation.Updater.csproj" />
   <Project Path="UnityEditor.UI.csproj" />
   <Project Path="Unity.Analytics.DataPrivacy.csproj" />
+  <Project Path="R3.Unity.csproj" />
   <Project Path="Unity.2D.Sprite.Editor.csproj" />
   <Project Path="Unity.XR.CoreUtils.Editor.csproj" />
   <Project Path="NuGetForUnity.csproj" />
@@ -73,6 +74,7 @@
   <Project Path="Unity.InputSystem.ForUI.csproj" />
   <Project Path="Fusion.Unity.csproj" />
   <Project Path="Unity.XR.Interaction.Toolkit.CodeSamples.Tests.csproj" />
+  <Project Path="R3.Unity.Editor.csproj" />
   <Project Path="Unity.Services.Core.Scheduler.csproj" />
   <Project Path="Unity.AI.Navigation.csproj" />
   <Project Path="Unity.XR.Interaction.Toolkit.Analytics.Hooks.Editor.csproj" />
@@ -90,6 +92,7 @@
   <Project Path="Unity.InputSystem.TestFramework.csproj" />
   <Project Path="UnityEditor.XR.LegacyInputHelpers.csproj" />
   <Project Path="Unity.ShaderGraph.Utilities.csproj" />
+  <Project Path="R3.Unity.TextMeshPro.csproj" />
   <Project Path="ParrelSync.csproj" />
   <Project Path="Unity.Services.Core.Device.csproj" />
   <Project Path="Unity.Services.Core.Analytics.csproj" />
@@ -102,6 +105,7 @@
   <Project Path="ALINEPackageToolsEditor.csproj" />
   <Project Path="UnityEngine.XR.LegacyInputHelpers.csproj" />
   <Project Path="MercuryMessaging.Examples.Editor.csproj" />
+  <Project Path="R3.Unity.XRInteractionToolkit.csproj" />
   <Project Path="Unity.InputSystem.DocCodeSamples.csproj" />
   <Project Path="Unity.RenderPipelines.Core.Runtime.Shared.csproj" />
   <Project Path="Unity.InternalAPIEngineBridge.004.csproj" />
