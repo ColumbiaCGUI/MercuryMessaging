@@ -110,6 +110,12 @@ namespace MercuryMessaging.Research.Benchmarks
             "T4_Manual",
             "T4_Delegate",
             "T4_UnityEvent",
+#if HAS_R3
+            "T4_R3",
+#endif
+#if HAS_MESSAGEPIPE
+            "T4_MessagePipe",
+#endif
         };
 
         [ContextMenu("Run Scenario Benchmark")]
@@ -178,6 +184,16 @@ namespace MercuryMessaging.Research.Benchmarks
 
                     currentTest = $"T4_UnityEvent N={n} run {run + 1}/{runs}";
                     yield return StartCoroutine(RunT4UnityEvent(n, run));
+
+#if HAS_R3
+                    currentTest = $"T4_R3 N={n} run {run + 1}/{runs}";
+                    yield return StartCoroutine(RunT4R3(n, run));
+#endif
+
+#if HAS_MESSAGEPIPE
+                    currentTest = $"T4_MessagePipe N={n} run {run + 1}/{runs}";
+                    yield return StartCoroutine(RunT4MessagePipe(n, run));
+#endif
                 }
             }
 
@@ -819,6 +835,85 @@ namespace MercuryMessaging.Research.Benchmarks
             RecordResult("T4_UnityEvent", n, run);
             DestroyImmediate(hub);
         }
+
+#if HAS_R3
+        /// <summary>
+        /// T4_R3: R3 Subject — single shared subject, dashboard subscribes,
+        /// subsystems round-robin publish. 1 message per frame.
+        /// </summary>
+        private IEnumerator RunT4R3(int n, int run)
+        {
+            var hub = new GameObject("T4_R3");
+            var dashboard = new GameObject("Dashboard");
+            dashboard.transform.SetParent(hub.transform);
+            var dashRecv = dashboard.AddComponent<ScenarioEventReceiver>();
+
+            var subject = new Subject<string>();
+            var sub = subject.Subscribe(msg => dashRecv.HandleAlert(msg));
+
+            for (int i = 0; i < n; i++)
+            {
+                var s = new GameObject($"Sub_{i}");
+                s.transform.SetParent(dashboard.transform);
+            }
+            yield return null;
+
+            int idx = 0;
+
+            yield return StartCoroutine(Measure(testDuration, () =>
+            {
+                subject.OnNext($"alert_{idx}");
+                idx++;
+            }));
+
+            RecordResult("T4_R3", n, run);
+            sub.Dispose();
+            subject.Dispose();
+            DestroyImmediate(hub);
+        }
+#endif
+
+#if HAS_MESSAGEPIPE
+        /// <summary>
+        /// T4_MessagePipe: Keyless pub/sub — single publisher, dashboard subscribes,
+        /// subsystems round-robin publish. 1 message per frame.
+        /// </summary>
+        private IEnumerator RunT4MessagePipe(int n, int run)
+        {
+            var hub = new GameObject("T4_MessagePipe");
+            var dashboard = new GameObject("Dashboard");
+            dashboard.transform.SetParent(hub.transform);
+            var dashRecv = dashboard.AddComponent<ScenarioEventReceiver>();
+
+            var builder = new BuiltinContainerBuilder();
+            builder.AddMessagePipe();
+            builder.AddMessageBroker<string>();
+            var provider = builder.BuildServiceProvider();
+
+            var pub = provider.GetRequiredService<IPublisher<string>>();
+            var subscription = provider.GetRequiredService<ISubscriber<string>>()
+                .Subscribe(msg => dashRecv.HandleAlert(msg));
+
+            for (int i = 0; i < n; i++)
+            {
+                var s = new GameObject($"Sub_{i}");
+                s.transform.SetParent(dashboard.transform);
+            }
+            yield return null;
+
+            int idx = 0;
+
+            yield return StartCoroutine(Measure(testDuration, () =>
+            {
+                pub.Publish($"alert_{idx}");
+                idx++;
+            }));
+
+            RecordResult("T4_MessagePipe", n, run);
+            subscription.Dispose();
+            DestroyImmediate(hub);
+        }
+#endif
 
         // ================================================================
         // Output
