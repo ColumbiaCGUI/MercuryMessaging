@@ -162,6 +162,48 @@ namespace MercuryMessaging
                     return true;
             }
         }
+
+        /// <summary>
+        /// Evaluate this predicate with a pre-cached source position.
+        /// Avoids redundant managed-to-native calls for source.transform.position
+        /// when evaluating multiple targets from the same source.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool Evaluate(Vector3 sourcePosition, GameObject target)
+        {
+            if (target == null) return false;
+
+            switch (Type)
+            {
+                case MmPredicateType.Within:
+                    float distSq = (target.transform.position - sourcePosition).sqrMagnitude;
+                    return distSq <= Radius * Radius;
+
+                case MmPredicateType.InDirection:
+                    Vector3 toTarget = (target.transform.position - sourcePosition).normalized;
+                    float angleToTarget = Vector3.Angle(Direction, toTarget);
+                    return angleToTarget <= Angle;
+
+                case MmPredicateType.InBounds:
+                    return Bounds.Contains(target.transform.position);
+
+                case MmPredicateType.WithComponent:
+                    return ComponentType != null && target.GetComponent(ComponentType) != null;
+
+                case MmPredicateType.Custom:
+                    if (CustomFunc != null)
+                        return CustomFunc(target);
+                    if (CustomRelayFunc != null)
+                    {
+                        var relay = target.GetComponent<MmRelayNode>();
+                        return relay != null && CustomRelayFunc(relay);
+                    }
+                    return true;
+
+                default:
+                    return true;
+            }
+        }
     }
 
     /// <summary>
@@ -195,6 +237,21 @@ namespace MercuryMessaging
             for (int i = 0; i < _predicates.Count; i++)
             {
                 if (!_predicates[i].Evaluate(source, target))
+                    return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Evaluate all predicates with a pre-cached source position.
+        /// Avoids N redundant managed-to-native calls for source.transform.position.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool EvaluateAll(Vector3 sourcePosition, GameObject target)
+        {
+            for (int i = 0; i < _predicates.Count; i++)
+            {
+                if (!_predicates[i].Evaluate(sourcePosition, target))
                     return false;
             }
             return true;

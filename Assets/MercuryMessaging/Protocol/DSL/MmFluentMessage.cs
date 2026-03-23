@@ -707,6 +707,11 @@ namespace MercuryMessaging
             var targets = CollectTargets();
             try
             {
+                // Hoist metadata creation before the loop — one allocation instead of N.
+                MmMetadataBlock targetMetadata = (_tag != MmTagHelper.Everything)
+                    ? new MmMetadataBlock(_tag, MmLevelFilter.Self, _activeFilter, _selectedFilter, _networkFilter)
+                    : new MmMetadataBlock(MmLevelFilter.Self, _activeFilter, _selectedFilter, _networkFilter);
+
                 // Send to each target with Self metadata
                 // Using Self (not SelfAndChildren) prevents double-delivery:
                 // - We explicitly send to each collected target
@@ -716,17 +721,6 @@ namespace MercuryMessaging
                 {
                     if (targetRelay == null || targetRelay.gameObject == null)
                         continue;
-
-                    // Create Self metadata - responders are registered with Level=Self so this works
-                    MmMetadataBlock targetMetadata;
-                    if (_tag != MmTagHelper.Everything)
-                    {
-                        targetMetadata = new MmMetadataBlock(_tag, MmLevelFilter.Self, _activeFilter, _selectedFilter, _networkFilter);
-                    }
-                    else
-                    {
-                        targetMetadata = new MmMetadataBlock(MmLevelFilter.Self, _activeFilter, _selectedFilter, _networkFilter);
-                    }
 
                     // Send message to this specific target
                     SendToTarget(targetRelay, targetMetadata);
@@ -895,27 +889,26 @@ namespace MercuryMessaging
             var targets = CollectTargets();
             try
             {
+                // Cache source position once — avoids N redundant managed-to-native calls
+                // (each transform.position access crosses the C#/C++ boundary)
+                Vector3 sourcePosition = _relay.transform.position;
+
+                // Hoist metadata creation before the loop — one allocation instead of N.
+                // This is safe because MmInvoke receives a copy via MmMessagePool (which
+                // copy-constructs its own metadata), so this instance is never mutated.
+                MmMetadataBlock targetMetadata = (_tag != MmTagHelper.Everything)
+                    ? new MmMetadataBlock(_tag, MmLevelFilter.Self, _activeFilter, _selectedFilter, _networkFilter)
+                    : new MmMetadataBlock(MmLevelFilter.Self, _activeFilter, _selectedFilter, _networkFilter);
+
                 // Apply predicates and send to matching targets
                 foreach (var targetRelay in targets)
                 {
                     if (targetRelay == null || targetRelay.gameObject == null)
                         continue;
 
-                    // Check if target passes all predicates
-                    if (!_predicates.EvaluateAll(_relay, targetRelay.gameObject))
+                    // Check if target passes all predicates (using cached source position)
+                    if (!_predicates.EvaluateAll(sourcePosition, targetRelay.gameObject))
                         continue;
-
-                    // Create Self metadata - responders are registered with Level=Self so this works
-                    // Using Self (not SelfAndChildren) prevents double-delivery
-                    MmMetadataBlock targetMetadata;
-                    if (_tag != MmTagHelper.Everything)
-                    {
-                        targetMetadata = new MmMetadataBlock(_tag, MmLevelFilter.Self, _activeFilter, _selectedFilter, _networkFilter);
-                    }
-                    else
-                    {
-                        targetMetadata = new MmMetadataBlock(MmLevelFilter.Self, _activeFilter, _selectedFilter, _networkFilter);
-                    }
 
                     // Send message to this specific target
                     SendToTarget(targetRelay, targetMetadata);
