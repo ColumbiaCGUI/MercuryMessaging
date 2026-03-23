@@ -996,7 +996,7 @@ namespace MercuryMessaging
                 if (item.Level != MmLevelFilter.Child)
                     continue;
 
-                var childRelay = item.Responder?.GetRelayNode();
+                var childRelay = item.CachedRelayNode ?? item.Responder?.GetRelayNode();
                 if (childRelay == null) continue;
 
                 // O(1) HashSet check instead of O(n) List.Contains
@@ -1027,7 +1027,7 @@ namespace MercuryMessaging
                 if (item.Level != MmLevelFilter.Parent)
                     continue;
 
-                var parentRelay = item.Responder?.GetRelayNode();
+                var parentRelay = item.CachedRelayNode ?? item.Responder?.GetRelayNode();
                 if (parentRelay == null) continue;
 
                 if (!seen.Add(parentRelay.gameObject.GetInstanceID()))
@@ -1058,7 +1058,7 @@ namespace MercuryMessaging
                 if (item.Level != MmLevelFilter.Parent)
                     continue;
 
-                var parent = item.Responder?.GetRelayNode();
+                var parent = item.CachedRelayNode ?? item.Responder?.GetRelayNode();
                 if (parent == null || parent.RoutingTable == null)
                     continue;
 
@@ -1068,7 +1068,7 @@ namespace MercuryMessaging
                     if (childItem.Level != MmLevelFilter.Child)
                         continue;
 
-                    var siblingRelay = childItem.Responder?.GetRelayNode();
+                    var siblingRelay = childItem.CachedRelayNode ?? childItem.Responder?.GetRelayNode();
                     if (siblingRelay == null || siblingRelay == node) continue;
 
                     if (!seen.Add(siblingRelay.gameObject.GetInstanceID()))

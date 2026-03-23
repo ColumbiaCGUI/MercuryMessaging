@@ -513,7 +513,8 @@ namespace MercuryMessaging
 			var routingTableItem = new MmRoutingTableItem (mmResponder.name, mmResponder) {
 				Level = level,
 				Tags = mmResponder.Tag,  // Copy tag from responder to routing table item
-                TagCheckEnabled = tagCheckEnabled  // Phase 8: Cache for removal tracking
+                TagCheckEnabled = tagCheckEnabled,  // Phase 8: Cache for removal tracking
+                CachedRelayNode = mmResponder as MmRelayNode  // Cache for DSL CollectTargets
 			};
 
             if (RoutingTable.Contains(mmResponder))

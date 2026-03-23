@@ -86,6 +86,15 @@ namespace MercuryMessaging
         [NonSerialized]
         public bool TagCheckEnabled;
 
+        /// <summary>
+        /// Cached relay node reference for Child/Parent items.
+        /// Avoids virtual GetRelayNode() dispatch + GetComponent lookup during
+        /// CollectTargets in the DSL predicate path.
+        /// Set during MmAddToRoutingTable / MmRefreshResponders.
+        /// </summary>
+        [NonSerialized]
+        public MmRelayNode CachedRelayNode;
+
         #endregion
 
         #region Delegate Dispatch (Phase 5 Optimization)
