@@ -512,7 +512,7 @@ This performance analysis validates the effectiveness of the Quick Win optimizat
 
 ### 8.3 Next Steps
 
-1. Integrate findings into CLAUDE.md documentation (Performance Characteristics section)
+1. Integrate findings into framework documentation (Performance Characteristics section)
 2. Share report with research team and stakeholders
 3. Plan Priority 1 optimizations (profiling + cache instrumentation)
 4. Consider Priority 3 improvements (routing optimization from framework-analysis-tasks.md)

@@ -297,7 +297,7 @@ After collecting test data:
 2. **Create Performance Graphs** (5 graphs showing scaling, memory, cache, etc.)
 3. **Validate Quick Wins** (QW-1 through QW-5)
 4. **Test Existing Scenes** (SimpleScene, TrafficLights, Tutorials)
-5. **Update CLAUDE.md** (add Performance Characteristics section)
+5. **Update Documentation** (add Performance Characteristics section)
 
 See `dev/archive/performance-analysis/` for historical analysis data.
 

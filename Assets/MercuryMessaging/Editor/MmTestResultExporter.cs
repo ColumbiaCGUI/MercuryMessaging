@@ -1,7 +1,7 @@
 // Copyright (c) 2017-2025, Columbia University
 // All rights reserved.
 //
-// MmTestResultExporter.cs - Automatic test result export for CI/CD and AI assistants
+// MmTestResultExporter.cs - Automatic test result export for CI/CD
 // Part of DX3: Developer Experience Improvements
 
 using System;

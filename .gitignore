@@ -62,3 +62,14 @@ sysinfo.txt
 crashlytics-build.properties
 
 nul
+
+# Local-only directories
+.claude/
+.planning/
+CLAUDE.md
+claude.md
+CONTRIBUTING.md
+archive/
+docs/plans/
+Assets/Research/UserStudy/*.md
+Assets/Research/UserStudy/Training/*.md

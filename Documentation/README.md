@@ -6,9 +6,8 @@ Internal documentation for the MercuryMessaging framework.
 
 See the **[GitHub Wiki](https://github.com/ColumbiaCGUI/MercuryMessaging/wiki)** for tutorials and user guides.
 
-## For AI Assistants (Claude Code)
+## Contents
 
-These files are imported by `CLAUDE.md` using the `@import` syntax to provide context:
 
 | File | Purpose |
 |------|---------|
