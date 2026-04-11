@@ -138,7 +138,7 @@ Carmine Elvezio. 2021. **XR Development with the Relay and Responder Pattern.** 
 
 - **Bug Reports:** [GitHub Issues](https://github.com/ColumbiaCGUI/MercuryMessaging/issues)
 - **Questions:** [GitHub Discussions](https://github.com/ColumbiaCGUI/MercuryMessaging/discussions)
-- **Lab Website:** [Columbia CGUI Lab](https://cgui.cs.columbia.edu/)
+- **Lab Website:** [Columbia CGUI Lab](https://graphics.cs.columbia.edu/)
 
 This is a research project. We welcome bug reports and feature requests, but are not currently accepting external pull requests.
 
